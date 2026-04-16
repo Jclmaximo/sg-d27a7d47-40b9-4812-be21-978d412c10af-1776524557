@@ -176,6 +176,54 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string
+          discount_code_used: string | null
+          id: string
+          network: string
+          payment_address: string | null
+          payment_id: string
+          provider: string
+          status: string
+          transaction_hash: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string
+          discount_code_used?: string | null
+          id?: string
+          network?: string
+          payment_address?: string | null
+          payment_id: string
+          provider?: string
+          status?: string
+          transaction_hash?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string
+          discount_code_used?: string | null
+          id?: string
+          network?: string
+          payment_address?: string | null
+          payment_id?: string
+          provider?: string
+          status?: string
+          transaction_hash?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
