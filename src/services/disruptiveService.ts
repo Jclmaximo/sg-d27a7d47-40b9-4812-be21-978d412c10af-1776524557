@@ -97,7 +97,8 @@ export const disruptiveService = {
     
     console.log("🔍 STEP 3: Request preparation");
     console.log("   📌 Full URL:", `${apiUrl}/payments`);
-    console.log("   📌 Authorization header:", authHeader.substring(0, 30) + "...");
+    console.log("   📌 Authorization header (Bearer):", authHeader.substring(0, 30) + "...");
+    console.log("   📌 Trying also X-API-Key header:", apiKey.substring(0, 20) + "...");
     console.log("   📌 Payload:", JSON.stringify(payload, null, 2));
 
     try {
@@ -108,6 +109,7 @@ export const disruptiveService = {
         headers: {
           "Content-Type": "application/json",
           "Authorization": authHeader,
+          "X-API-Key": apiKey,
           "Accept": "application/json"
         },
         body: JSON.stringify(payload)
