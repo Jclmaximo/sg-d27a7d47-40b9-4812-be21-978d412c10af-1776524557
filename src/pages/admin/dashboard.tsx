@@ -21,6 +21,34 @@ export default function AdminDashboard() {
   const [templates, setTemplates] = useState<MessageTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState("");
 
+  const messageTemplates = [
+    {
+      name: "Primer Contacto",
+      template: (lead: Lead) => 
+        `Hola ${lead.name}, soy Embajador de Travel Advantage. Vi tu interés en conocer cómo acceder a precios exclusivos en viajes. ¿Tienes unos minutos para platicarte cómo funciona?`
+    },
+    {
+      name: "Seguimiento 1",
+      template: (lead: Lead) => 
+        `Hola ${lead.name}, te contacté hace unos días sobre Travel Advantage. ¿Tuviste oportunidad de pensar en cómo podríamos ayudarte a ahorrar en tus próximos viajes? Como Embajador de Travel Advantage, puedo resolver cualquier duda.`
+    },
+    {
+      name: "Seguimiento 2",
+      template: (lead: Lead) => 
+        `${lead.name}, solo quería recordarte que como Embajador de Travel Advantage tengo acceso a tarifas exclusivas que no están disponibles al público. ¿Te gustaría ver algunos ejemplos de ahorro real de nuestros miembros?`
+    },
+    {
+      name: "Recordatorio",
+      template: (lead: Lead) => 
+        `Hola ${lead.name}, ¿sigues interesado en conocer cómo funciona Travel Advantage? Como tu Embajador de Travel Advantage, puedo mostrarte cómo ahorrar hasta 60% en tus viajes. ¿Cuándo te viene bien una breve llamada?`
+    },
+    {
+      name: "Cierre",
+      template: (lead: Lead) => 
+        `${lead.name}, muchas gracias por tu tiempo. Como Embajador de Travel Advantage, estoy aquí cuando decidas aprovechar los beneficios exclusivos del club. ¡Que tengas un excelente día!`
+    }
+  ];
+
   useEffect(() => {
     checkAuth();
   }, []);
