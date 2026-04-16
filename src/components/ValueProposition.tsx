@@ -21,8 +21,8 @@ const benefits = [
     icon: DollarSign,
     title: "Créditos de Viaje",
     description: "Genera y acumula créditos para reducir significativamente el costo de tus futuras reservas y experiencias de viaje.",
-    image: "/airport-traveler.jpg",
-    alt: "Viajero con mochila y maleta observando aviones en el aeropuerto"
+    image: "/happy-travelers.jpg",
+    alt: "Pareja feliz explorando ciudad europea con mapa, disfrutando de sus viajes"
   },
   {
     icon: MapPin,
