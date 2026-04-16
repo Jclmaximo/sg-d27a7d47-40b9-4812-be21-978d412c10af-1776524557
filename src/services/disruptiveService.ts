@@ -27,6 +27,7 @@ interface DisruptivePaymentResponse {
 export interface CreatePaymentParams {
   amount: number;
   currency: string;
+  network?: string;
   description: string;
   metadata?: any;
   callback_url?: string;
