@@ -1,19 +1,20 @@
-"use client";
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Phone, Mail, User, Globe, MessageSquare } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 
 export function FunnelForm() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
-    country: "",
-    contactMethod: "whatsapp" as const
+    country: ""
   });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,103 +23,104 @@ export function FunnelForm() {
       `Nombre: ${formData.name}%0A` +
       `Email: ${formData.email}%0A` +
       `Teléfono: ${formData.phone}%0A` +
-      `País: ${formData.country}%0A` +
-      `Método de contacto: WhatsApp`;
+      `País: ${formData.country}`;
     
     window.open(`https://wa.me/523314300767?text=${message}`, '_blank');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white p-8 rounded-2xl border border-muted shadow-lg">
-      <div className="grid md:grid-cols-2 gap-6 mb-6">
-        <div className="space-y-2">
-          <Label htmlFor="name" className="flex items-center gap-2">
-            <User className="w-4 h-4 text-primary" />
-            Nombre completo
-          </Label>
-          <Input
-            id="name"
-            required
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            placeholder="Tu nombre"
-            className="border-muted focus:border-primary" />
-          
-        </div>
+    <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+      <div className="container mx-auto px-4 max-w-2xl">
+        <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-border">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+              Comienza Tu Aventura Hoy
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Completa el formulario y descubre cómo Travel Advantage puede transformar tu forma de viajar
+            </p>
+          </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="email" className="flex items-center gap-2">
-            <Mail className="w-4 h-4 text-primary" />
-            Email
-          </Label>
-          <Input
-            id="email"
-            type="email"
-            required
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            placeholder="tu@email.com"
-            className="border-muted focus:border-primary" />
-          
-        </div>
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name */}
+            <div className="space-y-2">
+              <Label htmlFor="name">Nombre Completo *</Label>
+              <Input
+                id="name"
+                name="name"
+                type="text"
+                placeholder="Juan Pérez"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="h-12"
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="phone" className="flex items-center gap-2">
-            <Phone className="w-4 h-4 text-primary" />
-            Teléfono
-          </Label>
-          <Input
-            id="phone"
-            type="tel"
-            required
-            value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            placeholder="+1234567890"
-            className="border-muted focus:border-primary" />
-          
-        </div>
+            {/* Email */}
+            <div className="space-y-2">
+              <Label htmlFor="email">Email *</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="juan@ejemplo.com"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                className="h-12"
+              />
+            </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="country" className="flex items-center gap-2">
-            <Globe className="w-4 h-4 text-primary" />
-            País
-          </Label>
-          <Input
-            id="country"
-            required
-            value={formData.country}
-            onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-            placeholder="Tu país"
-            className="border-muted focus:border-primary" />
-          
+            {/* Phone */}
+            <div className="space-y-2">
+              <Label htmlFor="phone">Teléfono (WhatsApp) *</Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                placeholder="+52 33 1234 5678"
+                value={formData.phone}
+                onChange={handleChange}
+                required
+                className="h-12"
+              />
+            </div>
+
+            {/* Country */}
+            <div className="space-y-2">
+              <Label htmlFor="country">País *</Label>
+              <Input
+                id="country"
+                name="country"
+                type="text"
+                placeholder="México"
+                value={formData.country}
+                onChange={handleChange}
+                required
+                className="h-12"
+              />
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              size="lg"
+              className="w-full h-14 text-lg font-semibold bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all"
+            >
+              <MessageSquare className="mr-2 h-5 w-5" />
+              Empezar Ahora
+            </Button>
+
+            {/* Privacy Note */}
+            <p className="text-xs text-center text-muted-foreground mt-4">
+              Al enviar este formulario, aceptas que Travel Advantage se comunique contigo por WhatsApp para brindarte más información.
+            </p>
+          </form>
         </div>
       </div>
-
-      {/* Contact Method - Solo WhatsApp */}
-      <div className="space-y-3">
-        <Label className="text-base font-medium flex items-center gap-2" style={{ textAlign: "center" }}>
-          <MessageSquare className="w-5 h-5" />
-          Método de contacto preferido
-        </Label>
-        <div className="flex gap-3">
-          <Button
-            type="button"
-            variant={formData.contactMethod === "whatsapp" ? "default" : "outline"}
-            className="flex-1"
-            onClick={() => setFormData({ ...formData, contactMethod: "whatsapp" })} style={{ backgroundColor: "#22c55e", backgroundImage: "none" }}>
-            
-            WhatsApp
-          </Button>
-        </div>
-      </div>
-
-      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white py-6 text-lg font-semibold" style={{ backgroundColor: "#3b82f6", backgroundImage: "none", padding: "16px 0px", margin: "10px 0px" }}>
-        Empezar ahora
-      </Button>
-
-      <p className="text-xs text-center text-muted-foreground mt-4">Al continuar, aceptas recibir información sobre Nuestro Club.
-
-      </p>
-    </form>);
-
+    </section>
+  );
 }
