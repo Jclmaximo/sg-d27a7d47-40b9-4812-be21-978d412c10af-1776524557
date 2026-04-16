@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,110 +9,88 @@ import { LogIn, UserPlus, Loader2, Lock } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { subscriptionService } from "@/services/subscriptionService";
 
-export default function AdminLogin() {
+export default function AdminPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
-
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
-  async function checkAuthStatus() {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (session) {
-        // Check if user has active subscription
-        try {
-          const hasActiveSubscription = await subscriptionService.hasActiveSubscription(session.user.id);
-          
-          if (hasActiveSubscription) {
-            // Only redirect to dashboard if they have an active subscription
-            router.push("/admin/dashboard");
-          }
-          // If no subscription, stay on this page - let them see login/signup
-        } catch (error) {
-          console.error("Error checking subscription:", error);
-          // If subscription check fails, stay on this page
-        }
-      }
-      // If no session, stay on login/signup page
-    } catch (error) {
-      console.error("Error checking auth:", error);
-      // If auth check fails, stay on this page
-    }
-  }
 
   async function handleLogout() {
     await supabase.auth.signOut();
     window.location.reload();
   }
 
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError("");
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if (error) {
-      setError("Credenciales inválidas. Por favor verifica tu correo y contraseña.");
-      setIsSubmitting(false);
-    } else {
-      // Check for redirect parameter
-      const redirect = router.query.redirect as string;
-      if (redirect) {
-        router.push(redirect);
-      } else {
-        router.push("/admin/dashboard");
-      }
-    }
-  }
-
-  async function handleSignup(e: React.FormEvent) {
-    e.preventDefault();
-    setIsSubmitting(true);
+  async function handleLogin() {
+    setLoading(true);
     setError("");
     setSuccessMessage("");
 
-    // Validate password length
-    if (password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres");
-      setIsSubmitting(false);
-      return;
-    }
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/admin/dashboard`
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+        return;
       }
-    });
 
-    if (error) {
-      setError(error.message || "Error al crear la cuenta. Por favor intenta de nuevo.");
-      setIsSubmitting(false);
-    } else if (data.user) {
-      setSuccessMessage("¡Cuenta creada exitosamente! Redirigiendo...");
-      
-      // Wait a moment to show success message, then redirect
-      setTimeout(() => {
-        const redirect = router.query.redirect as string;
-        if (redirect) {
-          router.push(redirect);
-        } else {
-          router.push("/admin/dashboard");
+      if (data.user) {
+        setSuccessMessage("¡Sesión iniciada exitosamente!");
+        
+        // Try to check subscription, but don't block if it fails
+        try {
+          const hasActiveSubscription = await subscriptionService.hasActiveSubscription(data.user.id);
+          
+          if (hasActiveSubscription) {
+            setTimeout(() => router.push("/admin/dashboard"), 1000);
+          } else {
+            setTimeout(() => router.push("/pricing"), 1000);
+          }
+        } catch (subError) {
+          console.error("Error checking subscription:", subError);
+          // If subscription check fails, default to pricing
+          setTimeout(() => router.push("/pricing"), 1000);
         }
-      }, 1500);
+      }
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Error al iniciar sesión. Intenta de nuevo.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSignup() {
+    setLoading(true);
+    setError("");
+    setSuccessMessage("");
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+
+      if (error) {
+        setError(error.message);
+        setLoading(false);
+        return;
+      }
+
+      if (data.user) {
+        setSuccessMessage("¡Cuenta creada exitosamente! Redirigiendo...");
+        setTimeout(() => router.push("/pricing"), 1500);
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError("Error al crear cuenta. Intenta de nuevo.");
+    } finally {
+      setLoading(false);
     }
   }
 
