@@ -7,15 +7,15 @@ const benefits = [
     icon: Plane,
     title: "Plataforma Privada de Viajes",
     description: "Acceso exclusivo a tarifas preferenciales en hoteles, vuelos, cruceros, resorts y alquiler de autos que no están disponibles al público general.",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80",
-    alt: "Piscina infinita en un resort de lujo"
+    image: "/luxury-resort.jpg",
+    alt: "Resort de lujo con piscina iluminada al atardecer"
   },
   {
     icon: Sparkles,
     title: "Life Experiences®",
     description: "Viajes de lujo curados en destinos exclusivos como Dubái, Nueva York, París y más, diseñados específicamente para miembros del club.",
-    image: "https://images.unsplash.com/photo-1582672060624-913f9c693a15?w=800&auto=format&fit=crop&q=80",
-    alt: "Vista de primer plano del imponente Burj Khalifa en Dubái"
+    image: "/burj-khalifa.jpg",
+    alt: "Vista panorámica del Burj Khalifa iluminado en Dubái"
   },
   {
     icon: DollarSign,
