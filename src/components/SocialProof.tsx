@@ -59,10 +59,10 @@ export function SocialProof() {
               Desde escapadas familiares hasta viajes de negocios, Travel Advantage hace que cada experiencia sea más accesible.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
-              <span className="px-4 py-2 bg-accent/20 border border-accent/30 rounded-full">🇨🇴 Colombia: -$493 USD</span>
-              <span className="px-4 py-2 bg-accent/20 border border-accent/30 rounded-full">🇹🇷 Turquía: -$1,092 USD</span>
-              <span className="px-4 py-2 bg-accent/20 border border-accent/30 rounded-full">🇲🇽 México: -$758 USD</span>
-              <span className="px-4 py-2 bg-accent/20 border border-accent/30 rounded-full">🇪🇸 España: -$1,245 USD</span>
+              <span className="px-4 py-2 bg-accent/20 border border-accent/30 rounded-full" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>🇨🇴 Colombia: -$493 USD</span>
+              <span className="px-4 py-2 bg-accent/20 border border-accent/30 rounded-full" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>🇹🇷 Turquía: -$1,092 USD</span>
+              <span className="px-4 py-2 bg-accent/20 border border-accent/30 rounded-full" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>🇲🇽 México: -$758 USD</span>
+              <span className="px-4 py-2 bg-accent/20 border border-accent/30 rounded-full" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>🇪🇸 España: -$1,245 USD</span>
             </div>
           </div>
         </div>
