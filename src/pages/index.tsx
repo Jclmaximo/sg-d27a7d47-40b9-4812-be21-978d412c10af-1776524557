@@ -10,11 +10,11 @@ import { SEO } from "@/components/SEO";
 export default function Home() {
   return (
     <>
-      <SEO 
+      <SEO
         title="Travel Advantage - Acceso Exclusivo a Viajes Premium"
         description="Accede a precios exclusivos en hoteles, vuelos y experiencias de viaje que no están disponibles al público. Ahorra en cada viaje y genera ingresos."
-        image="/og-image.png"
-      />
+        image="/og-image.png" />
+      
       
       <main className="min-h-screen">
         {/* Etapa 1: Captación y Gancho */}
@@ -52,7 +52,7 @@ export default function Home() {
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Comienza a Ahorrar en Tus Viajes Hoy
               </h2>
-              <div className="h-1 w-24 bg-accent mx-auto mb-6"></div>
+              <div className="h-1 w-24 bg-accent mx-auto mb-6" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}></div>
               <p className="text-lg text-muted-foreground">
                 Déjanos tus datos y un asesor te contactará para mostrarte cómo funciona el club
               </p>
@@ -64,6 +64,6 @@ export default function Home() {
         {/* Footer con Licencias y Ubicaciones */}
         <FunnelFooter />
       </main>
-    </>
-  );
+    </>);
+
 }
