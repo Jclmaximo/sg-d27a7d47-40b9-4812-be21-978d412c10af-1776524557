@@ -18,18 +18,18 @@ export function FunnelForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const message = `¡Hola! Quiero más información sobre Travel Advantage.%0A%0A` +
-      `Nombre: ${formData.name}%0A` +
-      `Email: ${formData.email}%0A` +
-      `Teléfono: ${formData.phone}%0A` +
-      `País: ${formData.country}`;
-    
+    `Nombre: ${formData.name}%0A` +
+    `Email: ${formData.email}%0A` +
+    `Teléfono: ${formData.phone}%0A` +
+    `País: ${formData.country}`;
+
     window.open(`https://wa.me/523314300767?text=${message}`, '_blank');
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5">
+    <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5" style={{ backgroundImage: "radial-gradient(ellipse, rgba(17, 98, 212, 0.05) 0%, rgb(255, 255, 255) 100%)", backgroundColor: "transparent" }}>
       <div className="container mx-auto px-4 max-w-2xl">
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-border">
           {/* Header */}
@@ -55,8 +55,8 @@ export function FunnelForm() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="h-12"
-              />
+                className="h-12" />
+              
             </div>
 
             {/* Email */}
@@ -70,8 +70,8 @@ export function FunnelForm() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="h-12"
-              />
+                className="h-12" />
+              
             </div>
 
             {/* Phone */}
@@ -85,8 +85,8 @@ export function FunnelForm() {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="h-12"
-              />
+                className="h-12" />
+              
             </div>
 
             {/* Country */}
@@ -100,16 +100,16 @@ export function FunnelForm() {
                 value={formData.country}
                 onChange={handleChange}
                 required
-                className="h-12"
-              />
+                className="h-12" />
+              
             </div>
 
             {/* Submit Button */}
             <Button
               type="submit"
               size="lg"
-              className="w-full h-14 text-lg font-semibold bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all"
-            >
+              className="w-full h-14 text-lg font-semibold bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all">
+              
               <MessageSquare className="mr-2 h-5 w-5" />
               Empezar Ahora
             </Button>
@@ -121,6 +121,6 @@ export function FunnelForm() {
           </form>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
