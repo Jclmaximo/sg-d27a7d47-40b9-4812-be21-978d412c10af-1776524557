@@ -24,6 +24,16 @@ interface DisruptivePaymentResponse {
   expiresAt?: string;
 }
 
+export interface CreatePaymentParams {
+  amount: number;
+  currency: string;
+  description: string;
+  metadata?: any;
+  callback_url?: string;
+  success_url?: string;
+  cancel_url?: string;
+}
+
 export const disruptiveService = {
   // Get API configuration from environment
   getApiConfig() {
@@ -40,14 +50,14 @@ export const disruptiveService = {
 
   // Create payment invoice
   async createPayment(params: CreatePaymentParams): Promise<DisruptivePaymentResponse> {
-    const apiKey = process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY;
+    const { apiKey, apiUrl } = this.getApiConfig();
     
     if (!apiKey) {
       throw new Error("Disruptive API key not configured");
     }
 
     try {
-      const response = await fetch(`${this.baseUrl}/payments`, {
+      const response = await fetch(`${apiUrl}/payments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
