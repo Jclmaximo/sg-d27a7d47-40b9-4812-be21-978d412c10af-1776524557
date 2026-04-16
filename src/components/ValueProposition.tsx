@@ -7,25 +7,29 @@ const benefits = [
     icon: Plane,
     title: "Plataforma Privada de Viajes",
     description: "Acceso exclusivo a tarifas preferenciales en hoteles, vuelos, cruceros, resorts y alquiler de autos que no están disponibles al público general.",
-    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80"
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80",
+    alt: "Piscina infinita en un resort de lujo"
   },
   {
     icon: Sparkles,
     title: "Life Experiences®",
     description: "Viajes de lujo curados en destinos exclusivos como Dubái, Nueva York, París y más, diseñados específicamente para miembros del club.",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&auto=format&fit=crop&q=80"
+    image: "https://images.unsplash.com/photo-1582672060624-913f9c693a15?w=800&auto=format&fit=crop&q=80",
+    alt: "Vista de primer plano del imponente Burj Khalifa en Dubái"
   },
   {
     icon: DollarSign,
     title: "Créditos de Viaje",
     description: "Genera y acumula créditos para reducir significativamente el costo de tus futuras reservas y experiencias de viaje.",
-    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&auto=format&fit=crop&q=80"
+    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&auto=format&fit=crop&q=80",
+    alt: "Viajero caminando con su maleta en un aeropuerto moderno"
   },
   {
     icon: MapPin,
     title: "Cobertura Global",
     description: "Más de 1 millón de hoteles, resorts y opciones de viaje en más de 190 países alrededor del mundo.",
-    image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&auto=format&fit=crop&q=80"
+    image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&auto=format&fit=crop&q=80",
+    alt: "Globo terráqueo vintage con pines iluminado"
   }
 ];
 
