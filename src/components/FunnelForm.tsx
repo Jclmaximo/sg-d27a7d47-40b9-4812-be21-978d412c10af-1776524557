@@ -19,7 +19,7 @@ export function FunnelForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       // Save lead to database
       await leadsService.createLead({
@@ -31,12 +31,12 @@ export function FunnelForm() {
 
       // Send to WhatsApp
       const message = `¡Hola! Quiero más información sobre Travel Advantage.%0A%0A` +
-        `Nombre: ${formData.name}%0A` +
-        `Email: ${formData.email}%0A` +
-        `Teléfono: ${formData.phone}%0A` +
-        `País: ${formData.country}%0A` +
-        `Método de contacto: WhatsApp`;
-      
+      `Nombre: ${formData.name}%0A` +
+      `Email: ${formData.email}%0A` +
+      `Teléfono: ${formData.phone}%0A` +
+      `País: ${formData.country}%0A` +
+      `Método de contacto: WhatsApp`;
+
       window.open(`https://wa.me/523314300767?text=${message}`, '_blank');
 
       // Reset form
@@ -134,8 +134,8 @@ export function FunnelForm() {
             </Button>
 
             {/* Privacy Note */}
-            <p className="text-xs text-center text-muted-foreground mt-4">
-              Al enviar este formulario, aceptas que Travel Advantage se comunique contigo por WhatsApp para brindarte más información.
+            <p className="text-xs text-center text-muted-foreground mt-4">Al enviar este formulario, aceptas que un embajador de Viaja Ligero Club se comunique contigo por WhatsApp para brindarte más información.
+
             </p>
           </form>
         </div>
