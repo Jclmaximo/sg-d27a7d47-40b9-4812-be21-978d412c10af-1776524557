@@ -50,7 +50,7 @@ export function FunnelFooter() {
         </div>
         
         <div className="border-t border-white/20 pt-8 text-center">
-          <p className="text-white/70 text-sm">© 2026 Travel Club. Todos los derechos reservados. | Política de Privacidad | Términos y Condiciones
+          <p className="text-white/70 text-sm">© 2026 Viaja LIgero Club. Todos los derechos reservados. | Política de Privacidad | Términos y Condiciones
 
           </p>
         </div>
