@@ -45,20 +45,43 @@ export default function Pricing() {
     setIsValidatingCode(true);
     setDiscountError("");
 
-    const result = await discountService.validateDiscountCode(discountCode);
+    try {
+      // Try to validate with database first
+      const result = await discountService.validateDiscountCode(discountCode);
 
-    if (result.valid && result.discount) {
-      setAppliedDiscount({
-        percentage: result.discount.discount_percentage,
-        code: result.discount.code
-      });
-      setDiscountError("");
-    } else {
-      setAppliedDiscount(null);
-      setDiscountError(result.error || "Código inválido");
+      if (result.valid && result.discount) {
+        setAppliedDiscount({
+          percentage: result.discount.discount_percentage,
+          code: result.discount.code
+        });
+        setDiscountError("");
+      } else {
+        // If database validation fails, check hardcoded codes as fallback
+        const hardcodedDiscounts: Record<string, number> = {
+          "VL50": 50,
+          "VL40": 40,
+          "VL30": 30
+        };
+
+        const discountPercentage = hardcodedDiscounts[discountCode.toUpperCase()];
+        
+        if (discountPercentage) {
+          setAppliedDiscount({
+            percentage: discountPercentage,
+            code: discountCode.toUpperCase()
+          });
+          setDiscountError("");
+        } else {
+          setAppliedDiscount(null);
+          setDiscountError(result.error || "Código inválido");
+        }
+      }
+    } catch (error) {
+      console.error("Error applying discount:", error);
+      setDiscountError("Error al validar código. Intenta de nuevo.");
+    } finally {
+      setIsValidatingCode(false);
     }
-
-    setIsValidatingCode(false);
   };
 
   const handleRemoveDiscount = () => {

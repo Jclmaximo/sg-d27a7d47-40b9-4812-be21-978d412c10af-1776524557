@@ -46,7 +46,8 @@ export const discountService = {
       return { valid: true, discount: data };
     } catch (error) {
       console.error("Error validating discount code:", error);
-      return { valid: false, error: "Error al validar el código" };
+      // Fail silently - don't block the UI
+      return { valid: false, error: "No se pudo validar el código. Continúa sin descuento." };
     }
   },
 
