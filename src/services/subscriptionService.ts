@@ -11,7 +11,7 @@ export const subscriptionService = {
       .from("subscriptions")
       .select("*")
       .eq("user_id", userId)
-      .gte("expires_at", new Date().toISOString())
+      .gte("end_date", new Date().toISOString())
       .eq("status", "active")
       .single();
 
@@ -34,9 +34,9 @@ export const subscriptionService = {
         user_id: userId,
         status: "active",
         payment_method: "usdt_bsc",
-        amount: 79.00,
+        price_usd: 79.00,
         transaction_hash: txHash,
-        expires_at: expiresAt.toISOString(),
+        end_date: expiresAt.toISOString(),
         initial_payment_amount: 79.00,
         monthly_payment_amount: 10.00,
         is_initial_payment: true
@@ -60,9 +60,9 @@ export const subscriptionService = {
       .single();
 
     const expiresAt = new Date();
-    if (currentSub && new Date(currentSub.expires_at) > new Date()) {
+    if (currentSub && new Date(currentSub.end_date) > new Date()) {
       // Extend from current expiration
-      expiresAt.setTime(new Date(currentSub.expires_at).getTime());
+      expiresAt.setTime(new Date(currentSub.end_date).getTime());
     }
     expiresAt.setDate(expiresAt.getDate() + 30); // Add 30 more days
 
@@ -72,9 +72,9 @@ export const subscriptionService = {
         user_id: userId,
         status: "active",
         payment_method: "usdt_bsc",
-        amount: 10.00,
+        price_usd: 10.00,
         transaction_hash: txHash,
-        expires_at: expiresAt.toISOString(),
+        end_date: expiresAt.toISOString(),
         initial_payment_amount: 79.00,
         monthly_payment_amount: 10.00,
         is_initial_payment: false
