@@ -89,7 +89,7 @@ export function FunnelForm() {
 
       {/* Contact Method - Solo WhatsApp */}
       <div className="space-y-3">
-        <Label className="text-base font-medium flex items-center gap-2">
+        <Label className="text-base font-medium flex items-center gap-2" style={{ textAlign: "center" }}>
           <MessageSquare className="w-5 h-5" />
           Método de contacto preferido
         </Label>
