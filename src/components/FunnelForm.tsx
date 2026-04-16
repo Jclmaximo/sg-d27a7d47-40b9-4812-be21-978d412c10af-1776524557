@@ -29,7 +29,7 @@ export function FunnelForm() {
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5" style={{ backgroundImage: "radial-gradient(ellipse, rgba(17, 98, 212, 0.05) 0%, rgb(255, 255, 255) 100%)", backgroundColor: "transparent" }}>
+    <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5" style={{ backgroundImage: "none", backgroundColor: "transparent" }}>
       <div className="container mx-auto px-4 max-w-2xl">
         <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 border border-border">
           {/* Header */}
