@@ -14,14 +14,14 @@ export function FunnelHero() {
         <div className="text-center space-y-6 max-w-4xl mx-auto">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/20">
-            <Sparkles className="w-4 h-4 text-secondary" />
-            <span className="text-sm font-medium text-secondary">ACCESO EXCLUSIVO</span>
+            <Sparkles className="w-4 h-4 text-secondary" style={{ backgroundImage: "none", backgroundColor: "transparent" }} />
+            <span className="text-sm font-medium text-secondary" style={{ color: "#99f6e4" }}>ACCESO EXCLUSIVO</span>
           </div>
         </div>
         
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-balance">
           Cómo acceder a precios exclusivos en viajes y experiencias{" "}
-          <span className="text-accent">que no están disponibles al público</span>
+          <span className="text-accent" style={{ color: "#99f6e4" }}>que no están disponibles al público</span>
         </h1>
         
         <p className="text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed">
@@ -30,19 +30,19 @@ export function FunnelHero() {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-6">
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             onClick={scrollToForm}
-            className="bg-accent hover:bg-accent/90 text-primary font-semibold px-8 py-6 text-lg shadow-xl hover:shadow-2xl transition-all"
-          >
+            className="bg-accent hover:bg-accent/90 text-primary font-semibold px-8 py-6 text-lg shadow-xl hover:shadow-2xl transition-all" style={{ backgroundColor: "#99f6e4", backgroundImage: "none" }}>
+            
             Ver cómo funciona el club
           </Button>
-          <Button 
-            size="lg" 
+          <Button
+            size="lg"
             variant="outline"
             onClick={scrollToForm}
-            className="border-2 border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg"
-          >
+            className="border-2 border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg">
+            
             Empezar ahora
           </Button>
         </div>
@@ -51,6 +51,6 @@ export function FunnelHero() {
           <ArrowDown className="w-6 h-6 mx-auto text-accent" />
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
