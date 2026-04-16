@@ -7,8 +7,8 @@ const benefits = [
     icon: Plane,
     title: "Plataforma Privada de Viajes",
     description: "Acceso exclusivo a tarifas preferenciales en hoteles, vuelos, cruceros, resorts y alquiler de autos que no están disponibles al público general.",
-    image: "/maldives-kayak.jpg",
-    alt: "Kayak transparente en aguas cristalinas turquesas de Maldivas con bungalows sobre el agua"
+    image: "/tropical-paradise.jpg",
+    alt: "Playa tropical paradisíaca con palmeras, flores rosadas y aguas turquesas cristalinas"
   },
   {
     icon: Sparkles,
