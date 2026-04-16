@@ -35,8 +35,8 @@ export function FunnelForm() {
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="Tu nombre"
-            className="border-muted focus:border-primary"
-          />
+            className="border-muted focus:border-primary" />
+          
         </div>
 
         <div className="space-y-2">
@@ -51,8 +51,8 @@ export function FunnelForm() {
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="tu@email.com"
-            className="border-muted focus:border-primary"
-          />
+            className="border-muted focus:border-primary" />
+          
         </div>
 
         <div className="space-y-2">
@@ -67,8 +67,8 @@ export function FunnelForm() {
             value={formData.phone}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="+1234567890"
-            className="border-muted focus:border-primary"
-          />
+            className="border-muted focus:border-primary" />
+          
         </div>
 
         <div className="space-y-2">
@@ -82,8 +82,8 @@ export function FunnelForm() {
             value={formData.country}
             onChange={(e) => setFormData({ ...formData, country: e.target.value })}
             placeholder="Tu país"
-            className="border-muted focus:border-primary"
-          />
+            className="border-muted focus:border-primary" />
+          
         </div>
       </div>
 
@@ -98,20 +98,20 @@ export function FunnelForm() {
             type="button"
             variant={formData.contactMethod === "whatsapp" ? "default" : "outline"}
             className="flex-1"
-            onClick={() => setFormData({ ...formData, contactMethod: "whatsapp" })}
-          >
+            onClick={() => setFormData({ ...formData, contactMethod: "whatsapp" })} style={{ backgroundColor: "#22c55e", backgroundImage: "none" }}>
+            
             WhatsApp
           </Button>
         </div>
       </div>
 
-      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white py-6 text-lg font-semibold">
+      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white py-6 text-lg font-semibold" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>
         Empezar ahora
       </Button>
 
       <p className="text-xs text-center text-muted-foreground mt-4">
         Al continuar, aceptas recibir información sobre Travel Advantage
       </p>
-    </form>
-  );
+    </form>);
+
 }
