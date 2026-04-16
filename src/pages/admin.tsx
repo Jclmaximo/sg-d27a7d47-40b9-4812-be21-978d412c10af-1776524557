@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LogIn, UserPlus, Loader2 } from "lucide-react";
+import { LogIn, UserPlus, Loader2, Lock } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { subscriptionService } from "@/services/subscriptionService";
 
@@ -23,20 +23,34 @@ export default function AdminLogin() {
   }, []);
 
   async function checkAuthStatus() {
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    if (session) {
-      // Only redirect if user is already logged in
-      const hasActiveSubscription = await subscriptionService.hasActiveSubscription(session.user.id);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
       
-      if (hasActiveSubscription) {
-        router.push("/admin/dashboard");
-      } else {
-        // User is logged in but no subscription - send them to pricing
-        router.push("/pricing");
+      if (session) {
+        // Check if user has active subscription
+        try {
+          const hasActiveSubscription = await subscriptionService.hasActiveSubscription(session.user.id);
+          
+          if (hasActiveSubscription) {
+            // Only redirect to dashboard if they have an active subscription
+            router.push("/admin/dashboard");
+          }
+          // If no subscription, stay on this page - let them see login/signup
+        } catch (error) {
+          console.error("Error checking subscription:", error);
+          // If subscription check fails, stay on this page
+        }
       }
+      // If no session, stay on login/signup page
+    } catch (error) {
+      console.error("Error checking auth:", error);
+      // If auth check fails, stay on this page
     }
-    // If no session, stay on login/signup page
+  }
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    window.location.reload();
   }
 
   async function handleLogin(e: React.FormEvent) {
@@ -116,17 +130,28 @@ export default function AdminLogin() {
         title="Admin - Viaja Ligero"
         description="Acceso al panel de administración de Viaja Ligero"
       />
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4">
+      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <Card className="w-full max-w-md p-8 space-y-6">
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-primary">Viaja Ligero</h1>
+            <div className="flex justify-center mb-4">
+              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
+                <Lock className="w-8 h-8 text-primary" />
+              </div>
+            </div>
+            <h1 className="text-3xl font-bold">Viaja Ligero</h1>
             <p className="text-muted-foreground">Panel de Administración</p>
           </div>
 
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Inicia Sesión</TabsTrigger>
-              <TabsTrigger value="signup">Regístrate</TabsTrigger>
+              <TabsTrigger value="login">
+                <LogIn className="w-4 h-4 mr-2" />
+                Inicia Sesión
+              </TabsTrigger>
+              <TabsTrigger value="signup">
+                <UserPlus className="w-4 h-4 mr-2" />
+                Regístrate
+              </TabsTrigger>
             </TabsList>
 
             {/* Login Tab */}
