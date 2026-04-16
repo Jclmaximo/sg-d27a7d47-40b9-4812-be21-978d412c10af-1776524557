@@ -1,28 +1,30 @@
 # Travel Advantage Sales Funnel
 
 ## Vision
-A conversion-optimized sales funnel for Travel Advantage, an exclusive travel club offering members access to discounted luxury travel bookings and optional income generation through referrals. Target audience: travel enthusiasts seeking value, professionals interested in lifestyle businesses, and digital nomads.
+Un funnel de ventas estratégico para Travel Advantage que captura, filtra y convierte prospectos en miembros o Lifestyle Ambassadors. Diseñado para presentar la dualidad del club: acceso a viajes exclusivos con descuentos y oportunidad de generar ingresos por recomendación.
 
 ## Design
-**Color System:**
-- `--primary: 220 60% 25%` (deep navy) — trust, professionalism, travel industry authority
-- `--accent: 43 100% 50%` (warm gold) — luxury, exclusivity, premium positioning
-- `--background: 40 40% 96%` (soft cream) — warmth, approachability
-- `--foreground: 220 25% 15%` (dark slate) — readability
-- `--muted: 220 15% 85%` (light slate) — secondary surfaces
-- `--card: 0 0% 100%` (white) — clean card backgrounds with elevation
-- `--border: 220 20% 85%` (subtle blue-grey) — refined separation
+Color palette basado en confianza corporativa con toques premium:
+- --primary: 215 85% 45% (azul corporativo confiable)
+- --primary-foreground: 0 0% 100% (blanco)
+- --secondary: 42 88% 55% (dorado exclusivo)
+- --secondary-foreground: 220 15% 15% (texto oscuro)
+- --accent: 215 75% 55% (azul acento)
+- --muted: 215 20% 95% (gris azulado suave)
+- --background: 0 0% 100% (blanco limpio)
+- --foreground: 220 15% 15% (texto principal)
 
-**Typography:**
-- Headings: Sora (500, 600, 700) — modern authority, geometric precision
-- Body: Work Sans (400, 500, 600) — clean readability for long-form content
+Tipografía:
+- Headings: Plus Jakarta Sans (peso 700/600)
+- Body: Work Sans (peso 400/500)
 
-**Style Direction:**
-Premium travel club aesthetic with conversion focus. Generous whitespace, subtle shadows for depth, gold accent lines for luxury cues. Progressive disclosure through scroll-triggered sections. Trust signals (licenses, offices) prominently placed. Testimonial cards with verified styling.
+Estilo: Profesional, limpio, aspiracional, con espaciado generoso y jerarquía clara.
 
 ## Features
-1. **Hero Section**: Bold headline with dual benefit proposition (savings + income), compelling subheadline, immediate scroll-to-action CTA
-2. **Value Proposition**: Icon-driven benefit cards showcasing platform exclusives, Life Experiences®, and travel credits
-3. **Segmentation Quiz**: Interactive choice module to route users (savings-only / income / both) with visual path indicators
-4. **Social Proof**: Aggregated savings stat ($2.8M+), individual testimonial cards with photos/flags/verified badges, success story highlights
-5. **Lead Capture Form**: Multi-field form (name, email, phone, country, contact preference) with trust badges (licenses, office locations) below
+- Hero section con headline impactante y propuesta de valor dual
+- Lista de beneficios exclusivos con iconos
+- Segmentación interactiva (ahorrar/ganar/ambas)
+- Sección de prueba social con datos de ahorro real
+- Testimonios con ahorros específicos por país
+- Formulario de captura con validación
+- Footer con licencias y ubicaciones corporativas
