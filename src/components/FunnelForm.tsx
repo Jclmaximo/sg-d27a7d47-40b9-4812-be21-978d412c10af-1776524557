@@ -105,7 +105,7 @@ export function FunnelForm() {
         </div>
       </div>
 
-      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white py-6 text-lg font-semibold" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>
+      <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-white py-6 text-lg font-semibold" style={{ backgroundColor: "#3b82f6", backgroundImage: "none", padding: "16px 0px", margin: "10px 0px" }}>
         Empezar ahora
       </Button>
 
