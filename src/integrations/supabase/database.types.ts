@@ -15,6 +15,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_settings: {
+        Row: {
+          business_name: string | null
+          created_at: string | null
+          id: string
+          updated_at: string | null
+          user_id: string
+          whatsapp_number: string
+        }
+        Insert: {
+          business_name?: string | null
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id: string
+          whatsapp_number: string
+        }
+        Update: {
+          business_name?: string | null
+          created_at?: string | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string
+          whatsapp_number?: string
+        }
+        Relationships: []
+      }
       lead_notes: {
         Row: {
           created_at: string | null
@@ -58,6 +85,7 @@ export type Database = {
           source: string | null
           status: string | null
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           country: string
@@ -69,6 +97,7 @@ export type Database = {
           source?: string | null
           status?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           country?: string
@@ -80,6 +109,7 @@ export type Database = {
           source?: string | null
           status?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -128,6 +158,54 @@ export type Database = {
           full_name?: string | null
           id?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          auto_renew: boolean | null
+          created_at: string | null
+          end_date: string | null
+          id: string
+          payment_method: string
+          plan_type: string
+          price_usd: number
+          start_date: string | null
+          status: string
+          transaction_hash: string | null
+          updated_at: string | null
+          user_id: string
+          wallet_address: string | null
+        }
+        Insert: {
+          auto_renew?: boolean | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          payment_method?: string
+          plan_type?: string
+          price_usd: number
+          start_date?: string | null
+          status?: string
+          transaction_hash?: string | null
+          updated_at?: string | null
+          user_id: string
+          wallet_address?: string | null
+        }
+        Update: {
+          auto_renew?: boolean | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          payment_method?: string
+          plan_type?: string
+          price_usd?: number
+          start_date?: string | null
+          status?: string
+          transaction_hash?: string | null
+          updated_at?: string | null
+          user_id?: string
+          wallet_address?: string | null
         }
         Relationships: []
       }

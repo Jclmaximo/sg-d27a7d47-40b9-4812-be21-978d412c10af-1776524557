@@ -19,8 +19,12 @@ export function FunnelForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     try {
+      // Get admin settings to use their WhatsApp
+      // For now, using default number - in production this would be dynamic per funnel
+      const whatsappNumber = "523314300767"; // This will be replaced with admin's number
+
       // Save lead to database
       await leadsService.createLead({
         name: formData.name,
@@ -31,13 +35,12 @@ export function FunnelForm() {
 
       // Send to WhatsApp
       const message = `¡Hola! Quiero más información sobre Travel Advantage.%0A%0A` +
-      `Nombre: ${formData.name}%0A` +
-      `Email: ${formData.email}%0A` +
-      `Teléfono: ${formData.phone}%0A` +
-      `País: ${formData.country}%0A` +
-      `Método de contacto: WhatsApp`;
-
-      window.open(`https://wa.me/523314300767?text=${message}`, '_blank');
+        `Nombre: ${formData.name}%0A` +
+        `Email: ${formData.email}%0A` +
+        `Teléfono: ${formData.phone}%0A` +
+        `País: ${formData.country}`;
+      
+      window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
 
       // Reset form
       setFormData({ name: "", email: "", phone: "", country: "" });

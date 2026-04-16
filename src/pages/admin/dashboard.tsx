@@ -8,8 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { LogOut, Plus, MessageSquare, Trash2, Loader2, Phone } from "lucide-react";
+import { LogOut, Plus, MessageSquare, Trash2, Loader2, Phone, Settings } from "lucide-react";
 import { SEO } from "@/components/SEO";
+import { subscriptionService } from "@/services/subscriptionService";
+import { Input } from "@/components/ui/input";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -20,6 +22,9 @@ export default function AdminDashboard() {
   const [newNote, setNewNote] = useState("");
   const [templates, setTemplates] = useState<MessageTemplate[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState("");
+  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
+  const [adminWhatsApp, setAdminWhatsApp] = useState("");
+  const [showSettings, setShowSettings] = useState(false);
 
   const messageTemplates = [
     {
@@ -50,8 +55,54 @@ export default function AdminDashboard() {
   ];
 
   useEffect(() => {
-    checkAuth();
+    checkAuthAndSubscription();
   }, []);
+
+  const checkAuthAndSubscription = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      router.push("/admin");
+      return;
+    }
+
+    // Check subscription
+    const isActive = await subscriptionService.hasActiveSubscription(user.id);
+    setHasActiveSubscription(isActive);
+
+    if (!isActive) {
+      router.push("/pricing");
+      return;
+    }
+
+    // Load admin settings
+    const settings = await subscriptionService.getAdminSettings(user.id);
+    if (settings) {
+      setAdminWhatsApp(settings.whatsapp_number);
+    }
+
+    loadLeads();
+  };
+
+  const handleSaveWhatsApp = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return;
+
+    try {
+      await subscriptionService.updateAdminSettings(user.id, {
+        whatsapp_number: adminWhatsApp
+      });
+      alert("WhatsApp guardado exitosamente");
+      setShowSettings(false);
+    } catch (error) {
+      console.error("Error saving WhatsApp:", error);
+      alert("Error al guardar WhatsApp");
+    }
+  };
+
+  const sendWhatsApp = (lead: Lead, message: string) => {
+    window.open(`https://wa.me/${lead.phone}?text=${encodeURIComponent(message)}`, '_blank');
+  };
 
   async function checkAuth() {
     const { data: { session } } = await supabase.auth.getSession();
@@ -176,12 +227,38 @@ export default function AdminDashboard() {
               <h1 className="text-2xl font-bold text-primary">Travel Advantage</h1>
               <p className="text-sm text-muted-foreground">Panel de Administración</p>
             </div>
-            <Button variant="outline" onClick={handleLogout}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Cerrar Sesión
-            </Button>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => setShowSettings(!showSettings)}>
+                <Settings className="w-4 h-4 mr-2" />
+                Configuración
+              </Button>
+              <Button variant="outline" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Cerrar Sesión
+              </Button>
+            </div>
           </div>
         </header>
+
+        {/* WhatsApp Settings Modal */}
+        {showSettings && (
+          <Card className="p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Configuración de WhatsApp</h2>
+            <div className="flex gap-2">
+              <Input
+                type="tel"
+                placeholder="Ej: 523314300767"
+                value={adminWhatsApp}
+                onChange={(e) => setAdminWhatsApp(e.target.value)}
+                className="flex-1"
+              />
+              <Button onClick={handleSaveWhatsApp}>Guardar</Button>
+            </div>
+            <p className="text-sm text-muted-foreground mt-2">
+              Los leads se enviarán a este número de WhatsApp
+            </p>
+          </Card>
+        )}
 
         {/* Stats */}
         <div className="container mx-auto px-4 py-8">
