@@ -35,6 +35,7 @@ export interface CreatePaymentParams {
   callback_url?: string;
   success_url?: string;
   cancel_url?: string;
+  webhookUrl?: string;
 }
 
 export const disruptiveService = {
@@ -77,7 +78,8 @@ export const disruptiveService = {
           metadata: params.metadata,
           callback_url: params.callback_url,
           success_url: params.success_url,
-          cancel_url: params.cancel_url
+          cancel_url: params.cancel_url,
+          webhookUrl: params.webhookUrl
         })
       });
 
