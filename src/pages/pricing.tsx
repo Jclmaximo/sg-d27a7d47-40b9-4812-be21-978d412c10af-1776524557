@@ -2,17 +2,59 @@ import { useState } from "react";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { CheckCircle2, Sparkles, Wallet, Shield, Globe, TrendingUp } from "lucide-react";
+import { CheckCircle2, Sparkles, Wallet, Shield, Globe, TrendingUp, Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
+import { discountService } from "@/services/discountService";
+import { Input } from "@/components/ui/input";
 
 export default function Pricing() {
   const router = useRouter();
   const [showCheckout, setShowCheckout] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
-  const [paymentType, setPaymentType] = useState<"initial" | "monthly">("initial");
+  const [selectedPlan, setSelectedPlan] = useState<"initial" | "renewal">("initial");
+  const [discountCode, setDiscountCode] = useState("");
+  const [appliedDiscount, setAppliedDiscount] = useState<{ percentage: number; code: string } | null>(null);
+  const [discountError, setDiscountError] = useState("");
+  const [isValidatingCode, setIsValidatingCode] = useState(false);
   
   // Your BSC wallet address to receive USDT payments
-  const usdtBscAddress = "TU_WALLET_BSC_AQUI"; // Replace with your actual BSC address
+  const usdtBscAddress = "TU_WALLET_BSC_AQUI";
+
+  const initialPrice = 79;
+  const renewalPrice = 10;
+
+  const currentPrice = selectedPlan === "initial" ? initialPrice : renewalPrice;
+  const finalPrice = appliedDiscount 
+    ? discountService.calculateDiscountedPrice(currentPrice, appliedDiscount.percentage)
+    : currentPrice;
+
+  const handleApplyDiscount = async () => {
+    if (!discountCode.trim()) return;
+
+    setIsValidatingCode(true);
+    setDiscountError("");
+
+    const result = await discountService.validateDiscountCode(discountCode);
+
+    if (result.valid && result.discount) {
+      setAppliedDiscount({
+        percentage: result.discount.discount_percentage,
+        code: result.discount.code
+      });
+      setDiscountError("");
+    } else {
+      setAppliedDiscount(null);
+      setDiscountError(result.error || "Código inválido");
+    }
+
+    setIsValidatingCode(false);
+  };
+
+  const handleRemoveDiscount = () => {
+    setAppliedDiscount(null);
+    setDiscountCode("");
+    setDiscountError("");
+  };
 
   const handleConnectWallet = async () => {
     if (typeof (window as any).ethereum !== "undefined") {
@@ -110,47 +152,94 @@ export default function Pricing() {
                   </div>
 
                   {!showCheckout ? (
-                    <Button 
-                      size="lg" 
-                      className="w-full text-lg py-6"
-                      onClick={handleConnectWallet}
-                    >
-                      <Wallet className="w-5 h-5 mr-2" />
-                      Conectar Wallet
-                    </Button>
-                  ) : (
                     <div className="space-y-4">
-                      {/* Payment Type Selector */}
-                      <div className="flex gap-2">
-                        <Button
-                          variant={paymentType === "initial" ? "default" : "outline"}
-                          className="flex-1"
-                          onClick={() => setPaymentType("initial")}
-                        >
-                          Pago Inicial ($79)
-                        </Button>
-                        <Button
-                          variant={paymentType === "monthly" ? "default" : "outline"}
-                          className="flex-1"
-                          onClick={() => setPaymentType("monthly")}
-                        >
-                          Mensualidad ($10)
-                        </Button>
+                      {/* Discount Code Input */}
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">¿Tienes un código de descuento?</label>
+                        <div className="flex gap-2">
+                          <Input
+                            type="text"
+                            placeholder="Ingresa tu código"
+                            value={discountCode}
+                            onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                            disabled={!!appliedDiscount}
+                            className="flex-1"
+                          />
+                          {appliedDiscount ? (
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={handleRemoveDiscount}
+                            >
+                              Quitar
+                            </Button>
+                          ) : (
+                            <Button
+                              type="button"
+                              onClick={handleApplyDiscount}
+                              disabled={isValidatingCode || !discountCode.trim()}
+                            >
+                              {isValidatingCode ? <Loader2 className="w-4 h-4 animate-spin" /> : "Aplicar"}
+                            </Button>
+                          )}
+                        </div>
+                        {discountError && (
+                          <p className="text-sm text-destructive">{discountError}</p>
+                        )}
+                        {appliedDiscount && (
+                          <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                            <CheckCircle2 className="w-4 h-4" />
+                            <span>¡Descuento del {appliedDiscount.percentage}% aplicado! ({appliedDiscount.code})</span>
+                          </div>
+                        )}
                       </div>
 
+                      {/* Price Summary */}
+                      {appliedDiscount && (
+                        <div className="p-4 bg-muted rounded-lg space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span>Precio original:</span>
+                            <span className="line-through">${currentPrice} USDT</span>
+                          </div>
+                          <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
+                            <span>Descuento ({appliedDiscount.percentage}%):</span>
+                            <span>-${(currentPrice - finalPrice).toFixed(2)} USDT</span>
+                          </div>
+                          <div className="flex justify-between font-bold text-lg border-t pt-2">
+                            <span>Total a pagar:</span>
+                            <span className="text-primary">${finalPrice} USDT</span>
+                          </div>
+                        </div>
+                      )}
+
+                      <Button 
+                        size="lg" 
+                        className="w-full text-lg py-6"
+                        onClick={handleConnectWallet}
+                      >
+                        <Wallet className="w-5 h-5 mr-2" />
+                        Conectar Wallet
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
                       <div className="p-4 bg-muted rounded-lg">
                         <p className="text-sm text-muted-foreground mb-2">
-                          Envía {paymentType === "initial" ? "79" : "10"} USDT (BEP20) a:
+                          Envía {finalPrice} USDT (BEP20) a:
                         </p>
                         <code className="text-xs break-all bg-background p-2 rounded block">
                           {usdtBscAddress}
                         </code>
-                        <p className="text-xs text-muted-foreground mt-2">
-                          {paymentType === "initial" 
-                            ? "⚠️ Pago inicial requerido para activar tu cuenta"
-                            : "🔄 Renovación mensual - mantiene tu acceso activo"
-                          }
-                        </p>
+                        {appliedDiscount && (
+                          <div className="mt-3 pt-3 border-t">
+                            <p className="text-sm font-medium text-green-600 dark:text-green-400">
+                              ✓ Descuento {appliedDiscount.percentage}% aplicado
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Ahorro: ${(currentPrice - finalPrice).toFixed(2)} USDT
+                            </p>
+                          </div>
+                        )}
                       </div>
                       <Button 
                         size="lg" 

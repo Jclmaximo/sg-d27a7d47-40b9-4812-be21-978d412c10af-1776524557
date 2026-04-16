@@ -42,6 +42,48 @@ export type Database = {
         }
         Relationships: []
       }
+      discount_codes: {
+        Row: {
+          code: string
+          created_at: string | null
+          description: string | null
+          discount_percentage: number
+          id: string
+          is_active: boolean | null
+          times_used: number | null
+          updated_at: string | null
+          usage_limit: number | null
+          valid_from: string | null
+          valid_until: string | null
+        }
+        Insert: {
+          code: string
+          created_at?: string | null
+          description?: string | null
+          discount_percentage: number
+          id?: string
+          is_active?: boolean | null
+          times_used?: number | null
+          updated_at?: string | null
+          usage_limit?: number | null
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Update: {
+          code?: string
+          created_at?: string | null
+          description?: string | null
+          discount_percentage?: number
+          id?: string
+          is_active?: boolean | null
+          times_used?: number | null
+          updated_at?: string | null
+          usage_limit?: number | null
+          valid_from?: string | null
+          valid_until?: string | null
+        }
+        Relationships: []
+      }
       lead_notes: {
         Row: {
           created_at: string | null
@@ -165,11 +207,15 @@ export type Database = {
         Row: {
           auto_renew: boolean | null
           created_at: string | null
+          discount_code_used: string | null
+          discount_percentage: number | null
           end_date: string | null
+          final_price: number | null
           id: string
           initial_payment_amount: number | null
           is_initial_payment: boolean | null
           monthly_payment_amount: number | null
+          original_price: number | null
           payment_method: string
           plan_type: string
           price_usd: number
@@ -183,11 +229,15 @@ export type Database = {
         Insert: {
           auto_renew?: boolean | null
           created_at?: string | null
+          discount_code_used?: string | null
+          discount_percentage?: number | null
           end_date?: string | null
+          final_price?: number | null
           id?: string
           initial_payment_amount?: number | null
           is_initial_payment?: boolean | null
           monthly_payment_amount?: number | null
+          original_price?: number | null
           payment_method?: string
           plan_type?: string
           price_usd: number
@@ -201,11 +251,15 @@ export type Database = {
         Update: {
           auto_renew?: boolean | null
           created_at?: string | null
+          discount_code_used?: string | null
+          discount_percentage?: number | null
           end_date?: string | null
+          final_price?: number | null
           id?: string
           initial_payment_amount?: number | null
           is_initial_payment?: boolean | null
           monthly_payment_amount?: number | null
+          original_price?: number | null
           payment_method?: string
           plan_type?: string
           price_usd?: number
