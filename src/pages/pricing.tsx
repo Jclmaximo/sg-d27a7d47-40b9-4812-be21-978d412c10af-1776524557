@@ -13,10 +13,10 @@ export default function Pricing() {
   const [walletAddress, setWalletAddress] = useState("");
   const [selectedPlan, setSelectedPlan] = useState<"initial" | "renewal">("initial");
   const [discountCode, setDiscountCode] = useState("");
-  const [appliedDiscount, setAppliedDiscount] = useState<{ percentage: number; code: string } | null>(null);
+  const [appliedDiscount, setAppliedDiscount] = useState<{percentage: number;code: string;} | null>(null);
   const [discountError, setDiscountError] = useState("");
   const [isValidatingCode, setIsValidatingCode] = useState(false);
-  
+
   // Your BSC wallet address to receive USDT payments
   const usdtBscAddress = "TU_WALLET_BSC_AQUI";
 
@@ -24,9 +24,9 @@ export default function Pricing() {
   const renewalPrice = 10;
 
   const currentPrice = selectedPlan === "initial" ? initialPrice : renewalPrice;
-  const finalPrice = appliedDiscount 
-    ? discountService.calculateDiscountedPrice(currentPrice, appliedDiscount.percentage)
-    : currentPrice;
+  const finalPrice = appliedDiscount ?
+  discountService.calculateDiscountedPrice(currentPrice, appliedDiscount.percentage) :
+  currentPrice;
 
   const handleApplyDiscount = async () => {
     if (!discountCode.trim()) return;
@@ -80,10 +80,10 @@ export default function Pricing() {
 
   return (
     <>
-      <SEO 
-        title="Membresía Viaja Ligero - Sistema de Embudo de Ventas" 
-        description="Accede al sistema completo de embudo de ventas para embajadores de Viaja Ligero. $79 USD inicial + $10 USD/mes en USDT."
-      />
+      <SEO
+        title="Membresía Viaja Ligero - Sistema de Embudo de Ventas"
+        description="Accede al sistema completo de embudo de ventas para embajadores de Viaja Ligero. $79 USD inicial + $10 USD/mes en USDT." />
+      
       
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         {/* Header */}
@@ -99,7 +99,7 @@ export default function Pricing() {
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-20 text-center">
           <div className="max-w-3xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary-foreground text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary-foreground text-sm font-medium" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>
               <Sparkles className="w-4 h-4" />
               Sistema Premium para Embajadores
             </div>
@@ -151,52 +151,52 @@ export default function Pricing() {
                     <p className="text-xs text-muted-foreground mt-1">Luego solo $10 USD mensuales</p>
                   </div>
 
-                  {!showCheckout ? (
-                    <div className="space-y-4">
+                  {!showCheckout ?
+                  <div className="space-y-4">
                       {/* Discount Code Input */}
                       <div className="space-y-2">
                         <label className="text-sm font-medium">¿Tienes un código de descuento?</label>
                         <div className="flex gap-2">
                           <Input
-                            type="text"
-                            placeholder="Ingresa tu código"
-                            value={discountCode}
-                            onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
-                            disabled={!!appliedDiscount}
-                            className="flex-1"
-                          />
-                          {appliedDiscount ? (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              onClick={handleRemoveDiscount}
-                            >
+                          type="text"
+                          placeholder="Ingresa tu código"
+                          value={discountCode}
+                          onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
+                          disabled={!!appliedDiscount}
+                          className="flex-1" />
+                        
+                          {appliedDiscount ?
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={handleRemoveDiscount}>
+                          
                               Quitar
-                            </Button>
-                          ) : (
-                            <Button
-                              type="button"
-                              onClick={handleApplyDiscount}
-                              disabled={isValidatingCode || !discountCode.trim()}
-                            >
+                            </Button> :
+
+                        <Button
+                          type="button"
+                          onClick={handleApplyDiscount}
+                          disabled={isValidatingCode || !discountCode.trim()}>
+                          
                               {isValidatingCode ? <Loader2 className="w-4 h-4 animate-spin" /> : "Aplicar"}
                             </Button>
-                          )}
+                        }
                         </div>
-                        {discountError && (
-                          <p className="text-sm text-destructive">{discountError}</p>
-                        )}
-                        {appliedDiscount && (
-                          <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                        {discountError &&
+                      <p className="text-sm text-destructive">{discountError}</p>
+                      }
+                        {appliedDiscount &&
+                      <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
                             <CheckCircle2 className="w-4 h-4" />
                             <span>¡Descuento del {appliedDiscount.percentage}% aplicado! ({appliedDiscount.code})</span>
                           </div>
-                        )}
+                      }
                       </div>
 
                       {/* Price Summary */}
-                      {appliedDiscount && (
-                        <div className="p-4 bg-muted rounded-lg space-y-2">
+                      {appliedDiscount &&
+                    <div className="p-4 bg-muted rounded-lg space-y-2">
                           <div className="flex justify-between text-sm">
                             <span>Precio original:</span>
                             <span className="line-through">${currentPrice} USDT</span>
@@ -210,19 +210,19 @@ export default function Pricing() {
                             <span className="text-primary">${finalPrice} USDT</span>
                           </div>
                         </div>
-                      )}
+                    }
 
-                      <Button 
-                        size="lg" 
-                        className="w-full text-lg py-6"
-                        onClick={handleConnectWallet}
-                      >
+                      <Button
+                      size="lg"
+                      className="w-full text-lg py-6"
+                      onClick={handleConnectWallet}>
+                      
                         <Wallet className="w-5 h-5 mr-2" />
                         Conectar Wallet
                       </Button>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
+                    </div> :
+
+                  <div className="space-y-4">
                       <div className="p-4 bg-muted rounded-lg">
                         <p className="text-sm text-muted-foreground mb-2">
                           Envía {finalPrice} USDT (BEP20) a:
@@ -230,8 +230,8 @@ export default function Pricing() {
                         <code className="text-xs break-all bg-background p-2 rounded block">
                           {usdtBscAddress}
                         </code>
-                        {appliedDiscount && (
-                          <div className="mt-3 pt-3 border-t">
+                        {appliedDiscount &&
+                      <div className="mt-3 pt-3 border-t">
                             <p className="text-sm font-medium text-green-600 dark:text-green-400">
                               ✓ Descuento {appliedDiscount.percentage}% aplicado
                             </p>
@@ -239,18 +239,18 @@ export default function Pricing() {
                               Ahorro: ${(currentPrice - finalPrice).toFixed(2)} USDT
                             </p>
                           </div>
-                        )}
+                      }
                       </div>
-                      <Button 
-                        size="lg" 
-                        className="w-full"
-                        onClick={handlePaymentConfirmed}
-                      >
+                      <Button
+                      size="lg"
+                      className="w-full"
+                      onClick={handlePaymentConfirmed}>
+                      
                         <CheckCircle2 className="w-5 h-5 mr-2" />
                         Ya realicé el pago
                       </Button>
                     </div>
-                  )}
+                  }
 
                   <p className="text-xs text-center text-muted-foreground">
                     Pagos con USDT en Binance Smart Chain (BEP20)
@@ -370,6 +370,6 @@ export default function Pricing() {
           </div>
         </section>
       </div>
-    </>
-  );
+    </>);
+
 }
