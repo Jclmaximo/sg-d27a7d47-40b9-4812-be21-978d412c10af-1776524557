@@ -35,14 +35,14 @@ const benefits = [
 
 export function ValueProposition() {
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-muted/30">
+    <section className="py-20 bg-background">
       <div className="container">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
             Beneficios Exclusivos para Miembros
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Descubre las ventajas que hacen de Travel Advantage el club de viajes más completo del mercado
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Accede a una plataforma completa diseñada para transformar la forma en que viajas
           </p>
         </div>
 
@@ -54,7 +54,7 @@ export function ValueProposition() {
                 key={index} 
                 className="group relative overflow-hidden border-2 hover:border-accent transition-all duration-300 hover:shadow-2xl"
               >
-                {/* Image Container */}
+                {/* Image Container - SIN BLUR */}
                 <div className="relative h-64 overflow-hidden">
                   <Image
                     src={benefit.image}
@@ -62,7 +62,7 @@ export function ValueProposition() {
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  {/* Gradient Overlay - sin blur */}
+                  {/* Gradient Overlay simple - sin backdrop-blur */}
                   <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-transparent" />
                   
                   {/* Icon Badge */}
@@ -70,8 +70,10 @@ export function ValueProposition() {
                     <Icon className="w-6 h-6 text-accent-foreground" />
                   </div>
                 </div>
+
+                {/* Content */}
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors">
                     {benefit.title}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
