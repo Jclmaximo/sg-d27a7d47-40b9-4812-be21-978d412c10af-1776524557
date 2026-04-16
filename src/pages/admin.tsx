@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogIn, UserPlus, Loader2 } from "lucide-react";
 import { SEO } from "@/components/SEO";
+import { subscriptionService } from "@/services/subscriptionService";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -31,8 +32,8 @@ export default function AdminLogin() {
       if (hasActiveSubscription) {
         router.push("/admin/dashboard");
       } else {
-        // User is logged in but no subscription - stay on this page or go to pricing
-        // Don't redirect, let them see they need a subscription
+        // User is logged in but no subscription - send them to pricing
+        router.push("/pricing");
       }
     }
     // If no session, stay on login/signup page
