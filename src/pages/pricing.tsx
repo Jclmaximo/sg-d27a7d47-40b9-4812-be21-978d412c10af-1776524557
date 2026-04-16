@@ -27,9 +27,9 @@ export default function Pricing() {
   ];
 
   const handleConnectWallet = async () => {
-    if (typeof window.ethereum !== "undefined") {
+    if (typeof (window as any).ethereum !== "undefined") {
       try {
-        const accounts = await window.ethereum.request({
+        const accounts = await (window as any).ethereum.request({
           method: "eth_requestAccounts"
         });
         setWalletAddress(accounts[0]);

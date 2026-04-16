@@ -78,12 +78,13 @@ export const subscriptionService = {
   },
 
   // Update admin settings (WhatsApp number)
-  async updateAdminSettings(userId: string, settings: Partial<AdminSettings>) {
+  async updateAdminSettings(userId: string, settings: { whatsapp_number: string; business_name?: string }) {
     const { data, error } = await supabase
       .from("admin_settings")
       .upsert([{
         user_id: userId,
-        ...settings
+        whatsapp_number: settings.whatsapp_number,
+        business_name: settings.business_name || null
       }])
       .select()
       .single();

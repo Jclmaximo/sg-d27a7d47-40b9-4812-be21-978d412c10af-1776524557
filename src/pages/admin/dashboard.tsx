@@ -81,7 +81,7 @@ export default function AdminDashboard() {
       setAdminWhatsApp(settings.whatsapp_number);
     }
 
-    loadLeads();
+    loadData();
   };
 
   const handleSaveWhatsApp = async () => {

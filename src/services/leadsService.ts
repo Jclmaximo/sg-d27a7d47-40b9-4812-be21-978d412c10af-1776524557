@@ -19,7 +19,7 @@ export const leadsService = {
   },
 
   // Create lead (from funnel)
-  async createLead(leadData: Omit<Lead, "id" | "created_at" | "updated_at" | "status" | "source">) {
+  async createLead(leadData: Omit<Lead, "id" | "created_at" | "updated_at" | "status" | "source" | "user_id"> & { user_id?: string | null }) {
     const { data, error } = await supabase
       .from("leads")
       .insert([leadData])
