@@ -39,53 +39,40 @@ export const disruptiveService = {
   },
 
   // Create payment invoice
-  async createPayment(request: DisruptivePaymentRequest): Promise<DisruptivePaymentResponse> {
-    const { apiKey, apiUrl } = this.getApiConfig();
+  async createPayment(params: CreatePaymentParams): Promise<DisruptivePaymentResponse> {
+    const apiKey = process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY;
+    
+    if (!apiKey) {
+      throw new Error("Disruptive API key not configured");
+    }
 
     try {
-      // Disruptive API expects payment data in this format
-      const payload = {
-        amount: request.amount.toString(),
-        currency: request.currency,
-        network: request.network,
-        order_id: request.orderId,
-        description: request.description,
-        customer_email: request.customerEmail,
-        callback_url: request.webhookUrl,
-        success_url: `${window.location.origin}/admin/dashboard`,
-        cancel_url: `${window.location.origin}/pricing`
-      };
-
-      console.log("Creating Disruptive payment:", payload);
-
-      const response = await fetch(`${apiUrl}/payments`, {
+      const response = await fetch(`${this.baseUrl}/payments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${apiKey}`,
           "Accept": "application/json"
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          amount: params.amount,
+          currency: params.currency,
+          description: params.description,
+          metadata: params.metadata,
+          callback_url: params.callback_url,
+          success_url: params.success_url,
+          cancel_url: params.cancel_url
+        })
       });
 
-      const data = await response.json();
-      console.log("Disruptive response:", data);
-
       if (!response.ok) {
-        throw new Error(data.message || data.error || "Failed to create payment");
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Disruptive response:", { errorCode: errorData.errorCode, errorMessage: errorData.errorMessage });
+        throw new Error(`Failed to create payment: ${errorData.errorMessage || response.statusText}`);
       }
 
-      // Map Disruptive response to our interface
-      return {
-        success: true,
-        paymentId: data.payment_id || data.id,
-        address: data.payment_address || data.address,
-        amount: parseFloat(data.amount),
-        qrCode: data.qr_code,
-        checkoutUrl: data.checkout_url,
-        status: this.mapStatus(data.status),
-        expiresAt: data.expires_at
-      };
+      const data = await response.json();
+      return data;
     } catch (error) {
       console.error("Disruptive payment creation error:", error);
       throw error;
