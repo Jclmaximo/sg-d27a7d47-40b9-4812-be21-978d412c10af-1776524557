@@ -56,45 +56,60 @@ export const disruptiveService = {
   async createPayment(params: CreatePaymentParams): Promise<DisruptivePaymentResponse> {
     const { apiKey, apiUrl } = this.getApiConfig();
     
-    console.log("=== Disruptive Payment Debug ===");
-    console.log("API URL:", apiUrl);
-    console.log("API Key exists:", !!apiKey);
-    console.log("API Key length:", apiKey?.length || 0);
-    console.log("API Key preview:", apiKey ? `${apiKey.substring(0, 10)}...` : "MISSING");
+    console.log("=== Disruptive Payment Debug (Extended) ===");
+    console.log("1. Environment check:");
+    console.log("   - API URL:", apiUrl);
+    console.log("   - API Key from env:", process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY?.substring(0, 15) + "...");
+    console.log("   - API Key variable exists:", !!process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY);
+    console.log("   - API Key from getApiConfig:", apiKey?.substring(0, 15) + "...");
+    console.log("   - API Key exists:", !!apiKey);
+    console.log("   - API Key length:", apiKey?.length || 0);
     
     if (!apiKey) {
+      console.error("❌ API key is missing!");
       throw new Error("Disruptive API key not configured");
     }
 
+    const payload = {
+      amount: params.amount,
+      currency: params.currency,
+      network: params.network,
+      orderId: params.orderId,
+      customerEmail: params.customerEmail,
+      description: params.description,
+      metadata: params.metadata,
+      callback_url: params.callback_url,
+      success_url: params.success_url,
+      cancel_url: params.cancel_url,
+      webhookUrl: params.webhookUrl
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${apiKey}`,
+      "Accept": "application/json"
+    };
+
+    console.log("2. Request details:");
+    console.log("   - URL:", `${apiUrl}/payments`);
+    console.log("   - Method: POST");
+    console.log("   - Headers:", {
+      ...headers,
+      Authorization: headers.Authorization.substring(0, 20) + "..."
+    });
+    console.log("   - Payload:", JSON.stringify(payload, null, 2));
+
     try {
-      const payload = {
-        amount: params.amount,
-        currency: params.currency,
-        network: params.network,
-        orderId: params.orderId,
-        customerEmail: params.customerEmail,
-        description: params.description,
-        metadata: params.metadata,
-        callback_url: params.callback_url,
-        success_url: params.success_url,
-        cancel_url: params.cancel_url,
-        webhookUrl: params.webhookUrl
-      };
-
-      console.log("Request payload:", JSON.stringify(payload, null, 2));
-
       const response = await fetch(`${apiUrl}/payments`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${apiKey}`,
-          "Accept": "application/json"
-        },
+        headers,
         body: JSON.stringify(payload)
       });
 
-      console.log("Response status:", response.status);
-      console.log("Response headers:", Object.fromEntries(response.headers.entries()));
+      console.log("3. Response:");
+      console.log("   - Status:", response.status);
+      console.log("   - Status Text:", response.statusText);
+      console.log("   - Headers:", Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
