@@ -29,6 +29,7 @@ export interface CreatePaymentParams {
   currency: string;
   network?: string;
   orderId?: string;
+  customerEmail?: string;
   description: string;
   metadata?: any;
   callback_url?: string;
@@ -69,6 +70,9 @@ export const disruptiveService = {
         body: JSON.stringify({
           amount: params.amount,
           currency: params.currency,
+          network: params.network,
+          orderId: params.orderId,
+          customerEmail: params.customerEmail,
           description: params.description,
           metadata: params.metadata,
           callback_url: params.callback_url,
