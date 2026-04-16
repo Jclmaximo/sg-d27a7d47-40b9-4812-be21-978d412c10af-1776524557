@@ -28,6 +28,7 @@ export interface CreatePaymentParams {
   amount: number;
   currency: string;
   network?: string;
+  orderId?: string;
   description: string;
   metadata?: any;
   callback_url?: string;
