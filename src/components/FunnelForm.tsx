@@ -17,8 +17,16 @@ export function FunnelForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Aquí iría la lógica de envío
+    
+    const message = `¡Hola! Quiero más información sobre Travel Advantage.%0A%0A` +
+      `Nombre: ${formData.name}%0A` +
+      `Email: ${formData.email}%0A` +
+      `Teléfono: ${formData.phone}%0A` +
+      `País: ${formData.country}%0A` +
+      `Interés: ${formData.interest}%0A` +
+      `Contacto preferido: ${formData.preferredContact}`;
+    
+    window.open(`https://wa.me/523314300767?text=${message}`, '_blank');
   };
 
   return (
