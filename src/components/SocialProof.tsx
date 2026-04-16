@@ -1,27 +1,27 @@
 import { TrendingUp, Users, Globe, Award } from "lucide-react";
 
 const stats = [
-  {
-    icon: TrendingUp,
-    value: "$2,813,359",
-    label: "Ahorrados por miembros en 2024"
-  },
-  {
-    icon: Users,
-    value: "50,000+",
-    label: "Miembros activos en el club"
-  },
-  {
-    icon: Globe,
-    value: "190+",
-    label: "Países con cobertura"
-  },
-  {
-    icon: Award,
-    value: "15+",
-    label: "Años de experiencia"
-  }
-];
+{
+  icon: TrendingUp,
+  value: "$2,813,359",
+  label: "Ahorrados por miembros en 2024"
+},
+{
+  icon: Users,
+  value: "50,000+",
+  label: "Miembros activos en el club"
+},
+{
+  icon: Globe,
+  value: "190+",
+  label: "Países con cobertura"
+},
+{
+  icon: Award,
+  value: "15+",
+  label: "Años de experiencia"
+}];
+
 
 export function SocialProof() {
   return (
@@ -31,22 +31,22 @@ export function SocialProof() {
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Resultados Comprobados
           </h2>
-          <div className="h-1 w-24 bg-accent mx-auto mb-6"></div>
+          <div className="h-1 w-24 bg-accent mx-auto mb-6" style={{ backgroundColor: "#99f6e4", backgroundImage: "none" }}></div>
           <p className="text-lg text-white/90">
             Miles de viajeros ya están ahorrando y generando ingresos con Travel Advantage
           </p>
         </div>
         
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-          {stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4">
+          {stats.map((stat, index) =>
+          <div key={index} className="text-center">
+              <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: "#99f6e4", backgroundImage: "none" }}>
                 <stat.icon className="w-8 h-8 text-accent" />
               </div>
               <p className="text-3xl md:text-4xl font-bold mb-2">{stat.value}</p>
               <p className="text-white/80">{stat.label}</p>
             </div>
-          ))}
+          )}
         </div>
         
         <div className="text-center max-w-4xl mx-auto">
@@ -67,6 +67,6 @@ export function SocialProof() {
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
