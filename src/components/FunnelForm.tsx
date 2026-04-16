@@ -12,7 +12,7 @@ export function FunnelForm() {
     email: "",
     phone: "",
     country: "",
-    contact: "whatsapp"
+    contactMethod: "whatsapp" as const
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -87,26 +87,21 @@ export function FunnelForm() {
         </div>
       </div>
 
-      <div className="mb-6">
-        <Label className="flex items-center gap-2 mb-3">
-          <MessageSquare className="w-4 h-4 text-primary" />
+      {/* Contact Method - Solo WhatsApp */}
+      <div className="space-y-3">
+        <Label className="text-base font-medium flex items-center gap-2">
+          <MessageSquare className="w-5 h-5" />
           Método de contacto preferido
         </Label>
-        <div className="flex gap-4">
-          {["whatsapp", "email", "llamada"].map((method) => (
-            <button
-              key={method}
-              type="button"
-              onClick={() => setFormData({ ...formData, contact: method })}
-              className={`px-4 py-2 rounded-lg border-2 transition-all capitalize ${
-                formData.contact === method
-                  ? "border-primary bg-primary text-white"
-                  : "border-muted hover:border-primary"
-              }`}
-            >
-              {method}
-            </button>
-          ))}
+        <div className="flex gap-3">
+          <Button
+            type="button"
+            variant={formData.contactMethod === "whatsapp" ? "default" : "outline"}
+            className="flex-1"
+            onClick={() => setFormData({ ...formData, contactMethod: "whatsapp" })}
+          >
+            WhatsApp
+          </Button>
         </div>
       </div>
 
