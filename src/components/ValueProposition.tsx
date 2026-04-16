@@ -6,30 +6,26 @@ const benefits = [
   {
     icon: Plane,
     title: "Plataforma Privada de Viajes",
-    description: "Acceso a tarifas preferenciales en hoteles, vuelos, cruceros, resorts y alquiler de autos que no están disponibles al público general.",
-    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&q=85",
-    alt: "Avión sobrevolando nubes al atardecer"
+    description: "Acceso exclusivo a tarifas preferenciales en hoteles, vuelos, cruceros, resorts y alquiler de autos que no están disponibles al público general.",
+    image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80"
   },
   {
     icon: Sparkles,
     title: "Life Experiences®",
-    description: "Viajes de lujo curados en destinos exclusivos como Dubái, Nueva York, París y más, con experiencias personalizadas para cada miembro.",
-    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&q=85",
-    alt: "Skyline de Dubái con Burj Khalifa iluminado"
+    description: "Viajes de lujo curados en destinos exclusivos como Dubái, Nueva York, París y más, diseñados específicamente para miembros del club.",
+    image: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&auto=format&fit=crop&q=80"
   },
   {
     icon: DollarSign,
     title: "Créditos de Viaje",
-    description: "Gana créditos para reducir el costo de tus futuras reservas. Cada experiencia te acerca más a tu próximo viaje soñado.",
-    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&q=85",
-    alt: "Persona con maleta en aeropuerto moderno"
+    description: "Genera y acumula créditos para reducir significativamente el costo de tus futuras reservas y experiencias de viaje.",
+    image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&auto=format&fit=crop&q=80"
   },
   {
     icon: MapPin,
     title: "Cobertura Global",
-    description: "Más de 1 millón de hoteles, 400 aerolíneas y opciones en más de 190 países. El mundo es tu destino con Travel Advantage.",
-    image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&q=85",
-    alt: "Globo terráqueo con pins de ubicaciones"
+    description: "Más de 1 millón de hoteles, resorts y opciones de viaje en más de 190 países alrededor del mundo.",
+    image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&auto=format&fit=crop&q=80"
   }
 ];
 
