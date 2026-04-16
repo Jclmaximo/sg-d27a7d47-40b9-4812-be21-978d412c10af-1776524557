@@ -167,6 +167,9 @@ export type Database = {
           created_at: string | null
           end_date: string | null
           id: string
+          initial_payment_amount: number | null
+          is_initial_payment: boolean | null
+          monthly_payment_amount: number | null
           payment_method: string
           plan_type: string
           price_usd: number
@@ -182,6 +185,9 @@ export type Database = {
           created_at?: string | null
           end_date?: string | null
           id?: string
+          initial_payment_amount?: number | null
+          is_initial_payment?: boolean | null
+          monthly_payment_amount?: number | null
           payment_method?: string
           plan_type?: string
           price_usd: number
@@ -197,6 +203,9 @@ export type Database = {
           created_at?: string | null
           end_date?: string | null
           id?: string
+          initial_payment_amount?: number | null
+          is_initial_payment?: boolean | null
+          monthly_payment_amount?: number | null
           payment_method?: string
           plan_type?: string
           price_usd?: number
