@@ -21,15 +21,15 @@ const benefits = [
     icon: DollarSign,
     title: "Créditos de Viaje",
     description: "Genera y acumula créditos para reducir significativamente el costo de tus futuras reservas y experiencias de viaje.",
-    image: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800&auto=format&fit=crop&q=80",
-    alt: "Viajero caminando con su maleta en un aeropuerto moderno"
+    image: "/airport-traveler.jpg",
+    alt: "Viajero con mochila y maleta observando aviones en el aeropuerto"
   },
   {
     icon: MapPin,
     title: "Cobertura Global",
     description: "Más de 1 millón de hoteles, resorts y opciones de viaje en más de 190 países alrededor del mundo.",
-    image: "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?w=800&auto=format&fit=crop&q=80",
-    alt: "Globo terráqueo vintage con pines iluminado"
+    image: "/globe-pins.jpg",
+    alt: "Globo terráqueo con pins marcando ubicaciones alrededor del mundo"
   }
 ];
 
