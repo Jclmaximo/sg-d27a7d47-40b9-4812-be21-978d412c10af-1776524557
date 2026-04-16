@@ -18,22 +18,24 @@ export default function AdminLogin() {
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
-    checkUser();
+    checkAuthStatus();
   }, []);
 
-  async function checkUser() {
+  async function checkAuthStatus() {
     const { data: { session } } = await supabase.auth.getSession();
+    
     if (session) {
-      // Check if there's a redirect parameter
-      const redirect = router.query.redirect as string;
-      if (redirect) {
-        router.push(redirect);
-      } else {
+      // Only redirect if user is already logged in
+      const hasActiveSubscription = await subscriptionService.hasActiveSubscription(session.user.id);
+      
+      if (hasActiveSubscription) {
         router.push("/admin/dashboard");
+      } else {
+        // User is logged in but no subscription - stay on this page or go to pricing
+        // Don't redirect, let them see they need a subscription
       }
-    } else {
-      setLoading(false);
     }
+    // If no session, stay on login/signup page
   }
 
   async function handleLogin(e: React.FormEvent) {
