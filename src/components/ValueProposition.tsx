@@ -50,20 +50,24 @@ export function ValueProposition() {
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
             return (
-              <Card key={index} className="group overflow-hidden hover:shadow-xl transition-all duration-300 border-2 hover:border-accent/50">
-                <div className="relative h-64 w-full overflow-hidden">
+              <Card 
+                key={index} 
+                className="group relative overflow-hidden border-2 hover:border-accent transition-all duration-300 hover:shadow-2xl"
+              >
+                {/* Image Container */}
+                <div className="relative h-64 overflow-hidden">
                   <Image
                     src={benefit.image}
                     alt={benefit.alt}
                     fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/90 via-primary/50 to-transparent" />
-                  <div className="absolute bottom-4 left-4">
-                    <div className="w-12 h-12 bg-accent rounded-lg flex items-center justify-center shadow-lg">
-                      <Icon className="w-6 h-6 text-accent-foreground" />
-                    </div>
+                  {/* Gradient Overlay - sin blur */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-transparent" />
+                  
+                  {/* Icon Badge */}
+                  <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-accent flex items-center justify-center">
+                    <Icon className="w-6 h-6 text-accent-foreground" />
                   </div>
                 </div>
                 <div className="p-6">
