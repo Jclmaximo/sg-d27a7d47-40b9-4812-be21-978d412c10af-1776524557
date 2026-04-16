@@ -54,19 +54,28 @@ export const disruptiveService = {
 
   // Create payment invoice
   async createPayment(params: CreatePaymentParams): Promise<DisruptivePaymentResponse> {
+    // CRITICAL DEBUG - Check API key FIRST
+    console.log("🔍 ========================================");
+    console.log("🔍 DISRUPTIVE PAYMENT DEBUG - START");
+    console.log("🔍 ========================================");
+    
+    const envApiKey = process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY;
+    console.log("🔍 STEP 1: Raw environment variable");
+    console.log("   📌 Variable name: NEXT_PUBLIC_DISRUPTIVE_API_KEY");
+    console.log("   📌 Exists:", !!envApiKey);
+    console.log("   📌 Length:", envApiKey?.length || 0);
+    console.log("   📌 Preview:", envApiKey ? envApiKey.substring(0, 20) + "..." : "❌ MISSING");
+    
     const { apiKey, apiUrl } = this.getApiConfig();
     
-    console.log("=== Disruptive Payment Debug (Extended) ===");
-    console.log("1. Environment check:");
-    console.log("   - API URL:", apiUrl);
-    console.log("   - API Key from env:", process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY?.substring(0, 15) + "...");
-    console.log("   - API Key variable exists:", !!process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY);
-    console.log("   - API Key from getApiConfig:", apiKey?.substring(0, 15) + "...");
-    console.log("   - API Key exists:", !!apiKey);
-    console.log("   - API Key length:", apiKey?.length || 0);
+    console.log("🔍 STEP 2: After getApiConfig()");
+    console.log("   📌 API URL:", apiUrl);
+    console.log("   📌 API Key exists:", !!apiKey);
+    console.log("   📌 API Key length:", apiKey?.length || 0);
+    console.log("   📌 API Key preview:", apiKey ? apiKey.substring(0, 20) + "..." : "❌ MISSING");
     
     if (!apiKey) {
-      console.error("❌ API key is missing!");
+      console.error("❌ API KEY IS MISSING - CANNOT PROCEED");
       throw new Error("Disruptive API key not configured");
     }
 
@@ -84,32 +93,29 @@ export const disruptiveService = {
       webhookUrl: params.webhookUrl
     };
 
-    const headers = {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${apiKey}`,
-      "Accept": "application/json"
-    };
-
-    console.log("2. Request details:");
-    console.log("   - URL:", `${apiUrl}/payments`);
-    console.log("   - Method: POST");
-    console.log("   - Headers:", {
-      ...headers,
-      Authorization: headers.Authorization.substring(0, 20) + "..."
-    });
-    console.log("   - Payload:", JSON.stringify(payload, null, 2));
+    const authHeader = `Bearer ${apiKey}`;
+    
+    console.log("🔍 STEP 3: Request preparation");
+    console.log("   📌 Full URL:", `${apiUrl}/payments`);
+    console.log("   📌 Authorization header:", authHeader.substring(0, 30) + "...");
+    console.log("   📌 Payload:", JSON.stringify(payload, null, 2));
 
     try {
+      console.log("🔍 STEP 4: Sending request to Disruptive...");
+      
       const response = await fetch(`${apiUrl}/payments`, {
         method: "POST",
-        headers,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": authHeader,
+          "Accept": "application/json"
+        },
         body: JSON.stringify(payload)
       });
 
-      console.log("3. Response:");
-      console.log("   - Status:", response.status);
-      console.log("   - Status Text:", response.statusText);
-      console.log("   - Headers:", Object.fromEntries(response.headers.entries()));
+      console.log("🔍 STEP 5: Response received");
+      console.log("   📌 Status:", response.status);
+      console.log("   📌 Status Text:", response.statusText);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
