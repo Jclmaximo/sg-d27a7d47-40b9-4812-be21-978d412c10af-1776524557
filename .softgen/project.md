@@ -1,7 +1,7 @@
-# Travel Advantage Sales Funnel
+# Viaja Ligero Sales Funnel
 
 ## Vision
-Un funnel de ventas estratégico para Travel Advantage que captura, filtra y convierte prospectos en miembros o Lifestyle Ambassadors. Diseñado para presentar la dualidad del club: acceso a viajes exclusivos con descuentos y oportunidad de generar ingresos por recomendación.
+Un funnel de ventas estratégico para Viaja Ligero que captura, filtra y convierte prospectos en miembros o Lifestyle Ambassadors. Diseñado para presentar la dualidad del club: acceso a viajes exclusivos con descuentos y oportunidad de generar ingresos por recomendación.
 
 ## Design
 Color palette basado en confianza corporativa con toques premium:

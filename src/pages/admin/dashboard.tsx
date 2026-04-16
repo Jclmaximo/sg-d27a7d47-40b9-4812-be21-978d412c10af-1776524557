@@ -30,27 +30,27 @@ export default function AdminDashboard() {
     {
       name: "Primer Contacto",
       template: (lead: Lead) => 
-        `Hola ${lead.name}, soy Embajador de Travel Advantage. Vi tu interés en conocer cómo acceder a precios exclusivos en viajes. ¿Tienes unos minutos para platicarte cómo funciona?`
+        `Hola ${lead.name}, soy Embajador de Viaja Ligero. Vi tu interés en conocer cómo acceder a precios exclusivos en viajes. ¿Tienes unos minutos para platicarte cómo funciona?`
     },
     {
       name: "Seguimiento 1",
       template: (lead: Lead) => 
-        `Hola ${lead.name}, te contacté hace unos días sobre Travel Advantage. ¿Tuviste oportunidad de pensar en cómo podríamos ayudarte a ahorrar en tus próximos viajes? Como Embajador de Travel Advantage, puedo resolver cualquier duda.`
+        `Hola ${lead.name}, te contacté hace unos días sobre Viaja Ligero. ¿Tuviste oportunidad de pensar en cómo podríamos ayudarte a ahorrar en tus próximos viajes? Como Embajador de Viaja Ligero, puedo resolver cualquier duda.`
     },
     {
       name: "Seguimiento 2",
       template: (lead: Lead) => 
-        `${lead.name}, solo quería recordarte que como Embajador de Travel Advantage tengo acceso a tarifas exclusivas que no están disponibles al público. ¿Te gustaría ver algunos ejemplos de ahorro real de nuestros miembros?`
+        `${lead.name}, solo quería recordarte que como Embajador de Viaja Ligero tengo acceso a tarifas exclusivas que no están disponibles al público. ¿Te gustaría ver algunos ejemplos de ahorro real de nuestros miembros?`
     },
     {
       name: "Recordatorio",
       template: (lead: Lead) => 
-        `Hola ${lead.name}, ¿sigues interesado en conocer cómo funciona Travel Advantage? Como tu Embajador de Travel Advantage, puedo mostrarte cómo ahorrar hasta 60% en tus viajes. ¿Cuándo te viene bien una breve llamada?`
+        `Hola ${lead.name}, ¿sigues interesado en conocer cómo funciona Viaja Ligero? Como tu Embajador de Viaja Ligero, puedo mostrarte cómo ahorrar hasta 60% en tus viajes. ¿Cuándo te viene bien una breve llamada?`
     },
     {
       name: "Cierre",
       template: (lead: Lead) => 
-        `${lead.name}, muchas gracias por tu tiempo. Como Embajador de Travel Advantage, estoy aquí cuando decidas aprovechar los beneficios exclusivos del club. ¡Que tengas un excelente día!`
+        `${lead.name}, muchas gracias por tu tiempo. Como Embajador de Viaja Ligero, estoy aquí cuando decidas aprovechar los beneficios exclusivos del club. ¡Que tengas un excelente día!`
     }
   ];
 
@@ -215,11 +215,9 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <SEO 
-        title="Dashboard - Admin Travel Advantage"
-        description="Panel de administración de leads"
-      />
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <SEO title="Panel de Administración - Viaja Ligero" />
+      
+      <div className="min-h-screen bg-background p-4 md:p-8">
         {/* Header */}
         <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
           <div className="container mx-auto px-4 py-4 flex items-center justify-between">

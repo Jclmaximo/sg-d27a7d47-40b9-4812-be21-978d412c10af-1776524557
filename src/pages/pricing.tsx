@@ -3,28 +3,17 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, Zap, Shield, Globe, TrendingUp } from "lucide-react";
+import { Check, Zap, Shield, Globe, TrendingUp, Sparkles, Wallet, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Pricing() {
-  const [walletAddress, setWalletAddress] = useState("");
+  const router = useRouter();
   const [showCheckout, setShowCheckout] = useState(false);
-
-  const monthlyPrice = 97; // USD
-  const usdtBscAddress = "TU_WALLET_BSC_AQUI"; // Replace with your BSC wallet
-
-  const features = [
-    "Embudo de ventas completo personalizado",
-    "Panel de administración de leads",
-    "Sistema de notas por lead",
-    "5 templates de mensajes automáticos",
-    "Integración directa con WhatsApp",
-    "Dashboard con estadísticas en tiempo real",
-    "Captura ilimitada de leads",
-    "Soporte técnico prioritario",
-    "Actualizaciones automáticas",
-    "Tu propio número de WhatsApp configurado"
-  ];
+  const [walletAddress, setWalletAddress] = useState("");
+  
+  // Your BSC wallet address to receive USDT payments
+  const usdtBscAddress = "TU_WALLET_BSC_AQUI"; // Replace with your actual BSC address
 
   const handleConnectWallet = async () => {
     if (typeof (window as any).ethereum !== "undefined") {
@@ -44,112 +33,161 @@ export default function Pricing() {
     }
   };
 
+  const handlePaymentConfirmed = () => {
+    router.push("/admin");
+  };
+
   return (
     <>
       <SEO 
-        title="Sistema de Embudo de Ventas - Travel Advantage"
-        description="Obtén tu propio sistema de embudo de ventas para Travel Advantage con panel de administración y captura automática de leads"
+        title="Membresía Viaja Ligero - Sistema de Embudo de Ventas" 
+        description="Accede al sistema completo de embudo de ventas para embajadores de Viaja Ligero. $97 USD/mes en USDT."
       />
-
+      
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+        {/* Header */}
+        <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-primary">Viaja Ligero</h1>
+            <Button variant="outline" asChild>
+              <a href="/">Volver al inicio</a>
+            </Button>
+          </div>
+        </header>
+
         {/* Hero Section */}
-        <section className="pt-20 pb-12 px-4">
-          <div className="max-w-4xl mx-auto text-center">
-            <Badge className="mb-4 bg-secondary text-secondary-foreground">
-              Sistema Completo de Ventas
-            </Badge>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Tu Propio Sistema de Embudo de Ventas
+        <section className="container mx-auto px-4 py-20 text-center">
+          <div className="max-w-3xl mx-auto space-y-6">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary-foreground text-sm font-medium">
+              <Sparkles className="w-4 h-4" />
+              Sistema Premium para Embajadores
+            </div>
+            
+            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+              Impulsa tu negocio con <span className="text-primary">Viaja Ligero</span>
             </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Convierte más prospectos en miembros de Travel Advantage con tu propio embudo automatizado y panel de administración profesional.
+            
+            <p className="text-xl text-muted-foreground">
+              Accede al sistema completo de embudo de ventas, gestión de leads y herramientas de conversión diseñadas para embajadores de Viaja Ligero
             </p>
           </div>
         </section>
 
         {/* Pricing Card */}
-        <section className="pb-20 px-4">
-          <div className="max-w-2xl mx-auto">
-            <Card className="p-8 border-2 border-primary/20 shadow-2xl">
-              <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 mb-4">
-                  <Zap className="w-8 h-8 text-primary" />
-                </div>
-                <h2 className="text-3xl font-bold mb-2">Suscripción Mensual</h2>
-                <div className="flex items-baseline justify-center gap-2 mb-4">
-                  <span className="text-5xl font-bold">${monthlyPrice}</span>
-                  <span className="text-muted-foreground">USD/mes</span>
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  Pago con USDT en Binance Smart Chain (BSC)
-                </p>
-              </div>
-
-              <div className="space-y-4 mb-8">
-                {features.map((feature, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="mt-0.5 flex-shrink-0">
-                      <Check className="w-5 h-5 text-primary" />
+        <section className="container mx-auto px-4 pb-20">
+          <div className="max-w-4xl mx-auto">
+            <Card className="p-8 md:p-12 border-2 border-primary/20 shadow-xl">
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Left: Price & CTA */}
+                <div className="space-y-6">
+                  <div>
+                    <p className="text-sm text-muted-foreground uppercase tracking-wider mb-2">Membresía Mensual</p>
+                    <div className="flex items-baseline gap-2">
+                      <span className="text-5xl font-bold">$97</span>
+                      <span className="text-2xl text-muted-foreground">USD/mes</span>
                     </div>
-                    <span className="text-foreground/90">{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              {!showCheckout ? (
-                <Button 
-                  onClick={handleConnectWallet}
-                  size="lg" 
-                  className="w-full text-lg h-14"
-                >
-                  Conectar Wallet y Empezar
-                </Button>
-              ) : (
-                <div className="space-y-4">
-                  <div className="p-4 bg-muted rounded-lg">
-                    <p className="text-sm font-semibold mb-2">Wallet conectada:</p>
-                    <p className="text-xs font-mono break-all">{walletAddress}</p>
-                  </div>
-                  
-                  <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
-                    <p className="text-sm font-semibold mb-2">Envía ${monthlyPrice} USDT (BSC) a:</p>
-                    <p className="text-xs font-mono break-all mb-4">{usdtBscAddress}</p>
-                    <p className="text-xs text-muted-foreground">
-                      ⚠️ Asegúrate de usar Binance Smart Chain (BEP20), no Ethereum
-                    </p>
+                    <p className="text-sm text-muted-foreground mt-2">Pago con USDT en Binance Smart Chain</p>
                   </div>
 
-                  <Link href="/admin">
-                    <Button size="lg" className="w-full">
-                      Ya realicé el pago - Acceder al panel
+                  {!showCheckout ? (
+                    <Button 
+                      size="lg" 
+                      className="w-full text-lg py-6"
+                      onClick={handleConnectWallet}
+                    >
+                      <Wallet className="w-5 h-5 mr-2" />
+                      Conectar Wallet
                     </Button>
-                  </Link>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="p-4 bg-muted rounded-lg">
+                        <p className="text-sm text-muted-foreground mb-2">Envía 97 USDT (BEP20) a:</p>
+                        <code className="text-xs break-all bg-background p-2 rounded block">
+                          {usdtBscAddress}
+                        </code>
+                      </div>
+                      <Button 
+                        size="lg" 
+                        className="w-full"
+                        onClick={handlePaymentConfirmed}
+                      >
+                        <CheckCircle2 className="w-5 h-5 mr-2" />
+                        Ya realicé el pago
+                      </Button>
+                    </div>
+                  )}
 
-                  <p className="text-xs text-center text-muted-foreground">
-                    Después del pago, tu suscripción se activará automáticamente
-                  </p>
+                  {/* Trust Badges */}
+                  <div className="flex flex-wrap gap-4 pt-4">
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Shield className="w-4 h-4 text-green-500" />
+                      <span>Pago seguro</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <Globe className="w-4 h-4 text-blue-500" />
+                      <span>Sin fronteras</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                      <TrendingUp className="w-4 h-4 text-primary" />
+                      <span>Crece tu negocio</span>
+                    </div>
+                  </div>
                 </div>
-              )}
-            </Card>
 
-            {/* Trust Badges */}
-            <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-              <div>
-                <Shield className="w-8 h-8 text-primary mx-auto mb-2" />
-                <p className="font-semibold mb-1">Pago Seguro</p>
-                <p className="text-sm text-muted-foreground">Blockchain verificado</p>
+                {/* Right: Features */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg mb-4">Todo lo que incluye:</h3>
+                  
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium">Embudo de ventas completo</p>
+                      <p className="text-sm text-muted-foreground">Landing page optimizada para conversión</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium">Panel de gestión de leads</p>
+                      <p className="text-sm text-muted-foreground">Organiza y da seguimiento a todos tus prospectos</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium">Mensajes automáticos WhatsApp</p>
+                      <p className="text-sm text-muted-foreground">5 templates profesionales listos para usar</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium">Sistema de notas por lead</p>
+                      <p className="text-sm text-muted-foreground">Registra conversaciones y seguimiento detallado</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium">WhatsApp personalizado</p>
+                      <p className="text-sm text-muted-foreground">Configura tu propio número de contacto</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-3">
+                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-medium">Dashboard con métricas</p>
+                      <p className="text-sm text-muted-foreground">Visualiza el estado de todos tus leads</p>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div>
-                <Globe className="w-8 h-8 text-primary mx-auto mb-2" />
-                <p className="font-semibold mb-1">Sin Fronteras</p>
-                <p className="text-sm text-muted-foreground">Acepta USDT global</p>
-              </div>
-              <div>
-                <TrendingUp className="w-8 h-8 text-primary mx-auto mb-2" />
-                <p className="font-semibold mb-1">Crece tu Negocio</p>
-                <p className="text-sm text-muted-foreground">Leads ilimitados</p>
-              </div>
-            </div>
+            </Card>
           </div>
         </section>
       </div>

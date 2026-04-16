@@ -34,7 +34,7 @@ export function FunnelForm() {
       });
 
       // Send to WhatsApp
-      const message = `¡Hola! Quiero más información sobre Travel Advantage.%0A%0A` +
+      const message = `¡Hola! Quiero más información sobre Viaja Ligero.%0A%0A` +
         `Nombre: ${formData.name}%0A` +
         `Email: ${formData.email}%0A` +
         `Teléfono: ${formData.phone}%0A` +
@@ -57,10 +57,10 @@ export function FunnelForm() {
           {/* Header */}
           <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Comienza Tu Aventura Hoy
+              Empieza tu experiencia con Viaja Ligero
             </h2>
             <p className="text-lg text-muted-foreground">
-              Completa el formulario y descubre cómo Travel Advantage puede transformar tu forma de viajar
+              Completa el formulario y te contactaremos para mostrarte cómo acceder a beneficios exclusivos
             </p>
           </div>
 

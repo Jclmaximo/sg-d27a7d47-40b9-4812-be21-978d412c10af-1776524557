@@ -15,46 +15,65 @@ const offices = [
 
 export function FunnelFooter() {
   return (
-    <footer className="bg-primary text-white py-16 px-6">
-      <div className="container">
-        <div className="grid md:grid-cols-2 gap-12 mb-12">
+    <footer className="bg-muted/30 border-t py-12">
+      <div className="container mx-auto px-4">
+        <div className="grid md:grid-cols-3 gap-8 mb-8">
+          {/* Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-6">
-              <Shield className="w-6 h-6 text-accent" />
-              <h3 className="text-xl font-semibold">Licencias y Certificaciones</h3>
-            </div>
-            <ul className="space-y-3">
-              {licenses.map((license, index) =>
-              <li key={index} className="flex items-start gap-2">
-                  <Award className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                  <span className="text-white/90">{license}</span>
-                </li>
-              )}
-            </ul>
+            <h3 className="font-bold text-lg mb-4">Viaja Ligero</h3>
+            <p className="text-sm text-muted-foreground">
+              Tu club exclusivo de viajes con acceso a tarifas preferenciales y experiencias únicas alrededor del mundo.
+            </p>
           </div>
-          
+
+          {/* Licenses */}
           <div>
-            <div className="flex items-center gap-2 mb-6">
-              <MapPin className="w-6 h-6 text-accent" />
-              <h3 className="text-xl font-semibold">Oficinas Corporativas</h3>
+            <h3 className="font-semibold mb-4">Licencias y Certificaciones</h3>
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <div className="flex items-start gap-2">
+                <Shield className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
+                <span>Seller of Travel - Florida (ST-43417)</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <Shield className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
+                <span>Seller of Travel - Iowa (1563)</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <Shield className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
+                <span>Seller of Travel - California (2193504-70)</span>
+              </div>
             </div>
-            <ul className="space-y-4">
-              {offices.map((office, index) =>
-              <li key={index}>
-                  <p className="font-semibold text-accent" style={{ color: "#99f6e4" }}>{office.city}</p>
-                  <p className="text-sm text-white/80">{office.address}</p>
-                </li>
-              )}
-            </ul>
+          </div>
+
+          {/* Offices */}
+          <div>
+            <h3 className="font-semibold mb-4">Oficinas Corporativas</h3>
+            <div className="space-y-2 text-sm text-muted-foreground">
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
+                <span>Hong Kong</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
+                <span>Florida, USA</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
+                <span>París, Francia</span>
+              </div>
+              <div className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
+                <span>Dubái, EAU</span>
+              </div>
+            </div>
           </div>
         </div>
-        
-        <div className="border-t border-white/20 pt-8 text-center">
-          <p className="text-white/70 text-sm">© 2026 Viaja LIgero Club. Todos los derechos reservados. | Política de Privacidad | Términos y Condiciones
 
-          </p>
+        {/* Bottom bar */}
+        <div className="border-t pt-8 text-center text-sm text-muted-foreground">
+          <p>&copy; {new Date().getFullYear()} Viaja Ligero. Todos los derechos reservados.</p>
         </div>
       </div>
-    </footer>);
-
+    </footer>
+  );
 }
