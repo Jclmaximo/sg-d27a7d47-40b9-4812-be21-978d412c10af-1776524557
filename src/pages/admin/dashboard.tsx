@@ -182,7 +182,8 @@ export default function AdminDashboard() {
         message = template.template.replace("{name}", lead.name);
       }
     } else {
-      message = `Hola ${lead.name}, soy de Travel Advantage. Vi que te interesa conocer más sobre nuestro club de viajes exclusivo.`;
+      // Custom message
+      message = `Hola ${lead.name}, soy de Viaja Ligero. Vi que te interesa conocer más sobre nuestro club de viajes exclusivo.`;
     }
     
     const encodedMessage = encodeURIComponent(message);
@@ -219,12 +220,9 @@ export default function AdminDashboard() {
       
       <div className="min-h-screen bg-background p-4 md:p-8">
         {/* Header */}
-        <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-          <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-primary">Travel Advantage</h1>
-              <p className="text-sm text-muted-foreground">Panel de Administración</p>
-            </div>
+        <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50 mb-8">
+          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-primary">Viaja Ligero</h1>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => setShowSettings(!showSettings)}>
                 <Settings className="w-4 h-4 mr-2" />

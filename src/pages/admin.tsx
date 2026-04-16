@@ -57,13 +57,13 @@ export default function AdminLogin() {
   return (
     <>
       <SEO 
-        title="Admin Login - Travel Advantage"
-        description="Panel de administración de leads"
+        title="Admin Login - Viaja Ligero"
+        description="Acceso al panel de administración de Viaja Ligero"
       />
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4">
         <Card className="w-full max-w-md p-8 space-y-6">
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold text-primary">Travel Advantage</h1>
+            <h1 className="text-3xl font-bold text-primary">Viaja Ligero</h1>
             <p className="text-muted-foreground">Panel de Administración de Leads</p>
           </div>
 

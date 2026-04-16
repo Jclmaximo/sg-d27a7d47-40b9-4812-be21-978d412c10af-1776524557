@@ -32,8 +32,8 @@ export function SocialProof() {
             Resultados Comprobados
           </h2>
           <div className="h-1 w-24 bg-accent mx-auto mb-6" style={{ backgroundColor: "#99f6e4", backgroundImage: "none" }}></div>
-          <p className="text-lg text-white/90">
-            Miles de viajeros ya están ahorrando y generando ingresos con Travel Advantage
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Miles de viajeros ya están ahorrando y generando ingresos con Viaja Ligero
           </p>
         </div>
         
@@ -56,7 +56,7 @@ export function SocialProof() {
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
             <p className="text-lg text-white/90 mb-6">
               Nuestros miembros han viajado a destinos increíbles ahorrando miles de dólares. 
-              Desde escapadas familiares hasta viajes de negocios, Travel Advantage hace que cada experiencia sea más accesible.
+              Desde escapadas familiares hasta viajes de negocios, Viaja Ligero hace que cada experiencia sea más accesible.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm">
               <span className="px-4 py-2 bg-accent/20 border border-accent/30 rounded-full" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>🇨🇴 Colombia: -$493 USD</span>

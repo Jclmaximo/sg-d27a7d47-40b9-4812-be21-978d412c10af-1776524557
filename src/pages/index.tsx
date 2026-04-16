@@ -10,10 +10,10 @@ import { SEO } from "@/components/SEO";
 export default function Home() {
   return (
     <>
-      <SEO
-        title="Travel Advantage - Acceso Exclusivo a Viajes Premium"
-        description="Accede a precios exclusivos en hoteles, vuelos y experiencias de viaje que no están disponibles al público. Ahorra en cada viaje y genera ingresos."
-        image="/og-image.png" />
+      <SEO 
+        title="Viaja Ligero - Acceso Exclusivo a Viajes Premium"
+        description="Descubre cómo acceder a precios exclusivos en viajes de lujo. Ahorra hasta 60% y genera ingresos por recomendación."
+      />
       
       
       <main className="min-h-screen">
@@ -37,8 +37,8 @@ export default function Home() {
                 Historias de Éxito de Nuestros Miembros
               </h2>
               <div className="h-1 w-24 bg-accent mx-auto mb-6"></div>
-              <p className="text-lg text-muted-foreground">
-                Viajeros reales compartiendo sus experiencias y ahorros con Travel Advantage
+              <p className="text-muted-foreground">
+                Viajeros reales compartiendo sus experiencias y ahorros con Viaja Ligero
               </p>
             </div>
             <FunnelTestimonials />

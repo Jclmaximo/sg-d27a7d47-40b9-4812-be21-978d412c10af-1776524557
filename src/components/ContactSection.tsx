@@ -6,7 +6,7 @@ export function ContactSection() {
       <div className="container">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Empieza tu viaje con Travel Advantage
+            Empieza tu viaje con Viaja Ligero
           </h2>
           <div className="h-1 w-24 bg-accent mx-auto mb-6"></div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
