@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MessageSquare } from "lucide-react";
+import { leadsService } from "@/services/leadsService";
 
 export function FunnelForm() {
   const [formData, setFormData] = useState({
@@ -16,16 +17,34 @@ export function FunnelForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    try {
+      // Save lead to database
+      await leadsService.createLead({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        country: formData.country
+      });
 
-    const message = `¡Hola! Quiero más información sobre Travel Advantage.%0A%0A` +
-    `Nombre: ${formData.name}%0A` +
-    `Email: ${formData.email}%0A` +
-    `Teléfono: ${formData.phone}%0A` +
-    `País: ${formData.country}`;
+      // Send to WhatsApp
+      const message = `¡Hola! Quiero más información sobre Travel Advantage.%0A%0A` +
+        `Nombre: ${formData.name}%0A` +
+        `Email: ${formData.email}%0A` +
+        `Teléfono: ${formData.phone}%0A` +
+        `País: ${formData.country}%0A` +
+        `Método de contacto: WhatsApp`;
+      
+      window.open(`https://wa.me/523314300767?text=${message}`, '_blank');
 
-    window.open(`https://wa.me/523314300767?text=${message}`, '_blank');
+      // Reset form
+      setFormData({ name: "", email: "", phone: "", country: "" });
+    } catch (error) {
+      console.error("Error saving lead:", error);
+      alert("Hubo un error al procesar tu solicitud. Por favor intenta de nuevo.");
+    }
   };
 
   return (
