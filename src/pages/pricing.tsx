@@ -11,7 +11,7 @@ export default function Pricing() {
   const router = useRouter();
   const [showCheckout, setShowCheckout] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
-  
+
   // Your BSC wallet address to receive USDT payments
   const usdtBscAddress = "TU_WALLET_BSC_AQUI"; // Replace with your actual BSC address
 
@@ -39,10 +39,10 @@ export default function Pricing() {
 
   return (
     <>
-      <SEO 
-        title="Membresía Viaja Ligero - Sistema de Embudo de Ventas" 
-        description="Accede al sistema completo de embudo de ventas para embajadores de Viaja Ligero. $97 USD/mes en USDT."
-      />
+      <SEO
+        title="Membresía Viaja Ligero - Sistema de Embudo de Ventas"
+        description="Accede al sistema completo de embudo de ventas para embajadores de Viaja Ligero. $97 USD/mes en USDT." />
+      
       
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         {/* Header */}
@@ -58,7 +58,7 @@ export default function Pricing() {
         {/* Hero Section */}
         <section className="container mx-auto px-4 py-20 text-center">
           <div className="max-w-3xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary-foreground text-sm font-medium">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary-foreground text-sm font-medium" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>
               <Sparkles className="w-4 h-4" />
               Sistema Premium para Embajadores
             </div>
@@ -89,33 +89,33 @@ export default function Pricing() {
                     <p className="text-sm text-muted-foreground mt-2">Pago con USDT en Binance Smart Chain</p>
                   </div>
 
-                  {!showCheckout ? (
-                    <Button 
-                      size="lg" 
-                      className="w-full text-lg py-6"
-                      onClick={handleConnectWallet}
-                    >
+                  {!showCheckout ?
+                  <Button
+                    size="lg"
+                    className="w-full text-lg py-6"
+                    onClick={handleConnectWallet}>
+                    
                       <Wallet className="w-5 h-5 mr-2" />
                       Conectar Wallet
-                    </Button>
-                  ) : (
-                    <div className="space-y-4">
+                    </Button> :
+
+                  <div className="space-y-4">
                       <div className="p-4 bg-muted rounded-lg">
                         <p className="text-sm text-muted-foreground mb-2">Envía 97 USDT (BEP20) a:</p>
                         <code className="text-xs break-all bg-background p-2 rounded block">
                           {usdtBscAddress}
                         </code>
                       </div>
-                      <Button 
-                        size="lg" 
-                        className="w-full"
-                        onClick={handlePaymentConfirmed}
-                      >
+                      <Button
+                      size="lg"
+                      className="w-full"
+                      onClick={handlePaymentConfirmed}>
+                      
                         <CheckCircle2 className="w-5 h-5 mr-2" />
                         Ya realicé el pago
                       </Button>
                     </div>
-                  )}
+                  }
 
                   {/* Trust Badges */}
                   <div className="flex flex-wrap gap-4 pt-4">
@@ -191,6 +191,6 @@ export default function Pricing() {
           </div>
         </section>
       </div>
-    </>
-  );
+    </>);
+
 }
