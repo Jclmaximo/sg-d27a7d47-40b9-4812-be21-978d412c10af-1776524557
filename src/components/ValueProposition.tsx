@@ -54,7 +54,7 @@ export function ValueProposition() {
                 key={index} 
                 className="group relative overflow-hidden border-2 hover:border-accent transition-all duration-300 hover:shadow-2xl"
               >
-                {/* Image Container - SIN BLUR */}
+                {/* Image Container */}
                 <div className="relative h-64 overflow-hidden">
                   <Image
                     src={benefit.image}
@@ -62,18 +62,18 @@ export function ValueProposition() {
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  {/* Gradient Overlay simple - sin backdrop-blur */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/60 to-transparent" />
+                  {/* Gradient Overlay - muy sutil solo en la parte inferior */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent" />
                   
                   {/* Icon Badge */}
-                  <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-accent flex items-center justify-center">
+                  <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-accent flex items-center justify-center shadow-lg">
                     <Icon className="w-6 h-6 text-accent-foreground" />
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-foreground mb-3 group-hover:text-accent transition-colors">
+                <div className="p-6 space-y-3 bg-card">
+                  <h3 className="text-xl font-heading font-semibold text-card-foreground">
                     {benefit.title}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed">
