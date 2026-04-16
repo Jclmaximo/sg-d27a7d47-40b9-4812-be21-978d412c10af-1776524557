@@ -14,8 +14,8 @@ const benefits = [
     icon: Sparkles,
     title: "Life Experiences®",
     description: "Viajes de lujo curados en destinos exclusivos como Dubái, Nueva York, París y más, diseñados específicamente para miembros del club.",
-    image: "/burj-khalifa.jpg",
-    alt: "Vista panorámica del Burj Khalifa iluminado en Dubái"
+    image: "/mountain-lake-boats.jpg",
+    alt: "Viajera en bote azul contemplando lago de montaña con aguas turquesas"
   },
   {
     icon: DollarSign,
