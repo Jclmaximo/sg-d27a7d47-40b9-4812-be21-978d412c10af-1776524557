@@ -66,8 +66,8 @@ export function ValueProposition() {
                   <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent" />
                   
                   {/* Icon Badge */}
-                  <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-accent flex items-center justify-center shadow-lg">
-                    <Icon className="w-6 h-6 text-accent-foreground" />
+                  <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-lg">
+                    <Icon className="w-6 h-6 text-secondary-foreground" />
                   </div>
                 </div>
 

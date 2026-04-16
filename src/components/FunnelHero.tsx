@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowDown } from "lucide-react";
+import { ArrowDown, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function FunnelHero() {
@@ -11,8 +11,12 @@ export function FunnelHero() {
   return (
     <section className="relative min-h-[85vh] flex items-center justify-center bg-primary text-white px-6 py-20">
       <div className="container max-w-5xl text-center space-y-8">
-        <div className="inline-block px-4 py-2 bg-accent/10 border border-accent/30 rounded-full mb-4">
-          <span className="text-accent font-semibold text-sm tracking-wide">ACCESO EXCLUSIVO</span>
+        <div className="text-center space-y-6 max-w-4xl mx-auto">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 border border-secondary/20">
+            <Sparkles className="w-4 h-4 text-secondary" />
+            <span className="text-sm font-medium text-secondary">ACCESO EXCLUSIVO</span>
+          </div>
         </div>
         
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-balance">
