@@ -23,8 +23,7 @@ export function FunnelForm() {
       `Email: ${formData.email}%0A` +
       `Teléfono: ${formData.phone}%0A` +
       `País: ${formData.country}%0A` +
-      `Interés: ${formData.interest}%0A` +
-      `Contacto preferido: ${formData.preferredContact}`;
+      `Método de contacto: WhatsApp`;
     
     window.open(`https://wa.me/523314300767?text=${message}`, '_blank');
   };
