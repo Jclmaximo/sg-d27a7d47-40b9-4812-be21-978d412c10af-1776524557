@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -70,12 +71,14 @@ export default function Pricing() {
     setIsProcessingPayment(true);
 
     try {
-      // Get current user
+      // Check if user is logged in
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        alert("Por favor inicia sesión primero");
-        router.push("/admin");
+        // Redirect to admin login page with return URL
+        alert("Debes iniciar sesión o crear una cuenta primero para continuar con el pago.");
+        router.push(`/admin?redirect=/pricing`);
+        setIsProcessingPayment(false);
         return;
       }
 
@@ -185,7 +188,7 @@ export default function Pricing() {
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-primary">Viaja Ligero</h1>
             <Button variant="outline" asChild>
-              <a href="/">Volver al inicio</a>
+              <Link href="/">Volver al inicio</Link>
             </Button>
           </div>
         </header>
