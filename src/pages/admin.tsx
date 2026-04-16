@@ -104,10 +104,7 @@ export default function AdminPage() {
 
   return (
     <>
-      <SEO 
-        title="Admin - Viaja Ligero"
-        description="Acceso al panel de administración de Viaja Ligero"
-      />
+      <SEO title="Admin | Viaja Ligero" />
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <Card className="w-full max-w-md p-8 space-y-6">
           <div className="text-center space-y-2">
@@ -132,129 +129,88 @@ export default function AdminPage() {
               </TabsTrigger>
             </TabsList>
 
-            {/* Login Tab */}
+            {error && (
+              <div className="mt-4 p-3 bg-destructive/10 text-destructive text-sm rounded-md text-center">
+                {error}
+              </div>
+            )}
+            
+            {successMessage && (
+              <div className="mt-4 p-3 bg-green-500/10 text-green-600 text-sm rounded-md text-center">
+                {successMessage}
+              </div>
+            )}
+
             <TabsContent value="login">
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }} className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <label htmlFor="login-email" className="text-sm font-medium">
-                    Correo Electrónico
-                  </label>
+                  <label className="text-sm font-medium">Email</label>
                   <Input
-                    id="login-email"
                     type="email"
-                    placeholder="tu@correo.com"
+                    placeholder="admin@viajaligero.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    disabled={isSubmitting}
+                    disabled={loading}
                   />
                 </div>
-
                 <div className="space-y-2">
-                  <label htmlFor="login-password" className="text-sm font-medium">
-                    Contraseña
-                  </label>
+                  <label className="text-sm font-medium">Contraseña</label>
                   <Input
-                    id="login-password"
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    disabled={isSubmitting}
+                    disabled={loading}
                   />
                 </div>
-
-                {error && (
-                  <div className="p-3 text-sm bg-destructive/10 text-destructive rounded-md">
-                    {error}
-                  </div>
-                )}
-
-                <Button 
-                  type="submit" 
-                  className="w-full"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Iniciando sesión...
                     </>
                   ) : (
-                    <>
-                      <LogIn className="w-4 h-4 mr-2" />
-                      Iniciar Sesión
-                    </>
+                    "Iniciar Sesión"
                   )}
                 </Button>
               </form>
             </TabsContent>
 
-            {/* Signup Tab */}
             <TabsContent value="signup">
-              <form onSubmit={handleSignup} className="space-y-4">
+              <form onSubmit={(e) => { e.preventDefault(); handleSignup(); }} className="space-y-4 mt-4">
                 <div className="space-y-2">
-                  <label htmlFor="signup-email" className="text-sm font-medium">
-                    Correo Electrónico
-                  </label>
+                  <label className="text-sm font-medium">Email</label>
                   <Input
-                    id="signup-email"
                     type="email"
                     placeholder="tu@correo.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
-                    disabled={isSubmitting}
+                    disabled={loading}
                   />
                 </div>
-
                 <div className="space-y-2">
-                  <label htmlFor="signup-password" className="text-sm font-medium">
-                    Contraseña
-                  </label>
+                  <label className="text-sm font-medium">Contraseña</label>
                   <Input
-                    id="signup-password"
                     type="password"
-                    placeholder="••••••••"
+                    placeholder="Mínimo 6 caracteres"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    disabled={isSubmitting}
                     minLength={6}
+                    disabled={loading}
                   />
-                  <p className="text-xs text-muted-foreground">
-                    Mínimo 6 caracteres
-                  </p>
                 </div>
-
-                {error && (
-                  <div className="p-3 text-sm bg-destructive/10 text-destructive rounded-md">
-                    {error}
-                  </div>
-                )}
-
-                {successMessage && (
-                  <div className="p-3 text-sm bg-green-500/10 text-green-600 rounded-md">
-                    {successMessage}
-                  </div>
-                )}
-
-                <Button 
-                  type="submit" 
-                  className="w-full"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Creando cuenta...
                     </>
                   ) : (
-                    <>
-                      <UserPlus className="w-4 h-4 mr-2" />
-                      Crear Cuenta
-                    </>
+                    "Crear Cuenta"
                   )}
                 </Button>
               </form>
