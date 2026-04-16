@@ -109,8 +109,8 @@ export function FunnelForm() {
         Empezar ahora
       </Button>
 
-      <p className="text-xs text-center text-muted-foreground mt-4">
-        Al continuar, aceptas recibir información sobre Travel Advantage
+      <p className="text-xs text-center text-muted-foreground mt-4">Al continuar, aceptas recibir información sobre Nuestro Club.
+
       </p>
     </form>);
 
