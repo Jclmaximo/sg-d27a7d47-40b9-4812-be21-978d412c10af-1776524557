@@ -47,7 +47,7 @@ export default function Home() {
         
         {/* Etapa 5: Llamada a la Acción y Captura de Datos */}
         <section id="contact-form" className="py-20 px-6 bg-muted/30">
-          <div className="container">
+          <div className="container" style={{ boxShadow: "0 1px 2px 0 rgb(0 0 0 / 0.05)", backgroundColor: "#00000000", backgroundImage: "none" }}>
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Comienza a Ahorrar en Tus Viajes Hoy
