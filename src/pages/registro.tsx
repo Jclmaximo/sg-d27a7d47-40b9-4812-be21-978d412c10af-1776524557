@@ -160,7 +160,33 @@ export default function RegistroPage() {
 
       console.log("✅ Auth user created:", data.user.id);
 
-      // 2. Update profile with all data
+      // 2. Wait for profile to be created by trigger (max 5 retries)
+      let profileExists = false;
+      let retries = 0;
+      const maxRetries = 5;
+
+      while (!profileExists && retries < maxRetries) {
+        const { data: profile, error: checkError } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("id", data.user.id)
+          .maybeSingle();
+
+        if (!checkError && profile) {
+          profileExists = true;
+          console.log("✅ Profile found in database");
+        } else {
+          retries++;
+          console.log(`⏳ Waiting for profile... attempt ${retries}/${maxRetries}`);
+          await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms
+        }
+      }
+
+      if (!profileExists) {
+        throw new Error("El perfil no se creó correctamente. Por favor contacta soporte.");
+      }
+
+      // 3. Update profile with all data
       const { error: profileError } = await supabase
         .from("profiles")
         .update({
@@ -171,11 +197,28 @@ export default function RegistroPage() {
         })
         .eq("id", data.user.id);
 
-      if (profileError) throw profileError;
+      if (profileError) {
+        console.error("Profile update error:", profileError);
+        throw profileError;
+      }
 
       console.log("✅ Profile updated with username and data");
 
-      // 3. Save referrer if exists
+      // 4. Verify username was saved
+      const { data: verifyProfile, error: verifyError } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("id", data.user.id)
+        .single();
+
+      if (verifyError || !verifyProfile?.username) {
+        console.error("Username verification failed:", verifyError);
+        throw new Error("No se pudo guardar el username correctamente");
+      }
+
+      console.log("✅ Username verified:", verifyProfile.username);
+
+      // 5. Save referrer if exists
       if (referrerUsername) {
         const { data: referrerProfile } = await supabase
           .from("profiles")

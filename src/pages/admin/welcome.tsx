@@ -30,15 +30,39 @@ export default function WelcomePage() {
       return;
     }
 
-    // Get username
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("username")
-      .eq("id", user.id)
-      .single();
+    // Get username with retry logic
+    let retries = 0;
+    const maxRetries = 3;
+    let profileData = null;
 
-    if (profile?.username) {
-      setUsername(profile.username);
+    while (retries < maxRetries && !profileData?.username) {
+      const { data: profile, error } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("id", user.id)
+        .single();
+
+      if (!error && profile?.username) {
+        profileData = profile;
+        console.log("✅ Username loaded:", profile.username);
+        break;
+      }
+
+      retries++;
+      console.log(`⏳ Waiting for username... attempt ${retries}/${maxRetries}`);
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+    }
+
+    if (profileData?.username) {
+      setUsername(profileData.username);
+    } else {
+      // Username still not found - show error
+      toast({
+        title: "Error de configuración",
+        description: "No se encontró tu username. Por favor contacta soporte.",
+        variant: "destructive"
+      });
+      console.error("❌ Username not found after retries");
     }
 
     setLoading(false);
