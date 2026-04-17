@@ -180,14 +180,11 @@ export default function RegistroPage() {
 
       console.log("✅ Registration complete");
       
-      setSuccess("¡Cuenta creada exitosamente! Redirigiendo al pago...");
+      setSuccess("¡Cuenta creada! Revisa tu email para confirmar tu cuenta y continuar al pago.");
       setError("");
 
-      // Redirect to pricing with ref
-      setTimeout(() => {
-        const refParam = referrerUsername ? `?ref=${referrerUsername}` : "";
-        router.push(`/pricing${refParam}`);
-      }, 1500);
+      // Don't redirect - let user check their email
+      // They will be redirected to /pricing after confirming email via the link
     } catch (err: any) {
       console.error("❌ Registration error:", err);
       setError(err.message || "Error al crear la cuenta. Intenta de nuevo.");
@@ -355,8 +352,14 @@ export default function RegistroPage() {
 
               {/* Success Alert */}
               {success && (
-                <Alert className="bg-green-50 text-green-900 border-green-200">
-                  <AlertDescription>{success}</AlertDescription>
+                <Alert className="bg-green-50 text-green-900 border-green-200 dark:bg-green-900/10 dark:text-green-100 dark:border-green-800">
+                  <CheckCircle2 className="h-4 w-4" />
+                  <AlertDescription className="ml-2">
+                    {success}
+                    <p className="mt-2 text-sm font-medium">
+                      📧 Revisa tu bandeja de entrada (y spam) para confirmar tu cuenta.
+                    </p>
+                  </AlertDescription>
                 </Alert>
               )}
 
