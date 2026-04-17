@@ -4,13 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 // Docs: https://my.disruptivepayments.io/api/docs
 
 interface DisruptivePaymentRequest {
-  amount: number;
-  currency: string;
   network: string;
-  orderId: string;
-  description: string;
-  customerEmail?: string;
-  webhookUrl?: string;
+  fundsGoal: number;
+  smartContractAddress: string;
 }
 
 interface DisruptivePaymentResponse {
@@ -52,83 +48,73 @@ export const disruptiveService = {
     return { apiKey, apiUrl, webhookSecret };
   },
 
-  // Create payment invoice
+  // Create payment invoice using correct Disruptive structure
   async createPayment(params: CreatePaymentParams): Promise<DisruptivePaymentResponse> {
-    // CRITICAL DEBUG - Check API key FIRST
     console.log("🔍 ========================================");
-    console.log("🔍 DISRUPTIVE PAYMENT DEBUG - START");
+    console.log("🔍 DISRUPTIVE PAYMENT (CORRECT STRUCTURE)");
     console.log("🔍 ========================================");
-    
-    const envApiKey = process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY;
-    console.log("🔍 STEP 1: Raw environment variable");
-    console.log("   📌 Variable name: NEXT_PUBLIC_DISRUPTIVE_API_KEY");
-    console.log("   📌 Exists:", !!envApiKey);
-    console.log("   📌 Length:", envApiKey?.length || 0);
-    console.log("   📌 Preview:", envApiKey ? envApiKey.substring(0, 20) + "..." : "❌ MISSING");
     
     const { apiKey, apiUrl } = this.getApiConfig();
     
-    console.log("🔍 STEP 2: After getApiConfig()");
+    console.log("🔍 Config:");
     console.log("   📌 API URL:", apiUrl);
     console.log("   📌 API Key exists:", !!apiKey);
-    console.log("   📌 API Key length:", apiKey?.length || 0);
-    console.log("   📌 API Key preview:", apiKey ? apiKey.substring(0, 20) + "..." : "❌ MISSING");
+    console.log("   📌 API Key preview:", apiKey.substring(0, 20) + "...");
     
-    if (!apiKey) {
-      console.error("❌ API KEY IS MISSING - CANNOT PROCEED");
-      throw new Error("Disruptive API key not configured");
-    }
-
-    const payload = {
-      amount: params.amount,
-      currency: params.currency,
-      network: params.network,
-      orderId: params.orderId,
-      customerEmail: params.customerEmail,
-      description: params.description,
-      metadata: params.metadata,
-      callback_url: params.callback_url,
-      success_url: params.success_url,
-      cancel_url: params.cancel_url,
-      webhookUrl: params.webhookUrl
+    // USDT Contract Address on BSC (Binance Smart Chain)
+    const USDT_BSC_CONTRACT = "0x55d398326f99059ff775485246999027b3197955";
+    
+    // Correct Disruptive payload structure
+    const payload: DisruptivePaymentRequest = {
+      network: "BSC",
+      fundsGoal: params.amount,
+      smartContractAddress: USDT_BSC_CONTRACT
     };
 
-    const authHeader = `Bearer ${apiKey}`;
-    
-    console.log("🔍 STEP 3: Request preparation");
-    console.log("   📌 Full URL:", `${apiUrl}/payments`);
-    console.log("   📌 Authorization header (Bearer):", authHeader.substring(0, 30) + "...");
-    console.log("   📌 Trying also X-API-Key header:", apiKey.substring(0, 20) + "...");
+    console.log("🔍 Request:");
+    console.log("   📌 URL:", `${apiUrl}/payments/single`);
+    console.log("   📌 Method: POST");
+    console.log("   📌 Header: X-API-Key:", apiKey.substring(0, 20) + "...");
     console.log("   📌 Payload:", JSON.stringify(payload, null, 2));
 
     try {
-      console.log("🔍 STEP 4: Sending request to Disruptive...");
+      console.log("🔍 Sending request to Disruptive...");
       
-      const response = await fetch(`${apiUrl}/payments`, {
+      const response = await fetch(`${apiUrl}/payments/single`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": authHeader,
-          "X-API-Key": apiKey,
-          "Accept": "application/json"
+          "X-API-Key": apiKey
         },
         body: JSON.stringify(payload)
       });
 
-      console.log("🔍 STEP 5: Response received");
+      console.log("🔍 Response:");
       console.log("   📌 Status:", response.status);
       console.log("   📌 Status Text:", response.statusText);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error("Disruptive response:", { errorCode: errorData.errorCode, errorMessage: errorData.errorMessage });
+        console.error("❌ Disruptive error:", errorData);
         throw new Error(`Failed to create payment: ${errorData.errorMessage || response.statusText}`);
       }
 
       const data = await response.json();
-      return data;
+      console.log("✅ Disruptive response:", data);
+
+      // Return normalized response
+      return {
+        success: true,
+        paymentId: data.id || data.payment_id || data.paymentId,
+        address: data.address || data.payment_address || data.walletAddress,
+        amount: params.amount,
+        qrCode: data.qrCode || data.qr_code,
+        checkoutUrl: data.checkoutUrl || data.checkout_url,
+        status: "pending",
+        expiresAt: data.expiresAt || data.expires_at
+      };
     } catch (error) {
-      console.error("Disruptive payment creation error:", error);
+      console.error("❌ Disruptive payment creation error:", error);
       throw error;
     }
   },
@@ -140,8 +126,7 @@ export const disruptiveService = {
     try {
       const response = await fetch(`${apiUrl}/payments/${paymentId}`, {
         headers: {
-          "Authorization": `Bearer ${apiKey}`,
-          "Accept": "application/json"
+          "X-API-Key": apiKey
         }
       });
 
