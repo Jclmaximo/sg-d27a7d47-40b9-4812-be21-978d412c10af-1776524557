@@ -74,7 +74,7 @@ export const disruptiveService = {
     console.log("🔍 Request:");
     console.log("   📌 URL:", `${apiUrl}/payments/single`);
     console.log("   📌 Method: POST");
-    console.log("   📌 Header: X-API-Key:", apiKey.substring(0, 20) + "...");
+    console.log("   📌 Header: Authorization: Bearer", apiKey.substring(0, 20) + "...");
     console.log("   📌 Payload:", JSON.stringify(payload, null, 2));
 
     try {
@@ -84,7 +84,7 @@ export const disruptiveService = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-API-Key": apiKey
+          "Authorization": `Bearer ${apiKey}`
         },
         body: JSON.stringify(payload)
       });
@@ -126,7 +126,7 @@ export const disruptiveService = {
     try {
       const response = await fetch(`${apiUrl}/payments/${paymentId}`, {
         headers: {
-          "X-API-Key": apiKey
+          "Authorization": `Bearer ${apiKey}`
         }
       });
 
