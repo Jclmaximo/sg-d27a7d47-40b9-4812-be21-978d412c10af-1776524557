@@ -11,9 +11,11 @@ import { discountService } from "@/services/discountService";
 import { disruptiveService } from "@/services/disruptiveService";
 import { supabase } from "@/integrations/supabase/client";
 import React from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Pricing() {
   const router = useRouter();
+  const { toast } = useToast();
   const [selectedPlan, setSelectedPlan] = useState<"initial" | "renewal">("initial");
   const [discountCode, setDiscountCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState<{ percentage: number; code: string } | null>(null);
