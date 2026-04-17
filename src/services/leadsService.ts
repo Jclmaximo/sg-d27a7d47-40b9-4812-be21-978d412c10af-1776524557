@@ -63,24 +63,14 @@ export const leadsService = {
       throw error;
     }
 
-    // Send notification to funnel owner
-    if (data) {
-      await this.notifyFunnelOwner({
-        leadId: data.id,
-        leadName: leadData.name,
-        leadEmail: leadData.email,
-        leadPhone: leadData.phone,
-        ownerId: leadData.user_id,
-        interest: leadData.interest || "No especificado",
-        contactMethod: leadData.contact_method || "whatsapp"
-      });
-    }
+    // Email notifications disabled by user request
+    // Leads will appear directly in the dashboard
 
     return { data, error };
   },
 
   /**
-   * Notify funnel owner about new lead
+   * Notify funnel owner about new lead (DISABLED)
    */
   async notifyFunnelOwner(params: {
     leadId: string;
