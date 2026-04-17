@@ -168,7 +168,7 @@ export default function AdminDashboard() {
         note,
         created_at,
         created_by,
-        profiles!lead_notes_created_by_fkey (
+        profiles (
           full_name,
           username,
           email
