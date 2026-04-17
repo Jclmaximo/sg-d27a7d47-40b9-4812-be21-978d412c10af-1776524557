@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SEO } from "@/components/SEO";
-import { Loader2, UserPlus, CheckCircle2, XCircle, Sparkles } from "lucide-react";
+import { Loader2, UserPlus, CheckCircle2, XCircle, Sparkles, Plane } from "lucide-react";
 
 export default function RegistroPage() {
   const router = useRouter();
@@ -328,221 +328,235 @@ export default function RegistroPage() {
         </header>
 
         <div className="container mx-auto px-4 py-8 md:py-12">
-          {checkingSession ? (
-            <div className="flex items-center gap-2">
-              <Loader2 className="w-6 h-6 animate-spin text-primary" />
-              <p className="text-muted-foreground">Verificando sesión...</p>
-            </div>
-          ) : existingUser ? (
-            // Show existing session options
-            <Card className="w-full max-w-lg shadow-xl border-2">
-              <CardHeader className="space-y-1 text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center">
-                    <UserPlus className="w-8 h-8 text-yellow-600" />
+          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Columna izquierda - Formulario */}
+            <div className="flex items-center">
+              <Card className="w-full">
+                <CardHeader className="text-center space-y-2">
+                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <Plane className="h-8 w-8 text-primary" />
                   </div>
-                </div>
-                <CardTitle className="text-3xl font-bold">Ya tienes una cuenta activa</CardTitle>
-                <CardDescription className="text-base">
-                  Estás conectado como: <span className="font-semibold">{existingUser.email}</span>
-                </CardDescription>
-              </CardHeader>
+                  <CardTitle className="text-2xl md:text-3xl">Únete a Viaja Ligero</CardTitle>
+                  <CardDescription className="text-base">
+                    Crea tu cuenta y comienza a disfrutar de viajes exclusivos
+                  </CardDescription>
+                </CardHeader>
 
-              <CardContent className="space-y-4">
-                <div className="p-4 bg-muted rounded-lg text-sm text-muted-foreground text-center">
-                  ¿Qué deseas hacer?
-                </div>
+                <CardContent>
+                  <form onSubmit={handleSignup} className="space-y-4">
+                    {/* Full Name */}
+                    <div className="space-y-2">
+                      <Label htmlFor="fullName">Nombre Completo</Label>
+                      <Input
+                        id="fullName"
+                        type="text"
+                        placeholder="Juan Pérez"
+                        value={fullName}
+                        onChange={(e) => setFullName(e.target.value)}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
 
-                {success && (
-                  <Alert className="bg-green-50 text-green-900 border-green-200">
-                    <CheckCircle2 className="h-4 w-4" />
-                    <AlertDescription>{success}</AlertDescription>
-                  </Alert>
-                )}
+                    {/* Email */}
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="tu@email.com"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
 
-                <div className="grid gap-3">
-                  <Button
-                    size="lg"
-                    className="w-full"
-                    onClick={goToDashboard}
-                  >
-                    <Sparkles className="w-5 h-5 mr-2" />
-                    Ir a Mi Dashboard
-                  </Button>
+                    {/* WhatsApp */}
+                    <div className="space-y-2">
+                      <Label htmlFor="whatsapp">WhatsApp</Label>
+                      <Input
+                        id="whatsapp"
+                        type="tel"
+                        placeholder="+52 123 456 7890"
+                        value={whatsapp}
+                        onChange={(e) => setWhatsapp(e.target.value)}
+                        required
+                        disabled={loading}
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Incluye el código de país (ej: +52 para México)
+                      </p>
+                    </div>
 
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="w-full"
-                    onClick={handleLogout}
-                  >
-                    <XCircle className="w-5 h-5 mr-2" />
-                    Cerrar Sesión y Crear Nueva Cuenta
-                  </Button>
-                </div>
+                    {/* Username */}
+                    <div className="space-y-2">
+                      <Label htmlFor="username">Username</Label>
+                      <Input
+                        id="username"
+                        type="text"
+                        placeholder="juan-perez"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                        required
+                        disabled={loading}
+                      />
+                      {getUsernameStatus()}
+                      <p className="text-xs text-muted-foreground">
+                        Tu URL será: viajaligero.com/ambassador/<span className="font-medium">{username || "tu-username"}</span>
+                      </p>
+                    </div>
 
-                <div className="text-center text-xs text-muted-foreground mt-4">
-                  Si cierras sesión, podrás registrar una nueva cuenta
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            // Show registration form
-            <Card className="w-full max-w-lg shadow-xl border-2">
-              <CardHeader className="space-y-1 text-center">
-                <div className="flex justify-center mb-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                    <Sparkles className="w-8 h-8 text-primary" />
-                  </div>
-                </div>
-                <CardTitle className="text-3xl font-bold">Únete a Viaja Ligero</CardTitle>
-                <CardDescription className="text-base">
-                  Crea tu cuenta y comienza a disfrutar de viajes exclusivos
-                </CardDescription>
-                {referrerUsername && (
-                  <div className="mt-4 p-3 bg-secondary/10 rounded-lg border border-secondary/20">
-                    <p className="text-sm text-muted-foreground">
-                      Invitado por: <span className="font-semibold text-secondary">@{referrerUsername}</span>
-                    </p>
-                  </div>
-                )}
-              </CardHeader>
+                    {/* Password */}
+                    <div className="space-y-2">
+                      <Label htmlFor="password">Contraseña</Label>
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="Mínimo 6 caracteres"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        disabled={loading}
+                      />
+                    </div>
 
-              <CardContent>
-                <form onSubmit={handleSignup} className="space-y-4">
-                  {/* Full Name */}
-                  <div className="space-y-2">
-                    <Label htmlFor="fullName">Nombre Completo</Label>
-                    <Input
-                      id="fullName"
-                      type="text"
-                      placeholder="Juan Pérez"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-
-                  {/* Email */}
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="tu@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-
-                  {/* WhatsApp */}
-                  <div className="space-y-2">
-                    <Label htmlFor="whatsapp">WhatsApp</Label>
-                    <Input
-                      id="whatsapp"
-                      type="tel"
-                      placeholder="+52 123 456 7890"
-                      value={whatsapp}
-                      onChange={(e) => setWhatsapp(e.target.value)}
-                      required
-                      disabled={loading}
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Incluye el código de país (ej: +52 para México)
-                    </p>
-                  </div>
-
-                  {/* Username */}
-                  <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
-                    <Input
-                      id="username"
-                      type="text"
-                      placeholder="juan-perez"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value.toLowerCase())}
-                      required
-                      disabled={loading}
-                    />
-                    {getUsernameStatus()}
-                    <p className="text-xs text-muted-foreground">
-                      Tu URL será: viajaligero.com/ambassador/<span className="font-medium">{username || "tu-username"}</span>
-                    </p>
-                  </div>
-
-                  {/* Password */}
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Contraseña</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="Mínimo 6 caracteres"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      disabled={loading}
-                    />
-                  </div>
-
-                  {/* Error Alert */}
-                  {error && (
-                    <Alert variant="destructive">
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  )}
-
-                  {/* Success Alert */}
-                  {success && (
-                    <Alert className="bg-green-50 text-green-900 border-green-200 dark:bg-green-900/10 dark:text-green-100 dark:border-green-800">
-                      <CheckCircle2 className="h-4 w-4" />
-                      <AlertDescription className="ml-2">
-                        {success}
-                        <p className="mt-2 text-sm font-medium">
-                          📧 Revisa tu bandeja de entrada (y spam) para confirmar tu cuenta.
-                        </p>
-                      </AlertDescription>
-                    </Alert>
-                  )}
-
-                  {/* Submit Button */}
-                  <Button
-                    type="submit"
-                    className="w-full"
-                    size="lg"
-                    disabled={loading || usernameAvailable === false}
-                  >
-                    {loading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Creando cuenta...
-                      </>
-                    ) : (
-                      <>
-                        <UserPlus className="w-4 h-4 mr-2" />
-                        Crear Cuenta
-                      </>
+                    {/* Error Alert */}
+                    {error && (
+                      <Alert variant="destructive">
+                        <AlertDescription>{error}</AlertDescription>
+                      </Alert>
                     )}
-                  </Button>
 
-                  {/* Login Link */}
-                  <div className="text-center text-sm text-muted-foreground">
-                    ¿Ya tienes cuenta?{" "}
+                    {/* Success Alert */}
+                    {success && (
+                      <Alert className="bg-green-50 text-green-900 border-green-200 dark:bg-green-900/10 dark:text-green-100 dark:border-green-800">
+                        <CheckCircle2 className="h-4 w-4" />
+                        <AlertDescription className="ml-2">
+                          {success}
+                          <p className="mt-2 text-sm font-medium">
+                            📧 Revisa tu bandeja de entrada (y spam) para confirmar tu cuenta.
+                          </p>
+                        </AlertDescription>
+                      </Alert>
+                    )}
+
+                    {/* Submit Button */}
                     <Button
-                      type="button"
-                      variant="link"
-                      className="px-0"
-                      onClick={() => router.push("/admin")}
+                      type="submit"
+                      className="w-full"
+                      size="lg"
+                      disabled={loading || usernameAvailable === false}
                     >
-                      Inicia sesión aquí
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Creando cuenta...
+                        </>
+                      ) : (
+                        <>
+                          <UserPlus className="w-4 h-4 mr-2" />
+                          Crear Cuenta
+                        </>
+                      )}
                     </Button>
+
+                    {/* Login Link */}
+                    <div className="text-center text-sm text-muted-foreground">
+                      ¿Ya tienes cuenta?{" "}
+                      <Button
+                        type="button"
+                        variant="link"
+                        className="px-0"
+                        onClick={() => router.push("/admin")}
+                      >
+                        Inicia sesión aquí
+                      </Button>
+                    </div>
+                  </form>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Columna derecha - Panel visual (solo desktop) */}
+            <div className="hidden lg:flex relative rounded-2xl overflow-hidden shadow-2xl">
+              {/* Imagen de fondo */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center"
+                style={{
+                  backgroundImage: "url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000')"
+                }}
+              />
+              
+              {/* Overlay con degradado */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-accent/80" />
+              
+              {/* Contenido */}
+              <div className="relative z-10 flex flex-col justify-center p-12 text-white">
+                <h2 className="text-4xl font-bold mb-6">
+                  Tu próxima aventura comienza aquí
+                </h2>
+                
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-1">Acceso Exclusivo</h3>
+                      <p className="text-white/90">
+                        Tarifas preferenciales en hoteles, vuelos y cruceros no disponibles al público
+                      </p>
+                    </div>
                   </div>
-                </form>
-              </CardContent>
-            </Card>
-          )}
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-1">Genera Ingresos</h3>
+                      <p className="text-white/90">
+                        Gana comisiones recomendando el club a otros viajeros
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-semibold mb-1">Experiencias Únicas</h3>
+                      <p className="text-white/90">
+                        Viajes curados de lujo a destinos exclusivos como Dubái, Maldivas y más
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-8 pt-8 border-t border-white/20">
+                  <p className="text-sm text-white/80">
+                    Más de 10,000 miembros ahorrando en sus viajes
+                  </p>
+                  <div className="flex items-center gap-2 mt-2">
+                    <div className="flex -space-x-2">
+                      <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-white" />
+                      <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-white" />
+                      <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-white" />
+                    </div>
+                    <span className="text-sm font-medium">+10,000 miembros</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>
