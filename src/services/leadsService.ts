@@ -24,7 +24,7 @@ export interface LeadNote {
 export interface MessageTemplate {
   id: string;
   name: string;
-  content: string;
+  template: string;
   created_at: string;
 }
 
