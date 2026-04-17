@@ -26,7 +26,7 @@ export default function AmbassadorFunnel({ ambassadorId, ambassadorName, usernam
       <div className="min-h-screen bg-background">
         <FunnelHero />
         <ValueProposition />
-        <FunnelSegmentation />
+        <FunnelSegmentation onSelect={(type) => console.log('Selected:', type)} />
         <SocialProof />
         <FunnelTestimonials />
         <FunnelForm ambassadorId={ambassadorId} ambassadorName={ambassadorName} />

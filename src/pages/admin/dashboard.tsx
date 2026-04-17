@@ -289,7 +289,7 @@ export default function AdminDashboard() {
                 <Users className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{stats.totalLeads}</div>
+                <div className="text-2xl font-bold">{leads.length}</div>
                 <Link href="/admin/leads">
                   <Button variant="link" className="px-0 mt-2">
                     Ver todos los leads →
