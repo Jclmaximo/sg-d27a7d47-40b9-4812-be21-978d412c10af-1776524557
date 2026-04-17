@@ -140,37 +140,50 @@ export const disruptiveService = {
   },
 
   /**
-   * Get payment status from Disruptive
+   * Get payment status from Disruptive using correct endpoint
    */
-  async getPaymentStatus(paymentId: string): Promise<DisruptivePaymentResponse> {
-    const { apiKey, apiUrl } = this.getApiConfig();
+  async getPaymentStatus(paymentAddress: string, network: string = "BSC"): Promise<{
+    status: string;
+    fundStatus: string;
+    amountCaptured: number;
+    currentBalance: string;
+    fundsGoal: number;
+  }> {
+    const apiKey = process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY;
+    const apiUrl = process.env.NEXT_PUBLIC_DISRUPTIVE_API_URL || "https://my.disruptivepayments.io/api";
 
-    try {
-      const response = await fetch(`${apiUrl}/payments/${paymentId}`, {
-        headers: {
-          "client-api-key": apiKey,
-          "content-type": "application/json"
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to get payment status");
-      }
-
-      const data = await response.json();
-
-      return {
-        success: true,
-        paymentId: data.payment_id || data.id,
-        address: data.payment_address || data.address,
-        amount: parseFloat(data.amount),
-        status: this.mapStatus(data.status),
-        expiresAt: data.expires_at
-      };
-    } catch (error) {
-      console.error("Error checking payment status:", error);
-      throw error;
+    if (!apiKey) {
+      throw new Error("Disruptive API key not configured");
     }
+
+    // Correct endpoint from documentation: /payments/status?network=BSC&address=0x...
+    const url = `${apiUrl}/payments/status?network=${network}&address=${paymentAddress}`;
+    console.log("🔍 Checking payment status:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "client-api-key": apiKey,
+        "content-type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get payment status: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("📦 Payment status response:", data);
+
+    const paymentData = data.data || data;
+
+    return {
+      status: paymentData.status || "unknown",
+      fundStatus: paymentData.fundStatus || "unknown",
+      amountCaptured: paymentData.amountCaptured || 0,
+      currentBalance: paymentData.currentBalance || "0",
+      fundsGoal: paymentData.fundsGoal || 0
+    };
   },
 
   // Map Disruptive status to our status

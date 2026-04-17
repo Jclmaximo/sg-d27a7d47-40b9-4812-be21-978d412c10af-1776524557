@@ -170,33 +170,31 @@ export default function Pricing() {
     if (!paymentData) return;
 
     try {
-      // Query our database instead of Disruptive API
-      const { data: payment, error } = await supabase
-        .from("payments")
-        .select("status")
-        .eq("payment_id", paymentData.paymentId)
-        .single();
+      // Use Disruptive API with correct endpoint
+      const status = await disruptiveService.getPaymentStatus(paymentData.address, "BSC");
+      console.log("💰 Payment status check:", status);
 
-      if (error) {
-        console.error("Error checking payment:", error);
-        return;
-      }
-
-      console.log("💰 Payment status from DB:", payment);
-
-      // Check if payment is completed
-      if (payment.status === "completed") {
+      // Check if payment is funded (completed)
+      if (status.fundStatus === "FUNDED" && status.amountCaptured > 0) {
         toast({
           title: "¡Pago Confirmado!",
           description: "Tu suscripción está activa. Redirigiendo..."
         });
         
-        // Close modal and redirect
+        // Wait for webhook to process, then redirect
         setTimeout(() => {
           setPaymentData(null);
           setShowCheckout(false);
           router.push("/admin/dashboard");
         }, 2000);
+      } else if (status.fundStatus === "EXPIRED") {
+        toast({
+          title: "Pago Expirado",
+          description: "El tiempo para completar el pago ha expirado. Por favor intenta de nuevo.",
+          variant: "destructive"
+        });
+        setPaymentData(null);
+        setShowCheckout(false);
       }
     } catch (error) {
       console.error("Error checking payment status:", error);
