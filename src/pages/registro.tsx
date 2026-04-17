@@ -483,7 +483,7 @@ export default function RegistroPage() {
               <div className="sticky top-8">
                 <div className="relative min-h-full rounded-2xl overflow-hidden bg-slate-50">
                   <img
-                    src="/registro-hero-new.jpg"
+                    src="/registro-hero-v3.jpg"
                     alt="Viaja Ligero - Marketing Digital Automatizado"
                     className="w-full h-full object-contain"
                   />
