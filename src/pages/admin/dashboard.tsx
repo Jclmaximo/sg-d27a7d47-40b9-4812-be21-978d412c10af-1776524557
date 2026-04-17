@@ -26,6 +26,7 @@ export default function AdminDashboard() {
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
   const [adminWhatsApp, setAdminWhatsApp] = useState("");
   const [showSettings, setShowSettings] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const messageTemplates = [
     {
@@ -67,11 +68,22 @@ export default function AdminDashboard() {
       return;
     }
 
+    // Check if user is admin
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.role === "admin") {
+      setIsAdmin(true);
+    }
+
     // Check subscription
     const isActive = await subscriptionService.hasActiveSubscription(user.id);
     setHasActiveSubscription(isActive);
 
-    if (!isActive) {
+    if (!isActive && profile?.role !== "admin") {
       router.push("/pricing");
       return;
     }
@@ -225,6 +237,14 @@ export default function AdminDashboard() {
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-primary">Viaja Ligero</h1>
             <div className="flex gap-2">
+              {isAdmin && (
+                <Link href="/admin/super-dashboard">
+                  <Button variant="default">
+                    <Users className="w-4 h-4 mr-2" />
+                    Super Admin
+                  </Button>
+                </Link>
+              )}
               <Button variant="outline" onClick={() => setShowSettings(!showSettings)}>
                 <Settings className="w-4 h-4 mr-2" />
                 Configuración
