@@ -484,64 +484,9 @@ export default function RegistroPage() {
                 <div className="relative h-[600px] rounded-2xl overflow-hidden">
                   <img
                     src="/registro-hero-new.jpg"
-                    alt="Viaja Ligero"
-                    className="w-full h-full object-cover" />
-                  
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                  
-                  {/* Logo overlay */}
-                  <div className="absolute top-8 left-8 right-8">
-                    
-
-
-
-                    
-                  </div>
-
-                  {/* Benefits overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 p-8 space-y-6">
-                    <div className="flex items-start gap-4">
-                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
-                        <Zap className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-white font-semibold text-lg mb-1">
-                          Embudo Automatizado con IA
-                        </h3>
-                        <p className="text-white/90 text-sm">
-                          Tu página personalizada captura y califica leads automáticamente
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
-                        <TrendingUp className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-white font-semibold text-lg mb-1">
-                          Sistema CRM Completo
-                        </h3>
-                        <p className="text-white/90 text-sm">
-                          Dashboard con gestión de leads y seguimiento automatizado
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
-                        <Clock className="h-6 w-6 text-white" />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-white font-semibold text-lg mb-1">
-                          Trabaja Mientras Duermes
-                        </h3>
-                        <p className="text-white/90 text-sm">
-                          Tu embudo trabaja 24/7 capturando leads y notificándote por WhatsApp
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                    alt="Viaja Ligero - Marketing Digital Automatizado"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             </div>
