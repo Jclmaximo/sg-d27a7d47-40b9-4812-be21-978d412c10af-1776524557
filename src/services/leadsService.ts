@@ -1,11 +1,107 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { Tables } from "@/integrations/supabase/types";
-
-export type Lead = Tables<"leads">;
-export type LeadNote = Tables<"lead_notes">;
-export type MessageTemplate = Tables<"message_templates">;
 
 export const leadsService = {
+  /**
+   * Create a new lead from funnel submission
+   */
+  async createLead(leadData: {
+    name: string;
+    email: string;
+    phone: string;
+    country: string;
+    source: string;
+    interest?: string;
+    contact_method?: string;
+    user_id: string;
+  }) {
+    const { data, error } = await supabase
+      .from("leads")
+      .insert([{
+        name: leadData.name,
+        email: leadData.email,
+        phone: leadData.phone,
+        country: leadData.country,
+        source: leadData.source,
+        user_id: leadData.user_id,
+        status: "new",
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }])
+      .select()
+      .single();
+
+    if (error) {
+      console.error("Error creating lead:", error);
+      throw error;
+    }
+
+    // Send notification to funnel owner
+    if (data) {
+      await this.notifyFunnelOwner({
+        leadId: data.id,
+        leadName: leadData.name,
+        leadEmail: leadData.email,
+        leadPhone: leadData.phone,
+        ownerId: leadData.user_id,
+        interest: leadData.interest || "No especificado",
+        contactMethod: leadData.contact_method || "whatsapp"
+      });
+    }
+
+    return { data, error };
+  },
+
+  /**
+   * Notify funnel owner about new lead
+   */
+  async notifyFunnelOwner(params: {
+    leadId: string;
+    leadName: string;
+    leadEmail: string;
+    leadPhone: string;
+    ownerId: string;
+    interest: string;
+    contactMethod: string;
+  }) {
+    try {
+      // Get owner's profile info
+      const { data: owner } = await supabase
+        .from("profiles")
+        .select("email, full_name, username, whatsapp_number")
+        .eq("id", params.ownerId)
+        .single();
+
+      if (!owner) {
+        console.error("Owner not found");
+        return;
+      }
+
+      console.log("📧 Sending notification to funnel owner:", owner.email);
+
+      // Call Edge Function to send email notification
+      const { data, error } = await supabase.functions.invoke("send-lead-notification", {
+        body: {
+          ownerEmail: owner.email,
+          ownerName: owner.full_name || owner.username,
+          leadName: params.leadName,
+          leadEmail: params.leadEmail,
+          leadPhone: params.leadPhone,
+          leadInterest: params.interest,
+          contactMethod: params.contactMethod,
+          dashboardUrl: `${window.location.origin}/admin/main-dashboard`
+        }
+      });
+
+      if (error) {
+        console.error("Error sending notification:", error);
+      } else {
+        console.log("✅ Notification sent successfully");
+      }
+    } catch (error) {
+      console.error("Error in notifyFunnelOwner:", error);
+    }
+  },
+
   // Get all leads
   async getLeads() {
     const { data, error } = await supabase
@@ -16,19 +112,6 @@ export const leadsService = {
     console.log("Get leads:", { data, error });
     if (error) throw error;
     return data || [];
-  },
-
-  // Create lead (from funnel)
-  async createLead(leadData: Omit<Lead, "id" | "created_at" | "updated_at" | "status" | "source" | "user_id"> & { user_id?: string | null }) {
-    const { data, error } = await supabase
-      .from("leads")
-      .insert([leadData])
-      .select()
-      .single();
-    
-    console.log("Create lead:", { data, error });
-    if (error) throw error;
-    return data;
   },
 
   // Update lead status

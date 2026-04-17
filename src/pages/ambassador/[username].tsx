@@ -24,12 +24,16 @@ export default function AmbassadorFunnel({ ambassadorId, ambassadorName, usernam
       />
       
       <div className="min-h-screen bg-background">
-        <FunnelHero />
-        <ValueProposition />
+        <FunnelHero username={username} />
+        <section id="benefits-section" className="scroll-mt-20">
+          <ValueProposition />
+        </section>
         <FunnelSegmentation onSelect={(type) => console.log('Selected:', type)} />
         <SocialProof />
         <FunnelTestimonials />
-        <FunnelForm ambassadorId={ambassadorId} ambassadorName={ambassadorName} />
+        <section id="how-it-works-section" className="scroll-mt-20">
+          <FunnelForm ambassadorId={ambassadorId} ambassadorName={ambassadorName} />
+        </section>
         <FunnelFooter />
       </div>
     </>

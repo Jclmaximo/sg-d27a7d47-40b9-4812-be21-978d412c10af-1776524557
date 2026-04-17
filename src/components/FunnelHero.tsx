@@ -1,9 +1,27 @@
 "use client";
 
-import { ArrowDown, Sparkles, Plane, Globe, Shield, Users, ChevronDown } from "lucide-react";
+import { ArrowDown, Sparkles, Plane, Globe, Shield, Users, ChevronDown, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function FunnelHero() {
+interface FunnelHeroProps {
+  username?: string;
+}
+
+export function FunnelHero({ username }: FunnelHeroProps) {
+  const scrollToBenefits = () => {
+    const benefitsSection = document.getElementById("benefits-section");
+    if (benefitsSection) {
+      benefitsSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
+  const scrollToHowItWorks = () => {
+    const howItWorksSection = document.getElementById("how-it-works-section");
+    if (howItWorksSection) {
+      howItWorksSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       {/* Background pattern */}
@@ -32,17 +50,14 @@ export function FunnelHero() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-8">
-            <Button size="lg" className="text-lg px-8 py-6 w-full sm:w-auto" asChild>
-              <a href="#form">
-                <Plane className="w-5 h-5 mr-2" />
-                Ver cómo funciona
-              </a>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="text-lg px-8" onClick={scrollToHowItWorks}>
+              <Plane className="mr-2 h-5 w-5" />
+              Ver cómo funciona
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6 w-full sm:w-auto" asChild>
-              <a href="#benefits">
-                Conocer beneficios
-              </a>
+            <Button size="lg" variant="outline" className="text-lg px-8" onClick={scrollToBenefits}>
+              <TrendingUp className="mr-2 h-5 w-5" />
+              Conocer beneficios
             </Button>
           </div>
 

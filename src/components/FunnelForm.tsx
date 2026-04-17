@@ -15,6 +15,7 @@ interface FunnelFormProps {
 export function FunnelForm({ ambassadorId, ambassadorName }: FunnelFormProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -62,6 +63,51 @@ export function FunnelForm({ ambassadorId, ambassadorName }: FunnelFormProps) {
       setLoading(false);
     }
   };
+
+  if (submitted) {
+    return (
+      <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-50">
+        <div className="container mx-auto max-w-2xl px-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-12 text-center border-4 border-green-500">
+            <div className="mb-6">
+              <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg
+                  className="w-12 h-12 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={3}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                ¡Registro Exitoso! 🎉
+              </h2>
+              <p className="text-xl text-gray-700 mb-6">
+                Gracias por tu interés en Viaja Ligero
+              </p>
+              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-6">
+                <p className="text-lg text-gray-800 leading-relaxed">
+                  <strong>Nos pondremos en contacto contigo muy pronto</strong> por {contactMethod === "whatsapp" ? "WhatsApp" : "email"} para compartir más información sobre el club y responder todas tus preguntas.
+                </p>
+              </div>
+              <div className="flex items-center justify-center gap-2 text-gray-600">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                </svg>
+                <span className="text-sm">Respuesta en menos de 24 horas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5" style={{ backgroundImage: "none", backgroundColor: "transparent" }}>
