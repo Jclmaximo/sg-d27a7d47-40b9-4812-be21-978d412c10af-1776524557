@@ -35,14 +35,15 @@ import { useToast } from "@/hooks/use-toast";
 
 interface Lead {
   id: string;
-  full_name: string;
+  name: string;
   email: string;
-  whatsapp: string;
+  phone: string;
   country: string;
-  interest_level: string;
+  source: string;
   status: string;
-  notes: string | null;
+  user_id: string;
   created_at: string;
+  updated_at: string;
 }
 
 interface UserProfile {
@@ -120,7 +121,7 @@ export default function MainDashboard() {
     const { data: leadsData } = await supabase
       .from("leads")
       .select("*")
-      .eq("captured_by", user.id)
+      .eq("user_id", user.id)
       .order("created_at", { ascending: false });
 
     if (leadsData) {
@@ -145,18 +146,14 @@ export default function MainDashboard() {
 
     if (searchTerm) {
       filtered = filtered.filter(lead =>
-        lead.full_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.whatsapp.includes(searchTerm)
+        lead.phone.includes(searchTerm)
       );
     }
 
     if (statusFilter !== "all") {
       filtered = filtered.filter(lead => lead.status === statusFilter);
-    }
-
-    if (interestFilter !== "all") {
-      filtered = filtered.filter(lead => lead.interest_level === interestFilter);
     }
 
     setFilteredLeads(filtered);
@@ -492,7 +489,7 @@ export default function MainDashboard() {
                             <TableHead>Email</TableHead>
                             <TableHead>WhatsApp</TableHead>
                             <TableHead>País</TableHead>
-                            <TableHead>Interés</TableHead>
+                            <TableHead>Origen</TableHead>
                             <TableHead>Estado</TableHead>
                             <TableHead>Fecha</TableHead>
                             <TableHead>Acciones</TableHead>
@@ -501,18 +498,13 @@ export default function MainDashboard() {
                         <TableBody>
                           {filteredLeads.map((lead) => (
                             <TableRow key={lead.id}>
-                              <TableCell className="font-medium">{lead.full_name}</TableCell>
+                              <TableCell className="font-medium">{lead.name}</TableCell>
                               <TableCell>{lead.email}</TableCell>
-                              <TableCell>{lead.whatsapp}</TableCell>
+                              <TableCell>{lead.phone}</TableCell>
                               <TableCell>{lead.country}</TableCell>
                               <TableCell>
-                                <Badge variant={
-                                  lead.interest_level === "both" ? "default" :
-                                  lead.interest_level === "earn" ? "secondary" :
-                                  "outline"
-                                }>
-                                  {lead.interest_level === "both" ? "Ambas" :
-                                   lead.interest_level === "earn" ? "Ganar" : "Ahorrar"}
+                                <Badge variant="outline">
+                                  {lead.source}
                                 </Badge>
                               </TableCell>
                               <TableCell>
@@ -529,7 +521,7 @@ export default function MainDashboard() {
                               </TableCell>
                               <TableCell>
                                 <a
-                                  href={`https://wa.me/${lead.whatsapp.replace(/[^0-9]/g, "")}`}
+                                  href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}`}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
@@ -613,9 +605,9 @@ export default function MainDashboard() {
                         <TableBody>
                           {commissions.map((commission) => (
                             <TableRow key={commission.id}>
-                              <TableCell>{commission.referred_username}</TableCell>
+                              <TableCell>{commission.referred_user?.username || commission.referred_user?.email || "Usuario"}</TableCell>
                               <TableCell className="font-medium">
-                                ${commission.amount.toFixed(2)}
+                                ${commission.amount_usd.toFixed(2)}
                               </TableCell>
                               <TableCell>
                                 <Badge variant={

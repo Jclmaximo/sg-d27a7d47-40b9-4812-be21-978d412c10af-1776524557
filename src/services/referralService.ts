@@ -24,6 +24,9 @@ export interface NetworkStats {
   totalCommissions: number;
   pendingCommissions: number;
   paidCommissions: number;
+  total_referrals: number;
+  total_earned: number;
+  available_balance: number;
 }
 
 export interface ReferralTreeNode {
@@ -158,12 +161,17 @@ export const referralService = {
     const paidCommissions = commissions?.filter(c => c.status === "paid")
       .reduce((sum, c) => sum + Number(c.amount_usd), 0) || 0;
 
+    const total_referrals = (directReferrals?.length || 0) + (indirectReferrals?.length || 0);
+
     return {
       directReferrals: directReferrals?.length || 0,
       indirectReferrals: indirectReferrals?.length || 0,
       totalCommissions,
       pendingCommissions,
-      paidCommissions
+      paidCommissions,
+      total_referrals,
+      total_earned: totalCommissions,
+      available_balance: totalCommissions - paidCommissions
     };
   },
 
