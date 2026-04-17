@@ -28,34 +28,31 @@ export default function AdminPage() {
     setSuccessMessage("");
 
     try {
+      console.log("🔐 Login attempt:", { email });
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
+      console.log("🔐 Login response:", { data: !!data, error });
+
       if (error) {
+        console.error("❌ Login error:", error);
         setError(error.message);
         setLoading(false);
         return;
       }
 
       if (data.user) {
-        setSuccessMessage("¡Sesión iniciada exitosamente!");
+        console.log("✅ Login successful, user:", data.user.id);
+        setSuccessMessage("¡Sesión iniciada exitosamente! Redirigiendo...");
         
-        // Try to check subscription, but don't block if it fails
-        try {
-          const hasActiveSubscription = await subscriptionService.hasActiveSubscription(data.user.id);
-          
-          if (hasActiveSubscription) {
-            setTimeout(() => router.push("/admin/dashboard"), 1000);
-          } else {
-            setTimeout(() => router.push("/pricing"), 1000);
-          }
-        } catch (subError) {
-          console.error("Error checking subscription:", subError);
-          // If subscription check fails, default to pricing
-          setTimeout(() => router.push("/pricing"), 1000);
-        }
+        // Direct redirect to pricing - skip subscription check during login
+        setTimeout(() => {
+          console.log("🔄 Redirecting to /pricing");
+          router.push("/pricing");
+        }, 1000);
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -71,20 +68,29 @@ export default function AdminPage() {
     setSuccessMessage("");
 
     try {
+      console.log("🔐 Signup attempt:", { email });
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
 
+      console.log("🔐 Signup response:", { data: !!data, error });
+
       if (error) {
+        console.error("❌ Signup error:", error);
         setError(error.message);
         setLoading(false);
         return;
       }
 
       if (data.user) {
+        console.log("✅ Signup successful, user:", data.user.id);
         setSuccessMessage("¡Cuenta creada exitosamente! Redirigiendo...");
-        setTimeout(() => router.push("/pricing"), 1500);
+        setTimeout(() => {
+          console.log("🔄 Redirecting to /pricing");
+          router.push("/pricing");
+        }, 1500);
       }
     } catch (err) {
       console.error("Signup error:", err);
