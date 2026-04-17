@@ -116,11 +116,15 @@ export const disruptiveService = {
       console.log("   - data.id:", data.id);
       console.log("   - data.payment_id:", data.payment_id);
 
+      // Disruptive doesn't return a payment_id - use address as unique identifier
+      const paymentId = paymentData.address || String(data.timeStart);
+      console.log("🔍 Using paymentId:", paymentId);
+
       // Return normalized response
       return {
         success: true,
-        paymentId: paymentData.id || paymentData.payment_id || paymentData.paymentId || data.id || String(data.timeStart),
-        address: paymentData.address || paymentData.payment_address || paymentData.walletAddress,
+        paymentId: paymentId,
+        address: paymentData.address,
         amount: params.amount,
         qrCode: paymentData.qrCode || paymentData.qr_code,
         checkoutUrl: paymentData.checkoutUrl || paymentData.checkout_url,
