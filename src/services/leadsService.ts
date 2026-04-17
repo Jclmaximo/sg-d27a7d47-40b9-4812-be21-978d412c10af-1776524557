@@ -1,5 +1,33 @@
 import { supabase } from "@/integrations/supabase/client";
 
+export interface Lead {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  country: string;
+  source: string;
+  status: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface LeadNote {
+  id: string;
+  lead_id: string;
+  note: string;
+  created_by: string;
+  created_at: string;
+}
+
+export interface MessageTemplate {
+  id: string;
+  name: string;
+  content: string;
+  created_at: string;
+}
+
 export const leadsService = {
   /**
    * Create a new lead from funnel submission
@@ -115,7 +143,7 @@ export const leadsService = {
   },
 
   // Update lead status
-  async updateLeadStatus(leadId: string, status: Lead["status"]) {
+  async updateLeadStatus(leadId: string, status: string) {
     const { data, error } = await supabase
       .from("leads")
       .update({ status })

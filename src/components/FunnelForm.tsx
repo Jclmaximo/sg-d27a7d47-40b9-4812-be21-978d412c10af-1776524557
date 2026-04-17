@@ -16,6 +16,7 @@ export function FunnelForm({ ambassadorId, ambassadorName }: FunnelFormProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [contactMethod, setContactMethod] = useState("whatsapp");
   const [formData, setFormData] = useState({
     name: "",
     email: "",

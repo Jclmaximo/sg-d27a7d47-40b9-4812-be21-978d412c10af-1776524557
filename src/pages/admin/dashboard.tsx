@@ -7,12 +7,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { LogOut, Plus, MessageSquare, Trash2, Loader2, Phone, Settings, Users, TrendingUp } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { subscriptionService } from "@/services/subscriptionService";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
 
 export default function AdminDashboard() {
   const router = useRouter();
