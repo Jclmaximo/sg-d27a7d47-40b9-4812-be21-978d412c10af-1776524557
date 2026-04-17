@@ -23,49 +23,58 @@ export default function WelcomePage() {
   }, []);
 
   const checkAuth = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      router.push("/admin");
-      return;
-    }
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        console.log("❌ No user found, redirecting to /admin");
+        router.push("/admin");
+        return;
+      }
 
-    // Get username with retry logic
-    let retries = 0;
-    const maxRetries = 3;
-    let profileData = null;
+      console.log("✅ User found:", user.id);
 
-    while (retries < maxRetries && !profileData?.username) {
+      // Get username
       const { data: profile, error } = await supabase
         .from("profiles")
         .select("username")
         .eq("id", user.id)
         .single();
 
-      if (!error && profile?.username) {
-        profileData = profile;
-        console.log("✅ Username loaded:", profile.username);
-        break;
+      console.log("Profile query result:", { profile, error });
+
+      if (error) {
+        console.error("❌ Error loading profile:", error);
+        toast({
+          title: "Error",
+          description: "No se pudo cargar tu perfil. Por favor recarga la página.",
+          variant: "destructive"
+        });
+        setLoading(false);
+        return;
       }
 
-      retries++;
-      console.log(`⏳ Waiting for username... attempt ${retries}/${maxRetries}`);
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
-    }
-
-    if (profileData?.username) {
-      setUsername(profileData.username);
-    } else {
-      // Username still not found - show error
+      if (profile?.username) {
+        console.log("✅ Username loaded:", profile.username);
+        setUsername(profile.username);
+      } else {
+        console.error("❌ No username found in profile");
+        toast({
+          title: "Configuración incompleta",
+          description: "No se encontró tu username. Por favor contacta soporte.",
+          variant: "destructive"
+        });
+      }
+    } catch (err) {
+      console.error("❌ Exception in checkAuth:", err);
       toast({
-        title: "Error de configuración",
-        description: "No se encontró tu username. Por favor contacta soporte.",
+        title: "Error",
+        description: "Ocurrió un error al cargar tu perfil",
         variant: "destructive"
       });
-      console.error("❌ Username not found after retries");
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const handleLogout = async () => {
@@ -78,35 +87,41 @@ export default function WelcomePage() {
   };
 
   const copyFunnelLink = () => {
-    navigator.clipboard.writeText(funnelLink);
+    const link = `${window.location.origin}/ambassador/${username}`;
+    console.log("📋 Copying funnel link:", link);
+    navigator.clipboard.writeText(link);
     setCopiedFunnel(true);
     toast({
-      title: "¡Link copiado!",
-      description: "Link de tu embudo copiado al portapapeles"
+      title: "✅ Link copiado",
+      description: "El link de tu embudo ha sido copiado al portapapeles"
     });
     setTimeout(() => setCopiedFunnel(false), 2000);
   };
 
   const copyReferralLink = () => {
-    navigator.clipboard.writeText(referralLink);
+    const link = `${window.location.origin}/pricing?ref=${username}`;
+    console.log("📋 Copying referral link:", link);
+    navigator.clipboard.writeText(link);
     setCopiedReferral(true);
     toast({
-      title: "¡Link copiado!",
-      description: "Link de referidos copiado al portapapeles"
+      title: "✅ Link copiado",
+      description: "Tu link de referidos ha sido copiado al portapapeles"
     });
     setTimeout(() => setCopiedReferral(false), 2000);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <div className="text-center">
-          <Sparkles className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-          <p className="text-lg text-muted-foreground">Cargando...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-lg">Cargando...</p>
       </div>
     );
   }
+
+  const funnelUrl = username ? `${window.location.origin}/ambassador/${username}` : "";
+  const referralUrl = username ? `${window.location.origin}/pricing?ref=${username}` : "";
+
+  console.log("🔗 Generated URLs:", { funnelUrl, referralUrl, username });
 
   return (
     <>
