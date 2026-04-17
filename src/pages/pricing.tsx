@@ -48,9 +48,9 @@ export default function Pricing() {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      // Not authenticated - redirect to admin with return URL
-      const refParam = ref ? `&ref=${ref}` : "";
-      router.push(`/admin?redirect=/pricing${refParam}`);
+      // Not authenticated - redirect to registro with ref
+      const refParam = ref && typeof ref === "string" ? `?ref=${ref}` : "";
+      router.push(`/registro${refParam}`);
       return;
     }
     
