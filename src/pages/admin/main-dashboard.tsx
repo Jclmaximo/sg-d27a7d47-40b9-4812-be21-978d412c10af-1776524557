@@ -525,9 +525,20 @@ Estoy aquí para resolver cualquier duda que tengas.
           </div>
         </header>
 
-        {/* Main Content */}
-        <div className="container mx-auto p-4 max-w-7xl">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        {/* Banner */}
+        <div className="container mx-auto px-4 mt-6">
+          <div className="relative overflow-hidden rounded-xl shadow-lg">
+            <img 
+              src="/dashboard-banner.jpg" 
+              alt="Viaja Ligero - Vive más, lleva menos" 
+              className="w-full h-48 md:h-64 object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Navigation Tabs */}
+        <div className="container mx-auto px-4 mt-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
               <TabsTrigger value="resumen" className="flex items-center gap-2">
                 <LayoutDashboard className="h-4 w-4" />
