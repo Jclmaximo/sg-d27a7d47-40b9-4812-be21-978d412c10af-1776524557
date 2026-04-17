@@ -297,6 +297,7 @@ export type Database = {
           role: string | null
           updated_at: string | null
           username: string | null
+          whatsapp_number: string | null
         }
         Insert: {
           ambassador_active?: boolean | null
@@ -309,6 +310,7 @@ export type Database = {
           role?: string | null
           updated_at?: string | null
           username?: string | null
+          whatsapp_number?: string | null
         }
         Update: {
           ambassador_active?: boolean | null
@@ -321,6 +323,7 @@ export type Database = {
           role?: string | null
           updated_at?: string | null
           username?: string | null
+          whatsapp_number?: string | null
         }
         Relationships: [
           {
