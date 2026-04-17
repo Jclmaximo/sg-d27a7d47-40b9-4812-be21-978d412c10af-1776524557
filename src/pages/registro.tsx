@@ -131,7 +131,7 @@ export default function RegistroPage() {
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/pricing${savedRef ? `?ref=${savedRef}` : ""}`,
+          emailRedirectTo: `${window.location.origin}/pricing${referrerUsername ? `?ref=${referrerUsername}` : ""}`,
           data: {
             full_name: fullName,
             username: username.toLowerCase(),
@@ -180,12 +180,12 @@ export default function RegistroPage() {
 
       console.log("✅ Registration complete");
       
-      setSuccessMessage("¡Cuenta creada exitosamente! Redirigiendo al pago...");
+      setSuccess("¡Cuenta creada exitosamente! Redirigiendo al pago...");
       setError("");
 
       // Redirect to pricing with ref
       setTimeout(() => {
-        const refParam = savedRef ? `?ref=${savedRef}` : "";
+        const refParam = referrerUsername ? `?ref=${referrerUsername}` : "";
         router.push(`/pricing${refParam}`);
       }, 1500);
     } catch (err: any) {
