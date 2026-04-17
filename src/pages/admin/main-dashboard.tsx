@@ -509,10 +509,10 @@ Estoy aquí para resolver cualquier duda que tengas.
               </div>
               
               <div className="flex items-center gap-2">
-                {isAdmin && (
+                {profile?.role === 'admin' && (
                   <Link href="/admin/super-dashboard">
                     <Button variant="outline" size="sm" className="gap-2">
-                      <Shield className="h-4 w-4" />
+                      <ShieldCheck className="h-4 w-4" />
                       <span className="hidden sm:inline">Super Admin</span>
                     </Button>
                   </Link>
