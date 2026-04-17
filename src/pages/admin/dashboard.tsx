@@ -165,11 +165,7 @@ export default function AdminDashboard() {
       setNotes(notes);
     } catch (error) {
       console.error("Error loading notes:", error);
-      toast({
-        title: "Error",
-        description: "No se pudieron cargar las notas",
-        variant: "destructive"
-      });
+      alert("No se pudieron cargar las notas");
     }
   }
 
