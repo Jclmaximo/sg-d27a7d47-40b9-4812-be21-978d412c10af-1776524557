@@ -235,20 +235,10 @@ ${window.location.origin}/admin/main-dashboard
 
   // Get notes for a lead
   async getLeadNotes(leadId: string) {
-    const { data, error } = await supabase
+    // First get the notes
+    const { data: notes, error } = await supabase
       .from("lead_notes")
-      .select(`
-        id,
-        lead_id,
-        note,
-        created_at,
-        created_by,
-        profiles (
-          full_name,
-          username,
-          email
-        )
-      `)
+      .select("id, lead_id, note, created_at, created_by")
       .eq("lead_id", leadId)
       .order("created_at", { ascending: false });
     
@@ -256,8 +246,27 @@ ${window.location.origin}/admin/main-dashboard
       console.error("Error loading notes:", error);
       throw error;
     }
+
+    if (!notes || notes.length === 0) {
+      return [];
+    }
+
+    // Get unique user IDs
+    const userIds = [...new Set(notes.map(n => n.created_by))];
+
+    // Get profiles for those users
+    const { data: profiles } = await supabase
+      .from("profiles")
+      .select("id, full_name, username, email")
+      .in("id", userIds);
+
+    // Map profiles to notes
+    const profileMap = new Map(profiles?.map(p => [p.id, p]) || []);
     
-    return data || [];
+    return notes.map(note => ({
+      ...note,
+      profiles: profileMap.get(note.created_by) || null
+    }));
   },
 
   // Get message templates

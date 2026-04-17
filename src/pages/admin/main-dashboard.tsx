@@ -462,6 +462,7 @@ Estoy aquí para resolver cualquier duda que tengas.
       setSelectedLead(lead);
       setShowNotesListDialog(true);
     } catch (error) {
+      console.error("Error loading notes:", error);
       toast({
         title: "Error",
         description: "No se pudieron cargar las notas",

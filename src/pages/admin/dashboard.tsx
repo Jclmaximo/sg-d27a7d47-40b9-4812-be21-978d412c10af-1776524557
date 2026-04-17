@@ -160,25 +160,16 @@ export default function AdminDashboard() {
 
   async function loadLeadNotes(lead: Lead) {
     setSelectedLead(lead);
-    const { data: notes } = await supabase
-      .from("lead_notes")
-      .select(`
-        id,
-        lead_id,
-        note,
-        created_at,
-        created_by,
-        profiles (
-          full_name,
-          username,
-          email
-        )
-      `)
-      .eq("lead_id", lead.id)
-      .order("created_at", { ascending: false });
-
-    if (notes) {
+    try {
+      const notes = await leadsService.getLeadNotes(lead.id);
       setNotes(notes);
+    } catch (error) {
+      console.error("Error loading notes:", error);
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar las notas",
+        variant: "destructive"
+      });
     }
   }
 
