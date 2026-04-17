@@ -20,11 +20,11 @@ export function FunnelFooter() {
         <div className="grid md:grid-cols-3 gap-8 mb-8">
           {/* Logo y descripción */}
           <div>
-            <img 
-              src="/viaja-ligero-logo.png" 
-              alt="Viaja Ligero" 
-              className="h-12 w-auto mb-4 brightness-0 invert"
-            />
+            
+
+
+
+            
             <p className="text-sm text-background/80">
               Club exclusivo de viajes con acceso a tarifas preferenciales y experiencias únicas.
             </p>
@@ -78,6 +78,6 @@ export function FunnelFooter() {
           <p>&copy; {new Date().getFullYear()} Viaja Ligero. Todos los derechos reservados.</p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>);
+
 }
