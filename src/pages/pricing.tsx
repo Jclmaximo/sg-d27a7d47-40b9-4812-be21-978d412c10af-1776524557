@@ -210,13 +210,16 @@ export default function Pricing() {
               await supabase.from("subscriptions").insert({
                 user_id: user.id,
                 status: "active",
+                price_usd: finalPrice,
                 start_date: startDate.toISOString(),
                 end_date: endDate.toISOString(),
-                payment_id: paymentData.paymentId,
-                discount_code: appliedDiscount?.code || null,
+                transaction_hash: paymentData.paymentId,
+                discount_code_used: appliedDiscount?.code || null,
                 discount_percentage: appliedDiscount?.percentage || 0,
                 original_price: currentPrice,
-                final_price: finalPrice
+                final_price: finalPrice,
+                is_initial_payment: selectedPlan === "initial",
+                plan_type: "monthly"
               });
 
               console.log("✅ Subscription created successfully");
