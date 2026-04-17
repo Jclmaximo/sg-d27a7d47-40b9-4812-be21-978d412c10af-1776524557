@@ -10,6 +10,7 @@ import { Sparkles, CheckCircle2, Shield, Globe, TrendingUp, Loader2, QrCode, Cop
 import { discountService } from "@/services/discountService";
 import { disruptiveService } from "@/services/disruptiveService";
 import { supabase } from "@/integrations/supabase/client";
+import React from "react";
 
 export default function Pricing() {
   const router = useRouter();
@@ -162,6 +163,48 @@ export default function Pricing() {
       setTimeout(() => setCopied(false), 2000);
     }
   };
+
+  const checkStatus = async () => {
+    if (!paymentData) return;
+
+    try {
+      const status = await disruptiveService.getPaymentStatus(paymentData.paymentId);
+      console.log("💰 Payment status check:", status);
+
+      // Check if payment is funded (completed)
+      if (status.fundStatus === "FUNDED" && status.amountCaptured > 0) {
+        toast({
+          title: "¡Pago Confirmado!",
+          description: "Tu suscripción está activa. Redirigiendo..."
+        });
+        
+        // Wait for webhook to process, then redirect
+        setTimeout(() => {
+          setPaymentData(null);
+          setShowCheckout(false);
+          router.push("/admin/dashboard");
+        }, 2000);
+      } else if (status.fundStatus === "EXPIRED") {
+        toast({
+          title: "Pago Expirado",
+          description: "El tiempo para completar el pago ha expirado. Por favor intenta de nuevo.",
+          variant: "destructive"
+        });
+        setPaymentData(null);
+        setShowCheckout(false);
+      }
+    } catch (error) {
+      console.error("Error checking payment status:", error);
+    }
+  };
+
+  // Poll payment status every 5 seconds
+  React.useEffect(() => {
+    if (!paymentData) return;
+
+    const interval = setInterval(checkStatus, 5000);
+    return () => clearInterval(interval);
+  }, [paymentData]);
 
   return (
     <>

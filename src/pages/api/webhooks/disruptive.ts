@@ -25,22 +25,22 @@ export default async function handler(
     }
 
     // Parse webhook data
-    const { payment_id, status, amount, user_id, order_id, discount_code } = req.body;
+    const { payment_id, status, amount, user_id, order_id, discount_code, fundStatus, amountCaptured } = req.body;
 
-    console.log("Disruptive webhook received:", { payment_id, status, amount, user_id });
+    console.log("Disruptive webhook received:", { payment_id, status, fundStatus, amountCaptured, user_id });
 
     // Update payment record in database
     const { error: updateError } = await supabase
       .from("payments")
-      .update({ status })
+      .update({ status: fundStatus === "FUNDED" ? "completed" : status })
       .eq("payment_id", payment_id);
 
     if (updateError) {
       console.error("Error updating payment:", updateError);
     }
 
-    // If payment is completed, activate subscription
-    if (status === "completed") {
+    // If payment is FUNDED (completed), activate subscription
+    if (fundStatus === "FUNDED" && amountCaptured > 0) {
       // Determine if this is initial payment or renewal based on amount
       const isInitialPayment = amount >= 39.50; // Minimum with 50% discount on $79
 

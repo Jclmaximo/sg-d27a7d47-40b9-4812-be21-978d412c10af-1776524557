@@ -169,6 +169,51 @@ export const disruptiveService = {
     }
   },
 
+  /**
+   * Get payment status from Disruptive
+   */
+  async getPaymentStatus(paymentAddress: string): Promise<{
+    status: string;
+    fundStatus: string;
+    amountCaptured: number;
+    currentBalance: string;
+    fundsGoal: number;
+  }> {
+    const apiKey = process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY;
+    const apiUrl = process.env.NEXT_PUBLIC_DISRUPTIVE_API_URL || "https://my.disruptivepayments.io/api";
+
+    if (!apiKey) {
+      throw new Error("Disruptive API key not configured");
+    }
+
+    const url = `${apiUrl}/payments/${paymentAddress}`;
+    console.log("🔍 Checking payment status:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "client-api-key": apiKey
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get payment status: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("📦 Payment status response:", data);
+
+    const paymentData = data.data || data;
+
+    return {
+      status: paymentData.status || "unknown",
+      fundStatus: paymentData.fundStatus || "unknown",
+      amountCaptured: paymentData.amountCaptured || 0,
+      currentBalance: paymentData.currentBalance || "0",
+      fundsGoal: paymentData.fundsGoal || 0
+    };
+  },
+
   // Map Disruptive status to our status
   mapStatus(status: string): "pending" | "completed" | "failed" | "expired" {
     const statusMap: Record<string, "pending" | "completed" | "failed" | "expired"> = {
