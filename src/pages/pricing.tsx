@@ -26,15 +26,32 @@ export default function Pricing() {
   const [referrerUsername, setReferrerUsername] = useState<string | null>(null);
 
   useEffect(() => {
+    checkAuthAndReferrer();
+  }, [router.query]);
+
+  const checkAuthAndReferrer = async () => {
+    // Check for referral code in URL
     const { ref } = router.query;
     if (ref && typeof ref === "string") {
       setReferrerUsername(ref);
       localStorage.setItem("referrer", ref);
     } else {
+      // Check localStorage for saved referrer
       const savedRef = localStorage.getItem("referrer");
-      if (savedRef) setReferrerUsername(savedRef);
+      if (savedRef) {
+        setReferrerUsername(savedRef);
+      }
     }
-  }, [router.query]);
+
+    // Check authentication
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      // Not authenticated - redirect to admin with return URL
+      const refParam = ref ? `&ref=${ref}` : "";
+      router.push(`/admin?redirect=/pricing${refParam}`);
+    }
+  };
 
   // Payment state
   const [showCheckout, setShowCheckout] = useState(false);

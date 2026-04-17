@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -8,14 +8,51 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LogIn, UserPlus, Loader2, Lock } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { subscriptionService } from "@/services/subscriptionService";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function AdminPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
+  const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    checkExistingSession();
+    
+    // Save referrer from query params if present
+    const { ref } = router.query;
+    if (ref && typeof ref === "string") {
+      localStorage.setItem("referrer", ref);
+    }
+  }, [router.query]);
+
+  const checkExistingSession = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (user) {
+      const hasActiveSub = await subscriptionService.hasActiveSubscription(user.id);
+      
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("username, role")
+        .eq("id", user.id)
+        .single();
+      
+      if (profile?.role === "admin" || hasActiveSub) {
+        if (!profile?.username) {
+          router.push("/admin/onboarding");
+        } else {
+          router.push("/admin/dashboard");
+        }
+      } else {
+        router.push("/pricing");
+      }
+    }
+  };
 
   async function handleLogout() {
     await supabase.auth.signOut();
@@ -60,6 +97,16 @@ export default function AdminPage() {
         
         setTimeout(() => {
           console.log("🔄 Redirecting based on subscription and profile status");
+          
+          // Check if there's a redirect URL in query params
+          const { redirect, ref } = router.query;
+          
+          if (redirect && typeof redirect === "string") {
+            // Preserve referrer in URL if present
+            const refParam = ref && typeof ref === "string" ? `?ref=${ref}` : "";
+            router.push(`${redirect}${refParam}`);
+            return;
+          }
           
           // If admin, skip subscription check
           if (profile?.role === "admin") {
@@ -117,7 +164,21 @@ export default function AdminPage() {
         
         setTimeout(() => {
           console.log("🔄 Redirecting to pricing for new user");
-          router.push("/pricing");
+          
+          // Check if there's a redirect URL in query params
+          const { redirect, ref } = router.query;
+          
+          if (redirect && typeof redirect === "string") {
+            // Preserve referrer in URL if present
+            const refParam = ref && typeof ref === "string" ? `?ref=${ref}` : "";
+            router.push(`${redirect}${refParam}`);
+            return;
+          }
+          
+          // Default: redirect to pricing with ref if available
+          const savedRef = localStorage.getItem("referrer");
+          const refParam = savedRef ? `?ref=${savedRef}` : "";
+          router.push(`/pricing${refParam}`);
         }, 1500);
       }
     } catch (err) {
