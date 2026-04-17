@@ -494,20 +494,20 @@ export default function RegistroPage() {
               {/* Contenido */}
               <div className="relative z-10 flex flex-col justify-center p-12 text-white">
                 <h2 className="text-4xl font-bold mb-6">
-                  Tu próxima aventura comienza aquí
+                  Marketing digital automatizado para ti
                 </h2>
                 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-1">Acceso Exclusivo</h3>
+                      <h3 className="text-xl font-semibold mb-1">Embudo Automatizado con IA</h3>
                       <p className="text-white/90">
-                        Tarifas preferenciales en hoteles, vuelos y cruceros no disponibles al público
+                        Tu página personalizada captura y califica leads automáticamente sin que tengas que hacer nada
                       </p>
                     </div>
                   </div>
@@ -515,13 +515,13 @@ export default function RegistroPage() {
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-1">Genera Ingresos</h3>
+                      <h3 className="text-xl font-semibold mb-1">Sistema CRM Completo</h3>
                       <p className="text-white/90">
-                        Gana comisiones recomendando el club a otros viajeros
+                        Dashboard con gestión de leads, templates de WhatsApp listos y seguimiento automatizado
                       </p>
                     </div>
                   </div>
@@ -529,13 +529,13 @@ export default function RegistroPage() {
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
                       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-xl font-semibold mb-1">Experiencias Únicas</h3>
+                      <h3 className="text-xl font-semibold mb-1">Trabaja Mientras Duermes</h3>
                       <p className="text-white/90">
-                        Viajes curados de lujo a destinos exclusivos como Dubái, Maldivas y más
+                        Tu embudo trabaja 24/7 capturando leads y notificándote por WhatsApp cuando alguien se registra
                       </p>
                     </div>
                   </div>
@@ -543,7 +543,7 @@ export default function RegistroPage() {
 
                 <div className="mt-8 pt-8 border-t border-white/20">
                   <p className="text-sm text-white/80">
-                    Más de 10,000 miembros ahorrando en sus viajes
+                    Únete a los ambassadors que ya están generando ingresos con marketing digital automatizado
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     <div className="flex -space-x-2">
@@ -551,7 +551,7 @@ export default function RegistroPage() {
                       <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-white" />
                       <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-white" />
                     </div>
-                    <span className="text-sm font-medium">+10,000 miembros</span>
+                    <span className="text-sm font-medium">Ambassadors activos</span>
                   </div>
                 </div>
               </div>
