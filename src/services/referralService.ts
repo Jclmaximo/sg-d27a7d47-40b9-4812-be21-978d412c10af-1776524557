@@ -126,7 +126,7 @@ export const referralService = {
       return [];
     }
 
-    return data || [];
+    return (data as unknown as Commission[]) || [];
   },
 
   /**
@@ -259,6 +259,6 @@ export const referralService = {
       return [];
     }
 
-    return data || [];
+    return (data as unknown as Commission[]) || [];
   }
 };

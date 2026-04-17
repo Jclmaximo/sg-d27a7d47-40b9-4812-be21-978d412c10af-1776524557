@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 import { SEO } from "@/components/SEO";
 import { ArrowLeft, DollarSign, TrendingUp, Users, Copy, Check } from "lucide-react";
 import Link from "next/link";

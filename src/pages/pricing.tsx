@@ -23,7 +23,19 @@ export default function Pricing() {
   const [appliedDiscount, setAppliedDiscount] = useState<{ percentage: number; code: string } | null>(null);
   const [discountError, setDiscountError] = useState("");
   const [isValidatingCode, setIsValidatingCode] = useState(false);
-  
+  const [referrerUsername, setReferrerUsername] = useState<string | null>(null);
+
+  useEffect(() => {
+    const { ref } = router.query;
+    if (ref && typeof ref === "string") {
+      setReferrerUsername(ref);
+      localStorage.setItem("referrer", ref);
+    } else {
+      const savedRef = localStorage.getItem("referrer");
+      if (savedRef) setReferrerUsername(savedRef);
+    }
+  }, [router.query]);
+
   // Payment state
   const [showCheckout, setShowCheckout] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
