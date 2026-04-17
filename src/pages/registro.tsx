@@ -305,187 +305,165 @@ export default function RegistroPage() {
         description="Crea tu cuenta en Viaja Ligero y comienza a ahorrar en tus viajes" />
       
       
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
-        {/* Header con logo */}
-        <header className="border-b bg-card/50 backdrop-blur">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/viaja-ligero-logo.png"
-                  alt="Viaja Ligero"
-                  className="h-8 md:h-10 w-auto" />
-                
-                <h1 className="text-xl md:text-2xl font-bold">Viaja Ligero</h1>
-              </div>
-              <Link href="/admin">
-                <Button variant="outline" size="sm">
-                  Iniciar Sesión
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        <div className="container mx-auto px-4 py-8 md:py-12">
-          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {/* Columna izquierda - Formulario */}
-            <div className="flex items-center">
-              <Card className="w-full" style={{ margin: "2px 0px", padding: "0px", borderRadius: "16px" }}>
-                <CardHeader className="text-center space-y-2">
-                  <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Plane className="h-8 w-8 text-primary" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-stretch">
+            {/* Left side - Form */}
+            <Card className="w-full flex flex-col h-full" style={{ borderRadius: "16px" }}>
+              <CardHeader className="space-y-2 text-center pb-6">
+                <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-2">
+                  <Plane className="w-8 h-8 text-primary" />
+                </div>
+                <CardTitle className="text-2xl md:text-3xl font-bold">
+                  Únete a Viaja Ligero
+                </CardTitle>
+                <CardDescription className="text-base">
+                  Crea tu cuenta y comienza a disfrutar de viajes exclusivos
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="flex-1">
+                <form onSubmit={handleSignup} className="space-y-4">
+                  {/* Full Name */}
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName">Nombre Completo</Label>
+                    <Input
+                      id="fullName"
+                      type="text"
+                      placeholder="Juan Pérez"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      required
+                      disabled={loading} />
+                    
                   </div>
-                  <CardTitle className="text-2xl md:text-3xl">Únete a Viaja Ligero</CardTitle>
-                  <CardDescription className="text-base">
-                    Crea tu cuenta y comienza a disfrutar de viajes exclusivos
-                  </CardDescription>
-                </CardHeader>
 
-                <CardContent>
-                  <form onSubmit={handleSignup} className="space-y-4">
-                    {/* Full Name */}
-                    <div className="space-y-2">
-                      <Label htmlFor="fullName">Nombre Completo</Label>
-                      <Input
-                        id="fullName"
-                        type="text"
-                        placeholder="Juan Pérez"
-                        value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        required
-                        disabled={loading} />
-                      
-                    </div>
+                  {/* Email */}
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="tu@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={loading} />
+                    
+                  </div>
 
-                    {/* Email */}
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="tu@email.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        disabled={loading} />
-                      
-                    </div>
+                  {/* WhatsApp */}
+                  <div className="space-y-2">
+                    <Label htmlFor="whatsapp">WhatsApp</Label>
+                    <Input
+                      id="whatsapp"
+                      type="tel"
+                      placeholder="+52 123 456 7890"
+                      value={whatsapp}
+                      onChange={(e) => setWhatsapp(e.target.value)}
+                      required
+                      disabled={loading} />
+                    
+                    <p className="text-xs text-muted-foreground">
+                      Incluye el código de país (ej: +52 para México)
+                    </p>
+                  </div>
 
-                    {/* WhatsApp */}
-                    <div className="space-y-2">
-                      <Label htmlFor="whatsapp">WhatsApp</Label>
-                      <Input
-                        id="whatsapp"
-                        type="tel"
-                        placeholder="+52 123 456 7890"
-                        value={whatsapp}
-                        onChange={(e) => setWhatsapp(e.target.value)}
-                        required
-                        disabled={loading} />
-                      
-                      <p className="text-xs text-muted-foreground">
-                        Incluye el código de país (ej: +52 para México)
-                      </p>
-                    </div>
+                  {/* Username */}
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input
+                      id="username"
+                      type="text"
+                      placeholder="juan-perez"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value.toLowerCase())}
+                      required
+                      disabled={loading} />
+                    
+                    {getUsernameStatus()}
+                    <p className="text-xs text-muted-foreground">
+                      Tu URL será: viajaligero.com/ambassador/<span className="font-medium">{username || "tu-username"}</span>
+                    </p>
+                  </div>
 
-                    {/* Username */}
-                    <div className="space-y-2">
-                      <Label htmlFor="username">Username</Label>
-                      <Input
-                        id="username"
-                        type="text"
-                        placeholder="juan-perez"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value.toLowerCase())}
-                        required
-                        disabled={loading} />
-                      
-                      {getUsernameStatus()}
-                      <p className="text-xs text-muted-foreground">
-                        Tu URL será: viajaligero.com/ambassador/<span className="font-medium">{username || "tu-username"}</span>
-                      </p>
-                    </div>
+                  {/* Password */}
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Contraseña</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="Mínimo 6 caracteres"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      disabled={loading} />
+                    
+                  </div>
 
-                    {/* Password */}
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Contraseña</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder="Mínimo 6 caracteres"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        disabled={loading} />
-                      
-                    </div>
+                  {/* Error Alert */}
+                  {error &&
+                  <Alert variant="destructive">
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  }
 
-                    {/* Error Alert */}
-                    {error &&
-                    <Alert variant="destructive">
-                        <AlertDescription>{error}</AlertDescription>
-                      </Alert>
+                  {/* Success Alert */}
+                  {success &&
+                  <Alert className="bg-green-50 text-green-900 border-green-200 dark:bg-green-900/10 dark:text-green-100 dark:border-green-800">
+                      <CheckCircle2 className="h-4 w-4" />
+                      <AlertDescription className="ml-2">
+                        {success}
+                        <p className="mt-2 text-sm font-medium">
+                          Redirigiendo a la página de pago...
+                        </p>
+                      </AlertDescription>
+                    </Alert>
+                  }
+
+                  {/* Submit Button */}
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    size="lg"
+                    disabled={loading || usernameAvailable === false}>
+                    
+                    {loading ?
+                    <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Creando cuenta...
+                      </> :
+
+                    <>
+                        <UserPlus className="w-4 h-4 mr-2" />
+                        Crear Cuenta
+                      </>
                     }
+                  </Button>
 
-                    {/* Success Alert */}
-                    {success &&
-                    <Alert className="bg-green-50 text-green-900 border-green-200 dark:bg-green-900/10 dark:text-green-100 dark:border-green-800">
-                        <CheckCircle2 className="h-4 w-4" />
-                        <AlertDescription className="ml-2">
-                          {success}
-                          <p className="mt-2 text-sm font-medium">
-                            Redirigiendo a la página de pago...
-                          </p>
-                        </AlertDescription>
-                      </Alert>
-                    }
-
-                    {/* Submit Button */}
+                  {/* Login Link */}
+                  <div className="text-center text-sm text-muted-foreground">
+                    ¿Ya tienes cuenta?{" "}
                     <Button
-                      type="submit"
-                      className="w-full"
-                      size="lg"
-                      disabled={loading || usernameAvailable === false}>
+                      type="button"
+                      variant="link"
+                      className="px-0"
+                      onClick={() => router.push("/admin")}>
                       
-                      {loading ?
-                      <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Creando cuenta...
-                        </> :
-
-                      <>
-                          <UserPlus className="w-4 h-4 mr-2" />
-                          Crear Cuenta
-                        </>
-                      }
+                      Inicia sesión aquí
                     </Button>
-
-                    {/* Login Link */}
-                    <div className="text-center text-sm text-muted-foreground">
-                      ¿Ya tienes cuenta?{" "}
-                      <Button
-                        type="button"
-                        variant="link"
-                        className="px-0"
-                        onClick={() => router.push("/admin")}>
-                        
-                        Inicia sesión aquí
-                      </Button>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
-            </div>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
 
             {/* Right side - Visual/Benefits */}
             <div className="hidden lg:block relative">
-              <div className="sticky top-8">
-                <div className="relative min-h-full rounded-2xl overflow-hidden bg-slate-50">
+              <div className="sticky top-8 h-full">
+                <div className="relative h-full min-h-[800px] rounded-2xl overflow-hidden bg-slate-50">
                   <img
                     src="/registro-hero-v3.jpg"
                     alt="Viaja Ligero - Marketing Digital Automatizado"
-                    className="w-full h-full object-contain" />
+                    className="w-full h-full object-cover" />
                   
                 </div>
               </div>
