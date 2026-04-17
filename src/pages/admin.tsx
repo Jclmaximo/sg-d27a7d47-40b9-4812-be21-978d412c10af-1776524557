@@ -72,63 +72,15 @@ export default function AdminPage() {
         password,
       });
 
-      console.log("🔐 Login response:", { data: !!data, error });
+      if (error) throw error;
 
-      if (error) {
-        console.error("❌ Login error:", error);
-        setError(error.message);
-        setLoading(false);
-        return;
-      }
+      toast({
+        title: "¡Bienvenido!",
+        description: "Has iniciado sesión exitosamente"
+      });
 
-      if (data.user) {
-        console.log("✅ Login successful, user:", data.user.id);
-        setSuccessMessage("¡Sesión iniciada exitosamente! Redirigiendo...");
-        
-        // Check if user has active subscription
-        const hasActiveSub = await subscriptionService.hasActiveSubscription(data.user.id);
-        
-        // Get user profile to check username and role
-        const { data: profile } = await supabase
-          .from("profiles")
-          .select("username, role")
-          .eq("id", data.user.id)
-          .single();
-        
-        setTimeout(() => {
-          console.log("🔄 Redirecting based on subscription and profile status");
-          
-          // Check if there's a redirect URL in query params
-          const { redirect, ref } = router.query;
-          
-          if (redirect && typeof redirect === "string") {
-            // Preserve referrer in URL if present
-            const refParam = ref && typeof ref === "string" ? `?ref=${ref}` : "";
-            router.push(`${redirect}${refParam}`);
-            return;
-          }
-          
-          // If admin, skip subscription check
-          if (profile?.role === "admin") {
-            if (!profile.username) {
-              router.push("/admin/onboarding");
-            } else {
-              router.push("/admin/dashboard");
-            }
-          }
-          // If regular user, check subscription
-          else if (hasActiveSub) {
-            if (!profile?.username) {
-              router.push("/admin/onboarding");
-            } else {
-              router.push("/admin/dashboard");
-            }
-          } else {
-            router.push("/pricing");
-          }
-        }, 1000);
-      }
-    } catch (err) {
+      router.push("/admin/main-dashboard");
+    } catch (err: any) {
       console.error("Login error:", err);
       setError("Error al iniciar sesión. Intenta de nuevo.");
     } finally {

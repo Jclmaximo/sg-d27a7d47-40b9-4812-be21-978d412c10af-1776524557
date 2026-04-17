@@ -90,14 +90,39 @@ export default function MainDashboard() {
   const [savingWallet, setSavingWallet] = useState(false);
 
   useEffect(() => {
-    loadAllData();
+    loadData();
   }, []);
 
   useEffect(() => {
     filterLeads();
-  }, [searchTerm, statusFilter, interestFilter, leads]);
+  }, [searchTerm, statusFilter, leads]);
 
-  const loadAllData = async () => {
+  useEffect(() => {
+    // Check if coming from registration or payment
+    const urlParams = new URLSearchParams(window.location.search);
+    const fromPayment = urlParams.get("payment");
+    const fromRegistration = urlParams.get("new");
+
+    if (fromPayment === "success") {
+      toast({
+        title: "¡Pago confirmado! 🎉",
+        description: "Tu suscripción está activa. Bienvenido al club.",
+      });
+      // Clean URL
+      window.history.replaceState({}, "", "/admin/main-dashboard");
+    }
+
+    if (fromRegistration === "true") {
+      toast({
+        title: "¡Cuenta creada! 🎉",
+        description: "Completa tu perfil y empieza a capturar leads.",
+      });
+      // Clean URL
+      window.history.replaceState({}, "", "/admin/main-dashboard");
+    }
+  }, [toast]);
+
+  const loadData = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {

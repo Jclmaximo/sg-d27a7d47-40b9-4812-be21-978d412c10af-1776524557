@@ -246,7 +246,7 @@ export default function NetworkPage() {
         <div className="container mx-auto max-w-7xl">
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <Link href="/admin/dashboard">
+              <Link href="/admin/main-dashboard">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Volver al Dashboard

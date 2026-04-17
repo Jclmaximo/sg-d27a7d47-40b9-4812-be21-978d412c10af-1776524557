@@ -62,7 +62,7 @@ export default function RegistroPage() {
   const goToDashboard = () => {
     const savedRef = localStorage.getItem("referrer");
     const refParam = savedRef ? `?ref=${savedRef}` : "";
-    router.push(`/pricing${refParam}`);
+    router.push(`/admin/main-dashboard${refParam}`);
   };
 
   // Check username availability in real-time
@@ -238,13 +238,13 @@ export default function RegistroPage() {
 
       console.log("✅ Registration complete");
       
-      setSuccess("¡Cuenta creada exitosamente! Redirigiendo al pago...");
+      setSuccess("¡Cuenta creada exitosamente! Redirigiendo...");
       setError("");
 
-      // Redirect immediately to pricing with ref
+      // Redirect immediately to main dashboard with ref
       setTimeout(() => {
         const refParam = referrerUsername ? `?ref=${referrerUsername}` : "";
-        router.push(`/pricing${refParam}`);
+        router.push(`/admin/main-dashboard${refParam}`);
       }, 1500);
     } catch (err: any) {
       console.error("❌ Registration error:", err);

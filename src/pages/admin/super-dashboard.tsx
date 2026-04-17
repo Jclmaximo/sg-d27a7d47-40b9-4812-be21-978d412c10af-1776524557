@@ -104,7 +104,7 @@ export default function SuperDashboard() {
         description: "No tienes permisos para acceder a esta página",
         variant: "destructive"
       });
-      router.push("/admin/dashboard");
+      router.push("/admin/main-dashboard");
       return;
     }
 
@@ -395,7 +395,7 @@ export default function SuperDashboard() {
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <Link href="/admin/dashboard">
+              <Link href="/admin/main-dashboard">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Volver

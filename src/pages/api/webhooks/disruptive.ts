@@ -80,7 +80,13 @@ export default async function handler(
         );
       }
 
-      console.log("Subscription activated for user:", user_id);
+      console.log("✅ Subscription activated successfully");
+
+      return res.status(200).json({ 
+        success: true,
+        message: "Subscription activated",
+        redirectUrl: `${process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"}/admin/main-dashboard`
+      });
     }
 
     // Respond to webhook
