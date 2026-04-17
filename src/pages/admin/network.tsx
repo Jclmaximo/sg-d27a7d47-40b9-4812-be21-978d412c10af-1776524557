@@ -225,7 +225,7 @@ export default function NetworkPage() {
               <CardHeader>
                 <CardTitle>Tu Link de Referidos del Funnel</CardTitle>
                 <CardDescription>
-                  Comparte este link para que otros miembros de tu equipo obtengan su propio embudo (ganas $7.90 por cada uno)
+                  Comparte este link para que otros miembros de tu equipo obtengan su propio embudo (ganas $39.50 por cada uno)
                 </CardDescription>
               </CardHeader>
               <CardContent>

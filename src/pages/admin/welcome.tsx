@@ -211,7 +211,7 @@ export default function WelcomePage() {
                     </div>
                     <div className="text-center p-3 bg-background rounded-lg border">
                       <Gift className="w-6 h-6 text-secondary mx-auto mb-2" />
-                      <p className="text-2xl font-bold text-secondary">$7.90</p>
+                      <p className="text-2xl font-bold text-secondary">$39.50</p>
                       <p className="text-xs text-muted-foreground">Por venta</p>
                     </div>
                   </div>
@@ -281,7 +281,7 @@ export default function WelcomePage() {
                 <CardTitle className="text-lg">Link de Referidos del Funnel</CardTitle>
               </div>
               <CardDescription>
-                Comparte este link con otros miembros de tu equipo que quieran su propio embudo (ganas $7.90 por cada uno)
+                Comparte este link con otros miembros de tu equipo que quieran su propio embudo (ganas $39.50 por cada uno)
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">

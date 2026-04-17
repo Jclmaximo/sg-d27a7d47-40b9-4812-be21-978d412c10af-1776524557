@@ -296,6 +296,7 @@ export type Database = {
           referred_by: string | null
           role: string | null
           updated_at: string | null
+          usdt_wallet_address: string | null
           username: string | null
           whatsapp_number: string | null
         }
@@ -309,6 +310,7 @@ export type Database = {
           referred_by?: string | null
           role?: string | null
           updated_at?: string | null
+          usdt_wallet_address?: string | null
           username?: string | null
           whatsapp_number?: string | null
         }
@@ -322,6 +324,7 @@ export type Database = {
           referred_by?: string | null
           role?: string | null
           updated_at?: string | null
+          usdt_wallet_address?: string | null
           username?: string | null
           whatsapp_number?: string | null
         }
