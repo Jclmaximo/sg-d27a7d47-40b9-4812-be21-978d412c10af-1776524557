@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SEO } from "@/components/SEO";
-import { Users, DollarSign, TrendingUp, UserCheck, Search, ArrowLeft, Power, PowerOff, Wallet, CheckCircle, XCircle } from "lucide-react";
+import { Users, DollarSign, TrendingUp, UserCheck, Search, ArrowLeft, Power, PowerOff, Wallet, CheckCircle, XCircle, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 
@@ -109,6 +109,15 @@ export default function SuperDashboard() {
     }
 
     await loadData();
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Sesión cerrada",
+      description: "Has cerrado sesión exitosamente"
+    });
+    router.push("/admin");
   };
 
   const loadData = async () => {
@@ -385,12 +394,18 @@ export default function SuperDashboard() {
         <div className="container mx-auto max-w-7xl">
           {/* Header */}
           <div className="mb-8">
-            <Link href="/admin/dashboard">
-              <Button variant="ghost" size="sm" className="mb-4">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Volver
+            <div className="flex items-center justify-between mb-4">
+              <Link href="/admin/dashboard">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Volver
+                </Button>
+              </Link>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Cerrar Sesión
               </Button>
-            </Link>
+            </div>
             <h1 className="text-4xl font-bold">Super Admin Dashboard</h1>
             <p className="text-muted-foreground mt-2">
               Gestión completa de usuarios, suscripciones y retiros

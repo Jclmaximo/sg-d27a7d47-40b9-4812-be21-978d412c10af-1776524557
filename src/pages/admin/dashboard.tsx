@@ -233,29 +233,28 @@ export default function AdminDashboard() {
       
       <div className="min-h-screen bg-background p-4 md:p-8">
         {/* Header */}
-        <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50 mb-8">
-          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-primary">Viaja Ligero</h1>
+        <div className="mb-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-4xl font-bold">Admin de Leads</h1>
+              <p className="text-muted-foreground mt-2">
+                Gestiona todos los prospectos capturados por tu embudo
+              </p>
+            </div>
             <div className="flex gap-2">
-              {isAdmin && (
-                <Link href="/admin/super-dashboard">
-                  <Button variant="default">
-                    <Users className="w-4 h-4 mr-2" />
-                    Super Admin
-                  </Button>
-                </Link>
-              )}
-              <Button variant="outline" onClick={() => setShowSettings(!showSettings)}>
-                <Settings className="w-4 h-4 mr-2" />
-                Configuración
-              </Button>
+              <Link href="/admin/super-dashboard">
+                <Button variant="outline">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Super Admin
+                </Button>
+              </Link>
               <Button variant="outline" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Cerrar Sesión
               </Button>
             </div>
           </div>
-        </header>
+        </div>
 
         {/* WhatsApp Settings Modal */}
         {showSettings && (

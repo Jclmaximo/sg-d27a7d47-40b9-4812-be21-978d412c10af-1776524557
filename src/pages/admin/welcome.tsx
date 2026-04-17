@@ -4,60 +4,53 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SEO } from "@/components/SEO";
-import { Sparkles, Copy, CheckCircle, ArrowRight, Users, TrendingUp, Gift, ExternalLink, LayoutDashboard, Link2 } from "lucide-react";
+import { Sparkles, Copy, CheckCircle, ArrowRight, Users, TrendingUp, Gift, ExternalLink, LayoutDashboard, Link2, LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import Link from "next/link";
 
 export default function WelcomePage() {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState<string | null>(null);
   const [funnelLink, setFunnelLink] = useState("");
   const [referralLink, setReferralLink] = useState("");
   const [copiedFunnel, setCopiedFunnel] = useState(false);
   const [copiedReferral, setCopiedReferral] = useState(false);
 
   useEffect(() => {
-    checkAuthAndLoadProfile();
+    checkAuth();
   }, []);
 
-  const checkAuthAndLoadProfile = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        router.push("/admin");
-        return;
-      }
-
-      // Get user profile
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("id", user.id)
-        .single();
-
-      if (error) throw error;
-
-      if (!profile?.username) {
-        router.push("/admin/onboarding");
-        return;
-      }
-
-      setUsername(profile.username);
-      const baseUrl = window.location.origin;
-      setFunnelLink(`${baseUrl}/ambassador/${profile.username}`);
-      setReferralLink(`${baseUrl}/pricing?ref=${profile.username}`);
-    } catch (error) {
-      console.error("Error loading profile:", error);
-      toast({
-        title: "Error",
-        description: "No se pudo cargar tu perfil",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
+  const checkAuth = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      router.push("/admin");
+      return;
     }
+
+    // Get username
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("username")
+      .eq("id", user.id)
+      .single();
+
+    if (profile?.username) {
+      setUsername(profile.username);
+    }
+
+    setLoading(false);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Sesión cerrada",
+      description: "Has cerrado sesión exitosamente"
+    });
+    router.push("/admin");
   };
 
   const copyFunnelLink = () => {
@@ -95,19 +88,17 @@ export default function WelcomePage() {
     <>
       <SEO title="¡Bienvenido a Viaja Ligero! 🎉" />
       
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4 py-12">
-        <div className="container mx-auto max-w-4xl space-y-8">
-          {/* Welcome Header */}
-          <div className="text-center space-y-4">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-primary/10 rounded-full mb-4">
-              <Sparkles className="w-10 h-10 text-primary" />
+      <div className="min-h-screen bg-background p-8">
+        <div className="container mx-auto max-w-5xl">
+          {/* Header */}
+          <div className="mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-4xl font-bold">¡Tu Embudo de Ventas está Listo! 🎉</h1>
+              <Button variant="outline" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Cerrar Sesión
+              </Button>
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold">
-              ¡Tu Embudo de Ventas está Listo! 🎉
-            </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Ya tienes tu herramienta profesional para captar y convertir prospectos en miembros del club de viajes.
-            </p>
           </div>
 
           {/* Funnel Link Card - DESTACADO */}

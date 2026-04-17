@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { SEO } from "@/components/SEO";
-import { ArrowLeft, DollarSign, TrendingUp, Users, Copy, Check, Wallet } from "lucide-react";
+import { ArrowLeft, DollarSign, TrendingUp, Users, Copy, Check, Wallet, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 
@@ -66,6 +66,15 @@ export default function NetworkPage() {
     setCommissions(commissionsData);
     setTree(treeData);
     setLoading(false);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast({
+      title: "Sesión cerrada",
+      description: "Has cerrado sesión exitosamente"
+    });
+    router.push("/admin");
   };
 
   const copyReferralLink = () => {
@@ -236,12 +245,18 @@ export default function NetworkPage() {
       <div className="min-h-screen bg-background p-8">
         <div className="container mx-auto max-w-7xl">
           <div className="mb-8">
-            <Link href="/admin/dashboard">
-              <Button variant="ghost" size="sm" className="mb-4">
-                <ArrowLeft className="h-4 w-4 mr-2" />
-                Volver al Dashboard
+            <div className="flex items-center justify-between mb-4">
+              <Link href="/admin/dashboard">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Volver al Dashboard
+                </Button>
+              </Link>
+              <Button variant="outline" size="sm" onClick={handleLogout}>
+                <LogOut className="w-4 h-4 mr-2" />
+                Cerrar Sesión
               </Button>
-            </Link>
+            </div>
             <h1 className="text-4xl font-bold">Mi Red de Referidos del Funnel</h1>
             <p className="text-muted-foreground mt-2">
               Gana comisiones del 50% invitando nuevos ambassadors
