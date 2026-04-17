@@ -23,12 +23,12 @@ export default function RegistroPage() {
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [checkingUsername, setCheckingUsername] = useState(false);
   const [referrerUsername, setReferrerUsername] = useState<string | null>(null);
-  const [existingUser, setExistingUser] = useState<{ email: string; id: string } | null>(null);
+  const [existingUser, setExistingUser] = useState<{email: string;id: string;} | null>(null);
   const [checkingSession, setCheckingSession] = useState(true);
 
   useEffect(() => {
     checkExistingSession();
-    
+
     // Get referrer from URL or localStorage
     const { ref } = router.query;
     if (ref && typeof ref === "string") {
@@ -44,12 +44,12 @@ export default function RegistroPage() {
 
   const checkExistingSession = async () => {
     const { data: { user } } = await supabase.auth.getUser();
-    
+
     if (user) {
       // User already logged in - show options instead of auto-redirect
       setExistingUser({ email: user.email || "Usuario", id: user.id });
     }
-    
+
     setCheckingSession(false);
   };
 
@@ -83,11 +83,11 @@ export default function RegistroPage() {
 
       setCheckingUsername(true);
 
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("username", username)
-        .maybeSingle();
+      const { data, error } = await supabase.
+      from("profiles").
+      select("username").
+      eq("username", username).
+      maybeSingle();
 
       if (error) {
         console.error("Error checking username:", error);
@@ -151,7 +151,7 @@ export default function RegistroPage() {
           data: {
             full_name: fullName,
             username: username.toLowerCase(),
-            whatsapp_number: whatsapp,
+            whatsapp_number: whatsapp
           }
         }
       });
@@ -167,11 +167,11 @@ export default function RegistroPage() {
       const maxRetries = 5;
 
       while (!profileExists && retries < maxRetries) {
-        const { data: profile, error: checkError } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("id", data.user.id)
-          .maybeSingle();
+        const { data: profile, error: checkError } = await supabase.
+        from("profiles").
+        select("id").
+        eq("id", data.user.id).
+        maybeSingle();
 
         if (!checkError && profile) {
           profileExists = true;
@@ -179,7 +179,7 @@ export default function RegistroPage() {
         } else {
           retries++;
           console.log(`⏳ Waiting for profile... attempt ${retries}/${maxRetries}`);
-          await new Promise(resolve => setTimeout(resolve, 500)); // Wait 500ms
+          await new Promise((resolve) => setTimeout(resolve, 500)); // Wait 500ms
         }
       }
 
@@ -188,15 +188,15 @@ export default function RegistroPage() {
       }
 
       // 3. Update profile with all data
-      const { error: profileError } = await supabase
-        .from("profiles")
-        .update({
-          full_name: fullName,
-          username: username.toLowerCase(),
-          whatsapp_number: whatsapp,
-          ambassador_active: true,
-        })
-        .eq("id", data.user.id);
+      const { error: profileError } = await supabase.
+      from("profiles").
+      update({
+        full_name: fullName,
+        username: username.toLowerCase(),
+        whatsapp_number: whatsapp,
+        ambassador_active: true
+      }).
+      eq("id", data.user.id);
 
       if (profileError) {
         console.error("Profile update error:", profileError);
@@ -206,11 +206,11 @@ export default function RegistroPage() {
       console.log("✅ Profile updated with username and data");
 
       // 4. Verify username was saved
-      const { data: verifyProfile, error: verifyError } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("id", data.user.id)
-        .single();
+      const { data: verifyProfile, error: verifyError } = await supabase.
+      from("profiles").
+      select("username").
+      eq("id", data.user.id).
+      single();
 
       if (verifyError || !verifyProfile?.username) {
         console.error("Username verification failed:", verifyError);
@@ -221,24 +221,24 @@ export default function RegistroPage() {
 
       // 5. Save referrer if exists
       if (referrerUsername) {
-        const { data: referrerProfile } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("username", referrerUsername)
-          .single();
+        const { data: referrerProfile } = await supabase.
+        from("profiles").
+        select("id").
+        eq("username", referrerUsername).
+        single();
 
         if (referrerProfile) {
-          await supabase
-            .from("profiles")
-            .update({ referred_by: referrerProfile.id })
-            .eq("id", data.user.id);
-          
+          await supabase.
+          from("profiles").
+          update({ referred_by: referrerProfile.id }).
+          eq("id", data.user.id);
+
           console.log("✅ Referrer saved:", referrerUsername);
         }
       }
 
       console.log("✅ Registration complete");
-      
+
       setSuccess("¡Cuenta creada exitosamente! Redirigiendo...");
       setError("");
 
@@ -257,15 +257,15 @@ export default function RegistroPage() {
 
   const getUsernameStatus = () => {
     if (username.length < 3) return null;
-    
+
     const usernameRegex = /^[a-z0-9-]+$/;
     if (!usernameRegex.test(username)) {
       return (
         <div className="flex items-center gap-2 text-sm text-destructive">
           <XCircle className="w-4 h-4" />
           Solo minúsculas, números y guiones
-        </div>
-      );
+        </div>);
+
     }
 
     if (checkingUsername) {
@@ -273,8 +273,8 @@ export default function RegistroPage() {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="w-4 h-4 animate-spin" />
           Verificando...
-        </div>
-      );
+        </div>);
+
     }
 
     if (usernameAvailable === true) {
@@ -282,8 +282,8 @@ export default function RegistroPage() {
         <div className="flex items-center gap-2 text-sm text-green-600">
           <CheckCircle2 className="w-4 h-4" />
           ¡Disponible!
-        </div>
-      );
+        </div>);
+
     }
 
     if (usernameAvailable === false) {
@@ -291,8 +291,8 @@ export default function RegistroPage() {
         <div className="flex items-center gap-2 text-sm text-destructive">
           <XCircle className="w-4 h-4" />
           No disponible
-        </div>
-      );
+        </div>);
+
     }
 
     return null;
@@ -300,10 +300,10 @@ export default function RegistroPage() {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Registro - Viaja Ligero"
-        description="Crea tu cuenta en Viaja Ligero y comienza a ahorrar en tus viajes"
-      />
+        description="Crea tu cuenta en Viaja Ligero y comienza a ahorrar en tus viajes" />
+      
       
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5">
         {/* Header con logo */}
@@ -311,11 +311,11 @@ export default function RegistroPage() {
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <img 
-                  src="/viaja-ligero-logo.png" 
-                  alt="Viaja Ligero" 
-                  className="h-8 md:h-10 w-auto"
-                />
+                <img
+                  src="/viaja-ligero-logo.png"
+                  alt="Viaja Ligero"
+                  className="h-8 md:h-10 w-auto" />
+                
                 <h1 className="text-xl md:text-2xl font-bold">Viaja Ligero</h1>
               </div>
               <Link href="/admin">
@@ -354,8 +354,8 @@ export default function RegistroPage() {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         required
-                        disabled={loading}
-                      />
+                        disabled={loading} />
+                      
                     </div>
 
                     {/* Email */}
@@ -368,8 +368,8 @@ export default function RegistroPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        disabled={loading}
-                      />
+                        disabled={loading} />
+                      
                     </div>
 
                     {/* WhatsApp */}
@@ -382,8 +382,8 @@ export default function RegistroPage() {
                         value={whatsapp}
                         onChange={(e) => setWhatsapp(e.target.value)}
                         required
-                        disabled={loading}
-                      />
+                        disabled={loading} />
+                      
                       <p className="text-xs text-muted-foreground">
                         Incluye el código de país (ej: +52 para México)
                       </p>
@@ -399,8 +399,8 @@ export default function RegistroPage() {
                         value={username}
                         onChange={(e) => setUsername(e.target.value.toLowerCase())}
                         required
-                        disabled={loading}
-                      />
+                        disabled={loading} />
+                      
                       {getUsernameStatus()}
                       <p className="text-xs text-muted-foreground">
                         Tu URL será: viajaligero.com/ambassador/<span className="font-medium">{username || "tu-username"}</span>
@@ -417,20 +417,20 @@ export default function RegistroPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        disabled={loading}
-                      />
+                        disabled={loading} />
+                      
                     </div>
 
                     {/* Error Alert */}
-                    {error && (
-                      <Alert variant="destructive">
+                    {error &&
+                    <Alert variant="destructive">
                         <AlertDescription>{error}</AlertDescription>
                       </Alert>
-                    )}
+                    }
 
                     {/* Success Alert */}
-                    {success && (
-                      <Alert className="bg-green-50 text-green-900 border-green-200 dark:bg-green-900/10 dark:text-green-100 dark:border-green-800">
+                    {success &&
+                    <Alert className="bg-green-50 text-green-900 border-green-200 dark:bg-green-900/10 dark:text-green-100 dark:border-green-800">
                         <CheckCircle2 className="h-4 w-4" />
                         <AlertDescription className="ml-2">
                           {success}
@@ -439,26 +439,26 @@ export default function RegistroPage() {
                           </p>
                         </AlertDescription>
                       </Alert>
-                    )}
+                    }
 
                     {/* Submit Button */}
                     <Button
                       type="submit"
                       className="w-full"
                       size="lg"
-                      disabled={loading || usernameAvailable === false}
-                    >
-                      {loading ? (
-                        <>
+                      disabled={loading || usernameAvailable === false}>
+                      
+                      {loading ?
+                      <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                           Creando cuenta...
-                        </>
-                      ) : (
-                        <>
+                        </> :
+
+                      <>
                           <UserPlus className="w-4 h-4 mr-2" />
                           Crear Cuenta
                         </>
-                      )}
+                      }
                     </Button>
 
                     {/* Login Link */}
@@ -468,8 +468,8 @@ export default function RegistroPage() {
                         type="button"
                         variant="link"
                         className="px-0"
-                        onClick={() => router.push("/admin")}
-                      >
+                        onClick={() => router.push("/admin")}>
+                        
                         Inicia sesión aquí
                       </Button>
                     </div>
@@ -485,17 +485,17 @@ export default function RegistroPage() {
                   <img
                     src="/registro-hero.jpg"
                     alt="Viaja Ligero"
-                    className="w-full h-full object-cover"
-                  />
+                    className="w-full h-full object-cover" />
+                  
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
                   
                   {/* Logo overlay */}
                   <div className="absolute top-8 left-8 right-8">
-                    <img 
-                      src="/viaja-ligero-logo.png" 
-                      alt="Viaja Ligero" 
-                      className="h-16 w-auto filter brightness-0 invert"
-                    />
+                    
+
+
+
+                    
                   </div>
 
                   {/* Benefits overlay */}
@@ -548,6 +548,6 @@ export default function RegistroPage() {
           </div>
         </div>
       </div>
-    </>
-  );
+    </>);
+
 }
