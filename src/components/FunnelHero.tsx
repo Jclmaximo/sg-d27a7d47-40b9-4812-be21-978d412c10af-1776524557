@@ -23,12 +23,20 @@ export function FunnelHero({ username }: FunnelHeroProps) {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-      {/* Background pattern */}
-      <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-5" />
+    <section className="relative py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5 overflow-hidden">
+      <div className="absolute inset-0 bg-grid-white/10 bg-[size:20px_20px]" />
       
-      <div className="relative z-10 container mx-auto px-4 py-20 text-center">
-        <div className="max-w-4xl mx-auto space-y-8">
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Logo */}
+        <div className="flex justify-center mb-8">
+          <img 
+            src="/viaja-ligero-logo.png" 
+            alt="Viaja Ligero" 
+            className="h-16 md:h-20 w-auto"
+          />
+        </div>
+
+        <div className="max-w-4xl mx-auto text-center space-y-6">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary-foreground text-sm font-medium">
             <Sparkles className="w-4 h-4" />

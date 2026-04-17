@@ -395,12 +395,19 @@ export default function SuperDashboard() {
           {/* Header */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
-              <Link href="/admin/main-dashboard">
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Volver
-                </Button>
-              </Link>
+              <div className="flex items-center gap-4">
+                <Link href="/admin/main-dashboard">
+                  <Button variant="ghost" size="sm">
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Volver
+                  </Button>
+                </Link>
+                <img 
+                  src="/viaja-ligero-logo.png" 
+                  alt="Viaja Ligero" 
+                  className="h-8 w-auto"
+                />
+              </div>
               <Button variant="outline" size="sm" onClick={handleLogout}>
                 <LogOut className="w-4 h-4 mr-2" />
                 Cerrar Sesión

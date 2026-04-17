@@ -151,18 +151,28 @@ export default function AdminPage() {
 
   return (
     <>
-      <SEO title="Admin | Viaja Ligero" />
-      <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-        <Card className="w-full max-w-md p-8 space-y-6">
-          <div className="text-center space-y-2">
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
-                <Lock className="w-8 h-8 text-primary" />
-              </div>
+      <SEO 
+        title="Admin Login - Viaja Ligero"
+        description="Accede a tu panel de administración"
+      />
+      
+      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center space-y-4">
+            <div className="flex justify-center">
+              <img 
+                src="/viaja-ligero-logo.png" 
+                alt="Viaja Ligero" 
+                className="h-16 w-auto"
+              />
             </div>
-            <h1 className="text-3xl font-bold">Viaja Ligero</h1>
-            <p className="text-muted-foreground">Panel de Administración</p>
-          </div>
+            <div>
+              <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
+              <CardDescription>
+                Accede a tu panel de administración
+              </CardDescription>
+            </div>
+          </CardHeader>
 
           <Tabs defaultValue="login" className="w-full">
             <TabsList className="grid w-full grid-cols-2">

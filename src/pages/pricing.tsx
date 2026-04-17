@@ -395,14 +395,23 @@ export default function Pricing() {
         description="Accede al sistema completo de embudo de ventas para embajadores de Viaja Ligero. Desde $39.50 USD con descuentos disponibles."
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <div className="min-h-screen bg-background">
         {/* Header */}
-        <header className="border-b bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className="text-2xl font-bold text-primary">Viaja Ligero</h1>
-            <Button variant="outline" asChild>
-              <Link href="/">Volver al inicio</Link>
-            </Button>
+        <header className="border-b bg-card sticky top-0 z-50">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img 
+                  src="/viaja-ligero-logo.png" 
+                  alt="Viaja Ligero" 
+                  className="h-8 md:h-10 w-auto"
+                />
+                <h1 className="text-xl md:text-2xl font-bold">Viaja Ligero</h1>
+              </div>
+              <Button variant="outline" onClick={() => router.push("/admin")}>
+                Iniciar Sesión
+              </Button>
+            </div>
           </div>
         </header>
 

@@ -15,14 +15,18 @@ const offices = [
 
 export function FunnelFooter() {
   return (
-    <footer className="bg-muted/30 border-t py-12">
+    <footer className="bg-foreground text-background py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
-          {/* Brand */}
+          {/* Logo y descripción */}
           <div>
-            <h3 className="font-bold text-lg mb-4">Viaja Ligero</h3>
-            <p className="text-sm text-muted-foreground">
-              Tu club exclusivo de viajes con acceso a tarifas preferenciales y experiencias únicas alrededor del mundo.
+            <img 
+              src="/viaja-ligero-logo.png" 
+              alt="Viaja Ligero" 
+              className="h-12 w-auto mb-4 brightness-0 invert"
+            />
+            <p className="text-sm text-background/80">
+              Club exclusivo de viajes con acceso a tarifas preferenciales y experiencias únicas.
             </p>
           </div>
 

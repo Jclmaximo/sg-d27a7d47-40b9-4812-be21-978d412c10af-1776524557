@@ -491,14 +491,21 @@ Estoy aquí para resolver cualquier duda que tengas.
       
       <div className="min-h-screen bg-background">
         {/* Header */}
-        <div className="border-b bg-card">
+        <header className="border-b bg-card sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-3xl font-bold">Mi Dashboard</h1>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Bienvenido, {profile?.full_name}
-                </p>
+              <div className="flex items-center gap-4">
+                <img 
+                  src="/viaja-ligero-logo.png" 
+                  alt="Viaja Ligero" 
+                  className="h-8 md:h-10 w-auto"
+                />
+                <div>
+                  <h1 className="text-xl md:text-2xl font-bold">Mi Dashboard</h1>
+                  <p className="text-sm text-muted-foreground hidden md:block">
+                    Bienvenido, {profile?.full_name || profile?.username || "Usuario"}
+                  </p>
+                </div>
               </div>
               <div className="flex gap-2">
                 {profile?.role === "admin" && (
@@ -516,7 +523,7 @@ Estoy aquí para resolver cualquier duda que tengas.
               </div>
             </div>
           </div>
-        </div>
+        </header>
 
         {/* Main Content */}
         <div className="container mx-auto p-4 max-w-7xl">
