@@ -332,6 +332,43 @@ export default function SuperDashboard() {
     return withdrawalRequests.filter(w => w.status === withdrawalStatusFilter);
   };
 
+  const downloadPendingWithdrawalsCSV = () => {
+    // Filter only pending withdrawals
+    const pendingWithdrawals = withdrawalRequests.filter(w => w.status === "pending");
+
+    if (pendingWithdrawals.length === 0) {
+      toast({
+        title: "Sin solicitudes pendientes",
+        description: "No hay solicitudes de retiro pendientes para descargar",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Generate CSV content
+    const csvContent = pendingWithdrawals
+      .map(w => `${w.wallet_address},${w.amount_usd.toFixed(2)}`)
+      .join("\n");
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute("href", url);
+    link.setAttribute("download", `retiros-pendientes-${new Date().toISOString().split("T")[0]}.csv`);
+    link.style.visibility = "hidden";
+    
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    toast({
+      title: "✅ CSV Descargado",
+      description: `${pendingWithdrawals.length} solicitud(es) exportadas exitosamente`
+    });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -588,6 +625,30 @@ export default function SuperDashboard() {
                         <SelectItem value="rejected">Rechazados</SelectItem>
                       </SelectContent>
                     </Select>
+                    
+                    <Button
+                      variant="outline"
+                      onClick={downloadPendingWithdrawalsCSV}
+                      disabled={withdrawalRequests.filter(w => w.status === "pending").length === 0}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="mr-2"
+                      >
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      Descargar CSV (Pendientes)
+                    </Button>
                   </div>
 
                   <div className="rounded-md border">
