@@ -493,7 +493,7 @@ Estoy aquí para resolver cualquier duda que tengas.
         {/* Header */}
         <header className="border-b bg-card sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-4">
                 <img 
                   src="/viaja-ligero-logo.png" 
@@ -507,18 +507,24 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </p>
                 </div>
               </div>
-              <div className="flex gap-2">
-                {profile?.role === "admin" && (
+              
+              <div className="flex items-center gap-2">
+                {isAdmin && (
                   <Link href="/admin/super-dashboard">
-                    <Button variant="outline" size="sm">
-                      <ShieldCheck className="h-4 w-4 mr-2" />
-                      Super Admin
+                    <Button variant="outline" size="sm" className="gap-2">
+                      <Shield className="h-4 w-4" />
+                      <span className="hidden sm:inline">Super Admin</span>
                     </Button>
                   </Link>
                 )}
-                <Button variant="outline" size="sm" onClick={handleLogout}>
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Cerrar Sesión
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleLogout}
+                  className="gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="hidden sm:inline">Cerrar Sesión</span>
                 </Button>
               </div>
             </div>
