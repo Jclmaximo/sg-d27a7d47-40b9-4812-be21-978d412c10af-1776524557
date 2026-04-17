@@ -1,4 +1,4 @@
- 
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 export type Json =
   | string
   | number
@@ -406,6 +406,53 @@ export type Database = {
           wallet_address?: string | null
         }
         Relationships: []
+      }
+      withdrawal_requests: {
+        Row: {
+          amount_usd: number
+          created_at: string | null
+          id: string
+          notes: string | null
+          paid_at: string | null
+          requested_at: string | null
+          status: string
+          updated_at: string | null
+          user_id: string
+          wallet_address: string
+        }
+        Insert: {
+          amount_usd: number
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          paid_at?: string | null
+          requested_at?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id: string
+          wallet_address: string
+        }
+        Update: {
+          amount_usd?: number
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          paid_at?: string | null
+          requested_at?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+          wallet_address?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "withdrawal_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

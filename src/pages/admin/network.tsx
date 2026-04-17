@@ -141,11 +141,40 @@ export default function NetworkPage() {
       return;
     }
 
-    toast({
-      title: "Solicitud enviada",
-      description: `Tu solicitud de retiro de ${formatCurrency(stats.pendingCommissions)} ha sido enviada. Recibirás el pago en 24-48 horas.`
-    });
-    setShowWithdrawDialog(false);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Create withdrawal request in database
+      const { error } = await supabase
+        .from("withdrawal_requests")
+        .insert({
+          user_id: user.id,
+          amount_usd: stats.pendingCommissions,
+          wallet_address: savedWallet,
+          status: "pending"
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "✅ Solicitud enviada",
+        description: `Tu solicitud de retiro de ${formatCurrency(stats.pendingCommissions)} ha sido enviada. Recibirás el pago en 24-48 horas.`,
+        duration: 5000
+      });
+      
+      setShowWithdrawDialog(false);
+      
+      // Reload data to refresh stats
+      await loadData();
+    } catch (error) {
+      console.error("Error creating withdrawal request:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo crear la solicitud de retiro. Intenta de nuevo.",
+        variant: "destructive"
+      });
+    }
   };
 
   const formatCurrency = (amount: number) => {
