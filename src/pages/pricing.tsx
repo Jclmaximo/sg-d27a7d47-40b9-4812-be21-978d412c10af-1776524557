@@ -222,7 +222,13 @@ export default function Pricing() {
                 plan_type: "monthly"
               });
 
-              console.log("✅ Subscription created successfully");
+              // Activate ambassador status
+              await supabase
+                .from("profiles")
+                .update({ ambassador_active: true })
+                .eq("id", user.id);
+
+              console.log("✅ Subscription created and ambassador activated");
             }
 
             // Update payment status
@@ -234,13 +240,26 @@ export default function Pricing() {
 
           toast({
             title: "¡Pago Confirmado!",
-            description: "Tu suscripción está activa. Redirigiendo..."
+            description: "Tu suscripción está activa. Configurando tu cuenta..."
           });
           
+          // Check if user has username configured
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("username")
+            .eq("id", user.id)
+            .single();
+
           setTimeout(() => {
             setPaymentData(null);
             setShowCheckout(false);
-            router.push("/admin/dashboard");
+            
+            // Redirect to onboarding if no username, otherwise to dashboard
+            if (!profile?.username) {
+              router.push("/admin/onboarding");
+            } else {
+              router.push("/admin/dashboard");
+            }
           }, 2000);
         } else if (status.fundStatus === "EXPIRED") {
           toast({
