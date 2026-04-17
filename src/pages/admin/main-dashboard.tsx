@@ -28,7 +28,8 @@ import {
   ExternalLink,
   Wallet,
   User,
-  ShieldCheck
+  ShieldCheck,
+  Plus
 } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
@@ -61,7 +62,7 @@ export default function MainDashboard() {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState("overview");
+  const [activeTab, setActiveTab] = useState("resumen");
   
   // User profile
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -75,10 +76,14 @@ export default function MainDashboard() {
   const [interestFilter, setInterestFilter] = useState<string>("all");
   const [newNote, setNewNote] = useState("");
   const [newStatus, setNewStatus] = useState("");
+  const [noteText, setNoteText] = useState("");
+  const [showNoteDialog, setShowNoteDialog] = useState(false);
+  const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [selectedMessageTemplate, setSelectedMessageTemplate] = useState("");
   
   // Network
   const [stats, setStats] = useState<NetworkStats | null>(null);
-  const [commissions, setCommissions] = useState<Commission[]>([]);
+  const [commissions, setCommissions] = useState<any[]>([]);
   const [tree, setTree] = useState<ReferralTreeNode | null>(null);
   
   // Links
@@ -186,11 +191,99 @@ export default function MainDashboard() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    toast({
-      title: "Sesión cerrada",
-      description: "Has cerrado sesión exitosamente"
-    });
     router.push("/admin");
+  };
+
+  // Message templates for different stages
+  const messageTemplates = {
+    "primer_contacto": {
+      title: "Primer Contacto",
+      template: (name: string) => `Hola ${name}! 👋
+
+Vi que te interesa *Viaja Ligero*, el club exclusivo para ahorrar en viajes.
+
+¿Te gustaría que te cuente cómo funciona y los beneficios que incluye? 
+
+Tenemos descuentos en:
+✈️ Vuelos
+🏨 Hoteles 
+🚢 Cruceros
+🚗 Alquiler de autos
+
+Y mucho más... ¿Cuándo tienes 5 minutos para hablar?`
+    },
+    "seguimiento": {
+      title: "Seguimiento",
+      template: (name: string) => `Hola ${name}! 
+
+¿Tuviste oportunidad de revisar la información que te envié sobre *Viaja Ligero*?
+
+Quedo atento a cualquier pregunta que tengas. 
+
+¿Hay algo específico que te gustaría saber? 🤔`
+    },
+    "beneficios_detallados": {
+      title: "Beneficios Detallados",
+      template: (name: string) => `Hola ${name}! 
+
+Te comparto los *beneficios principales* de Viaja Ligero:
+
+✅ Acceso a plataforma privada de viajes
+✅ Descuentos de hasta 70% en hoteles
+✅ Precios especiales en vuelos y cruceros
+✅ Programa Life Experiences (viajes de lujo)
+✅ Créditos de viaje acumulables
+✅ Soporte 24/7
+
+La inversión es de solo $179 USD/año.
+
+¿Te gustaría activar tu membresía? 🎯`
+    },
+    "cierre_membresia": {
+      title: "Cierre - Membresía",
+      template: (name: string) => `Hola ${name}! 
+
+Para activar tu membresía de *Viaja Ligero* y empezar a ahorrar en tus viajes, aquí está el link de pago seguro:
+
+🔗 [Link de registro]
+
+Una vez que completes el pago:
+✅ Acceso inmediato a la plataforma
+✅ Descuentos disponibles 24/7
+✅ Soporte personalizado
+
+¿Tienes alguna duda antes de activar? 💳`
+    },
+    "oportunidad_ganar": {
+      title: "Oportunidad de Ganar",
+      template: (name: string) => `Hola ${name}! 
+
+Además de *ahorrar en viajes*, ¿sabías que puedes *generar ingresos* con Viaja Ligero?
+
+Como Lifestyle Ambassador puedes:
+💰 Ganar $39.50 USD por cada referido directo
+💰 Ganar $7.90 USD por referidos indirectos
+💰 Construir tu red de viajeros
+
+Es simple: compartes tu link personalizado y cuando alguien se registra, ganas comisiones.
+
+¿Te interesa saber más sobre esta oportunidad? 🚀`
+    },
+    "recordatorio": {
+      title: "Recordatorio",
+      template: (name: string) => `Hola ${name}! 
+
+Solo paso a recordarte que la oferta de *Viaja Ligero* sigue disponible.
+
+¿Sigues interesado/a en:
+• Ahorrar en tus viajes? ✈️
+• Generar ingresos por recomendación? 💰
+• Ambas opciones?
+
+Estoy aquí para resolver cualquier duda que tengas. 
+
+¿Hablamos hoy? 📱`
+    }
   };
 
   const copyFunnelLink = () => {
@@ -296,6 +389,69 @@ export default function MainDashboard() {
     }
   };
 
+  const handleChangeLeadStatus = async (leadId: string, newStatus: string) => {
+    try {
+      await leadsService.updateLeadStatus(leadId, newStatus);
+      
+      toast({
+        title: "Estado actualizado",
+        description: `Lead marcado como ${newStatus}`
+      });
+      
+      await loadData();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el estado",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const handleAddNote = async () => {
+    if (!selectedLead || !noteText.trim()) return;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await leadsService.addNote({
+        lead_id: selectedLead.id,
+        note: noteText,
+        created_by: user.id
+      });
+
+      toast({
+        title: "Nota agregada",
+        description: "La nota se guardó correctamente"
+      });
+
+      setNoteText("");
+      setShowNoteDialog(false);
+      setSelectedLead(null);
+      await loadData();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo guardar la nota",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const sendWhatsAppMessage = (lead: Lead, templateKey: string) => {
+    const template = messageTemplates[templateKey as keyof typeof messageTemplates];
+    if (!template) return;
+
+    const message = template.template(lead.name);
+    const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
+    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
+    
+    window.open(whatsappUrl, "_blank");
+    setShowMessageDialog(false);
+    setSelectedLead(null);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -347,7 +503,7 @@ export default function MainDashboard() {
         <div className="container mx-auto p-4 max-w-7xl">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
-              <TabsTrigger value="overview" className="flex items-center gap-2">
+              <TabsTrigger value="resumen" className="flex items-center gap-2">
                 <LayoutDashboard className="h-4 w-4" />
                 <span className="hidden sm:inline">Resumen</span>
               </TabsTrigger>
@@ -370,7 +526,7 @@ export default function MainDashboard() {
             </TabsList>
 
             {/* TAB 1 - OVERVIEW */}
-            <TabsContent value="overview" className="space-y-6">
+            <TabsContent value="resumen" className="space-y-6">
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -533,27 +689,49 @@ export default function MainDashboard() {
                                 </Badge>
                               </TableCell>
                               <TableCell>
-                                <Badge variant={
-                                  lead.status === "converted" ? "default" :
-                                  lead.status === "qualified" ? "secondary" :
-                                  "outline"
-                                }>
-                                  {lead.status}
-                                </Badge>
+                                <Select
+                                  value={lead.status}
+                                  onValueChange={(value) => handleChangeLeadStatus(lead.id, value)}
+                                >
+                                  <SelectTrigger className="w-32">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="new">Nuevo</SelectItem>
+                                    <SelectItem value="contacted">Contactado</SelectItem>
+                                    <SelectItem value="qualified">Calificado</SelectItem>
+                                    <SelectItem value="converted">Convertido</SelectItem>
+                                  </SelectContent>
+                                </Select>
                               </TableCell>
                               <TableCell>
                                 {new Date(lead.created_at).toLocaleDateString("es-ES")}
                               </TableCell>
                               <TableCell>
-                                <a
-                                  href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  <Button size="sm" variant="ghost">
+                                <div className="flex items-center gap-2">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setSelectedLead(lead);
+                                      setShowMessageDialog(true);
+                                    }}
+                                    title="Enviar mensaje por WhatsApp"
+                                  >
                                     <MessageSquare className="h-4 w-4" />
                                   </Button>
-                                </a>
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => {
+                                      setSelectedLead(lead);
+                                      setShowNoteDialog(true);
+                                    }}
+                                    title="Agregar nota"
+                                  >
+                                    <Plus className="h-4 w-4" />
+                                  </Button>
+                                </div>
                               </TableCell>
                             </TableRow>
                           ))}
@@ -821,6 +999,74 @@ export default function MainDashboard() {
             </TabsContent>
           </Tabs>
         </div>
+
+        {/* Dialog para agregar nota */}
+        <Dialog open={showNoteDialog} onOpenChange={setShowNoteDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Agregar Nota</DialogTitle>
+              <DialogDescription>
+                Agrega una nota de seguimiento para {selectedLead?.name}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <textarea
+                className="w-full min-h-32 p-3 border rounded-md"
+                placeholder="Escribe tu nota aquí..."
+                value={noteText}
+                onChange={(e) => setNoteText(e.target.value)}
+              />
+              <div className="flex justify-end gap-2">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowNoteDialog(false);
+                    setNoteText("");
+                    setSelectedLead(null);
+                  }}
+                >
+                  Cancelar
+                </Button>
+                <Button onClick={handleAddNote}>
+                  Guardar Nota
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Dialog para seleccionar mensaje */}
+        <Dialog open={showMessageDialog} onOpenChange={setShowMessageDialog}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Enviar Mensaje a {selectedLead?.name}</DialogTitle>
+              <DialogDescription>
+                Selecciona un template de mensaje según la etapa del seguimiento
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 max-h-96 overflow-y-auto">
+              {Object.entries(messageTemplates).map(([key, template]) => (
+                <div
+                  key={key}
+                  className="border rounded-lg p-4 hover:bg-muted cursor-pointer transition"
+                  onClick={() => {
+                    if (selectedLead) {
+                      sendWhatsAppMessage(selectedLead, key);
+                    }
+                  }}
+                >
+                  <h4 className="font-semibold mb-2 flex items-center gap-2">
+                    <MessageSquare className="h-4 w-4 text-green-600" />
+                    {template.title}
+                  </h4>
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">
+                    {selectedLead ? template.template(selectedLead.name).substring(0, 150) + "..." : ""}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );

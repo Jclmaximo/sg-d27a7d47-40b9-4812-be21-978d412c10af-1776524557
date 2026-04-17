@@ -66,7 +66,73 @@ export const leadsService = {
     // Email notifications disabled by user request
     // Leads will appear directly in the dashboard
 
+    // Send WhatsApp notification to funnel owner
+    if (data) {
+      this.sendWhatsAppNotification({
+        leadName: leadData.name,
+        leadEmail: leadData.email,
+        leadPhone: leadData.phone,
+        leadCountry: leadData.country,
+        interest: leadData.interest || "No especificado",
+        ownerId: leadData.user_id
+      });
+    }
+
     return { data, error };
+  },
+
+  /**
+   * Send WhatsApp notification to funnel owner
+   */
+  async sendWhatsAppNotification(params: {
+    leadName: string;
+    leadEmail: string;
+    leadPhone: string;
+    leadCountry: string;
+    interest: string;
+    ownerId: string;
+  }) {
+    try {
+      // Get owner's profile to get their WhatsApp number
+      const { data: owner } = await supabase
+        .from("profiles")
+        .select("whatsapp_number, username")
+        .eq("id", params.ownerId)
+        .single();
+
+      if (!owner?.whatsapp_number) {
+        console.log("Owner WhatsApp not found");
+        return;
+      }
+
+      // Clean WhatsApp number (remove spaces, dashes, etc.)
+      const cleanWhatsApp = owner.whatsapp_number.replace(/[^0-9]/g, "");
+
+      // Create notification message
+      const message = `🎯 *Nuevo Lead Capturado!*
+
+📋 *Información del Lead:*
+• Nombre: ${params.leadName}
+• Email: ${params.leadEmail}
+• WhatsApp: ${params.leadPhone}
+• País: ${params.leadCountry}
+• Interés: ${params.interest}
+
+🔗 Ver en dashboard:
+${window.location.origin}/admin/main-dashboard
+
+¡Contacta rápido para cerrar la venta!`;
+
+      // Open WhatsApp with message
+      const whatsappUrl = `https://wa.me/${cleanWhatsApp}?text=${encodeURIComponent(message)}`;
+      
+      console.log("📱 Opening WhatsApp notification:", whatsappUrl);
+      
+      // Open in new tab
+      window.open(whatsappUrl, "_blank");
+    } catch (error) {
+      console.error("Error sending WhatsApp notification:", error);
+    }
   },
 
   /**
@@ -146,6 +212,27 @@ export const leadsService = {
     return data;
   },
 
+  // Add note to lead
+  async addNote(noteData: {
+    lead_id: string;
+    note: string;
+    created_by: string;
+  }) {
+    const { data, error } = await supabase
+      .from("lead_notes")
+      .insert([{
+        lead_id: noteData.lead_id,
+        note: noteData.note,
+        created_by: noteData.created_by,
+        created_at: new Date().toISOString()
+      }])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
   // Get notes for a lead
   async getLeadNotes(leadId: string) {
     const { data, error } = await supabase
@@ -157,21 +244,6 @@ export const leadsService = {
     console.log("Get lead notes:", { data, error });
     if (error) throw error;
     return data || [];
-  },
-
-  // Add note to lead
-  async addLeadNote(leadId: string, note: string) {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    const { data, error } = await supabase
-      .from("lead_notes")
-      .insert([{ lead_id: leadId, note, created_by: user?.id }])
-      .select()
-      .single();
-    
-    console.log("Add lead note:", { data, error });
-    if (error) throw error;
-    return data;
   },
 
   // Get message templates
