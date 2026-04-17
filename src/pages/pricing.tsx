@@ -144,8 +144,8 @@ export default function Pricing() {
         });
         setShowCheckout(true);
 
-        // Start polling payment status
-        pollPaymentStatus(payment.paymentId);
+        // Payment status will be updated via webhook only
+        // No polling needed - Disruptive doesn't support status queries by address
       }
     } catch (error) {
       console.error("Error creating payment:", error);
@@ -153,41 +153,6 @@ export default function Pricing() {
     } finally {
       setIsProcessingPayment(false);
     }
-  };
-
-  const pollPaymentStatus = async (paymentId: string) => {
-    const maxAttempts = 60; // 5 minutes (5 seconds * 60)
-    let attempts = 0;
-
-    const checkStatus = async () => {
-      try {
-        const status = await disruptiveService.getPaymentStatus(paymentId);
-
-        if (status.status === "completed") {
-          // Payment confirmed! Redirect to dashboard
-          alert("¡Pago confirmado! Redirigiendo a tu panel...");
-          router.push("/admin/dashboard");
-          return;
-        }
-
-        if (status.status === "failed" || status.status === "expired") {
-          alert("El pago falló o expiró. Por favor intenta de nuevo.");
-          setShowCheckout(false);
-          setPaymentData(null);
-          return;
-        }
-
-        // Continue polling if still pending
-        if (attempts < maxAttempts && status.status === "pending") {
-          attempts++;
-          setTimeout(checkStatus, 5000); // Check every 5 seconds
-        }
-      } catch (error) {
-        console.error("Error polling payment status:", error);
-      }
-    };
-
-    checkStatus();
   };
 
   const copyAddress = () => {
