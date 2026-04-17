@@ -74,9 +74,7 @@ export const disruptiveService = {
     console.log("🔍 Request:");
     console.log("   📌 URL:", `${apiUrl}/payments/single`);
     console.log("   📌 Method: POST");
-    console.log("   📌 Headers:");
-    console.log("      - Authorization:", apiKey.substring(0, 20) + "...");
-    console.log("      - X-API-Key:", apiKey.substring(0, 20) + "...");
+    console.log("   📌 Header: client-api-key:", apiKey.substring(0, 20) + "...");
     console.log("   📌 Payload:", JSON.stringify(payload, null, 2));
 
     try {
@@ -85,9 +83,8 @@ export const disruptiveService = {
       const response = await fetch(`${apiUrl}/payments/single`, {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": apiKey,
-          "X-API-Key": apiKey
+          "client-api-key": apiKey,
+          "content-type": "application/json"
         },
         body: JSON.stringify(payload)
       });
@@ -129,8 +126,8 @@ export const disruptiveService = {
     try {
       const response = await fetch(`${apiUrl}/payments/${paymentId}`, {
         headers: {
-          "Authorization": apiKey,
-          "X-API-Key": apiKey
+          "client-api-key": apiKey,
+          "content-type": "application/json"
         }
       });
 
