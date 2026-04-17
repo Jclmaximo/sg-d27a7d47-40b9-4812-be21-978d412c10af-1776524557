@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SEO } from "@/components/SEO";
-import { Sparkles, Copy, CheckCircle, ArrowRight, Users, TrendingUp, Gift } from "lucide-react";
+import { Sparkles, Copy, CheckCircle, ArrowRight, Users, TrendingUp, Gift, ExternalLink, LayoutDashboard, Link2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function WelcomePage() {
@@ -12,8 +12,10 @@ export default function WelcomePage() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
+  const [funnelLink, setFunnelLink] = useState("");
   const [referralLink, setReferralLink] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [copiedFunnel, setCopiedFunnel] = useState(false);
+  const [copiedReferral, setCopiedReferral] = useState(false);
 
   useEffect(() => {
     checkAuthAndLoadProfile();
@@ -44,6 +46,7 @@ export default function WelcomePage() {
 
       setUsername(profile.username);
       const baseUrl = window.location.origin;
+      setFunnelLink(`${baseUrl}/ambassador/${profile.username}`);
       setReferralLink(`${baseUrl}/pricing?ref=${profile.username}`);
     } catch (error) {
       console.error("Error loading profile:", error);
@@ -57,14 +60,24 @@ export default function WelcomePage() {
     }
   };
 
-  const copyLink = () => {
-    navigator.clipboard.writeText(referralLink);
-    setCopied(true);
+  const copyFunnelLink = () => {
+    navigator.clipboard.writeText(funnelLink);
+    setCopiedFunnel(true);
     toast({
       title: "¡Link copiado!",
-      description: "Ya puedes compartirlo en WhatsApp, Instagram, etc."
+      description: "Link de tu embudo copiado al portapapeles"
     });
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => setCopiedFunnel(false), 2000);
+  };
+
+  const copyReferralLink = () => {
+    navigator.clipboard.writeText(referralLink);
+    setCopiedReferral(true);
+    toast({
+      title: "¡Link copiado!",
+      description: "Link de referidos copiado al portapapeles"
+    });
+    setTimeout(() => setCopiedReferral(false), 2000);
   };
 
   if (loading) {
@@ -90,36 +103,36 @@ export default function WelcomePage() {
               <Sparkles className="w-10 h-10 text-primary" />
             </div>
             <h1 className="text-4xl md:text-5xl font-bold">
-              ¡Bienvenido a Viaja Ligero! 🎉
+              ¡Tu Embudo de Ventas está Listo! 🎉
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Tu cuenta está activa y lista para generar ingresos. Aquí está todo lo que necesitas para empezar.
+              Ya tienes tu herramienta profesional para captar y convertir prospectos en miembros del club de viajes.
             </p>
           </div>
 
-          {/* Referral Link Card - DESTACADO */}
+          {/* Funnel Link Card - DESTACADO */}
           <Card className="border-2 border-primary shadow-xl bg-gradient-to-br from-primary/5 to-secondary/5">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Gift className="w-6 h-6 text-primary" />
-                <CardTitle className="text-2xl">Tu Link de Referido</CardTitle>
+                <LayoutDashboard className="w-6 h-6 text-primary" />
+                <CardTitle className="text-2xl">Tu Embudo Personalizado</CardTitle>
               </div>
               <CardDescription className="text-base">
-                Comparte este link para ganar comisiones del 30% por cada referido
+                Comparte este embudo para captar leads interesados en el club de viajes
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="p-4 bg-background rounded-lg border-2 border-primary/20">
                 <p className="font-mono text-sm break-all text-primary font-semibold">
-                  {referralLink}
+                  {funnelLink}
                 </p>
               </div>
               <Button 
                 size="lg" 
                 className="w-full"
-                onClick={copyLink}
+                onClick={copyFunnelLink}
               >
-                {copied ? (
+                {copiedFunnel ? (
                   <>
                     <CheckCircle className="w-5 h-5 mr-2" />
                     ¡Copiado!
@@ -127,81 +140,81 @@ export default function WelcomePage() {
                 ) : (
                   <>
                     <Copy className="w-5 h-5 mr-2" />
-                    Copiar Link
+                    Copiar Link del Embudo
                   </>
                 )}
               </Button>
-              <div className="grid md:grid-cols-3 gap-3 pt-4">
-                <div className="text-center p-3 bg-background rounded-lg border">
-                  <TrendingUp className="w-6 h-6 text-primary mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-primary">30%</p>
-                  <p className="text-xs text-muted-foreground">Comisión</p>
-                </div>
-                <div className="text-center p-3 bg-background rounded-lg border">
-                  <Gift className="w-6 h-6 text-secondary mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-secondary">$4.74</p>
-                  <p className="text-xs text-muted-foreground">Por referido</p>
-                </div>
-                <div className="text-center p-3 bg-background rounded-lg border">
-                  <Users className="w-6 h-6 text-accent mx-auto mb-2" />
-                  <p className="text-2xl font-bold text-accent">Ilimitados</p>
-                  <p className="text-xs text-muted-foreground">Referidos</p>
-                </div>
-              </div>
             </CardContent>
           </Card>
 
           {/* Quick Start Guide */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">🚀 Guía Rápida de Inicio</CardTitle>
-              <CardDescription>Sigue estos 3 pasos para empezar a generar ingresos</CardDescription>
+              <CardTitle className="text-2xl">🚀 Cómo Usar tu Embudo de Ventas</CardTitle>
+              <CardDescription>Sigue estos 3 pasos para empezar a captar leads y cerrar ventas</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Step 1 */}
+              {/* Step 1 - EMBUDO */}
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
                   1
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-2">Copia tu link de referido</h3>
-                  <p className="text-muted-foreground">
-                    Haz click en "Copiar Link" arriba. Este es tu link único que te identifica como embajador.
+                  <h3 className="font-semibold text-lg mb-2">Comparte tu embudo personalizado</h3>
+                  <p className="text-muted-foreground mb-3">
+                    Tu embudo captura leads automáticamente. Cada persona que complete el formulario aparecerá en tu admin de leads.
                   </p>
-                </div>
-              </div>
-
-              {/* Step 2 */}
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
-                  2
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-2">Comparte tu link</h3>
-                  <p className="text-muted-foreground mb-2">
-                    Envía tu link por WhatsApp, Instagram, Facebook, email o cualquier otro canal.
-                  </p>
-                  <div className="p-3 bg-muted rounded-lg text-sm">
+                  <div className="p-3 bg-muted rounded-lg text-sm space-y-2">
                     <p className="font-medium mb-1">💬 Mensaje sugerido:</p>
                     <p className="text-muted-foreground italic">
-                      "¡Hola! Te invito a Viaja Ligero 🌍✈️ - Accede a viajes exclusivos con descuentos increíbles. 
-                      Solo $15.80 USD con el cupón SUPER80. {referralLink}"
+                      "¡Hola! 🌍✈️ ¿Te gustaría viajar más pagando menos? Te comparto info sobre el club de viajes con mejores tarifas que encontré. Echa un vistazo: {funnelLink}"
                     </p>
                   </div>
                 </div>
               </div>
 
-              {/* Step 3 */}
+              {/* Step 2 - ADMIN LEADS */}
+              <div className="flex gap-4">
+                <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
+                  2
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-lg mb-2">Gestiona tus leads</h3>
+                  <p className="text-muted-foreground mb-2">
+                    En tu Admin de Leads verás todos los prospectos capturados. Puedes:
+                  </p>
+                  <ul className="space-y-1 text-muted-foreground ml-4">
+                    <li>• Filtrar por nivel de interés (Ahorrar / Ganar / Ambas)</li>
+                    <li>• Ver datos de contacto (WhatsApp, email)</li>
+                    <li>• Marcar status (Nuevo / Contactado / Negociación / Cerrado / Perdido)</li>
+                    <li>• Agregar notas de seguimiento</li>
+                    <li>• Usar templates de WhatsApp listos</li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* Step 3 - CERRAR VENTAS */}
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center text-primary font-bold">
                   3
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-lg mb-2">Gana comisiones</h3>
-                  <p className="text-muted-foreground">
-                    Cada vez que alguien se registre y pague usando tu link, ganas $4.74 USD (30% de comisión). 
-                    Todas tus comisiones las puedes ver en tu Dashboard de Red.
+                  <h3 className="font-semibold text-lg mb-2">Cierra ventas y gana comisiones</h3>
+                  <p className="text-muted-foreground mb-2">
+                    Cuando alguien se registre y pague usando tu link de referidos del funnel (abajo), recibes:
                   </p>
+                  <div className="grid grid-cols-2 gap-3 mt-3">
+                    <div className="text-center p-3 bg-background rounded-lg border">
+                      <TrendingUp className="w-6 h-6 text-primary mx-auto mb-2" />
+                      <p className="text-2xl font-bold text-primary">50%</p>
+                      <p className="text-xs text-muted-foreground">Comisión</p>
+                    </div>
+                    <div className="text-center p-3 bg-background rounded-lg border">
+                      <Gift className="w-6 h-6 text-secondary mx-auto mb-2" />
+                      <p className="text-2xl font-bold text-secondary">$7.90</p>
+                      <p className="text-xs text-muted-foreground">Por venta</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -210,80 +223,159 @@ export default function WelcomePage() {
           {/* Features Overview */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">✨ Lo que incluye tu membresía</CardTitle>
+              <CardTitle className="text-2xl">✨ Lo que incluye tu embudo</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium">Embudo de ventas personalizado</p>
-                    <p className="text-sm text-muted-foreground">Tu propia página para captar leads</p>
+                    <p className="font-medium">Embudo de captura personalizado</p>
+                    <p className="text-sm text-muted-foreground">Con tu marca y link único</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium">Panel de gestión de leads</p>
-                    <p className="text-sm text-muted-foreground">Organiza todos tus prospectos</p>
+                    <p className="text-sm text-muted-foreground">Organiza y da seguimiento</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium">Templates de WhatsApp</p>
-                    <p className="text-sm text-muted-foreground">5 mensajes listos para usar</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-medium">Dashboard de red</p>
-                    <p className="text-sm text-muted-foreground">Visualiza tus referidos y comisiones</p>
+                    <p className="text-sm text-muted-foreground">5 mensajes pre-escritos</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-medium">Sistema de notas</p>
-                    <p className="text-sm text-muted-foreground">Registra seguimiento detallado</p>
+                    <p className="text-sm text-muted-foreground">Registra cada interacción</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-medium">Soporte incluido</p>
-                    <p className="text-sm text-muted-foreground">Asistencia vía WhatsApp</p>
+                    <p className="font-medium">Link de referidos</p>
+                    <p className="text-sm text-muted-foreground">Crece tu equipo de embajadores</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-medium">Panel de comisiones</p>
+                    <p className="text-sm text-muted-foreground">Rastrea tus ganancias</p>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button 
-              size="lg" 
-              className="flex-1"
-              onClick={() => router.push("/admin/network")}
-            >
-              <TrendingUp className="w-5 h-5 mr-2" />
-              Ver mi Dashboard de Red
-            </Button>
-            <Button 
-              size="lg" 
-              variant="outline"
-              className="flex-1"
-              onClick={() => router.push("/admin/dashboard")}
-            >
-              <ArrowRight className="w-5 h-5 mr-2" />
-              Ir a Gestión de Leads
-            </Button>
+          {/* Referral Link Card - SECUNDARIO */}
+          <Card className="border border-muted-foreground/20">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Link2 className="w-5 h-5 text-muted-foreground" />
+                <CardTitle className="text-lg">Link de Referidos del Funnel</CardTitle>
+              </div>
+              <CardDescription>
+                Comparte este link con otros miembros de tu equipo que quieran su propio embudo (ganas $7.90 por cada uno)
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="p-3 bg-muted rounded-lg border">
+                <p className="font-mono text-xs break-all text-muted-foreground">
+                  {referralLink}
+                </p>
+              </div>
+              <Button 
+                size="sm" 
+                variant="outline"
+                className="w-full"
+                onClick={copyReferralLink}
+              >
+                {copiedReferral ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 mr-2" />
+                    ¡Copiado!
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copiar Link de Referidos
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+
+          {/* CTA Buttons - ORDEN ESTRATÉGICO */}
+          <div className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              {/* 1. Embudo */}
+              <Button 
+                size="lg" 
+                className="w-full"
+                onClick={() => window.open(funnelLink, "_blank")}
+              >
+                <ExternalLink className="w-5 h-5 mr-2" />
+                Ver mi Embudo
+              </Button>
+
+              {/* 2. Admin Leads */}
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="w-full"
+                onClick={() => router.push("/admin/dashboard")}
+              >
+                <LayoutDashboard className="w-5 h-5 mr-2" />
+                Ir a Admin de Leads
+              </Button>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {/* 3. Link Referidos (copiar) */}
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="w-full"
+                onClick={copyReferralLink}
+              >
+                {copiedReferral ? (
+                  <>
+                    <CheckCircle className="w-5 h-5 mr-2" />
+                    Link Copiado
+                  </>
+                ) : (
+                  <>
+                    <Link2 className="w-5 h-5 mr-2" />
+                    Copiar Link de Referidos
+                  </>
+                )}
+              </Button>
+
+              {/* 4. Admin Network */}
+              <Button 
+                size="lg" 
+                variant="outline"
+                className="w-full"
+                onClick={() => router.push("/admin/network")}
+              >
+                <Users className="w-5 h-5 mr-2" />
+                Ver Admin del Network
+              </Button>
+            </div>
           </div>
 
           {/* Footer Note */}
-          <div className="text-center text-sm text-muted-foreground">
-            <p>¿Tienes dudas? Contáctanos por WhatsApp al soporte técnico</p>
+          <div className="text-center text-sm text-muted-foreground space-y-2">
+            <p className="font-medium">📚 Próximos pasos:</p>
+            <p>1. Comparte tu embudo en redes sociales, WhatsApp y email</p>
+            <p>2. Da seguimiento a tus leads desde el admin</p>
+            <p>3. Cierra ventas y gana comisiones del 50%</p>
           </div>
         </div>
       </div>
