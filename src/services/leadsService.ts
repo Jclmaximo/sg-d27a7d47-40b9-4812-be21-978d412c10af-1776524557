@@ -237,12 +237,25 @@ ${window.location.origin}/admin/main-dashboard
   async getLeadNotes(leadId: string) {
     const { data, error } = await supabase
       .from("lead_notes")
-      .select("*")
+      .select(`
+        id,
+        note,
+        created_at,
+        created_by,
+        profiles:created_by (
+          full_name,
+          username,
+          email
+        )
+      `)
       .eq("lead_id", leadId)
       .order("created_at", { ascending: false });
     
-    console.log("Get lead notes:", { data, error });
-    if (error) throw error;
+    if (error) {
+      console.error("Error loading notes:", error);
+      throw error;
+    }
+    
     return data || [];
   },
 

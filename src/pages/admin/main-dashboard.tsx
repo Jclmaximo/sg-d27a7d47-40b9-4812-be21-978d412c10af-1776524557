@@ -80,6 +80,8 @@ export default function MainDashboard() {
   const [noteText, setNoteText] = useState("");
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [showNotesListDialog, setShowNotesListDialog] = useState(false);
+  const [leadNotes, setLeadNotes] = useState<any[]>([]);
   const [selectedMessageTemplate, setSelectedMessageTemplate] = useState("");
   
   // Network
@@ -453,6 +455,21 @@ Estoy aquí para resolver cualquier duda que tengas.
     setSelectedLead(null);
   };
 
+  const loadLeadNotes = async (lead: Lead) => {
+    try {
+      const notes = await leadsService.getLeadNotes(lead.id);
+      setLeadNotes(notes);
+      setSelectedLead(lead);
+      setShowNotesListDialog(true);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar las notas",
+        variant: "destructive"
+      });
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -733,6 +750,16 @@ Estoy aquí para resolver cualquier duda que tengas.
                                     title="Agregar nota"
                                   >
                                     <Plus className="h-4 w-4" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => loadLeadNotes(lead)}
+                                    title="Ver notas"
+                                  >
+                                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
                                   </Button>
                                 </div>
                               </TableCell>
@@ -1067,6 +1094,82 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </p>
                 </div>
               ))}
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Dialog para ver historial de notas */}
+        <Dialog open={showNotesListDialog} onOpenChange={setShowNotesListDialog}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Notas de {selectedLead?.name}</DialogTitle>
+              <DialogDescription>
+                Historial completo de seguimiento
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 max-h-96 overflow-y-auto">
+              {leadNotes.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <svg className="h-12 w-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <p>No hay notas para este lead</p>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="mt-4"
+                    onClick={() => {
+                      setShowNotesListDialog(false);
+                      setShowNoteDialog(true);
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar primera nota
+                  </Button>
+                </div>
+              ) : (
+                <>
+                  {leadNotes.map((note) => (
+                    <div key={note.id} className="border rounded-lg p-4 bg-card">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                            <span className="text-xs font-semibold text-primary">
+                              {note.profiles?.full_name?.[0] || note.profiles?.username?.[0] || "?"}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">
+                              {note.profiles?.full_name || note.profiles?.username || "Usuario"}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(note.created_at).toLocaleString("es-ES", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                              })}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-sm whitespace-pre-line">{note.note}</p>
+                    </div>
+                  ))}
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => {
+                      setShowNotesListDialog(false);
+                      setShowNoteDialog(true);
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Agregar nueva nota
+                  </Button>
+                </>
+              )}
             </div>
           </DialogContent>
         </Dialog>
