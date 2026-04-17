@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
+ 
 export type Json =
   | string
   | number
@@ -226,28 +226,34 @@ export type Database = {
       }
       profiles: {
         Row: {
+          ambassador_active: boolean | null
           avatar_url: string | null
           created_at: string | null
           email: string | null
           full_name: string | null
           id: string
           updated_at: string | null
+          username: string | null
         }
         Insert: {
+          ambassador_active?: boolean | null
           avatar_url?: string | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null
           id: string
           updated_at?: string | null
+          username?: string | null
         }
         Update: {
+          ambassador_active?: boolean | null
           avatar_url?: string | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null
           id?: string
           updated_at?: string | null
+          username?: string | null
         }
         Relationships: []
       }

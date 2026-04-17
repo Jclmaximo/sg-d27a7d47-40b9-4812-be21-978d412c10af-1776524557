@@ -4,8 +4,17 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MessageSquare } from "lucide-react";
 import { leadsService } from "@/services/leadsService";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
-export function FunnelForm() {
+interface FunnelFormProps {
+  ambassadorId?: string;
+  ambassadorName?: string;
+}
+
+export function FunnelForm({ ambassadorId, ambassadorName }: FunnelFormProps) {
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -19,34 +28,38 @@ export function FunnelForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    try {
-      // Get admin settings to use their WhatsApp
-      // For now, using default number - in production this would be dynamic per funnel
-      const whatsappNumber = "523314300767"; // This will be replaced with admin's number
+    setLoading(true);
 
-      // Save lead to database
-      await leadsService.createLead({
+    try {
+      // Insert lead with ambassador tracking
+      const { error } = await supabase.from("leads").insert({
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        country: formData.country
+        country: formData.country,
+        user_id: ambassadorId || null, // Track which ambassador captured this lead
+        source: ambassadorId ? `ambassador/${ambassadorName}` : "funnel",
+        status: "nuevo"
       });
 
-      // Send to WhatsApp
-      const message = `¡Hola! Quiero más información sobre Viaja Ligero.%0A%0A` +
-        `Nombre: ${formData.name}%0A` +
-        `Email: ${formData.email}%0A` +
-        `Teléfono: ${formData.phone}%0A` +
-        `País: ${formData.country}`;
-      
-      window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+      if (error) throw error;
+
+      toast({
+        title: "¡Gracias por tu interés!",
+        description: "Nos pondremos en contacto contigo muy pronto."
+      });
 
       // Reset form
       setFormData({ name: "", email: "", phone: "", country: "" });
     } catch (error) {
-      console.error("Error saving lead:", error);
-      alert("Hubo un error al procesar tu solicitud. Por favor intenta de nuevo.");
+      console.error("Error submitting lead:", error);
+      toast({
+        title: "Error",
+        description: "Hubo un problema al enviar tu información. Intenta de nuevo.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -130,9 +143,10 @@ export function FunnelForm() {
             <Button
               type="submit"
               size="lg"
-              className="w-full h-14 text-lg font-semibold bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all">
+              className="w-full h-14 text-lg font-semibold bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all"
+              disabled={loading}>
               
-              <MessageSquare className="mr-2 h-5 w-5" />
+              {loading ? "Enviando..." : <MessageSquare className="mr-2 h-5 w-5" />}
               Empezar Ahora
             </Button>
 

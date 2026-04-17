@@ -8,10 +8,11 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { LogOut, Plus, MessageSquare, Trash2, Loader2, Phone, Settings } from "lucide-react";
+import { LogOut, Plus, MessageSquare, Trash2, Loader2, Phone, Settings, Users } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { subscriptionService } from "@/services/subscriptionService";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 export default function AdminDashboard() {
   const router = useRouter();
@@ -278,6 +279,23 @@ export default function AdminDashboard() {
             <Card className="p-6">
               <div className="text-2xl font-bold">{leads.length}</div>
               <div className="text-sm text-muted-foreground">Total Leads</div>
+            </Card>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Leads Capturados</CardTitle>
+                <Users className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{stats.totalLeads}</div>
+                <Link href="/admin/leads">
+                  <Button variant="link" className="px-0 mt-2">
+                    Ver todos los leads →
+                  </Button>
+                </Link>
+              </CardContent>
             </Card>
           </div>
 
