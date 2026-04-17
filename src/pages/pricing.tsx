@@ -324,12 +324,8 @@ export default function Pricing() {
             setPaymentData(null);
             setShowCheckout(false);
             
-            // Redirect to onboarding if no username, otherwise to dashboard
-            if (!profile?.username) {
-              router.push("/admin/onboarding");
-            } else {
-              router.push("/admin/dashboard");
-            }
+            // Always redirect to welcome page after first payment
+            router.push("/admin/welcome");
           }, 2000);
         } else if (status.fundStatus === "EXPIRED") {
           toast({
