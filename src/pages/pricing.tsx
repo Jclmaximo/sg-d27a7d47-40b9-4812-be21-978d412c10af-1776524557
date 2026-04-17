@@ -170,30 +170,33 @@ export default function Pricing() {
     if (!paymentData) return;
 
     try {
-      const status = await disruptiveService.getPaymentStatus(paymentData.paymentId);
-      console.log("💰 Payment status check:", status);
+      // Query our database instead of Disruptive API
+      const { data: payment, error } = await supabase
+        .from("payments")
+        .select("status")
+        .eq("payment_id", paymentData.paymentId)
+        .single();
 
-      // Check if payment is funded (completed)
-      if (status.fundStatus === "FUNDED" && status.amountCaptured > 0) {
+      if (error) {
+        console.error("Error checking payment:", error);
+        return;
+      }
+
+      console.log("💰 Payment status from DB:", payment);
+
+      // Check if payment is completed
+      if (payment.status === "completed") {
         toast({
           title: "¡Pago Confirmado!",
           description: "Tu suscripción está activa. Redirigiendo..."
         });
         
-        // Wait for webhook to process, then redirect
+        // Close modal and redirect
         setTimeout(() => {
           setPaymentData(null);
           setShowCheckout(false);
           router.push("/admin/dashboard");
         }, 2000);
-      } else if (status.fundStatus === "EXPIRED") {
-        toast({
-          title: "Pago Expirado",
-          description: "El tiempo para completar el pago ha expirado. Por favor intenta de nuevo.",
-          variant: "destructive"
-        });
-        setPaymentData(null);
-        setShowCheckout(false);
       }
     } catch (error) {
       console.error("Error checking payment status:", error);
@@ -204,6 +207,10 @@ export default function Pricing() {
   React.useEffect(() => {
     if (!paymentData) return;
 
+    // Check immediately
+    checkStatus();
+
+    // Then check every 5 seconds
     const interval = setInterval(checkStatus, 5000);
     return () => clearInterval(interval);
   }, [paymentData]);
