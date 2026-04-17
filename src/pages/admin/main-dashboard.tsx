@@ -649,10 +649,11 @@ Estoy aquí para resolver cualquier duda que tengas.
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="all">Todos los estados</SelectItem>
-                        <SelectItem value="new">Nuevos</SelectItem>
-                        <SelectItem value="contacted">Contactados</SelectItem>
-                        <SelectItem value="qualified">Calificados</SelectItem>
-                        <SelectItem value="converted">Convertidos</SelectItem>
+                        <SelectItem value="nuevo">Nuevos</SelectItem>
+                        <SelectItem value="contactado">Contactados</SelectItem>
+                        <SelectItem value="interesado">Interesados</SelectItem>
+                        <SelectItem value="convertido">Convertidos</SelectItem>
+                        <SelectItem value="descartado">Descartados</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -698,10 +699,11 @@ Estoy aquí para resolver cualquier duda que tengas.
                                     <SelectValue />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="new">Nuevo</SelectItem>
-                                    <SelectItem value="contacted">Contactado</SelectItem>
-                                    <SelectItem value="qualified">Calificado</SelectItem>
-                                    <SelectItem value="converted">Convertido</SelectItem>
+                                    <SelectItem value="nuevo">Nuevo</SelectItem>
+                                    <SelectItem value="contactado">Contactado</SelectItem>
+                                    <SelectItem value="interesado">Interesado</SelectItem>
+                                    <SelectItem value="convertido">Convertido</SelectItem>
+                                    <SelectItem value="descartado">Descartado</SelectItem>
                                   </SelectContent>
                                 </Select>
                               </TableCell>
