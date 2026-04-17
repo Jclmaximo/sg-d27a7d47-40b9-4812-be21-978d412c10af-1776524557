@@ -98,7 +98,7 @@ export default function SuperDashboard() {
       .eq("id", user.id)
       .single();
 
-    if (profile?.role !== "super_admin") {
+    if (profile?.role !== "admin") {
       toast({
         title: "Acceso Denegado",
         description: "No tienes permisos para acceder a esta página",
