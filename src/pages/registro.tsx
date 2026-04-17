@@ -481,11 +481,11 @@ export default function RegistroPage() {
             {/* Right side - Visual/Benefits */}
             <div className="hidden lg:block relative">
               <div className="sticky top-8">
-                <div className="relative h-[600px] rounded-2xl overflow-hidden">
+                <div className="relative min-h-full rounded-2xl overflow-hidden bg-slate-50">
                   <img
                     src="/registro-hero-new.jpg"
                     alt="Viaja Ligero - Marketing Digital Automatizado"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                   />
                 </div>
               </div>
