@@ -24,6 +24,7 @@ export default function Pricing() {
   const [discountError, setDiscountError] = useState("");
   const [isValidatingCode, setIsValidatingCode] = useState(false);
   const [referrerUsername, setReferrerUsername] = useState<string | null>(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
 
   useEffect(() => {
     checkAuthAndReferrer();
@@ -50,7 +51,11 @@ export default function Pricing() {
       // Not authenticated - redirect to admin with return URL
       const refParam = ref ? `&ref=${ref}` : "";
       router.push(`/admin?redirect=/pricing${refParam}`);
+      return;
     }
+    
+    // User is authenticated, allow rendering
+    setCheckingAuth(false);
   };
 
   // Payment state
@@ -354,6 +359,32 @@ export default function Pricing() {
     const interval = setInterval(checkStatus, 5000);
     return () => clearInterval(interval);
   }, [paymentData]);
+
+  const formatDate = (date: string) => {
+    return new Date(date).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "short",
+      day: "numeric"
+    });
+  };
+
+  // Show loading screen while checking authentication
+  if (checkingAuth) {
+    return (
+      <>
+        <SEO 
+          title="Membresía Viaja Ligero - Sistema de Embudo de Ventas" 
+          description="Accede al sistema completo de embudo de ventas para embajadores de Viaja Ligero. Desde $39.50 USD con descuentos disponibles."
+        />
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+          <div className="text-center">
+            <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
+            <p className="text-lg text-muted-foreground">Verificando acceso...</p>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
