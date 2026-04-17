@@ -331,7 +331,7 @@ export default function RegistroPage() {
           <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {/* Columna izquierda - Formulario */}
             <div className="flex items-center">
-              <Card className="w-full" style={{ margin: "14px 0px", padding: "0px" }}>
+              <Card className="w-full" style={{ margin: "14px 0px", padding: "0px", borderRadius: "16px" }}>
                 <CardHeader className="text-center space-y-2">
                   <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2">
                     <Plane className="h-8 w-8 text-primary" />
