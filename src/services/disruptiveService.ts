@@ -102,16 +102,19 @@ export const disruptiveService = {
       const data = await response.json();
       console.log("✅ Disruptive response:", data);
 
+      // Disruptive response structure: { data: { actual_payment_data }, timeStart, timeEnd }
+      const paymentData = data.data || data;
+
       // Return normalized response
       return {
         success: true,
-        paymentId: data.id || data.payment_id || data.paymentId,
-        address: data.address || data.payment_address || data.walletAddress,
+        paymentId: paymentData.id || paymentData.payment_id || paymentData.paymentId || String(paymentData.timeStart),
+        address: paymentData.address || paymentData.payment_address || paymentData.walletAddress,
         amount: params.amount,
-        qrCode: data.qrCode || data.qr_code,
-        checkoutUrl: data.checkoutUrl || data.checkout_url,
+        qrCode: paymentData.qrCode || paymentData.qr_code,
+        checkoutUrl: paymentData.checkoutUrl || paymentData.checkout_url,
         status: "pending",
-        expiresAt: data.expiresAt || data.expires_at
+        expiresAt: paymentData.expiresAt || paymentData.expires_at
       };
     } catch (error) {
       console.error("❌ Disruptive payment creation error:", error);
