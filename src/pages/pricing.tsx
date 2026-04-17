@@ -170,31 +170,86 @@ export default function Pricing() {
     if (!paymentData) return;
 
     try {
-      // Use Disruptive API with correct endpoint
-      const status = await disruptiveService.getPaymentStatus(paymentData.address, "BSC");
-      console.log("💰 Payment status check:", status);
+      // Step 1: Check if payment is still in-processing
+      const inProcessingAddresses = await disruptiveService.getPaymentsInProcessing("BSC");
+      const isStillProcessing = inProcessingAddresses.includes(paymentData.address);
 
-      // Check if payment is funded (completed)
-      if (status.fundStatus === "FUNDED" && status.amountCaptured > 0) {
-        toast({
-          title: "¡Pago Confirmado!",
-          description: "Tu suscripción está activa. Redirigiendo..."
-        });
-        
-        // Wait for webhook to process, then redirect
-        setTimeout(() => {
+      console.log("🔍 Payment status:", {
+        address: paymentData.address,
+        stillInProcessing: isStillProcessing
+      });
+
+      // If payment is NO LONGER in processing list, it means it was processed
+      if (!isStillProcessing) {
+        console.log("✅ Payment no longer in processing - checking final status...");
+
+        // Step 2: Get final status
+        const status = await disruptiveService.getPaymentStatus(paymentData.address, "BSC");
+        console.log("📦 Final payment status:", status);
+
+        // Check if payment is funded (completed)
+        if (status.fundStatus === "FUNDED" && status.amountCaptured > 0) {
+          // Get current user
+          const { data: { user } } = await supabase.auth.getUser();
+          
+          if (user) {
+            // Activate subscription directly (don't wait for webhook)
+            const { data: subscription, error: subError } = await supabase
+              .from("subscriptions")
+              .select("id")
+              .eq("user_id", user.id)
+              .eq("status", "active")
+              .maybeSingle();
+
+            // If no active subscription, create one
+            if (!subscription) {
+              const startDate = new Date();
+              const endDate = new Date();
+              endDate.setDate(endDate.getDate() + 30);
+
+              await supabase.from("subscriptions").insert({
+                user_id: user.id,
+                status: "active",
+                start_date: startDate.toISOString(),
+                end_date: endDate.toISOString(),
+                payment_id: paymentData.paymentId,
+                discount_code: appliedDiscount?.code || null,
+                discount_percentage: appliedDiscount?.percentage || 0,
+                original_price: currentPrice,
+                final_price: finalPrice
+              });
+
+              console.log("✅ Subscription created successfully");
+            }
+
+            // Update payment status
+            await supabase
+              .from("payments")
+              .update({ status: "completed" })
+              .eq("payment_id", paymentData.paymentId);
+          }
+
+          toast({
+            title: "¡Pago Confirmado!",
+            description: "Tu suscripción está activa. Redirigiendo..."
+          });
+          
+          setTimeout(() => {
+            setPaymentData(null);
+            setShowCheckout(false);
+            router.push("/admin/dashboard");
+          }, 2000);
+        } else if (status.fundStatus === "EXPIRED") {
+          toast({
+            title: "Pago Expirado",
+            description: "El tiempo para completar el pago ha expirado. Por favor intenta de nuevo.",
+            variant: "destructive"
+          });
           setPaymentData(null);
           setShowCheckout(false);
-          router.push("/admin/dashboard");
-        }, 2000);
-      } else if (status.fundStatus === "EXPIRED") {
-        toast({
-          title: "Pago Expirado",
-          description: "El tiempo para completar el pago ha expirado. Por favor intenta de nuevo.",
-          variant: "destructive"
-        });
-        setPaymentData(null);
-        setShowCheckout(false);
+        }
+      } else {
+        console.log("⏳ Payment still processing, checking again in 5 seconds...");
       }
     } catch (error) {
       console.error("Error checking payment status:", error);

@@ -140,6 +140,38 @@ export const disruptiveService = {
   },
 
   /**
+   * Get all payments currently in processing status
+   */
+  async getPaymentsInProcessing(network: string = "BSC"): Promise<string[]> {
+    const apiKey = process.env.NEXT_PUBLIC_DISRUPTIVE_API_KEY;
+    const apiUrl = process.env.NEXT_PUBLIC_DISRUPTIVE_API_URL || "https://my.disruptivepayments.io/api";
+
+    if (!apiKey) {
+      throw new Error("Disruptive API key not configured");
+    }
+
+    const url = `${apiUrl}/payments/in-processing?network=${network}`;
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "client-api-key": apiKey,
+        "content-type": "application/json"
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to get payments in processing: ${response.status}`);
+    }
+
+    const data = await response.json();
+    const payments = data.data || [];
+
+    // Return array of payment addresses
+    return payments.map((p: any) => p.address);
+  },
+
+  /**
    * Get payment status from Disruptive using correct endpoint
    */
   async getPaymentStatus(paymentAddress: string, network: string = "BSC"): Promise<{
