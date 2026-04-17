@@ -29,11 +29,11 @@ export function FunnelHero({ username }: FunnelHeroProps) {
       <div className="container mx-auto px-4 relative z-10">
         {/* Logo */}
         <div className="flex justify-center mb-8">
-          <img 
-            src="/viaja-ligero-logo.png" 
-            alt="Viaja Ligero" 
-            className="h-16 md:h-20 w-auto"
-          />
+          
+
+
+
+          
         </div>
 
         <div className="max-w-4xl mx-auto text-center space-y-6">
@@ -91,6 +91,6 @@ export function FunnelHero({ username }: FunnelHeroProps) {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
         <ChevronDown className="w-6 h-6 text-muted-foreground" />
       </div>
-    </section>
-  );
+    </section>);
+
 }
