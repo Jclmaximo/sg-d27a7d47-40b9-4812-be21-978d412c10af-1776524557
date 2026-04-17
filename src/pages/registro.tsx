@@ -126,22 +126,22 @@ export default function RegistroPage() {
     setLoading(true);
 
     try {
-      // 1. Create auth user
-      const { data, error: signupError } = await supabase.auth.signUp({
+      // 1. Create auth user with auto-confirm
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
         options: {
+          emailRedirectTo: `${window.location.origin}/pricing${savedRef ? `?ref=${savedRef}` : ""}`,
           data: {
             full_name: fullName,
+            username: username.toLowerCase(),
+            whatsapp_number: whatsapp,
           }
         }
       });
 
-      if (signupError) throw signupError;
-
-      if (!data.user) {
-        throw new Error("No se pudo crear la cuenta");
-      }
+      if (signUpError) throw signUpError;
+      if (!data.user) throw new Error("No se pudo crear el usuario");
 
       console.log("✅ Auth user created:", data.user.id);
 
@@ -178,16 +178,19 @@ export default function RegistroPage() {
         }
       }
 
-      setSuccess("¡Cuenta creada exitosamente! Redirigiendo...");
+      console.log("✅ Registration complete");
+      
+      setSuccessMessage("¡Cuenta creada exitosamente! Redirigiendo al pago...");
+      setError("");
 
+      // Redirect to pricing with ref
       setTimeout(() => {
-        const refParam = referrerUsername ? `?ref=${referrerUsername}` : "";
+        const refParam = savedRef ? `?ref=${savedRef}` : "";
         router.push(`/pricing${refParam}`);
       }, 1500);
-
     } catch (err: any) {
-      console.error("❌ Signup error:", err);
-      setError(err.message || "Error al crear la cuenta. Intenta nuevamente.");
+      console.error("❌ Registration error:", err);
+      setError(err.message || "Error al crear la cuenta. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }
