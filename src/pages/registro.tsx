@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { SEO } from "@/components/SEO";
-import { Loader2, UserPlus, CheckCircle2, XCircle, Sparkles, Plane } from "lucide-react";
+import { Loader2, UserPlus, CheckCircle2, XCircle, Sparkles, Plane, Zap, TrendingUp, Clock } from "lucide-react";
 
 export default function RegistroPage() {
   const router = useRouter();
@@ -478,80 +478,69 @@ export default function RegistroPage() {
               </Card>
             </div>
 
-            {/* Columna derecha - Panel visual (solo desktop) */}
-            <div className="hidden lg:flex relative rounded-2xl overflow-hidden shadow-2xl">
-              {/* Imagen de fondo */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                  backgroundImage: "url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2000')"
-                }}
-              />
-              
-              {/* Overlay con degradado */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/90 via-primary/70 to-accent/80" />
-              
-              {/* Contenido */}
-              <div className="relative z-10 flex flex-col justify-center p-12 text-white">
-                <h2 className="text-4xl font-bold mb-6">
-                  Marketing digital automatizado para ti
-                </h2>
-                
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-1">Embudo Automatizado con IA</h3>
-                      <p className="text-white/90">
-                        Tu página personalizada captura y califica leads automáticamente sin que tengas que hacer nada
-                      </p>
-                    </div>
+            {/* Right side - Visual/Benefits */}
+            <div className="hidden lg:block relative">
+              <div className="sticky top-8">
+                <div className="relative h-[600px] rounded-2xl overflow-hidden">
+                  <img
+                    src="/registro-hero.jpg"
+                    alt="Viaja Ligero"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+                  
+                  {/* Logo overlay */}
+                  <div className="absolute top-8 left-8 right-8">
+                    <img 
+                      src="/viaja-ligero-logo.png" 
+                      alt="Viaja Ligero" 
+                      className="h-16 w-auto filter brightness-0 invert"
+                    />
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                      </svg>
+                  {/* Benefits overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 p-8 space-y-6">
+                    <div className="flex items-start gap-4">
+                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
+                        <Zap className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-white font-semibold text-lg mb-1">
+                          Embudo Automatizado con IA
+                        </h3>
+                        <p className="text-white/90 text-sm">
+                          Tu página personalizada captura y califica leads automáticamente
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-1">Sistema CRM Completo</h3>
-                      <p className="text-white/90">
-                        Dashboard con gestión de leads, templates de WhatsApp listos y seguimiento automatizado
-                      </p>
-                    </div>
-                  </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                    <div className="flex items-start gap-4">
+                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
+                        <TrendingUp className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-white font-semibold text-lg mb-1">
+                          Sistema CRM Completo
+                        </h3>
+                        <p className="text-white/90 text-sm">
+                          Dashboard con gestión de leads y seguimiento automatizado
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-semibold mb-1">Trabaja Mientras Duermes</h3>
-                      <p className="text-white/90">
-                        Tu embudo trabaja 24/7 capturando leads y notificándote por WhatsApp cuando alguien se registra
-                      </p>
-                    </div>
-                  </div>
-                </div>
 
-                <div className="mt-8 pt-8 border-t border-white/20">
-                  <p className="text-sm text-white/80">
-                    Únete a los ambassadors que ya están generando ingresos con marketing digital automatizado
-                  </p>
-                  <div className="flex items-center gap-2 mt-2">
-                    <div className="flex -space-x-2">
-                      <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-white" />
-                      <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-white" />
-                      <div className="w-8 h-8 rounded-full bg-white/20 border-2 border-white" />
+                    <div className="flex items-start gap-4">
+                      <div className="bg-white/20 backdrop-blur-sm rounded-lg p-3">
+                        <Clock className="h-6 w-6 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-white font-semibold text-lg mb-1">
+                          Trabaja Mientras Duermes
+                        </h3>
+                        <p className="text-white/90 text-sm">
+                          Tu embudo trabaja 24/7 capturando leads y notificándote por WhatsApp
+                        </p>
+                      </div>
                     </div>
-                    <span className="text-sm font-medium">Ambassadors activos</span>
                   </div>
                 </div>
               </div>
