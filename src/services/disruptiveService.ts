@@ -101,14 +101,25 @@ export const disruptiveService = {
 
       const data = await response.json();
       console.log("✅ Disruptive response:", data);
+      console.log("📦 Full data object:", JSON.stringify(data, null, 2));
+      console.log("📦 data.data object:", JSON.stringify(data.data, null, 2));
 
       // Disruptive response structure: { data: { actual_payment_data }, timeStart, timeEnd }
       const paymentData = data.data || data;
+      console.log("📦 Extracted paymentData:", JSON.stringify(paymentData, null, 2));
+
+      // Log all possible ID fields
+      console.log("🔍 Possible IDs:");
+      console.log("   - paymentData.id:", paymentData.id);
+      console.log("   - paymentData.payment_id:", paymentData.payment_id);
+      console.log("   - paymentData.paymentId:", paymentData.paymentId);
+      console.log("   - data.id:", data.id);
+      console.log("   - data.payment_id:", data.payment_id);
 
       // Return normalized response
       return {
         success: true,
-        paymentId: paymentData.id || paymentData.payment_id || paymentData.paymentId || String(paymentData.timeStart),
+        paymentId: paymentData.id || paymentData.payment_id || paymentData.paymentId || data.id || String(data.timeStart),
         address: paymentData.address || paymentData.payment_address || paymentData.walletAddress,
         amount: params.amount,
         qrCode: paymentData.qrCode || paymentData.qr_code,
