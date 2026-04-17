@@ -168,7 +168,15 @@ export default function AdminDashboard() {
     if (!selectedLead || !newNote.trim()) return;
     
     try {
-      await leadsService.addLeadNote(selectedLead.id, newNote);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      await leadsService.addNote({
+        lead_id: selectedLead.id,
+        note: newNote,
+        created_by: user.id
+      });
+
       setNewNote("");
       loadLeadNotes(selectedLead);
     } catch (error) {
