@@ -45,7 +45,7 @@ export default function OnboardingPage() {
       return;
     }
 
-    // Check if user already has username configured
+    // Check if user already has a username
     const { data: profile } = await supabase
       .from("profiles")
       .select("username")
@@ -53,7 +53,8 @@ export default function OnboardingPage() {
       .single();
 
     if (profile?.username) {
-      router.push("/admin/dashboard");
+      router.push("/admin/main-dashboard");
+      return;
     }
   };
 
@@ -134,11 +135,11 @@ export default function OnboardingPage() {
       if (updateError) throw updateError;
 
       toast({
-        title: "¡Username configurado!",
-        description: "Tu funnel ya está listo para compartir"
+        title: "¡Perfil configurado!",
+        description: "Bienvenido a tu panel de control"
       });
 
-      router.push("/admin/dashboard");
+      router.push("/admin/main-dashboard");
     } catch (err: any) {
       console.error("Error setting username:", err);
       toast({

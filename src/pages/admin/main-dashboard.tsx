@@ -292,7 +292,7 @@ export default function MainDashboard() {
         title: "✅ Solicitud creada",
         description: `Se procesará tu retiro de $${stats.available_balance.toFixed(2)} USD`
       });
-      await loadAllData();
+      await loadData();
     }
   };
 

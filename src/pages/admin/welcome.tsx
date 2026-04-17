@@ -341,63 +341,25 @@ export default function WelcomePage() {
             </CardContent>
           </Card>
 
-          {/* CTA Buttons - ORDEN ESTRATÉGICO */}
-          <div className="space-y-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              {/* 1. Embudo */}
-              <Button 
-                size="lg" 
-                className="w-full"
-                onClick={() => window.open(funnelLink, "_blank")}
-              >
-                <ExternalLink className="w-5 h-5 mr-2" />
-                Ver mi Embudo
-              </Button>
-
-              {/* 2. Admin Leads */}
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="w-full"
-                onClick={() => router.push("/admin/dashboard")}
-              >
-                <LayoutDashboard className="w-5 h-5 mr-2" />
-                Ir a Admin de Leads
-              </Button>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              {/* 3. Link Referidos (copiar) */}
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="w-full"
-                onClick={copyReferralLink}
-              >
-                {copiedReferral ? (
-                  <>
-                    <CheckCircle className="w-5 h-5 mr-2" />
-                    Link Copiado
-                  </>
-                ) : (
-                  <>
-                    <Link2 className="w-5 h-5 mr-2" />
-                    Copiar Link de Referidos
-                  </>
-                )}
-              </Button>
-
-              {/* 4. Admin Network */}
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="w-full"
-                onClick={() => router.push("/admin/network")}
-              >
-                <Users className="w-5 h-5 mr-2" />
-                Ver Admin del Network
-              </Button>
-            </div>
+          {/* Action Buttons */}
+          <div className="grid md:grid-cols-2 gap-4">
+            <Button 
+              size="lg" 
+              className="w-full"
+              onClick={() => router.push("/admin/main-dashboard")}
+            >
+              <Users className="mr-2 h-5 w-5" />
+              Ir al Panel Principal
+            </Button>
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="w-full"
+              onClick={() => router.push("/admin/main-dashboard")}
+            >
+              <TrendingUp className="mr-2 h-5 w-5" />
+              Ver Comisiones
+            </Button>
           </div>
 
           {/* Footer Note */}

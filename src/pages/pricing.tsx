@@ -325,7 +325,13 @@ export default function Pricing() {
             setShowCheckout(false);
             
             // Always redirect to welcome page after first payment
-            router.push("/admin/welcome");
+            toast({
+              title: "¡Suscripción activa!",
+              description: "Redirigiendo a tu dashboard...",
+            });
+
+            router.push("/admin/main-dashboard");
+            return;
           }, 2000);
         } else if (status.fundStatus === "EXPIRED") {
           toast({
