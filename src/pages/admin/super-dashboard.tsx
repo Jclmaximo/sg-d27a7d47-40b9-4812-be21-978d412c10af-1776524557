@@ -7,8 +7,9 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SEO } from "@/components/SEO";
-import { Users, DollarSign, TrendingUp, UserCheck, Search, ArrowLeft, Power, PowerOff } from "lucide-react";
+import { Users, DollarSign, TrendingUp, UserCheck, Search, ArrowLeft, Power, PowerOff, Wallet, CheckCircle, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 
@@ -30,11 +31,29 @@ interface UserWithSubscription {
   lead_count: number;
 }
 
+interface WithdrawalRequest {
+  id: string;
+  user_id: string;
+  amount_usd: number;
+  wallet_address: string;
+  status: string;
+  requested_at: string;
+  paid_at: string | null;
+  notes: string | null;
+  user: {
+    email: string;
+    full_name: string | null;
+    username: string | null;
+  };
+}
+
 interface Stats {
   totalUsers: number;
   activeSubscriptions: number;
   totalRevenue: number;
   totalLeads: number;
+  pendingWithdrawals: number;
+  pendingAmount: number;
 }
 
 export default function SuperDashboard() {
@@ -43,14 +62,18 @@ export default function SuperDashboard() {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<UserWithSubscription[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<UserWithSubscription[]>([]);
+  const [withdrawalRequests, setWithdrawalRequests] = useState<WithdrawalRequest[]>([]);
   const [stats, setStats] = useState<Stats>({
     totalUsers: 0,
     activeSubscriptions: 0,
     totalRevenue: 0,
-    totalLeads: 0
+    totalLeads: 0,
+    pendingWithdrawals: 0,
+    pendingAmount: 0
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [withdrawalStatusFilter, setWithdrawalStatusFilter] = useState<string>("pending");
 
   useEffect(() => {
     checkAdminAccess();
@@ -75,7 +98,7 @@ export default function SuperDashboard() {
       .eq("id", user.id)
       .single();
 
-    if (profile?.role !== "admin") {
+    if (profile?.role !== "super_admin") {
       toast({
         title: "Acceso Denegado",
         description: "No tienes permisos para acceder a esta página",
@@ -119,6 +142,39 @@ export default function SuperDashboard() {
 
       if (leadsError) throw leadsError;
 
+      // Get withdrawal requests with user info
+      const { data: withdrawalsData, error: withdrawalsError } = await supabase
+        .from("withdrawal_requests")
+        .select(`
+          id,
+          user_id,
+          amount_usd,
+          wallet_address,
+          status,
+          requested_at,
+          paid_at,
+          notes,
+          user:profiles(email, full_name, username)
+        `)
+        .order("requested_at", { ascending: false });
+
+      if (withdrawalsError) throw withdrawalsError;
+
+      // Format withdrawal requests
+      const formattedWithdrawals: WithdrawalRequest[] = withdrawalsData.map((w: any) => ({
+        id: w.id,
+        user_id: w.user_id,
+        amount_usd: w.amount_usd,
+        wallet_address: w.wallet_address,
+        status: w.status,
+        requested_at: w.requested_at,
+        paid_at: w.paid_at,
+        notes: w.notes,
+        user: Array.isArray(w.user) ? w.user[0] : w.user
+      }));
+
+      setWithdrawalRequests(formattedWithdrawals);
+
       // Count leads per user
       const leadCounts = leadsData.reduce((acc: Record<string, number>, lead) => {
         if (lead.user_id) {
@@ -142,12 +198,16 @@ export default function SuperDashboard() {
       // Calculate stats
       const activeCount = subscriptionsData.filter(sub => sub.status === "active").length;
       const totalRev = subscriptionsData.reduce((sum, sub) => sum + (sub.price_usd || 0), 0);
+      const pendingWithdrawals = formattedWithdrawals.filter(w => w.status === "pending");
+      const pendingAmount = pendingWithdrawals.reduce((sum, w) => sum + w.amount_usd, 0);
 
       setStats({
         totalUsers: profilesData.length,
         activeSubscriptions: activeCount,
         totalRevenue: totalRev,
-        totalLeads: leadsData.length
+        totalLeads: leadsData.length,
+        pendingWithdrawals: pendingWithdrawals.length,
+        pendingAmount
       });
 
     } catch (error) {
@@ -212,11 +272,51 @@ export default function SuperDashboard() {
     }
   };
 
+  const updateWithdrawalStatus = async (withdrawalId: string, newStatus: "paid" | "rejected", notes?: string) => {
+    try {
+      const updateData: any = {
+        status: newStatus,
+        updated_at: new Date().toISOString()
+      };
+
+      if (newStatus === "paid") {
+        updateData.paid_at = new Date().toISOString();
+      }
+
+      if (notes) {
+        updateData.notes = notes;
+      }
+
+      const { error } = await supabase
+        .from("withdrawal_requests")
+        .update(updateData)
+        .eq("id", withdrawalId);
+
+      if (error) throw error;
+
+      toast({
+        title: "✅ Actualizado",
+        description: `Solicitud marcada como ${newStatus === "paid" ? "pagada" : "rechazada"}`
+      });
+
+      await loadData();
+    } catch (error) {
+      console.error("Error updating withdrawal:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar la solicitud",
+        variant: "destructive"
+      });
+    }
+  };
+
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString("es-ES", {
       year: "numeric",
       month: "short",
-      day: "numeric"
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
     });
   };
 
@@ -225,6 +325,11 @@ export default function SuperDashboard() {
       style: "currency",
       currency: "USD"
     }).format(amount);
+  };
+
+  const getFilteredWithdrawals = () => {
+    if (withdrawalStatusFilter === "all") return withdrawalRequests;
+    return withdrawalRequests.filter(w => w.status === withdrawalStatusFilter);
   };
 
   if (loading) {
@@ -251,12 +356,12 @@ export default function SuperDashboard() {
             </Link>
             <h1 className="text-4xl font-bold">Super Admin Dashboard</h1>
             <p className="text-muted-foreground mt-2">
-              Gestión completa de usuarios y suscripciones
+              Gestión completa de usuarios, suscripciones y retiros
             </p>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 mb-8">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mb-8">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Usuarios</CardTitle>
@@ -300,141 +405,300 @@ export default function SuperDashboard() {
                 <p className="text-xs text-muted-foreground">Capturados por todos</p>
               </CardContent>
             </Card>
+
+            <Card className="border-yellow-200 bg-yellow-50">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Retiros Pendientes</CardTitle>
+                <Wallet className="h-4 w-4 text-yellow-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-yellow-600">{stats.pendingWithdrawals}</div>
+                <p className="text-xs text-muted-foreground">Total: {formatCurrency(stats.pendingAmount)}</p>
+              </CardContent>
+            </Card>
           </div>
 
-          {/* Filters */}
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle>Usuarios y Suscripciones</CardTitle>
-              <CardDescription>Gestiona todos los usuarios de la plataforma</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="flex gap-4 mb-6">
-                <div className="flex-1 relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Buscar por email, nombre o username..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-                <Select value={statusFilter} onValueChange={setStatusFilter}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Filtrar por estado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">Todos</SelectItem>
-                    <SelectItem value="active">Suscripción Activa</SelectItem>
-                    <SelectItem value="inactive">Sin Suscripción</SelectItem>
-                    <SelectItem value="ambassador">Ambassadors Activos</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+          {/* Tabs for Users and Withdrawals */}
+          <Tabs defaultValue="users" className="space-y-6">
+            <TabsList>
+              <TabsTrigger value="users">Usuarios y Suscripciones</TabsTrigger>
+              <TabsTrigger value="withdrawals">
+                Solicitudes de Retiro
+                {stats.pendingWithdrawals > 0 && (
+                  <Badge variant="destructive" className="ml-2">
+                    {stats.pendingWithdrawals}
+                  </Badge>
+                )}
+              </TabsTrigger>
+            </TabsList>
 
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Usuario</TableHead>
-                      <TableHead>Username</TableHead>
-                      <TableHead>Suscripción</TableHead>
-                      <TableHead>Precio</TableHead>
-                      <TableHead>Vigencia</TableHead>
-                      <TableHead>Leads</TableHead>
-                      <TableHead>Ambassador</TableHead>
-                      <TableHead>Acciones</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredUsers.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={8} className="text-center text-muted-foreground">
-                          No se encontraron usuarios
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      filteredUsers.map((user) => (
-                        <TableRow key={user.id}>
-                          <TableCell>
-                            <div>
-                              <div className="font-medium">{user.full_name || "Sin nombre"}</div>
-                              <div className="text-sm text-muted-foreground">{user.email}</div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            {user.username ? (
-                              <code className="text-xs bg-muted px-2 py-1 rounded">
-                                {user.username}
-                              </code>
-                            ) : (
-                              <span className="text-muted-foreground">-</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {user.subscription ? (
-                              <Badge variant={user.subscription.status === "active" ? "default" : "secondary"}>
-                                {user.subscription.status}
-                              </Badge>
-                            ) : (
-                              <Badge variant="outline">Sin suscripción</Badge>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {user.subscription ? (
-                              <div>
-                                <div className="font-medium">{formatCurrency(user.subscription.price_usd)}</div>
-                                {user.subscription.discount_code_used && (
+            {/* Users Tab */}
+            <TabsContent value="users">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Usuarios y Suscripciones</CardTitle>
+                  <CardDescription>Gestiona todos los usuarios de la plataforma</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex gap-4 mb-6">
+                    <div className="flex-1 relative">
+                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Buscar por email, nombre o username..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-10"
+                      />
+                    </div>
+                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                      <SelectTrigger className="w-48">
+                        <SelectValue placeholder="Filtrar por estado" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todos</SelectItem>
+                        <SelectItem value="active">Suscripción Activa</SelectItem>
+                        <SelectItem value="inactive">Sin Suscripción</SelectItem>
+                        <SelectItem value="ambassador">Ambassadors Activos</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Usuario</TableHead>
+                          <TableHead>Username</TableHead>
+                          <TableHead>Suscripción</TableHead>
+                          <TableHead>Precio</TableHead>
+                          <TableHead>Vigencia</TableHead>
+                          <TableHead>Leads</TableHead>
+                          <TableHead>Ambassador</TableHead>
+                          <TableHead>Acciones</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {filteredUsers.length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={8} className="text-center text-muted-foreground">
+                              No se encontraron usuarios
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          filteredUsers.map((user) => (
+                            <TableRow key={user.id}>
+                              <TableCell>
+                                <div>
+                                  <div className="font-medium">{user.full_name || "Sin nombre"}</div>
+                                  <div className="text-sm text-muted-foreground">{user.email}</div>
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                {user.username ? (
+                                  <code className="text-xs bg-muted px-2 py-1 rounded">
+                                    {user.username}
+                                  </code>
+                                ) : (
+                                  <span className="text-muted-foreground">-</span>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {user.subscription ? (
+                                  <Badge variant={user.subscription.status === "active" ? "default" : "secondary"}>
+                                    {user.subscription.status}
+                                  </Badge>
+                                ) : (
+                                  <Badge variant="outline">Sin suscripción</Badge>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {user.subscription ? (
+                                  <div>
+                                    <div className="font-medium">{formatCurrency(user.subscription.price_usd)}</div>
+                                    {user.subscription.discount_code_used && (
+                                      <div className="text-xs text-muted-foreground">
+                                        Cupón: {user.subscription.discount_code_used}
+                                      </div>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <span className="text-muted-foreground">-</span>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                {user.subscription ? (
+                                  <div className="text-sm">
+                                    <div>{formatDate(user.subscription.start_date)}</div>
+                                    <div className="text-muted-foreground">
+                                      hasta {formatDate(user.subscription.end_date)}
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <span className="text-muted-foreground">-</span>
+                                )}
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant="secondary">{user.lead_count}</Badge>
+                              </TableCell>
+                              <TableCell>
+                                <Badge variant={user.ambassador_active ? "default" : "outline"}>
+                                  {user.ambassador_active ? "Activo" : "Inactivo"}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => toggleAmbassadorStatus(user.id, user.ambassador_active)}
+                                >
+                                  {user.ambassador_active ? (
+                                    <PowerOff className="h-4 w-4 text-destructive" />
+                                  ) : (
+                                    <Power className="h-4 w-4 text-green-600" />
+                                  )}
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Withdrawals Tab */}
+            <TabsContent value="withdrawals">
+              <Card>
+                <CardHeader>
+                  <CardTitle>💰 Solicitudes de Retiro</CardTitle>
+                  <CardDescription>Gestiona las solicitudes de retiro de comisiones</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex gap-4 mb-6">
+                    <Select value={withdrawalStatusFilter} onValueChange={setWithdrawalStatusFilter}>
+                      <SelectTrigger className="w-48">
+                        <SelectValue placeholder="Filtrar por estado" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Todos</SelectItem>
+                        <SelectItem value="pending">Pendientes</SelectItem>
+                        <SelectItem value="paid">Pagados</SelectItem>
+                        <SelectItem value="rejected">Rechazados</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Usuario</TableHead>
+                          <TableHead>Monto</TableHead>
+                          <TableHead>Billetera USDT (BSC)</TableHead>
+                          <TableHead>Solicitado</TableHead>
+                          <TableHead>Estado</TableHead>
+                          <TableHead>Acciones</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {getFilteredWithdrawals().length === 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={6} className="text-center text-muted-foreground py-8">
+                              No hay solicitudes de retiro
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          getFilteredWithdrawals().map((withdrawal) => (
+                            <TableRow key={withdrawal.id}>
+                              <TableCell>
+                                <div>
+                                  <div className="font-medium">
+                                    {withdrawal.user.full_name || "Sin nombre"}
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">
+                                    {withdrawal.user.email}
+                                  </div>
+                                  {withdrawal.user.username && (
+                                    <code className="text-xs bg-muted px-1 py-0.5 rounded">
+                                      @{withdrawal.user.username}
+                                    </code>
+                                  )}
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="font-bold text-lg">
+                                  {formatCurrency(withdrawal.amount_usd)}
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="font-mono text-xs bg-muted px-2 py-1 rounded inline-block">
+                                  {withdrawal.wallet_address}
+                                </div>
+                              </TableCell>
+                              <TableCell>
+                                <div className="text-sm">
+                                  {formatDate(withdrawal.requested_at)}
+                                </div>
+                                {withdrawal.paid_at && (
                                   <div className="text-xs text-muted-foreground">
-                                    Cupón: {user.subscription.discount_code_used}
+                                    Pagado: {formatDate(withdrawal.paid_at)}
                                   </div>
                                 )}
-                              </div>
-                            ) : (
-                              <span className="text-muted-foreground">-</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {user.subscription ? (
-                              <div className="text-sm">
-                                <div>{formatDate(user.subscription.start_date)}</div>
-                                <div className="text-muted-foreground">
-                                  hasta {formatDate(user.subscription.end_date)}
-                                </div>
-                              </div>
-                            ) : (
-                              <span className="text-muted-foreground">-</span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="secondary">{user.lead_count}</Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant={user.ambassador_active ? "default" : "outline"}>
-                              {user.ambassador_active ? "Activo" : "Inactivo"}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => toggleAmbassadorStatus(user.id, user.ambassador_active)}
-                            >
-                              {user.ambassador_active ? (
-                                <PowerOff className="h-4 w-4 text-destructive" />
-                              ) : (
-                                <Power className="h-4 w-4 text-green-600" />
-                              )}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
+                              </TableCell>
+                              <TableCell>
+                                <Badge
+                                  variant={
+                                    withdrawal.status === "paid"
+                                      ? "default"
+                                      : withdrawal.status === "pending"
+                                      ? "secondary"
+                                      : "destructive"
+                                  }
+                                >
+                                  {withdrawal.status === "paid"
+                                    ? "Pagado"
+                                    : withdrawal.status === "pending"
+                                    ? "Pendiente"
+                                    : "Rechazado"}
+                                </Badge>
+                              </TableCell>
+                              <TableCell>
+                                {withdrawal.status === "pending" && (
+                                  <div className="flex gap-2">
+                                    <Button
+                                      size="sm"
+                                      variant="default"
+                                      onClick={() => updateWithdrawalStatus(withdrawal.id, "paid")}
+                                    >
+                                      <CheckCircle className="h-4 w-4 mr-1" />
+                                      Pagado
+                                    </Button>
+                                    <Button
+                                      size="sm"
+                                      variant="destructive"
+                                      onClick={() => updateWithdrawalStatus(withdrawal.id, "rejected")}
+                                    >
+                                      <XCircle className="h-4 w-4 mr-1" />
+                                      Rechazar
+                                    </Button>
+                                  </div>
+                                )}
+                                {withdrawal.status !== "pending" && (
+                                  <span className="text-sm text-muted-foreground">-</span>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))
+                        )}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </>
