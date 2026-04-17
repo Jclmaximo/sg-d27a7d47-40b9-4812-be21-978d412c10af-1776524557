@@ -63,7 +63,7 @@ export default function RegistroPage() {
   const goToDashboard = () => {
     const savedRef = localStorage.getItem("referrer");
     const refParam = savedRef ? `?ref=${savedRef}` : "";
-    router.push(`/admin/main-dashboard${refParam}`);
+    router.push(`/pricing${refParam}`);
   };
 
   // Check username availability in real-time
@@ -245,7 +245,7 @@ export default function RegistroPage() {
       // Redirect immediately to main dashboard with ref
       setTimeout(() => {
         const refParam = referrerUsername ? `?ref=${referrerUsername}` : "";
-        router.push(`/admin/main-dashboard${refParam}`);
+        router.push(`/pricing${refParam}`);
       }, 1500);
     } catch (err: any) {
       console.error("❌ Registration error:", err);
@@ -435,7 +435,7 @@ export default function RegistroPage() {
                         <AlertDescription className="ml-2">
                           {success}
                           <p className="mt-2 text-sm font-medium">
-                            📧 Revisa tu bandeja de entrada (y spam) para confirmar tu cuenta.
+                            Redirigiendo a la página de pago...
                           </p>
                         </AlertDescription>
                       </Alert>
