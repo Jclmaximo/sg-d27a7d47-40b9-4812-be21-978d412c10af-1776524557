@@ -12,6 +12,8 @@ import { disruptiveService } from "@/services/disruptiveService";
 import { supabase } from "@/integrations/supabase/client";
 import React from "react";
 import { useToast } from "@/hooks/use-toast";
+import { subscriptionService } from "@/services/subscriptionService";
+import { referralService } from "@/services/referralService";
 
 export default function Pricing() {
   const router = useRouter();
@@ -207,20 +209,51 @@ export default function Pricing() {
               const endDate = new Date();
               endDate.setDate(endDate.getDate() + 30);
 
-              await supabase.from("subscriptions").insert({
-                user_id: user.id,
-                status: "active",
-                price_usd: finalPrice,
-                start_date: startDate.toISOString(),
-                end_date: endDate.toISOString(),
-                transaction_hash: paymentData.paymentId,
-                discount_code_used: appliedDiscount?.code || null,
-                discount_percentage: appliedDiscount?.percentage || 0,
-                original_price: currentPrice,
-                final_price: finalPrice,
-                is_initial_payment: selectedPlan === "initial",
-                plan_type: "monthly"
-              });
+              // Save referred_by if referrer exists
+              if (referrerUsername) {
+                const { data: referrerProfile } = await supabase
+                  .from("profiles")
+                  .select("id")
+                  .eq("username", referrerUsername)
+                  .single();
+
+                if (referrerProfile) {
+                  await supabase
+                    .from("profiles")
+                    .update({ referred_by: referrerProfile.id })
+                    .eq("id", user.id);
+                }
+              }
+
+              const { data: newSub, error: subError } = await supabase
+                .from("subscriptions")
+                .insert({
+                  user_id: user.id,
+                  status: "active",
+                  price_usd: finalPrice,
+                  start_date: startDate.toISOString(),
+                  end_date: endDate.toISOString(),
+                  transaction_hash: paymentData.paymentId,
+                  discount_code_used: appliedDiscount?.code || null,
+                  discount_percentage: appliedDiscount?.percentage || 0,
+                  original_price: currentPrice,
+                  final_price: finalPrice,
+                  is_initial_payment: selectedPlan === "initial",
+                  plan_type: "monthly"
+                })
+                .select()
+                .single();
+
+              if (subError) throw subError;
+
+              // Create commissions for referrer(s)
+              if (newSub) {
+                await referralService.createCommissionsForSubscription(
+                  user.id,
+                  newSub.id,
+                  finalPrice
+                );
+              }
 
               // Activate ambassador status
               await supabase
@@ -228,7 +261,10 @@ export default function Pricing() {
                 .update({ ambassador_active: true })
                 .eq("id", user.id);
 
-              console.log("✅ Subscription created and ambassador activated");
+              console.log("✅ Subscription created, commissions generated, ambassador activated");
+              
+              // Clear referrer from localStorage
+              localStorage.removeItem("referrer");
             }
 
             // Update payment status

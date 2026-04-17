@@ -42,6 +42,67 @@ export type Database = {
         }
         Relationships: []
       }
+      commissions: {
+        Row: {
+          amount_usd: number
+          commission_level: number
+          created_at: string | null
+          id: string
+          paid_at: string | null
+          percentage: number
+          referred_user_id: string
+          status: string
+          subscription_id: string
+          user_id: string
+        }
+        Insert: {
+          amount_usd: number
+          commission_level: number
+          created_at?: string | null
+          id?: string
+          paid_at?: string | null
+          percentage: number
+          referred_user_id: string
+          status?: string
+          subscription_id: string
+          user_id: string
+        }
+        Update: {
+          amount_usd?: number
+          commission_level?: number
+          created_at?: string | null
+          id?: string
+          paid_at?: string | null
+          percentage?: number
+          referred_user_id?: string
+          status?: string
+          subscription_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commissions_referred_user_id_fkey"
+            columns: ["referred_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commissions_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discount_codes: {
         Row: {
           code: string
@@ -232,6 +293,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          referred_by: string | null
           role: string | null
           updated_at: string | null
           username: string | null
@@ -243,6 +305,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          referred_by?: string | null
           role?: string | null
           updated_at?: string | null
           username?: string | null
@@ -254,11 +317,20 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          referred_by?: string | null
           role?: string | null
           updated_at?: string | null
           username?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "profiles_referred_by_fkey"
+            columns: ["referred_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       subscriptions: {
         Row: {
