@@ -160,8 +160,26 @@ export default function AdminDashboard() {
 
   async function loadLeadNotes(lead: Lead) {
     setSelectedLead(lead);
-    const notesData = await leadsService.getLeadNotes(lead.id);
-    setNotes(notesData);
+    const { data: notes } = await supabase
+      .from("lead_notes")
+      .select(`
+        id,
+        lead_id,
+        note,
+        created_at,
+        created_by,
+        profiles!lead_notes_created_by_fkey (
+          full_name,
+          username,
+          email
+        )
+      `)
+      .eq("lead_id", lead.id)
+      .order("created_at", { ascending: false });
+
+    if (notes) {
+      setNotes(notes);
+    }
   }
 
   async function handleAddNote() {

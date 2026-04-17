@@ -239,10 +239,11 @@ ${window.location.origin}/admin/main-dashboard
       .from("lead_notes")
       .select(`
         id,
+        lead_id,
         note,
         created_at,
         created_by,
-        profiles:created_by (
+        profiles!lead_notes_created_by_fkey (
           full_name,
           username,
           email
