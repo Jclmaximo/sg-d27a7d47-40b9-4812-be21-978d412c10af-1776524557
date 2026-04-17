@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { supabase } from "@/integrations/supabase/client";
 import { leadsService, type Lead, type LeadNote, type MessageTemplate } from "@/services/leadsService";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
