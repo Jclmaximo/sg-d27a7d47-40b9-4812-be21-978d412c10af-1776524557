@@ -19,17 +19,41 @@ export default function ResetPasswordPage() {
   const [validatingToken, setValidatingToken] = useState(true);
 
   useEffect(() => {
-    // Verify that we have a valid session from the reset link
     const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
-      if (!session) {
-        setError("Link de recuperación inválido o expirado. Solicita uno nuevo.");
+      try {
+        // Wait a bit for Supabase to process the hash fragment
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        console.log("Session check:", { session, sessionError });
+        
+        if (sessionError) {
+          console.error("Session error:", sessionError);
+          setError("Error al validar el link de recuperación. Por favor intenta de nuevo.");
+          setValidatingToken(false);
+          return;
+        }
+        
+        if (!session) {
+          setError("Link de recuperación inválido o expirado. Solicita uno nuevo.");
+          setValidatingToken(false);
+          return;
+        }
+        
+        // Verify it's a recovery session
+        if (session.user && session.user.aud === 'authenticated') {
+          console.log("Valid recovery session found");
+          setValidatingToken(false);
+        } else {
+          setError("Sesión de recuperación inválida. Solicita un nuevo link.");
+          setValidatingToken(false);
+        }
+      } catch (err) {
+        console.error("Error checking session:", err);
+        setError("Error al validar el link. Por favor intenta de nuevo.");
         setValidatingToken(false);
-        return;
       }
-      
-      setValidatingToken(false);
     };
 
     checkSession();
@@ -54,13 +78,23 @@ export default function ResetPasswordPage() {
     setLoading(true);
 
     try {
-      const { error: updateError } = await supabase.auth.updateUser({
+      console.log("Attempting to update password...");
+      
+      const { data, error: updateError } = await supabase.auth.updateUser({
         password: password
       });
 
-      if (updateError) throw updateError;
+      console.log("Update result:", { data, updateError });
+
+      if (updateError) {
+        console.error("Update error:", updateError);
+        throw updateError;
+      }
 
       setSuccess("¡Contraseña actualizada exitosamente!");
+      
+      // Sign out to clear the recovery session
+      await supabase.auth.signOut();
       
       // Redirect to login after 2 seconds
       setTimeout(() => {
@@ -68,7 +102,12 @@ export default function ResetPasswordPage() {
       }, 2000);
     } catch (err: any) {
       console.error("Reset password error:", err);
-      setError(err.message || "Error al actualizar la contraseña. Intenta de nuevo.");
+      
+      if (err.message?.includes("session")) {
+        setError("Sesión expirada. Por favor solicita un nuevo link de recuperación.");
+      } else {
+        setError(err.message || "Error al actualizar la contraseña. Intenta de nuevo.");
+      }
     } finally {
       setLoading(false);
     }
@@ -108,10 +147,8 @@ export default function ResetPasswordPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-green-900/20" />
         </div>
 
-        {/* Reset Password Card */}
         <Card className="relative w-full max-w-md bg-white/95 backdrop-blur-sm shadow-2xl border-0">
           <CardHeader className="text-center space-y-6 pb-4">
-            {/* Logo */}
             <div className="flex flex-col items-center gap-2">
               <div className="text-4xl font-bold tracking-wider">
                 V<span className="text-2xl">_</span>
@@ -122,7 +159,6 @@ export default function ResetPasswordPage() {
               </div>
             </div>
             
-            {/* Title */}
             <div className="space-y-2 pt-4">
               <div className="flex items-center justify-center gap-2">
                 <KeyRound className="w-6 h-6 text-primary" />
@@ -135,14 +171,12 @@ export default function ResetPasswordPage() {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            {/* Error Alert */}
             {error && (
               <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg text-center">
                 {error}
               </div>
             )}
             
-            {/* Success Alert */}
             {success && (
               <div className="p-3 bg-green-500/10 text-green-600 text-sm rounded-lg text-center flex items-center justify-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
@@ -151,7 +185,6 @@ export default function ResetPasswordPage() {
             )}
 
             <form onSubmit={handleResetPassword} className="space-y-4">
-              {/* New Password */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Nueva Contraseña</label>
                 <div className="relative">
@@ -163,21 +196,20 @@ export default function ResetPasswordPage() {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                     minLength={6}
-                    disabled={loading}
+                    disabled={loading || !!error}
                     className="pl-10 pr-10 bg-background border-muted"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    disabled={loading}
+                    disabled={loading || !!error}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
-              {/* Confirm Password */}
               <div className="space-y-2">
                 <label className="text-sm font-medium">Confirmar Contraseña</label>
                 <div className="relative">
@@ -189,21 +221,20 @@ export default function ResetPasswordPage() {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
                     minLength={6}
-                    disabled={loading}
+                    disabled={loading || !!error}
                     className="pl-10 pr-10 bg-background border-muted"
                   />
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                    disabled={loading}
+                    disabled={loading || !!error}
                   >
                     {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
-              {/* Password Requirements */}
               <div className="text-xs text-muted-foreground space-y-1">
                 <p className="font-medium">Tu contraseña debe tener:</p>
                 <ul className="list-disc list-inside space-y-0.5 pl-2">
@@ -216,11 +247,10 @@ export default function ResetPasswordPage() {
                 </ul>
               </div>
 
-              {/* Submit Button */}
               <Button 
                 type="submit" 
                 className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-medium shadow-lg" 
-                disabled={loading}
+                disabled={loading || !!error}
               >
                 {loading ? (
                   <>
@@ -235,7 +265,6 @@ export default function ResetPasswordPage() {
                 )}
               </Button>
 
-              {/* Back to Login */}
               <div className="text-center">
                 <Button
                   type="button"
