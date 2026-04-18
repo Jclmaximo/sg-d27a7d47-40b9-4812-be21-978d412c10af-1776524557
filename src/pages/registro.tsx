@@ -189,15 +189,15 @@ export default function RegistroPage() {
       }
 
       // 3. Update profile with all data
-      const { error: profileError } = await supabase.
-      from("profiles").
-      update({
-        full_name: fullName,
-        username: username.toLowerCase(),
-        whatsapp_number: whatsapp,
-        ambassador_active: true
-      }).
-      eq("id", data.user.id);
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .update({
+          full_name: fullName,
+          username: username.toLowerCase(),
+          whatsapp_number: whatsapp,
+          ambassador_active: true
+        })
+        .eq("id", data.user.id);
 
       if (profileError) {
         console.error("Profile update error:", profileError);
@@ -207,11 +207,11 @@ export default function RegistroPage() {
       console.log("✅ Profile updated with username and data");
 
       // 4. Verify username was saved
-      const { data: verifyProfile, error: verifyError } = await supabase.
-      from("profiles").
-      select("username").
-      eq("id", data.user.id).
-      single();
+      const { data: verifyProfile, error: verifyError } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("id", data.user.id)
+        .single();
 
       if (verifyError || !verifyProfile?.username) {
         console.error("Username verification failed:", verifyError);
