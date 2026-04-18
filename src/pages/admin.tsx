@@ -196,10 +196,10 @@ export default function AdminPage() {
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/mountain-lake-boats.jpg')",
+            backgroundImage: "url('/login-background.jpg')",
           }}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-transparent to-green-500/20" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-green-900/20" />
         </div>
 
         <Card className="relative w-full max-w-md bg-white/95 backdrop-blur-sm shadow-2xl border-0">
