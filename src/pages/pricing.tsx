@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, CheckCircle2, Shield, Globe, TrendingUp, Loader2, QrCode, Copy, ExternalLink } from "lucide-react";
+import { Sparkles, CheckCircle2, Shield, Globe, TrendingUp, Loader2, QrCode, Copy, ExternalLink, MapPin } from "lucide-react";
 import { discountService } from "@/services/discountService";
 import { disruptiveService } from "@/services/disruptiveService";
 import { supabase } from "@/integrations/supabase/client";
