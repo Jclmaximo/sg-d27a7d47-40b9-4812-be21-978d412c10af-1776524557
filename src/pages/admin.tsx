@@ -3,9 +3,8 @@ import { useRouter } from "next/router";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LogIn, UserPlus, Loader2, Lock } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { LogIn, UserPlus, Loader2, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { subscriptionService } from "@/services/subscriptionService";
 import { useToast } from "@/hooks/use-toast";
@@ -16,6 +15,7 @@ export default function AdminPage() {
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -23,7 +23,6 @@ export default function AdminPage() {
   useEffect(() => {
     checkExistingSession();
     
-    // Save referrer from query params if present
     const { ref } = router.query;
     if (ref && typeof ref === "string") {
       localStorage.setItem("referrer", ref);
@@ -54,19 +53,12 @@ export default function AdminPage() {
     }
   };
 
-  async function handleLogout() {
-    await supabase.auth.signOut();
-    window.location.reload();
-  }
-
   async function handleLogin() {
     setLoading(true);
     setError("");
     setSuccessMessage("");
 
     try {
-      console.log("🔐 Login attempt:", { email });
-      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -82,7 +74,7 @@ export default function AdminPage() {
       router.push("/admin/main-dashboard");
     } catch (err: any) {
       console.error("Login error:", err);
-      setError("Error al iniciar sesión. Intenta de nuevo.");
+      setError("Error al iniciar sesión. Verifica tus credenciales.");
     } finally {
       setLoading(false);
     }
@@ -94,14 +86,10 @@ export default function AdminPage() {
     setSuccessMessage("");
 
     try {
-      console.log("🔐 Signup attempt:", { email });
-      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
-
-      console.log("🔐 Signup response:", { data: !!data, error });
 
       if (error) {
         console.error("❌ Signup error:", error);
@@ -111,23 +99,17 @@ export default function AdminPage() {
       }
 
       if (data.user) {
-        console.log("✅ Signup successful, user:", data.user.id);
         setSuccessMessage("¡Cuenta creada exitosamente! Redirigiendo...");
         
         setTimeout(() => {
-          console.log("🔄 Redirecting to pricing for new user");
-          
-          // Check if there's a redirect URL in query params
           const { redirect, ref } = router.query;
           
           if (redirect && typeof redirect === "string") {
-            // Preserve referrer in URL if present
             const refParam = ref && typeof ref === "string" ? `?ref=${ref}` : "";
             router.push(`${redirect}${refParam}`);
             return;
           }
           
-          // Default: redirect to pricing with ref if available
           const savedRef = localStorage.getItem("referrer");
           const refParam = savedRef ? `?ref=${savedRef}` : "";
           router.push(`/pricing${refParam}`);
@@ -141,7 +123,7 @@ export default function AdminPage() {
     }
   }
 
-  if (loading) {
+  if (loading && !error && !successMessage) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -152,127 +134,219 @@ export default function AdminPage() {
   return (
     <>
       <SEO 
-        title="Admin Login - Viaja Ligero"
+        title="Iniciar Sesión - Viaja Ligero"
         description="Accede a tu panel de administración"
       />
       
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
-          <CardHeader className="text-center space-y-4">
-            <div className="flex justify-center">
-              <img 
-                src="/viaja-ligero-logo.png" 
-                alt="Viaja Ligero" 
-                className="h-16 w-auto"
-              />
+      <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
+        <div 
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: "url('/mountain-lake-boats.jpg')",
+          }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 via-transparent to-green-500/20" />
+        </div>
+
+        <Card className="relative w-full max-w-md bg-white/95 backdrop-blur-sm shadow-2xl border-0">
+          <CardHeader className="text-center space-y-6 pb-4">
+            <div className="flex flex-col items-center gap-2">
+              <div className="text-4xl font-bold tracking-wider">
+                V<span className="text-2xl">_</span>
+              </div>
+              <div className="space-y-0">
+                <div className="text-lg font-semibold tracking-widest">VIAJA LIGERO</div>
+                <div className="text-xs text-muted-foreground tracking-wider">VIVE MÁS CON MENOS</div>
+              </div>
             </div>
-            <div>
-              <CardTitle className="text-2xl">Iniciar Sesión</CardTitle>
-              <CardDescription>
+            
+            <div className="space-y-2 pt-4">
+              <h1 className="text-3xl font-bold">Iniciar Sesión</h1>
+              <p className="text-sm text-muted-foreground">
                 Accede a tu panel de administración
-              </CardDescription>
+              </p>
             </div>
           </CardHeader>
 
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">
-                <LogIn className="w-4 h-4 mr-2" />
+          <CardContent className="space-y-6">
+            <div className="flex border-b">
+              <button
+                onClick={() => setActiveTab("login")}
+                className={`flex-1 flex items-center justify-center gap-2 pb-3 text-sm font-medium transition-colors relative ${
+                  activeTab === "login"
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <LogIn className="w-4 h-4" />
                 Inicia Sesión
-              </TabsTrigger>
-              <TabsTrigger value="signup">
-                <UserPlus className="w-4 h-4 mr-2" />
+                {activeTab === "login" && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground" />
+                )}
+              </button>
+              <button
+                onClick={() => setActiveTab("signup")}
+                className={`flex-1 flex items-center justify-center gap-2 pb-3 text-sm font-medium transition-colors relative ${
+                  activeTab === "signup"
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <UserPlus className="w-4 h-4" />
                 Regístrate
-              </TabsTrigger>
-            </TabsList>
+                {activeTab === "signup" && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground" />
+                )}
+              </button>
+            </div>
 
             {error && (
-              <div className="mt-4 p-3 bg-destructive/10 text-destructive text-sm rounded-md text-center">
+              <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg text-center">
                 {error}
               </div>
             )}
             
             {successMessage && (
-              <div className="mt-4 p-3 bg-green-500/10 text-green-600 text-sm rounded-md text-center">
+              <div className="p-3 bg-green-500/10 text-green-600 text-sm rounded-lg text-center">
                 {successMessage}
               </div>
             )}
 
-            <TabsContent value="login">
-              <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }} className="space-y-4 mt-4">
+            {activeTab === "login" ? (
+              <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Email</label>
-                  <Input
-                    type="email"
-                    placeholder="admin@viajaligero.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      type="email"
+                      placeholder="admin@viajaligero.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={loading}
+                      className="pl-10 bg-background border-muted"
+                    />
+                  </div>
                 </div>
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Contraseña</label>
-                  <Input
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      disabled={loading}
+                      className="pl-10 pr-10 bg-background border-muted"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      disabled={loading}
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+                  <div className="flex justify-end">
+                    <button
+                      type="button"
+                      className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      ¿Olvidaste tu contraseña?
+                    </button>
+                  </div>
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-medium shadow-lg" 
+                  disabled={loading}
+                >
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Iniciando sesión...
                     </>
                   ) : (
-                    "Iniciar Sesión"
+                    <>
+                      Iniciar Sesión
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
                   )}
                 </Button>
               </form>
-            </TabsContent>
-
-            <TabsContent value="signup">
-              <form onSubmit={(e) => { e.preventDefault(); handleSignup(); }} className="space-y-4 mt-4">
+            ) : (
+              <form onSubmit={(e) => { e.preventDefault(); handleSignup(); }} className="space-y-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Email</label>
-                  <Input
-                    type="email"
-                    placeholder="tu@correo.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      type="email"
+                      placeholder="tu@correo.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      disabled={loading}
+                      className="pl-10 bg-background border-muted"
+                    />
+                  </div>
                 </div>
+
                 <div className="space-y-2">
                   <label className="text-sm font-medium">Contraseña</label>
-                  <Input
-                    type="password"
-                    placeholder="Mínimo 6 caracteres"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    minLength={6}
-                    disabled={loading}
-                  />
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Mínimo 6 caracteres"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      disabled={loading}
+                      className="pl-10 pr-10 bg-background border-muted"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      disabled={loading}
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
                 </div>
-                <Button type="submit" className="w-full" disabled={loading}>
+
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-medium shadow-lg" 
+                  disabled={loading}
+                >
                   {loading ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       Creando cuenta...
                     </>
                   ) : (
-                    "Crear Cuenta"
+                    <>
+                      Crear Cuenta
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </>
                   )}
                 </Button>
               </form>
-            </TabsContent>
-          </Tabs>
+            )}
+
+            <p className="text-center text-xs text-muted-foreground pt-2">
+              Vive más con menos.
+            </p>
+          </CardContent>
         </Card>
       </div>
     </>
