@@ -143,18 +143,10 @@ export default function RegistroPage() {
     setLoading(true);
 
     try {
-      // 1. Create auth user with auto-confirm
+      // 1. Create auth user
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/pricing${referrerUsername ? `?ref=${referrerUsername}` : ""}`,
-          data: {
-            full_name: fullName,
-            username: username.toLowerCase(),
-            whatsapp_number: whatsapp
-          }
-        }
       });
 
       if (signUpError) throw signUpError;
@@ -162,25 +154,40 @@ export default function RegistroPage() {
 
       console.log("✅ Auth user created:", data.user.id);
 
-      // 2. Wait for profile to be created by trigger (max 5 retries)
+      // 2. Sign in immediately to establish session (CRITICAL for UPDATE to work)
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        console.error("⚠️ Auto sign-in failed:", signInError);
+        // Continue anyway - profile might still update
+      } else {
+        console.log("✅ Session established via auto sign-in");
+      }
+
+      // 3. Wait for profile to be created by trigger
       let profileExists = false;
       let retries = 0;
-      const maxRetries = 5;
+      const maxRetries = 10;
 
       while (!profileExists && retries < maxRetries) {
-        const { data: profile, error: checkError } = await supabase.
-        from("profiles").
-        select("id").
-        eq("id", data.user.id).
-        maybeSingle();
+        retries++;
+        console.log(`⏳ Waiting for profile... attempt ${retries}/${maxRetries}`);
+        
+        // Initial delay to let trigger complete
+        await new Promise((resolve) => setTimeout(resolve, retries === 1 ? 300 : 800));
+
+        const { data: profile, error: checkError } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("id", data.user.id)
+          .maybeSingle();
 
         if (!checkError && profile) {
           profileExists = true;
           console.log("✅ Profile found in database");
-        } else {
-          retries++;
-          console.log(`⏳ Waiting for profile... attempt ${retries}/${maxRetries}`);
-          await new Promise((resolve) => setTimeout(resolve, 500)); // Wait 500ms
         }
       }
 
@@ -188,7 +195,7 @@ export default function RegistroPage() {
         throw new Error("El perfil no se creó correctamente. Por favor contacta soporte.");
       }
 
-      // 3. Update profile with all data
+      // 4. Update profile with all data (now session is active)
       const { error: profileError } = await supabase
         .from("profiles")
         .update({
@@ -200,13 +207,13 @@ export default function RegistroPage() {
         .eq("id", data.user.id);
 
       if (profileError) {
-        console.error("Profile update error:", profileError);
+        console.error("❌ Profile update error:", profileError);
         throw profileError;
       }
 
       console.log("✅ Profile updated with username and data");
 
-      // 4. Verify username was saved
+      // 5. Verify username was saved
       const { data: verifyProfile, error: verifyError } = await supabase
         .from("profiles")
         .select("username")
@@ -214,25 +221,25 @@ export default function RegistroPage() {
         .single();
 
       if (verifyError || !verifyProfile?.username) {
-        console.error("Username verification failed:", verifyError);
+        console.error("❌ Username verification failed:", verifyError);
         throw new Error("No se pudo guardar el username correctamente");
       }
 
       console.log("✅ Username verified:", verifyProfile.username);
 
-      // 5. Save referrer if exists
+      // 6. Save referrer if exists
       if (referrerUsername) {
-        const { data: referrerProfile } = await supabase.
-        from("profiles").
-        select("id").
-        eq("username", referrerUsername).
-        single();
+        const { data: referrerProfile } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("username", referrerUsername)
+          .single();
 
         if (referrerProfile) {
-          await supabase.
-          from("profiles").
-          update({ referred_by: referrerProfile.id }).
-          eq("id", data.user.id);
+          await supabase
+            .from("profiles")
+            .update({ referred_by: referrerProfile.id })
+            .eq("id", data.user.id);
 
           console.log("✅ Referrer saved:", referrerUsername);
         }
@@ -243,7 +250,7 @@ export default function RegistroPage() {
       setSuccess("¡Cuenta creada exitosamente! Redirigiendo...");
       setError("");
 
-      // Redirect immediately to main dashboard with ref
+      // Redirect to pricing with ref
       setTimeout(() => {
         const refParam = referrerUsername ? `?ref=${referrerUsername}` : "";
         router.push(`/pricing${refParam}`);
