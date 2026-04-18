@@ -1,28 +1,23 @@
-import { Plane, Sparkles, DollarSign, MapPin } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import Image from "next/image";
+import { MapPin, Plane, Gift, Award } from "lucide-react";
 
 const benefits = [
   {
     icon: Plane,
     title: "Plataforma Privada de Viajes",
-    description: "Acceso exclusivo a tarifas preferenciales en hoteles, vuelos, cruceros, resorts y alquiler de autos que no están disponibles al público general.",
-    image: "/tropical-paradise.jpg",
-    alt: "Playa tropical paradisíaca con palmeras, flores rosadas y aguas turquesas cristalinas"
+    description: "Accede a tarifas preferenciales en hoteles, vuelos, cruceros, resorts y alquiler de autos reservados exclusivamente para miembros.",
+    image: "/tropical-paradise.jpg"
   },
   {
-    icon: Sparkles,
+    icon: Award,
     title: "Life Experiences®",
-    description: "Viajes de lujo curados en destinos exclusivos como Dubái, Nueva York, París y más, diseñados específicamente para miembros del club.",
-    image: "/alaska-cruise.jpg",
-    alt: "Crucero de lujo navegando entre glaciares y montañas nevadas en Alaska"
+    description: "Viajes de lujo curados en destinos premium como Dubái, Nueva York, Cancún y más, diseñados para crear momentos inolvidables.",
+    image: "/alaska-cruise.jpg"
   },
   {
-    icon: DollarSign,
+    icon: Gift,
     title: "Créditos de Viaje",
-    description: "Genera y acumula créditos para reducir significativamente el costo de tus futuras reservas y experiencias de viaje.",
-    image: "/happy-travelers.jpg",
-    alt: "Pareja feliz explorando ciudad europea con mapa, disfrutando de sus viajes"
+    description: "Gana créditos canjeables para reducir el costo de tus futuras reservas y viaja más gastando menos.",
+    image: "/happy-travelers.jpg"
   },
   {
     icon: MapPin,
@@ -34,10 +29,10 @@ const benefits = [
 
 export function ValueProposition() {
   return (
-    <section className="py-20 bg-background">
-      <div className="container">
+    <section className="py-24 bg-gradient-to-b from-white to-slate-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">
             Beneficios Exclusivos para Miembros
           </h2>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
@@ -48,38 +43,47 @@ export function ValueProposition() {
         <div className="grid md:grid-cols-2 gap-8">
           {benefits.map((benefit, index) => {
             const Icon = benefit.icon;
+            const isGlobalCoverage = benefit.title === "Cobertura Global";
+            
             return (
-              <Card 
-                key={index} 
-                className="group relative overflow-hidden border-2 hover:border-accent transition-all duration-300 hover:shadow-2xl"
+              <div
+                key={index}
+                className={`group ${isGlobalCoverage ? 'rounded-3xl' : 'rounded-2xl'} overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 border ${isGlobalCoverage ? 'border-slate-200' : 'border-transparent'} hover:border-accent`}
               >
-                {/* Image Container */}
-                <div className="relative h-64 overflow-hidden">
-                  <Image
+                <div className="relative h-80 overflow-hidden">
+                  <img
                     src={benefit.image}
-                    alt={benefit.alt}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    alt={benefit.title}
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  {/* Gradient Overlay - muy sutil solo en la parte inferior */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent" />
-                  
-                  {/* Icon Badge */}
-                  <div className="absolute top-4 right-4 w-12 h-12 rounded-full bg-secondary flex items-center justify-center shadow-lg">
-                    <Icon className="w-6 h-6 text-secondary-foreground" />
+                  <div className={`absolute inset-0 ${isGlobalCoverage ? 'bg-gradient-to-b from-black/30 via-black/10 to-transparent' : 'bg-gradient-to-t from-black/60 via-black/20 to-transparent'}`} />
+                  <div className={`absolute ${isGlobalCoverage ? 'top-4 right-4' : 'top-4 right-4'} ${isGlobalCoverage ? 'bg-white' : 'bg-white/90 backdrop-blur-sm'} p-3 rounded-full shadow-lg`}>
+                    <Icon className={`w-6 h-6 ${isGlobalCoverage ? 'text-primary' : 'text-blue-600'}`} />
                   </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-6 space-y-3 bg-card">
-                  <h3 className="text-xl font-heading font-semibold text-card-foreground">
-                    {benefit.title}
+                <div className={`p-8 ${isGlobalCoverage ? 'bg-white' : 'bg-white'}`}>
+                  {isGlobalCoverage && (
+                    <div className="mb-3">
+                      <span className="text-sm font-semibold text-primary tracking-wider uppercase">
+                        {benefit.title.replace("Cobertura Global", "COBERTURA GLOBAL")}
+                      </span>
+                    </div>
+                  )}
+                  
+                  <h3 className={`${isGlobalCoverage ? 'text-3xl' : 'text-2xl'} font-bold mb-3 ${isGlobalCoverage ? 'text-slate-900' : 'text-foreground'}`}>
+                    {isGlobalCoverage ? "Explora sin fronteras" : benefit.title}
                   </h3>
-                  <p className="text-muted-foreground leading-relaxed">
+                  
+                  {isGlobalCoverage && (
+                    <div className="w-12 h-1 bg-primary mb-4" />
+                  )}
+                  
+                  <p className={`${isGlobalCoverage ? 'text-slate-700' : 'text-muted-foreground'} leading-relaxed`}>
                     {benefit.description}
                   </p>
                 </div>
-              </Card>
+              </div>
             );
           })}
         </div>
