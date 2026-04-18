@@ -1,10 +1,22 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/integrations/supabase/client";
+import { authService } from "@/services/authService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { LogIn, UserPlus, Loader2, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
+import { 
+  LogIn, 
+  UserPlus, 
+  Loader2, 
+  Mail, 
+  Lock, 
+  Eye, 
+  EyeOff, 
+  ArrowRight,
+  ArrowLeft,
+  KeyRound
+} from "lucide-react";
 import { SEO } from "@/components/SEO";
 import { subscriptionService } from "@/services/subscriptionService";
 import { useToast } from "@/hooks/use-toast";
@@ -13,12 +25,17 @@ export default function AdminPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [resetEmail, setResetEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
   const [error, setError] = useState("");
+  const [resetError, setResetError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [resetSuccess, setResetSuccess] = useState("");
 
   useEffect(() => {
     checkExistingSession();
@@ -123,6 +140,43 @@ export default function AdminPage() {
     }
   }
 
+  async function handleForgotPassword() {
+    if (!resetEmail.trim() || !resetEmail.includes("@")) {
+      setResetError("Por favor ingresa un email válido");
+      return;
+    }
+
+    setResetLoading(true);
+    setResetError("");
+    setResetSuccess("");
+
+    try {
+      const { error } = await authService.resetPassword(resetEmail);
+
+      if (error) {
+        setResetError(error.message);
+      } else {
+        setResetSuccess("¡Email enviado! Revisa tu bandeja de entrada para restablecer tu contraseña.");
+        setTimeout(() => {
+          setShowForgotPassword(false);
+          setResetEmail("");
+          setResetSuccess("");
+        }, 3000);
+      }
+    } catch (err) {
+      setResetError("Error al enviar el email. Intenta de nuevo.");
+    } finally {
+      setResetLoading(false);
+    }
+  }
+
+  const handleBackToLogin = () => {
+    setShowForgotPassword(false);
+    setResetEmail("");
+    setResetError("");
+    setResetSuccess("");
+  };
+
   if (loading && !error && !successMessage) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
@@ -161,186 +215,257 @@ export default function AdminPage() {
             </div>
             
             <div className="space-y-2 pt-4">
-              <h1 className="text-3xl font-bold">Iniciar Sesión</h1>
+              <h1 className="text-3xl font-bold">
+                {showForgotPassword ? "Recuperar Contraseña" : "Iniciar Sesión"}
+              </h1>
               <p className="text-sm text-muted-foreground">
-                Accede a tu panel de administración
+                {showForgotPassword 
+                  ? "Te enviaremos un enlace para restablecer tu contraseña"
+                  : "Accede a tu panel de administración"
+                }
               </p>
             </div>
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <div className="flex border-b">
-              <button
-                onClick={() => setActiveTab("login")}
-                className={`flex-1 flex items-center justify-center gap-2 pb-3 text-sm font-medium transition-colors relative ${
-                  activeTab === "login"
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <LogIn className="w-4 h-4" />
-                Inicia Sesión
-                {activeTab === "login" && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground" />
-                )}
-              </button>
-              <button
-                onClick={() => setActiveTab("signup")}
-                className={`flex-1 flex items-center justify-center gap-2 pb-3 text-sm font-medium transition-colors relative ${
-                  activeTab === "signup"
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                <UserPlus className="w-4 h-4" />
-                Regístrate
-                {activeTab === "signup" && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground" />
-                )}
-              </button>
-            </div>
-
-            {error && (
-              <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg text-center">
-                {error}
-              </div>
-            )}
-            
-            {successMessage && (
-              <div className="p-3 bg-green-500/10 text-green-600 text-sm rounded-lg text-center">
-                {successMessage}
-              </div>
-            )}
-
-            {activeTab === "login" ? (
-              <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }} className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Email</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      type="email"
-                      placeholder="admin@viajaligero.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      disabled={loading}
-                      className="pl-10 bg-background border-muted"
-                    />
-                  </div>
+            {!showForgotPassword ? (
+              <>
+                <div className="flex border-b">
+                  <button
+                    onClick={() => setActiveTab("login")}
+                    className={`flex-1 flex items-center justify-center gap-2 pb-3 text-sm font-medium transition-colors relative ${
+                      activeTab === "login"
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <LogIn className="w-4 h-4" />
+                    Inicia Sesión
+                    {activeTab === "login" && (
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground" />
+                    )}
+                  </button>
+                  <button
+                    onClick={() => setActiveTab("signup")}
+                    className={`flex-1 flex items-center justify-center gap-2 pb-3 text-sm font-medium transition-colors relative ${
+                      activeTab === "signup"
+                        ? "text-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    Regístrate
+                    {activeTab === "signup" && (
+                      <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-foreground" />
+                    )}
+                  </button>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Contraseña</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      disabled={loading}
-                      className="pl-10 pr-10 bg-background border-muted"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                      disabled={loading}
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
+                {error && (
+                  <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg text-center">
+                    {error}
                   </div>
-                  <div className="flex justify-end">
-                    <button
-                      type="button"
-                      className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      ¿Olvidaste tu contraseña?
-                    </button>
+                )}
+                
+                {successMessage && (
+                  <div className="p-3 bg-green-500/10 text-green-600 text-sm rounded-lg text-center">
+                    {successMessage}
                   </div>
-                </div>
+                )}
 
-                <Button 
-                  type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-medium shadow-lg" 
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Iniciando sesión...
-                    </>
-                  ) : (
-                    <>
-                      Iniciar Sesión
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </>
-                  )}
-                </Button>
-              </form>
+                {activeTab === "login" ? (
+                  <form onSubmit={(e) => { e.preventDefault(); handleLogin(); }} className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Email</label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          type="email"
+                          placeholder="admin@viajaligero.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          disabled={loading}
+                          className="pl-10 bg-background border-muted"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Contraseña</label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          disabled={loading}
+                          className="pl-10 pr-10 bg-background border-muted"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                          disabled={loading}
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => setShowForgotPassword(true)}
+                          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                          ¿Olvidaste tu contraseña?
+                        </button>
+                      </div>
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-medium shadow-lg" 
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Iniciando sesión...
+                        </>
+                      ) : (
+                        <>
+                          Iniciar Sesión
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                ) : (
+                  <form onSubmit={(e) => { e.preventDefault(); handleSignup(); }} className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Email</label>
+                      <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          type="email"
+                          placeholder="tu@correo.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          required
+                          disabled={loading}
+                          className="pl-10 bg-background border-muted"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Contraseña</label>
+                      <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Mínimo 6 caracteres"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          required
+                          minLength={6}
+                          disabled={loading}
+                          className="pl-10 pr-10 bg-background border-muted"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                          disabled={loading}
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-medium shadow-lg" 
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Creando cuenta...
+                        </>
+                      ) : (
+                        <>
+                          Crear Cuenta
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                )}
+              </>
             ) : (
-              <form onSubmit={(e) => { e.preventDefault(); handleSignup(); }} className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Email</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      type="email"
-                      placeholder="tu@correo.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      disabled={loading}
-                      className="pl-10 bg-background border-muted"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Contraseña</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                    <Input
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Mínimo 6 caracteres"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                      minLength={6}
-                      disabled={loading}
-                      className="pl-10 pr-10 bg-background border-muted"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                      disabled={loading}
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                <Button 
-                  type="submit" 
-                  className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-medium shadow-lg" 
-                  disabled={loading}
+              <div className="space-y-4">
+                <button
+                  onClick={handleBackToLogin}
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  {loading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Creando cuenta...
-                    </>
-                  ) : (
-                    <>
-                      Crear Cuenta
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </>
-                  )}
-                </Button>
-              </form>
+                  <ArrowLeft className="w-4 h-4" />
+                  Volver al inicio de sesión
+                </button>
+
+                {resetError && (
+                  <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg text-center">
+                    {resetError}
+                  </div>
+                )}
+                
+                {resetSuccess && (
+                  <div className="p-3 bg-green-500/10 text-green-600 text-sm rounded-lg text-center">
+                    {resetSuccess}
+                  </div>
+                )}
+
+                <form onSubmit={(e) => { e.preventDefault(); handleForgotPassword(); }} className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium">Email</label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                      <Input
+                        type="email"
+                        placeholder="tu@correo.com"
+                        value={resetEmail}
+                        onChange={(e) => setResetEmail(e.target.value)}
+                        required
+                        disabled={resetLoading}
+                        className="pl-10 bg-background border-muted"
+                      />
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Ingresa el email asociado a tu cuenta para recibir un enlace de recuperación.
+                    </p>
+                  </div>
+
+                  <Button 
+                    type="submit" 
+                    className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-medium shadow-lg" 
+                    disabled={resetLoading}
+                  >
+                    {resetLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Enviando email...
+                      </>
+                    ) : (
+                      <>
+                        <KeyRound className="mr-2 h-4 w-4" />
+                        Enviar Enlace de Recuperación
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </div>
             )}
 
             <p className="text-center text-xs text-muted-foreground pt-2">
