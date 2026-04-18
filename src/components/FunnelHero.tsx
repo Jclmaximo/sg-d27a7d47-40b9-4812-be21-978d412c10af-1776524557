@@ -40,7 +40,7 @@ export function FunnelHero({ username }: FunnelHeroProps) {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary-foreground text-sm font-medium" style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>
             <Sparkles className="w-4 h-4" />
-            Viaja Ligero - Club Exclusivo de Viajes
+            Club Exclusivo de Viajes
           </div>
 
           {/* Main Headline */}
