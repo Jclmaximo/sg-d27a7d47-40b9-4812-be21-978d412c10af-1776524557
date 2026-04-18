@@ -26,7 +26,7 @@ export function FunnelHero({ username }: FunnelHeroProps) {
     <section className="relative py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5 overflow-hidden">
       <div className="absolute inset-0 bg-grid-white/10 bg-[size:20px_20px]" />
       
-      <div className="container mx-auto px-4 relative z-10" style={{ backgroundColor: "#d1fae5", backgroundImage: "none" }}>
+      <div className="container mx-auto px-4 relative z-10" style={{ backgroundColor: "#ffffff", backgroundImage: "none", borderRadius: "24px" }}>
         {/* Logo */}
         <div className="flex justify-center mb-8">
           
