@@ -23,7 +23,7 @@ const benefits = [
     icon: MapPin,
     title: "Cobertura Global",
     description: "Más de 1 millón de hoteles, resorts y opciones de viaje en más de 190 países alrededor del mundo.",
-    image: "/egypt-temple.jpg"
+    image: "/egypt-sphinx.jpg"
   }
 ];
 
