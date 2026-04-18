@@ -19,44 +19,91 @@ export default function ResetPasswordPage() {
   const [validatingToken, setValidatingToken] = useState(true);
 
   useEffect(() => {
-    const checkSession = async () => {
+    let mounted = true;
+    let authListener: any = null;
+
+    const setupAuth = async () => {
       try {
-        // Wait a bit for Supabase to process the hash fragment
-        await new Promise(resolve => setTimeout(resolve, 100));
+        // Listen for auth state changes
+        const { data: authListenerData } = supabase.auth.onAuthStateChange(async (event, session) => {
+          console.log("Auth state change:", { event, session });
+          
+          if (!mounted) return;
+
+          if (event === 'PASSWORD_RECOVERY') {
+            console.log("✅ Password recovery session detected");
+            setValidatingToken(false);
+            setError("");
+          } else if (event === 'SIGNED_IN' && session) {
+            console.log("✅ User signed in, checking if recovery session");
+            setValidatingToken(false);
+            setError("");
+          }
+        });
+
+        authListener = authListenerData;
+
+        // Also check current session after a short delay
+        await new Promise(resolve => setTimeout(resolve, 500));
         
+        if (!mounted) return;
+
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         
-        console.log("Session check:", { session, sessionError });
+        console.log("Initial session check:", { session, sessionError });
         
         if (sessionError) {
           console.error("Session error:", sessionError);
-          setError("Error al validar el link de recuperación. Por favor intenta de nuevo.");
-          setValidatingToken(false);
+          if (mounted) {
+            setError("Error al validar el link de recuperación. Por favor intenta de nuevo.");
+            setValidatingToken(false);
+          }
           return;
         }
         
-        if (!session) {
-          setError("Link de recuperación inválido o expirado. Solicita uno nuevo.");
-          setValidatingToken(false);
-          return;
-        }
-        
-        // Verify it's a recovery session
-        if (session.user && session.user.aud === 'authenticated') {
-          console.log("Valid recovery session found");
-          setValidatingToken(false);
+        if (session?.user) {
+          console.log("✅ Session found:", session.user.id);
+          if (mounted) {
+            setValidatingToken(false);
+            setError("");
+          }
         } else {
-          setError("Sesión de recuperación inválida. Solicita un nuevo link.");
-          setValidatingToken(false);
+          console.warn("⚠️ No session found after 500ms");
+          // Give it a bit more time before showing error
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          if (!mounted) return;
+          
+          const { data: { session: retrySession } } = await supabase.auth.getSession();
+          
+          if (retrySession?.user) {
+            console.log("✅ Session found on retry");
+            setValidatingToken(false);
+            setError("");
+          } else {
+            console.error("❌ No session found after retries");
+            setError("Link de recuperación inválido o expirado. Solicita uno nuevo.");
+            setValidatingToken(false);
+          }
         }
       } catch (err) {
-        console.error("Error checking session:", err);
-        setError("Error al validar el link. Por favor intenta de nuevo.");
-        setValidatingToken(false);
+        console.error("Error in setupAuth:", err);
+        if (mounted) {
+          setError("Error al validar el link. Por favor intenta de nuevo.");
+          setValidatingToken(false);
+        }
       }
     };
 
-    checkSession();
+    setupAuth();
+
+    // Cleanup
+    return () => {
+      mounted = false;
+      if (authListener?.subscription) {
+        authListener.subscription.unsubscribe();
+      }
+    };
   }, []);
 
   const handleResetPassword = async (e: React.FormEvent) => {
@@ -79,6 +126,15 @@ export default function ResetPasswordPage() {
 
     try {
       console.log("Attempting to update password...");
+      
+      // Verify we have a session first
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        throw new Error("No hay sesión activa. Por favor solicita un nuevo link de recuperación.");
+      }
+
+      console.log("Session verified, updating password...");
       
       const { data, error: updateError } = await supabase.auth.updateUser({
         password: password
@@ -103,8 +159,8 @@ export default function ResetPasswordPage() {
     } catch (err: any) {
       console.error("Reset password error:", err);
       
-      if (err.message?.includes("session")) {
-        setError("Sesión expirada. Por favor solicita un nuevo link de recuperación.");
+      if (err.message?.includes("session") || err.message?.includes("sesión")) {
+        setError(err.message || "Sesión expirada. Por favor solicita un nuevo link de recuperación.");
       } else {
         setError(err.message || "Error al actualizar la contraseña. Intenta de nuevo.");
       }
@@ -120,8 +176,16 @@ export default function ResetPasswordPage() {
           title="Validando - Viaja Ligero"
           description="Validando link de recuperación"
         />
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-          <div className="text-center">
+        <div className="min-h-screen relative flex items-center justify-center overflow-hidden">
+          <div 
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{
+              backgroundImage: "url('/login-background.jpg')",
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-green-900/20" />
+          </div>
+          <div className="relative text-center bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl">
             <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
             <p className="text-muted-foreground">Validando link de recuperación...</p>
           </div>
