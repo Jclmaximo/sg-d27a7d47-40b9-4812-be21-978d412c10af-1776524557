@@ -4,8 +4,8 @@ const benefits = [
   {
     icon: Plane,
     title: "Plataforma Privada de Viajes",
-    description: "Accede a tarifas preferenciales en hoteles, vuelos, cruceros, resorts y alquiler de autos reservados exclusivamente para miembros.",
-    image: "/tropical-paradise.jpg"
+    description: "Acceso a más de 1 millón de hoteles, vuelos, cruceros y alquiler de autos con tarifas preferenciales exclusivas para miembros.",
+    image: "/luxury-resort.jpg"
   },
   {
     icon: Award,
