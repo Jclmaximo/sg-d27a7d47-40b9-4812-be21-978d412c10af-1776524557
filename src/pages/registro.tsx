@@ -12,6 +12,7 @@ import { Loader2, UserPlus, CheckCircle2, XCircle, Sparkles, Plane, Zap, Trendin
 
 export default function RegistroPage() {
   const router = useRouter();
+  const [mounted, setMounted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,10 +25,16 @@ export default function RegistroPage() {
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [checkingUsername, setCheckingUsername] = useState(false);
   const [referrerUsername, setReferrerUsername] = useState<string | null>(null);
-  const [existingUser, setExistingUser] = useState<{email: string;id: string;} | null>(null);
+  const [existingUser, setExistingUser] = useState<{email: string; id: string;} | null>(null);
   const [checkingSession, setCheckingSession] = useState(true);
 
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
     checkExistingSession();
 
     // Get referrer from URL or localStorage
@@ -41,7 +48,7 @@ export default function RegistroPage() {
         setReferrerUsername(savedRef);
       }
     }
-  }, [router.query]);
+  }, [mounted, router.query]);
 
   const checkExistingSession = async () => {
     const { data: { user } } = await supabase.auth.getUser();
