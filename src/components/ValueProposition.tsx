@@ -10,8 +10,8 @@ const benefits = [
   {
     icon: Award,
     title: "Life Experiences®",
-    description: "Viajes de lujo curados en destinos premium como Dubái, Nueva York, Cancún y más, diseñados para crear momentos inolvidables.",
-    image: "/alaska-cruise.jpg"
+    description: "Viajes curados de lujo a destinos exclusivos como Dubái, París, Nueva York y más, con experiencias inolvidables.",
+    image: "/cruise-sunset.jpg"
   },
   {
     icon: Gift,
