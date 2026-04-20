@@ -523,7 +523,7 @@ Estoy aquí para resolver cualquier duda que tengas.
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
 
         {/* Header */}
-        <header className="border-b border-border/50 bg-card/30 backdrop-blur-sm sticky top-0 z-50">
+        <header className="bg-background border-b border-border/30 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
@@ -540,7 +540,7 @@ Estoy aquí para resolver cualquier duda que tengas.
               variant="outline"
               size="sm"
               onClick={handleLogout}
-              className="border-primary/30 hover:border-primary/50 hover:bg-primary/10 text-xs md:text-sm px-2 md:px-3"
+              className="border-border/50 hover:border-primary/50 hover:bg-primary/10 text-xs md:text-sm px-2 md:px-3"
             >
               <LogOut className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />
               <span className="hidden md:inline">Salir</span>
