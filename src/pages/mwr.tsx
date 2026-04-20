@@ -78,14 +78,14 @@ export default function MWRPage() {
 
           {/* Hero Video Button */}
           <div className="flex justify-center mb-12">
-            <Button
+            <Button 
               size="lg"
               onClick={() => router.push("/mwr/vsl")}
-              className="h-16 px-8 bg-white hover:bg-white/90 text-blue-600 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all" style={{ backgroundColor: "#eab308", backgroundImage: "none", color: "#ffffff", fontWeight: "900" }}>
-              
-              <Sparkles className="mr-3 h-6 w-6" />
+              className="h-16 px-8 bg-white hover:bg-white/90 text-blue-600 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all animate-pulse hover:animate-none ring-4 ring-yellow-400/50 hover:ring-yellow-400 hover:shadow-yellow-400/50"
+            >
+              <Sparkles className="mr-3 h-6 w-6 animate-spin-slow" />
               Ver Cómo Funciona (60 seg)
-              <ArrowRight className="ml-3 h-5 w-5" />
+              <ArrowRight className="ml-3 h-5 w-5 animate-bounce" />
             </Button>
           </div>
         </div>
