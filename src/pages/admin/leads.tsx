@@ -50,7 +50,7 @@ export default function LeadsPage() {
   }, [searchQuery, filterStatus, leads]);
 
   const checkAuth = async () => {
-    const session = await authService.getSession();
+    const session = await authService.getCurrentSession();
     if (!session) {
       router.push("/auth/reset-password");
       return;
@@ -61,7 +61,7 @@ export default function LeadsPage() {
   const loadLeads = async () => {
     setLoading(true);
     try {
-      const { data } = await leadsService.getAllLeads();
+      const { data } = await leadsService.getLeads();
       if (data) {
         setLeads(data);
         setFilteredLeads(data);

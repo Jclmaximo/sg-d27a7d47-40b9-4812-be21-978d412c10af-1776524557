@@ -54,7 +54,7 @@ export default function DashboardPage() {
   }, []);
 
   const checkAuth = async () => {
-    const session = await authService.getSession();
+    const session = await authService.getCurrentSession();
     if (!session) {
       router.push("/auth/reset-password");
       return;
@@ -66,7 +66,7 @@ export default function DashboardPage() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const { data: leadsData } = await leadsService.getAllLeads();
+      const { data: leadsData } = await leadsService.getLeads();
       
       if (leadsData) {
         setLeads(leadsData);
