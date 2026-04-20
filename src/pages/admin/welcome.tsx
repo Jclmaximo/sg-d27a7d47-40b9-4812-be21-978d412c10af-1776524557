@@ -202,426 +202,434 @@ export default function WelcomePage() {
         description="Gestiona tus leads y referidos"
       />
       
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background relative overflow-hidden">
+        {/* Background Orbs */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
+
         {/* Header */}
-        <header className="border-b border-border/50 bg-card/50 backdrop-blur-sm sticky top-0 z-50 shadow-lg shadow-primary/5">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-primary/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-primary/30">
-                  <Plane className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-foreground">Viaja Ligero</h1>
-                  <p className="text-sm text-muted-foreground">{userEmail}</p>
-                </div>
+        <header className="border-b border-border/50 bg-card/30 backdrop-blur-sm sticky top-0 z-50">
+          <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg">
+                <Plane className="w-6 h-6 text-primary-foreground" />
               </div>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => router.push("/admin/main-dashboard")}
-                  className="text-foreground hover:text-primary hover:bg-primary/10"
-                >
-                  <LayoutDashboard className="w-4 h-4 mr-2" />
-                  Dashboard
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="text-muted-foreground hover:text-destructive hover:bg-destructive/10"
-                >
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Salir
-                </Button>
+              <div>
+                <h1 className="text-xl font-bold text-foreground">Viaja Ligero</h1>
+                <p className="text-sm text-muted-foreground">Dashboard</p>
               </div>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-muted-foreground">{userEmail}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="border-primary/30 hover:border-primary/50 hover:bg-primary/10"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Salir
+              </Button>
             </div>
           </div>
         </header>
 
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 py-8">
-          {/* Hero Welcome */}
-          <div className="mb-12 text-center relative overflow-hidden">
-            {/* Background Orbs */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-              <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+          {loading ? (
+            <div className="flex items-center justify-center min-h-[400px]">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
-            
-            <div className="relative z-10">
-              <Badge className="mb-4 bg-primary/20 text-primary border-primary/30">
-                <Plane className="w-4 h-4 mr-2" />
-                Panel de Embajador
-              </Badge>
-              <h1 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-heading bg-clip-text text-transparent">
-                ¡Bienvenido, {profile?.full_name || username}!
-              </h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Tu plataforma para capturar leads y generar ingresos compartiendo Viaja Ligero
-              </p>
-            </div>
-          </div>
-
-          {/* Stats Grid - BRILLANTE */}
-          <div className="grid md:grid-cols-4 gap-6 mb-8">
-            <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/50 shadow-[0_8px_30px_rgba(37,99,235,0.2)] hover:shadow-[0_10px_40px_rgba(37,99,235,0.3)] hover:-translate-y-1 hover:border-primary/60 transition-all">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
-                <Users className="w-5 h-5 text-primary" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-5xl font-black text-foreground mb-1">{stats.total}</div>
-                <p className="text-xs text-muted-foreground">Prospectos capturados</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/50 shadow-[0_8px_30px_rgba(56,189,248,0.2)] hover:shadow-[0_10px_40px_rgba(56,189,248,0.3)] hover:-translate-y-1 hover:border-accent/60 transition-all">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Nuevos</CardTitle>
-                <Clock className="w-5 h-5 text-accent" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-5xl font-black text-foreground mb-1">{stats.new}</div>
-                <p className="text-xs text-muted-foreground">Por contactar</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/50 shadow-[0_8px_30px_rgba(37,99,235,0.2)] hover:shadow-[0_10px_40px_rgba(37,99,235,0.3)] hover:-translate-y-1 hover:border-primary/60 transition-all">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Contactados</CardTitle>
-                <MessageSquare className="w-5 h-5 text-primary" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-5xl font-black text-foreground mb-1">{stats.contacted}</div>
-                <p className="text-xs text-muted-foreground">En seguimiento</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/50 shadow-[0_8px_30px_rgba(234,179,8,0.2)] hover:shadow-[0_10px_40px_rgba(234,179,8,0.3)] hover:-translate-y-1 hover:border-secondary/60 transition-all">
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium text-muted-foreground">Convertidos</CardTitle>
-                <CheckCircle2 className="w-5 h-5 text-secondary" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-5xl font-black text-foreground mb-1">{stats.converted}</div>
-                <p className="text-xs text-muted-foreground">Ventas cerradas</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Funnel Link Card - BRILLANTE */}
-          <Card className="bg-gradient-to-br from-primary/30 to-accent/20 backdrop-blur-sm border-primary/60 shadow-[0_10px_40px_rgba(37,99,235,0.25)] mb-8 relative overflow-hidden">
-            {/* Background Orb */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl" />
-            
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
-                    <Link2 className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-lg">Tu Embudo de Ventas</CardTitle>
-                    <CardDescription>Comparte este link para capturar leads</CardDescription>
-                  </div>
-                </div>
-                <Button
-                  size="sm"
-                  onClick={copyFunnelLink}
-                  className="bg-white hover:bg-white/90 text-primary shadow-lg shadow-primary/30"
-                >
-                  {copiedFunnel ? (
-                    <>
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                      Copiado
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copiar
-                    </>
-                  )}
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-primary/30 shadow-inner">
-                <code className="text-sm text-primary font-mono break-all">
-                  {funnelLink}
-                </code>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Quick Start Guide - BRILLANTE */}
-          <Card className="bg-gradient-to-br from-card/90 to-card/50 backdrop-blur-sm border-accent/40 shadow-[0_8px_30px_rgba(56,189,248,0.15)] mb-8">
-            <CardHeader>
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 bg-accent/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-accent/30">
-                  <Zap className="w-5 h-5 text-accent" />
-                </div>
-                <CardTitle>Guía de Inicio Rápido</CardTitle>
-              </div>
-              <CardDescription>
-                3 pasos para empezar a generar leads automáticamente
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex gap-4 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-primary/10 hover:border-primary/20 transition-all">
-                  <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center shrink-0 border border-primary/30 shadow-lg shadow-primary/20">
-                    <span className="text-lg font-bold text-primary">1</span>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1">Comparte tu embudo</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Copia y envía tu link personalizado por WhatsApp, redes sociales o email
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-primary/10 hover:border-primary/20 transition-all">
-                  <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center shrink-0 border border-primary/30 shadow-lg shadow-primary/20">
-                    <span className="text-lg font-bold text-primary">2</span>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1">Recibe leads automáticos</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Cada persona que llene el formulario aparecerá aquí con su información
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-4 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-primary/10 hover:border-primary/20 transition-all">
-                  <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center shrink-0 border border-primary/30 shadow-lg shadow-primary/20">
-                    <span className="text-lg font-bold text-primary">3</span>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1">Contacta y convierte</h3>
-                    <p className="text-sm text-muted-foreground">
-                      Usa el botón de contactar para comunicarte vía WhatsApp o email
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Features Overview & Referral */}
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 transition-all">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
-                    <Star className="w-5 h-5 text-primary" />
-                  </div>
-                  <CardTitle>Lo que incluye tu embudo</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {[
-                    "Página de captura optimizada",
-                    "Formulario de contacto integrado",
-                    "Presentación de beneficios",
-                    "Sección de testimonios",
-                    "Call-to-action persuasivos",
-                    "Diseño responsive móvil/desktop",
-                  ].map((feature, index) => (
-                    <div key={index} className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="w-4 h-4 text-secondary shrink-0" />
-                      <span className="text-foreground">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-gradient-to-br from-secondary/20 to-accent/10 backdrop-blur-sm border-secondary/40 shadow-2xl shadow-secondary/30 hover:shadow-2xl hover:shadow-secondary/40 transition-all relative overflow-hidden">
-              {/* Background Orb */}
-              <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-secondary/20 rounded-full blur-3xl" />
-              
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 bg-secondary/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-secondary/30 shadow-lg shadow-secondary/20">
-                    <Gift className="w-5 h-5 text-secondary" />
-                  </div>
-                  <CardTitle>Link de Referidos</CardTitle>
-                </div>
-                <CardDescription>Genera ingresos por cada persona que se una</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 mb-4 border border-secondary/30 shadow-inner">
-                  <code className="text-sm text-secondary font-mono break-all">
-                    {referralLink}
-                  </code>
-                </div>
-                <Button
-                  size="sm"
-                  onClick={copyReferralLink}
-                  className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/30"
-                >
-                  {copiedReferral ? (
-                    <>
-                      <CheckCircle className="w-4 h-4 mr-2" />
-                      Link Copiado
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copiar Link de Referidos
-                    </>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Quick Actions - BRILLANTE */}
-          <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 mb-8">
-            <CardHeader>
-              <CardTitle>Acciones Rápidas</CardTitle>
-              <CardDescription>Herramientas principales de tu negocio</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid md:grid-cols-3 gap-4">
-                <Button
-                  variant="outline"
-                  className="h-auto py-6 flex-col gap-2 bg-white/5 backdrop-blur-md border-primary/30 hover:border-primary/50 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all"
-                  onClick={() => window.open(funnelLink, "_blank")}
-                >
-                  <Link2 className="w-8 h-8 text-primary" />
-                  <div className="text-center">
-                    <div className="font-semibold text-foreground">Tu Funnel</div>
-                    <div className="text-xs text-muted-foreground">Ver y compartir</div>
-                  </div>
-                </Button>
-
-                <Button
-                  variant="outline"
-                  className="h-auto py-6 flex-col gap-2 bg-white/5 backdrop-blur-md border-accent/30 hover:border-accent/50 hover:bg-accent/10 hover:shadow-[0_0_20px_rgba(56,189,248,0.3)] transition-all"
-                  onClick={() => router.push("/admin/leads")}
-                >
-                  <Users className="w-8 h-8 text-accent" />
-                  <div className="text-center">
-                    <div className="font-semibold text-foreground">Mis Leads</div>
-                    <div className="text-xs text-muted-foreground">Gestionar prospectos</div>
-                  </div>
-                </Button>
-
-                <Button
-                  variant="outline"
-                  className="h-auto py-6 flex-col gap-2 bg-white/5 backdrop-blur-md border-secondary/30 hover:border-secondary/50 hover:bg-secondary/10 hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all"
-                  onClick={copyFunnelLink}
-                >
-                  <Share2 className="w-8 h-8 text-secondary" />
-                  <div className="text-center">
-                    <div className="font-semibold text-foreground">Compartir</div>
-                    <div className="text-xs text-muted-foreground">Copiar URL</div>
-                  </div>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Recent Leads - BRILLANTE */}
-          <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Prospectos Recientes</CardTitle>
-                  <CardDescription>Últimos leads capturados</CardDescription>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => router.push("/admin/leads")}
-                  className="text-primary hover:text-primary/80 hover:bg-primary/10"
-                >
-                  Ver todos
-                  <ArrowRight className="w-4 h-4 ml-1" />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              {recentLeads.length === 0 ? (
-                <div className="text-center py-12">
-                  <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold text-foreground mb-2">
-                    Aún no tienes leads
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
-                    Comienza compartiendo tu embudo para recibir tus primeros prospectos
-                  </p>
+          ) : (
+            <>
+              {/* Hero Welcome Section */}
+              <div className="mb-12">
+                <h2 className="text-5xl md:text-6xl font-black mb-4 bg-gradient-heading bg-clip-text text-transparent">
+                  ¡Bienvenido, {profile?.full_name || "Usuario"}! 👋
+                </h2>
+                <p className="text-xl text-muted-foreground mb-6 max-w-3xl">
+                  Este es tu panel de control. Aquí podrás gestionar tus prospectos y ver las métricas de tu negocio.
+                </p>
+                <div className="flex flex-wrap gap-4">
                   <Button
-                    onClick={copyFunnelLink}
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
+                    size="lg"
+                    onClick={() => router.push("/admin/main-dashboard")}
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30 text-base px-6"
                   >
-                    <Share2 className="w-4 h-4 mr-2" />
-                    Compartir Mi Embudo
+                    <LayoutDashboard className="w-5 h-5 mr-2" />
+                    Ir al Dashboard Completo
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="bg-background/40 backdrop-blur-sm border-primary/30 hover:border-primary/50 hover:bg-primary/10 text-base px-6"
+                  >
+                    <PlayCircle className="w-5 h-5 mr-2" />
+                    Ver Tutorial
                   </Button>
                 </div>
-              ) : (
-                <>
-                  <div className="space-y-4">
-                    {recentLeads.map((lead) => (
-                      <div
-                        key={lead.id}
-                        className="flex items-center justify-between p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-primary/20 hover:border-primary/40 hover:bg-white/10 hover:shadow-lg hover:shadow-primary/10 transition-all"
-                      >
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-semibold text-foreground">{lead.name}</span>
-                            <Badge className={getStatusColor(lead.status)}>
-                              {getStatusText(lead.status)}
-                            </Badge>
-                          </div>
-                          <div className="text-sm text-muted-foreground flex items-center gap-3">
-                            <span className="flex items-center gap-1">
-                              <Mail className="w-3 h-3" />
-                              {lead.email}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <Calendar className="w-3 h-3" />
-                              {formatDate(lead.created_at)}
-                            </span>
-                          </div>
-                        </div>
-                        <Button
-                          size="sm"
-                          className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20"
-                          onClick={() => window.open(`https://wa.me/${lead.phone.replace(/\D/g, "")}`, "_blank")}
-                        >
-                          Contactar
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
+              </div>
 
-                  <div className="mt-6 grid md:grid-cols-2 gap-4">
+              {/* Stats Grid - BRILLANTE */}
+              <div className="grid md:grid-cols-4 gap-6 mb-8">
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/50 shadow-[0_8px_30px_rgba(37,99,235,0.2)] hover:shadow-[0_10px_40px_rgba(37,99,235,0.3)] hover:-translate-y-1 hover:border-primary/60 transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
+                    <Users className="w-5 h-5 text-primary" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-5xl font-black text-foreground mb-1">{stats.total}</div>
+                    <p className="text-xs text-muted-foreground">Prospectos capturados</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/50 shadow-[0_8px_30px_rgba(56,189,248,0.2)] hover:shadow-[0_10px_40px_rgba(56,189,248,0.3)] hover:-translate-y-1 hover:border-accent/60 transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Nuevos</CardTitle>
+                    <Clock className="w-5 h-5 text-accent" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-5xl font-black text-foreground mb-1">{stats.new}</div>
+                    <p className="text-xs text-muted-foreground">Por contactar</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/50 shadow-[0_8px_30px_rgba(37,99,235,0.2)] hover:shadow-[0_10px_40px_rgba(37,99,235,0.3)] hover:-translate-y-1 hover:border-primary/60 transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Contactados</CardTitle>
+                    <MessageSquare className="w-5 h-5 text-primary" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-5xl font-black text-foreground mb-1">{stats.contacted}</div>
+                    <p className="text-xs text-muted-foreground">En seguimiento</p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/50 shadow-[0_8px_30px_rgba(234,179,8,0.2)] hover:shadow-[0_10px_40px_rgba(234,179,8,0.3)] hover:-translate-y-1 hover:border-secondary/60 transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Convertidos</CardTitle>
+                    <CheckCircle2 className="w-5 h-5 text-secondary" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-5xl font-black text-foreground mb-1">{stats.converted}</div>
+                    <p className="text-xs text-muted-foreground">Ventas cerradas</p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Funnel Link Card - BRILLANTE */}
+              <Card className="bg-gradient-to-br from-primary/30 to-accent/20 backdrop-blur-sm border-primary/60 shadow-[0_10px_40px_rgba(37,99,235,0.25)] mb-8 relative overflow-hidden">
+                {/* Background Orb */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-white/5 rounded-full blur-3xl" />
+                
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
+                        <Link2 className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-lg">Tu Embudo de Ventas</CardTitle>
+                        <CardDescription>Comparte este link para capturar leads</CardDescription>
+                      </div>
+                    </div>
                     <Button
-                      size="lg"
-                      onClick={() => router.push("/admin/main-dashboard")}
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
+                      size="sm"
+                      onClick={copyFunnelLink}
+                      className="bg-white hover:bg-white/90 text-primary shadow-lg shadow-primary/30"
                     >
-                      <LayoutDashboard className="w-5 h-5 mr-2" />
-                      Ver Panel Principal
+                      {copiedFunnel ? (
+                        <>
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                          Copiado
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4 mr-2" />
+                          Copiar
+                        </>
+                      )}
                     </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-primary/30 shadow-inner">
+                    <code className="text-sm text-primary font-mono break-all">
+                      {funnelLink}
+                    </code>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Start Guide - BRILLANTE */}
+              <Card className="bg-gradient-to-br from-card/90 to-card/50 backdrop-blur-sm border-accent/40 shadow-[0_8px_30px_rgba(56,189,248,0.15)] mb-8">
+                <CardHeader>
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 bg-accent/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-accent/30">
+                      <Zap className="w-5 h-5 text-accent" />
+                    </div>
+                    <CardTitle>Guía de Inicio Rápido</CardTitle>
+                  </div>
+                  <CardDescription>
+                    3 pasos para empezar a generar leads automáticamente
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div className="flex gap-4 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-primary/10 hover:border-primary/20 transition-all">
+                      <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center shrink-0 border border-primary/30 shadow-lg shadow-primary/20">
+                        <span className="text-lg font-bold text-primary">1</span>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-foreground mb-1">Comparte tu embudo</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Copia y envía tu link personalizado por WhatsApp, redes sociales o email
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-primary/10 hover:border-primary/20 transition-all">
+                      <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center shrink-0 border border-primary/30 shadow-lg shadow-primary/20">
+                        <span className="text-lg font-bold text-primary">2</span>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-foreground mb-1">Recibe leads automáticos</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Cada persona que llene el formulario aparecerá aquí con su información
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-4 p-4 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:bg-primary/10 hover:border-primary/20 transition-all">
+                      <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center shrink-0 border border-primary/30 shadow-lg shadow-primary/20">
+                        <span className="text-lg font-bold text-primary">3</span>
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-foreground mb-1">Contacta y convierte</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Usa el botón de contactar para comunicarte vía WhatsApp o email
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Features Overview & Referral */}
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 transition-all">
+                  <CardHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 bg-primary/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
+                        <Star className="w-5 h-5 text-primary" />
+                      </div>
+                      <CardTitle>Lo que incluye tu embudo</CardTitle>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {[
+                        "Página de captura optimizada",
+                        "Formulario de contacto integrado",
+                        "Presentación de beneficios",
+                        "Sección de testimonios",
+                        "Call-to-action persuasivos",
+                        "Diseño responsive móvil/desktop",
+                      ].map((feature, index) => (
+                        <div key={index} className="flex items-center gap-2 text-sm">
+                          <CheckCircle2 className="w-4 h-4 text-secondary shrink-0" />
+                          <span className="text-foreground">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-secondary/20 to-accent/10 backdrop-blur-sm border-secondary/40 shadow-2xl shadow-secondary/30 hover:shadow-2xl hover:shadow-secondary/40 transition-all relative overflow-hidden">
+                  {/* Background Orb */}
+                  <div className="absolute -bottom-10 -right-10 w-32 h-32 bg-secondary/20 rounded-full blur-3xl" />
+                  
+                  <CardHeader>
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 bg-secondary/20 backdrop-blur-sm rounded-lg flex items-center justify-center border border-secondary/30 shadow-lg shadow-secondary/20">
+                        <Gift className="w-5 h-5 text-secondary" />
+                      </div>
+                      <CardTitle>Link de Referidos</CardTitle>
+                    </div>
+                    <CardDescription>Genera ingresos por cada persona que se una</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 mb-4 border border-secondary/30 shadow-inner">
+                      <code className="text-sm text-secondary font-mono break-all">
+                        {referralLink}
+                      </code>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={copyReferralLink}
+                      className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/30"
+                    >
+                      {copiedReferral ? (
+                        <>
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                          Link Copiado
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4 mr-2" />
+                          Copiar Link de Referidos
+                        </>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Quick Actions - BRILLANTE */}
+              <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 mb-8">
+                <CardHeader>
+                  <CardTitle>Acciones Rápidas</CardTitle>
+                  <CardDescription>Herramientas principales de tu negocio</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-3 gap-4">
                     <Button
                       variant="outline"
-                      size="lg"
-                      className="bg-white/5 backdrop-blur-md border-accent/30 hover:border-accent/50 hover:bg-accent/10"
+                      className="h-auto py-6 flex-col gap-2 bg-white/5 backdrop-blur-md border-primary/30 hover:border-primary/50 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all"
+                      onClick={() => window.open(funnelLink, "_blank")}
                     >
-                      <TrendingUp className="w-5 h-5 mr-2" />
-                      Ver Comisiones
+                      <Link2 className="w-8 h-8 text-primary" />
+                      <div className="text-center">
+                        <div className="font-semibold text-foreground">Tu Funnel</div>
+                        <div className="text-xs text-muted-foreground">Ver y compartir</div>
+                      </div>
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="h-auto py-6 flex-col gap-2 bg-white/5 backdrop-blur-md border-accent/30 hover:border-accent/50 hover:bg-accent/10 hover:shadow-[0_0_20px_rgba(56,189,248,0.3)] transition-all"
+                      onClick={() => router.push("/admin/leads")}
+                    >
+                      <Users className="w-8 h-8 text-accent" />
+                      <div className="text-center">
+                        <div className="font-semibold text-foreground">Mis Leads</div>
+                        <div className="text-xs text-muted-foreground">Gestionar prospectos</div>
+                      </div>
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="h-auto py-6 flex-col gap-2 bg-white/5 backdrop-blur-md border-secondary/30 hover:border-secondary/50 hover:bg-secondary/10 hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all"
+                      onClick={copyFunnelLink}
+                    >
+                      <Share2 className="w-8 h-8 text-secondary" />
+                      <div className="text-center">
+                        <div className="font-semibold text-foreground">Compartir</div>
+                        <div className="text-xs text-muted-foreground">Copiar URL</div>
+                      </div>
                     </Button>
                   </div>
-                </>
-              )}
-            </CardContent>
-          </Card>
+                </CardContent>
+              </Card>
+
+              {/* Recent Leads - BRILLANTE */}
+              <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <CardTitle>Prospectos Recientes</CardTitle>
+                      <CardDescription>Últimos leads capturados</CardDescription>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => router.push("/admin/leads")}
+                      className="text-primary hover:text-primary/80 hover:bg-primary/10"
+                    >
+                      Ver todos
+                      <ArrowRight className="w-4 h-4 ml-1" />
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {recentLeads.length === 0 ? (
+                    <div className="text-center py-12">
+                      <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-foreground mb-2">
+                        Aún no tienes leads
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
+                        Comienza compartiendo tu embudo para recibir tus primeros prospectos
+                      </p>
+                      <Button
+                        onClick={copyFunnelLink}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Compartir Mi Embudo
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      <div className="space-y-4">
+                        {recentLeads.map((lead) => (
+                          <div
+                            key={lead.id}
+                            className="flex items-center justify-between p-4 rounded-lg bg-white/5 backdrop-blur-sm border border-primary/20 hover:border-primary/40 hover:bg-white/10 hover:shadow-lg hover:shadow-primary/10 transition-all"
+                          >
+                            <div>
+                              <div className="flex items-center gap-2 mb-1">
+                                <span className="font-semibold text-foreground">{lead.name}</span>
+                                <Badge className={getStatusColor(lead.status)}>
+                                  {getStatusText(lead.status)}
+                                </Badge>
+                              </div>
+                              <div className="text-sm text-muted-foreground flex items-center gap-3">
+                                <span className="flex items-center gap-1">
+                                  <Mail className="w-3 h-3" />
+                                  {lead.email}
+                                </span>
+                                <span className="flex items-center gap-1">
+                                  <Calendar className="w-3 h-3" />
+                                  {formatDate(lead.created_at)}
+                                </span>
+                              </div>
+                            </div>
+                            <Button
+                              size="sm"
+                              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20"
+                              onClick={() => window.open(`https://wa.me/${lead.phone.replace(/\D/g, "")}`, "_blank")}
+                            >
+                              Contactar
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="mt-6 grid md:grid-cols-2 gap-4">
+                        <Button
+                          size="lg"
+                          onClick={() => router.push("/admin/main-dashboard")}
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
+                        >
+                          <LayoutDashboard className="w-5 h-5 mr-2" />
+                          Ver Panel Principal
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="lg"
+                          className="bg-white/5 backdrop-blur-md border-accent/30 hover:border-accent/50 hover:bg-accent/10"
+                        >
+                          <TrendingUp className="w-5 h-5 mr-2" />
+                          Ver Comisiones
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </>
+          )}
         </main>
       </div>
     </>
