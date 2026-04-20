@@ -288,20 +288,31 @@ export default function MWRPage() {
           <Card className="bg-white shadow-2xl max-w-md mx-auto">
             <CardContent className="p-8">
               <div className="space-y-4">
-                <Input
+                <Input 
                   placeholder="Tu email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 text-lg" />
-                
-                <Button
+                  className="h-12 text-lg"
+                />
+                <Button 
                   size="lg"
                   onClick={() => router.push("/mwr/registro")}
-                  className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg font-semibold">
-                  
+                  className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg font-semibold"
+                >
                   Empezar Ahora - Solo $29 USD
                   <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                
+                {/* Video Button */}
+                <Button 
+                  size="lg"
+                  variant="outline"
+                  onClick={() => router.push("/mwr/vsl")}
+                  className="w-full h-12 border-2 border-white bg-white/10 hover:bg-white/20 text-white text-base font-semibold backdrop-blur-sm"
+                >
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  Ver Video de 3 Minutos
                 </Button>
               </div>
 
