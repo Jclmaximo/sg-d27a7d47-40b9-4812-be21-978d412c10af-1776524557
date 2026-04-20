@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -10,7 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
-import { leadsService } from "@/services/leadsService";
+import { supabase } from "@/integrations/supabase/client";
+import { referralService } from "@/services/referralService";
 import { 
   ArrowRight, 
   Check, 
@@ -26,17 +27,27 @@ export default function RegistroPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [referralCode, setReferralCode] = useState<string | null>(null);
   
   const [formData, setFormData] = useState({
     nombre: "",
     apellido: "",
     email: "",
+    password: "",
     telefono: "",
     pais: "",
     interes: "",
     metodo_contacto: "whatsapp",
     acepta_terminos: false,
   });
+
+  useEffect(() => {
+    // Capture referral code from URL
+    const { ref } = router.query;
+    if (ref && typeof ref === 'string') {
+      setReferralCode(ref);
+    }
+  }, [router.query]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,42 +61,59 @@ export default function RegistroPage() {
       return;
     }
 
+    if (formData.password.length < 6) {
+      toast({
+        title: "Error",
+        description: "La contraseña debe tener al menos 6 caracteres",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await leadsService.createLead({
-        name: `${formData.nombre} ${formData.apellido}`.trim(),
+      // 1. Create auth user
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
-        phone: formData.telefono,
-        country: formData.pais,
-        source: "landing",
-        interest: formData.interes as "ahorrar" | "ganar" | "ambas",
-        contact_method: formData.metodo_contacto as "whatsapp" | "email" | "telefono",
-        user_id: "anonymous", // Temporal id for public forms
+        password: formData.password,
+        options: {
+          data: {
+            full_name: `${formData.nombre} ${formData.apellido}`.trim(),
+          }
+        }
       });
 
-      if (error) {
-        console.error("Error creating lead:", error);
-        toast({
-          title: "Error",
-          description: "Hubo un problema al enviar tu información. Por favor intenta de nuevo.",
-          variant: "destructive",
-        });
-        return;
+      if (authError) {
+        throw authError;
+      }
+
+      if (!authData.user) {
+        throw new Error("No se pudo crear el usuario");
+      }
+
+      // 2. Process referral if exists
+      if (referralCode) {
+        try {
+          await referralService.processReferral(authData.user.id, referralCode);
+        } catch (refError) {
+          console.error("Error processing referral:", refError);
+          // Don't block registration if referral fails
+        }
       }
 
       toast({
-        title: "¡Registro exitoso!",
-        description: "Nos pondremos en contacto contigo pronto.",
+        title: "¡Cuenta creada exitosamente!",
+        description: "Redirigiendo al pago seguro...",
       });
 
       // Redirect to checkout page
       router.push("/checkout");
-    } catch (err) {
+    } catch (err: any) {
       console.error("Unexpected error:", err);
       toast({
-        title: "Error",
-        description: "Ocurrió un error inesperado. Por favor intenta de nuevo.",
+        title: "Error al registrarse",
+        description: err.message || "Ocurrió un error inesperado. Por favor intenta de nuevo.",
         variant: "destructive",
       });
     } finally {
@@ -189,7 +217,7 @@ export default function RegistroPage() {
                     </div>
                   </div>
 
-                  {/* Contact Fields */}
+                  {/* Account Fields */}
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
@@ -203,6 +231,21 @@ export default function RegistroPage() {
                     />
                   </div>
 
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Contraseña</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      placeholder="Mínimo 6 caracteres"
+                      value={formData.password}
+                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      required
+                      minLength={6}
+                      className="bg-background/50 border-border/50"
+                    />
+                  </div>
+
+                  {/* Contact Fields */}
                   <div className="space-y-2">
                     <Label htmlFor="telefono">Teléfono (con código de país)</Label>
                     <Input
