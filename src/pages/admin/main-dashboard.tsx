@@ -582,13 +582,16 @@ Estoy aquí para resolver cualquier duda que tengas.
   return (
     <>
       <SEO 
-        title="Mi Dashboard - Viaja Ligero"
-        description="Panel de control para gestionar leads, red de referidos y comisiones"
+        title="Dashboard Principal - Viaja Ligero"
+        description="Panel de control principal para gestionar leads y comisiones"
       />
-      
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background relative overflow-hidden">
+        {/* Background Orbs */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
+
         {/* Header */}
-        <header className="border-b bg-card sticky top-0 z-50">
+        <header className="border-b border-border/50 bg-card/30 backdrop-blur-sm sticky top-0 z-50">
           <div className="container mx-auto px-4 py-4">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="flex items-center gap-4">
@@ -667,60 +670,50 @@ Estoy aquí para resolver cualquier duda que tengas.
 
             {/* TAB 1 - OVERVIEW */}
             <TabsContent value="resumen" className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Total Leads</CardTitle>
-                    <Users className="h-4 w-4 text-muted-foreground" />
+              <div className="grid gap-4 md:grid-cols-4 mb-6">
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
+                    <Users className="w-5 h-5 text-primary" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{leads.length}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Capturados por tu embudo
-                    </p>
+                    <div className="text-4xl font-bold text-foreground">{allLeads.length}</div>
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Mi Red</CardTitle>
-                    <Network className="h-4 w-4 text-muted-foreground" />
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/30 shadow-xl shadow-accent/20 hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/50 transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Nuevos</CardTitle>
+                    <Clock className="w-5 h-5 text-accent" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">{stats?.total_referrals || 0}</div>
-                    <p className="text-xs text-muted-foreground">
-                      Referidos activos
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Comisiones</CardTitle>
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">
-                      ${(stats?.total_earned ?? 0).toFixed(2)}
+                    <div className="text-4xl font-bold text-foreground">
+                      {allLeads.filter(l => l.status === "new").length}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Total ganado
-                    </p>
                   </CardContent>
                 </Card>
 
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Disponible</CardTitle>
-                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Contactados</CardTitle>
+                    <MessageSquare className="w-5 h-5 text-primary" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-2xl font-bold">
-                      ${(stats?.available_balance ?? 0).toFixed(2)}
+                    <div className="text-4xl font-bold text-foreground">
+                      {allLeads.filter(l => l.status === "contacted").length}
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Para retirar
-                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/30 shadow-xl shadow-secondary/20 hover:shadow-2xl hover:shadow-secondary/30 hover:border-secondary/50 transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-muted-foreground">Convertidos</CardTitle>
+                    <CheckCircle2 className="w-5 h-5 text-secondary" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-4xl font-bold text-foreground">
+                      {allLeads.filter(l => l.status === "converted").length}
+                    </div>
                   </CardContent>
                 </Card>
               </div>
@@ -767,36 +760,48 @@ Estoy aquí para resolver cualquier duda que tengas.
 
             {/* TAB 2 - LEADS */}
             <TabsContent value="leads" className="space-y-6">
-              <Card>
+              <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
                 <CardHeader>
-                  <CardTitle>Mis Leads Capturados</CardTitle>
-                  <CardDescription>
-                    Gestiona todos los prospectos que han completado tu embudo
-                  </CardDescription>
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                      <CardTitle>Gestión de Leads</CardTitle>
+                      <CardDescription>
+                        Administra y da seguimiento a tus prospectos
+                      </CardDescription>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <div className="relative flex-1 md:flex-initial md:w-64">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Buscar leads..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-10 bg-background/60 border-primary/20 focus:border-primary/50"
+                        />
+                      </div>
+                      <Select value={statusFilter} onValueChange={setStatusFilter}>
+                        <SelectTrigger className="w-full md:w-[180px] bg-background/60 border-primary/20">
+                          <SelectValue placeholder="Filtrar por estado" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">Todos</SelectItem>
+                          <SelectItem value="new">Nuevos</SelectItem>
+                          <SelectItem value="contacted">Contactados</SelectItem>
+                          <SelectItem value="converted">Convertidos</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <Button 
+                        onClick={exportToCSV}
+                        variant="outline"
+                        className="bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        Exportar
+                      </Button>
+                    </div>
+                  </div>
                 </CardHeader>
                 <CardContent>
-                  <div className="flex flex-col md:flex-row gap-4 mb-6">
-                    <Input
-                      placeholder="Buscar por nombre, email o teléfono..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="flex-1"
-                    />
-                    <Select value={statusFilter} onValueChange={setStatusFilter}>
-                      <SelectTrigger className="w-full md:w-48">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">Todos los estados</SelectItem>
-                        <SelectItem value="nuevo">Nuevos</SelectItem>
-                        <SelectItem value="contactado">Contactados</SelectItem>
-                        <SelectItem value="interesado">Interesados</SelectItem>
-                        <SelectItem value="convertido">Convertidos</SelectItem>
-                        <SelectItem value="descartado">Descartados</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
                   {filteredLeads.length === 0 ? (
                     <div className="text-center py-12 text-muted-foreground">
                       <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
@@ -1014,75 +1019,90 @@ Estoy aquí para resolver cualquier duda que tengas.
 
             {/* TAB 4 - LINKS */}
             <TabsContent value="links" className="space-y-6">
-              <Card>
+              <Card className="bg-gradient-to-br from-primary/20 to-accent/10 backdrop-blur-sm border-primary/40 shadow-2xl shadow-primary/30">
                 <CardHeader>
-                  <CardTitle>Tu Embudo Personalizado</CardTitle>
-                  <CardDescription>
-                    Comparte este embudo para captar leads interesados en el club de viajes
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label>Link del Embudo</Label>
-                    <div className="flex gap-2 mt-2">
-                      <Input
-                        value={funnelUrl}
-                        readOnly
-                        className="flex-1"
-                      />
-                      <Button onClick={copyFunnelLink} variant="outline">
-                        {copiedFunnel ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                      </Button>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
+                        <Link2 className="w-6 h-6 text-primary" />
+                      </div>
+                      <div>
+                        <CardTitle>Tu Embudo de Ventas</CardTitle>
+                        <CardDescription>Comparte este link para capturar leads</CardDescription>
+                      </div>
                     </div>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/ambassador/${profile?.username || ""}`);
+                        setCopiedFunnel(true);
+                        setTimeout(() => setCopiedFunnel(false), 2000);
+                      }}
+                      className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30"
+                    >
+                      {copiedFunnel ? (
+                        <>
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                          Copiado
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4 mr-2" />
+                          Copiar
+                        </>
+                      )}
+                    </Button>
                   </div>
-
-                  <div className="flex gap-2">
-                    <a href={funnelUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                      <Button variant="outline" className="w-full">
-                        <ExternalLink className="h-4 w-4 mr-2" />
-                        Ver mi Embudo
-                      </Button>
-                    </a>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Link de Referidos del Funnel</CardTitle>
-                  <CardDescription>
-                    Comparte este link con otros miembros de tu equipo que quieran su propio embudo (ganas $39.50 por cada uno)
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label>Link de Referidos</Label>
-                    <div className="flex gap-2 mt-2">
-                      <Input
-                        value={referralUrl}
-                        readOnly
-                        className="flex-1"
-                      />
-                      <Button onClick={copyReferralLink} variant="outline">
-                        {copiedReferral ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Mensaje Sugerido</CardTitle>
-                  <CardDescription>
-                    Usa este mensaje para compartir tu embudo por WhatsApp
-                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="bg-muted p-4 rounded-lg text-sm">
-                    <p className="italic">
-                      "¡Hola! 🌍✈️ ¿Te gustaría viajar más pagando menos? Te comparto info sobre el club de viajes con mejores tarifas que encontré. Echa un vistazo: {funnelUrl}"
-                    </p>
+                  <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-primary/30 shadow-inner">
+                    <code className="text-sm text-primary font-mono break-all">
+                      {window.location.origin}/ambassador/{profile?.username || "tu-usuario"}
+                    </code>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-gradient-to-br from-secondary/20 to-accent/10 backdrop-blur-sm border-secondary/40 shadow-2xl shadow-secondary/30">
+                <CardHeader>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 bg-secondary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-secondary/30 shadow-lg shadow-secondary/20">
+                        <Gift className="w-6 h-6 text-secondary" />
+                      </div>
+                      <div>
+                        <CardTitle>Link de Referidos</CardTitle>
+                        <CardDescription>Genera ingresos por cada persona que se una</CardDescription>
+                      </div>
+                    </div>
+                    <Button
+                      size="sm"
+                      onClick={() => {
+                        navigator.clipboard.writeText(`${window.location.origin}/?ref=${profile?.username || ""}`);
+                        setCopiedReferral(true);
+                        setTimeout(() => setCopiedReferral(false), 2000);
+                      }}
+                      className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/30"
+                    >
+                      {copiedReferral ? (
+                        <>
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                          Copiado
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-4 h-4 mr-2" />
+                          Copiar
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-secondary/30 shadow-inner">
+                    <code className="text-sm text-secondary font-mono break-all">
+                      {window.location.origin}/?ref={profile?.username || "tu-usuario"}
+                    </code>
                   </div>
                 </CardContent>
               </Card>
@@ -1146,6 +1166,84 @@ Estoy aquí para resolver cualquier duda que tengas.
                   >
                     {savingWallet ? "Guardando..." : "Guardar Billetera"}
                   </Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* TAB 6 - PERFIL */}
+            <TabsContent value="perfil" className="space-y-6">
+              <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
+                <CardHeader>
+                  <CardTitle className="text-xl">Información Personal</CardTitle>
+                  <CardDescription className="text-lg">
+                    Datos de tu cuenta y preferencias
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Nombre Completo</Label>
+                    <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
+                      {profile?.full_name || "No configurado"}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Email</Label>
+                    <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
+                      {profile?.email || "No configurado"}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Username</Label>
+                    <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
+                      @{profile?.username || "No configurado"}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Billetera USDT (BSC)</Label>
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="0x..."
+                        value={walletAddress}
+                        onChange={(e) => setWalletAddress(e.target.value)}
+                        className="flex-1 bg-background/60 border-primary/20 focus:border-primary/50"
+                      />
+                      <Button
+                        onClick={async () => {
+                          setSavingWallet(true);
+                          const { error } = await supabase
+                            .from("profiles")
+                            .update({ usdt_wallet_address: walletAddress })
+                            .eq("id", profile?.id || "");
+                          
+                          if (error) {
+                            toast({
+                              title: "Error",
+                              description: "No se pudo guardar la billetera",
+                              variant: "destructive"
+                            });
+                          } else {
+                            toast({
+                              title: "✅ Guardado",
+                              description: "Dirección de billetera actualizada"
+                            });
+                            await loadData();
+                          }
+                          setSavingWallet(false);
+                        }}
+                        disabled={savingWallet}
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
+                      >
+                        {savingWallet ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          "Guardar"
+                        )}
+                      </Button>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Necesaria para recibir tus comisiones en USDT
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
