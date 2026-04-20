@@ -21,7 +21,6 @@ import {
 
 export default function MWRPage() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
   const [showCTA, setShowCTA] = useState(false);
 
   // Auto-show CTA after 3 seconds
@@ -301,13 +300,6 @@ export default function MWRPage() {
           <Card className="bg-white shadow-2xl max-w-md mx-auto">
             <CardContent className="p-8">
               <div className="space-y-4">
-                <Input 
-                  placeholder="Tu email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 text-lg"
-                />
                 <Button 
                   size="lg"
                   onClick={() => router.push("/mwr/registro")}
@@ -315,6 +307,17 @@ export default function MWRPage() {
                 >
                   Empezar Ya! - Solo $29 USD
                   <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+                
+                {/* Video Button */}
+                <Button 
+                  size="lg"
+                  variant="outline"
+                  onClick={() => router.push("/mwr/vsl")}
+                  className="w-full h-12 border-2 border-blue-200 bg-white hover:bg-blue-50 text-blue-600 text-base font-semibold"
+                >
+                  <Sparkles className="mr-2 h-5 w-5" />
+                  Ver Video de 60 Segundos
                 </Button>
               </div>
 
