@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
@@ -24,7 +25,10 @@ import {
   MessageSquare,
   Link2,
   Share2,
-  ArrowRight
+  ArrowRight,
+  CheckCircle,
+  Copy,
+  Gift
 } from "lucide-react";
 
 interface Lead {
@@ -46,6 +50,11 @@ export default function WelcomePage() {
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [stats, setStats] = useState({ total: 0, new: 0, contacted: 0, converted: 0 });
   const [recentLeads, setRecentLeads] = useState<Lead[]>([]);
+  const [copiedFunnel, setCopiedFunnel] = useState(false);
+  const [copiedReferral, setCopiedReferral] = useState(false);
+
+  const funnelLink = typeof window !== "undefined" ? `${window.location.origin}/ambassador/${username}` : "";
+  const referralLink = typeof window !== "undefined" ? `${window.location.origin}/pricing?ref=${username}` : "";
 
   useEffect(() => {
     checkAuth();
@@ -61,7 +70,12 @@ export default function WelcomePage() {
     setUserEmail(session.user?.email || "");
     
     // Get profile data
-    const { data: profileData } = await authService.getProfile();
+    const { data: profileData } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", session.user.id)
+      .single();
+      
     if (profileData) {
       setProfile(profileData);
       setUsername(profileData.username || "");
@@ -72,6 +86,24 @@ export default function WelcomePage() {
     }
     
     loadDashboardData();
+  };
+
+  const copyFunnelLink = () => {
+    if (typeof navigator !== "undefined") {
+      navigator.clipboard.writeText(funnelLink);
+      setCopiedFunnel(true);
+      toast({ title: "¡Copiado!", description: "Link de embudo copiado" });
+      setTimeout(() => setCopiedFunnel(false), 2000);
+    }
+  };
+
+  const copyReferralLink = () => {
+    if (typeof navigator !== "undefined") {
+      navigator.clipboard.writeText(referralLink);
+      setCopiedReferral(true);
+      toast({ title: "¡Copiado!", description: "Link de referidos copiado" });
+      setTimeout(() => setCopiedReferral(false), 2000);
+    }
   };
 
   const loadDashboardData = async () => {
