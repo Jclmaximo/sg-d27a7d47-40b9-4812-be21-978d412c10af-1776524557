@@ -517,14 +517,14 @@ Estoy aquí para resolver cualquier duda que tengas.
         title="Dashboard Principal - Viaja Ligero"
         description="Panel de control principal para gestionar leads y comisiones"
       />
-      <div className="min-h-screen bg-background relative">
+      <div className="min-h-screen bg-background relative w-full overflow-x-hidden">
         {/* Background Orbs */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
 
         {/* Header */}
-        <header className="bg-background border-b border-border/30 sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+        <header className="bg-background border-b border-border/30 sticky top-0 z-50 w-full">
+          <div className="w-full px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
                 <Hand className="w-6 h-6 text-primary" />
@@ -549,9 +549,9 @@ Estoy aquí para resolver cualquier duda que tengas.
         </header>
 
         {/* Hero Message */}
-        <div className="w-full py-12 md:py-16 bg-gradient-to-b from-background via-primary/5 to-background">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-center leading-tight">
+        <div className="w-full py-8 md:py-12 lg:py-16 bg-gradient-to-b from-background via-primary/5 to-background">
+          <div className="w-full px-4">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center leading-tight break-words">
               <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
                 Gestiona Tu Red de Referidos
               </span>
@@ -563,720 +563,722 @@ Estoy aquí para resolver cualquier duda que tengas.
           </div>
         </div>
 
-        <main className="max-w-7xl mx-auto px-4 py-8 relative z-10">
-          {/* Navigation Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid mb-8">
-              <TabsTrigger value="resumen" className="flex items-center gap-2">
-                <LayoutDashboard className="h-4 w-4" />
-                <span className="hidden sm:inline">Resumen</span>
-              </TabsTrigger>
-              <TabsTrigger value="leads" className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
-                <span className="hidden sm:inline">Leads</span>
-              </TabsTrigger>
-              <TabsTrigger value="network" className="flex items-center gap-2">
-                <TrendingUp className="h-4 w-4" />
-                <span className="hidden sm:inline">Mi Red</span>
-              </TabsTrigger>
-              <TabsTrigger value="links" className="flex items-center gap-2">
-                <Link2 className="h-4 w-4" />
-                <span className="hidden sm:inline">Links</span>
-              </TabsTrigger>
-              <TabsTrigger value="perfil" className="flex items-center gap-2">
-                <User className="h-4 w-4" />
-                <span className="hidden sm:inline">Perfil</span>
-              </TabsTrigger>
-            </TabsList>
+        <main className="w-full px-4 py-6 md:py-8 relative z-10">
+          <div className="max-w-7xl mx-auto w-full">
+            {/* Navigation Tabs */}
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid mb-8">
+                <TabsTrigger value="resumen" className="flex items-center gap-2">
+                  <LayoutDashboard className="h-4 w-4" />
+                  <span className="hidden sm:inline">Resumen</span>
+                </TabsTrigger>
+                <TabsTrigger value="leads" className="flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  <span className="hidden sm:inline">Leads</span>
+                </TabsTrigger>
+                <TabsTrigger value="network" className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  <span className="hidden sm:inline">Mi Red</span>
+                </TabsTrigger>
+                <TabsTrigger value="links" className="flex items-center gap-2">
+                  <Link2 className="h-4 w-4" />
+                  <span className="hidden sm:inline">Links</span>
+                </TabsTrigger>
+                <TabsTrigger value="perfil" className="flex items-center gap-2">
+                  <User className="h-4 w-4" />
+                  <span className="hidden sm:inline">Perfil</span>
+                </TabsTrigger>
+              </TabsList>
 
-            {/* TAB 1 - RESUMEN */}
-            <TabsContent value="resumen" className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-3 mb-6">
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
-                  <CardHeader>
-                    <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                      <DollarSign className="w-5 h-5 text-primary" />
-                      Total Ganado
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-1">
-                      ${(stats?.total_earned ?? 0).toFixed(2)}
-                    </div>
-                    <p className="text-xs text-muted-foreground">Acumulado total</p>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/30 shadow-xl shadow-secondary/20 hover:shadow-2xl hover:shadow-secondary/30 hover:border-secondary/50 transition-all">
-                  <CardHeader>
-                    <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                      <TrendingUp className="w-5 h-5 text-secondary" />
-                      Disponible para Retiro
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-1">
-                      ${(stats?.available_balance ?? 0).toFixed(2)}
-                    </div>
-                    <p className="text-xs text-muted-foreground">Listo para retirar</p>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/30 shadow-xl shadow-accent/20 hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/50 transition-all">
-                  <CardHeader>
-                    <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                      <Users className="w-5 h-5 text-accent" />
-                      Referidos Activos
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-1">
-                      {stats?.total_referrals ?? 0}
-                    </div>
-                    <p className="text-xs text-muted-foreground">En tu red</p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Quick Actions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Acciones Rápidas</CardTitle>
-                  <CardDescription>
-                    Herramientas para hacer crecer tu negocio
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-4 md:grid-cols-2">
-                  <Button
-                    variant="outline"
-                    className="h-auto py-4 flex-col gap-2"
-                    onClick={() => setActiveTab("links")}
-                  >
-                    <Link2 className="h-6 w-6" />
-                    <div className="text-center">
-                      <div className="font-semibold">Compartir Embudo</div>
-                      <div className="text-xs text-muted-foreground">
-                        Copia tu link personalizado
+              {/* TAB 1 - RESUMEN */}
+              <TabsContent value="resumen" className="space-y-6">
+                <div className="grid gap-4 md:grid-cols-3 mb-6">
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                        <DollarSign className="w-5 h-5 text-primary" />
+                        Total Ganado
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-1">
+                        ${(stats?.total_earned ?? 0).toFixed(2)}
                       </div>
-                    </div>
-                  </Button>
+                      <p className="text-xs text-muted-foreground">Acumulado total</p>
+                    </CardContent>
+                  </Card>
 
-                  <Button
-                    variant="outline"
-                    className="h-auto py-4 flex-col gap-2"
-                    onClick={() => setActiveTab("leads")}
-                  >
-                    <Users className="h-6 w-6" />
-                    <div className="text-center">
-                      <div className="font-semibold">Ver Leads</div>
-                      <div className="text-xs text-muted-foreground">
-                        {allLeads.length} prospectos capturados
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/30 shadow-xl shadow-secondary/20 hover:shadow-2xl hover:shadow-secondary/30 hover:border-secondary/50 transition-all">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-secondary" />
+                        Disponible para Retiro
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-1">
+                        ${(stats?.available_balance ?? 0).toFixed(2)}
                       </div>
-                    </div>
-                  </Button>
-                </CardContent>
-              </Card>
-            </TabsContent>
+                      <p className="text-xs text-muted-foreground">Listo para retirar</p>
+                    </CardContent>
+                  </Card>
 
-            {/* TAB 2 - LEADS */}
-            <TabsContent value="leads" className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-4 mb-6">
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
-                    <Users className="w-5 h-5 text-primary" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-bold text-foreground">{allLeads.length}</div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/30 shadow-xl shadow-accent/20 hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/50 transition-all">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Nuevos</CardTitle>
-                    <Clock className="w-5 h-5 text-accent" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-bold text-foreground">
-                      {allLeads.filter(l => l.status === "new").length}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Contactados</CardTitle>
-                    <MessageSquare className="w-5 h-5 text-primary" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-bold text-foreground">
-                      {allLeads.filter(l => l.status === "contacted").length}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/30 shadow-xl shadow-secondary/20 hover:shadow-2xl hover:shadow-secondary/30 hover:border-secondary/50 transition-all">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Convertidos</CardTitle>
-                    <CheckCircle2 className="w-5 h-5 text-secondary" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-4xl font-bold text-foreground">
-                      {allLeads.filter(l => l.status === "converted").length}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
-                <CardHeader>
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                      <CardTitle>Gestión de Leads</CardTitle>
-                      <CardDescription>
-                        Administra y da seguimiento a tus prospectos
-                      </CardDescription>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <div className="relative flex-1 md:flex-initial md:w-64">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                        <Input
-                          placeholder="Buscar leads..."
-                          value={searchTerm}
-                          onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-10 bg-background/60 border-primary/20 focus:border-primary/50"
-                        />
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/30 shadow-xl shadow-accent/20 hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/50 transition-all">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                        <Users className="w-5 h-5 text-accent" />
+                        Referidos Activos
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-1">
+                        {stats?.total_referrals ?? 0}
                       </div>
-                      <Select value={statusFilter} onValueChange={setStatusFilter}>
-                        <SelectTrigger className="w-full md:w-[180px] bg-background/60 border-primary/20">
-                          <SelectValue placeholder="Filtrar por estado" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">Todos</SelectItem>
-                          <SelectItem value="new">Nuevos</SelectItem>
-                          <SelectItem value="contacted">Contactados</SelectItem>
-                          <SelectItem value="converted">Convertidos</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <Button 
-                        onClick={exportToCSV}
-                        variant="outline"
-                        className="bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        Exportar
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  {leads.length === 0 ? (
-                    <div className="text-center py-12 text-muted-foreground">
-                      <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>No hay leads que coincidan con tu búsqueda</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      {leads.map((lead) => (
-                        <div
-                          key={lead.id}
-                          className="p-4 rounded-lg bg-card/90 backdrop-blur-sm border border-border/50 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all"
+                      <p className="text-xs text-muted-foreground">En tu red</p>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Quick Actions */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Acciones Rápidas</CardTitle>
+                    <CardDescription>
+                      Herramientas para hacer crecer tu negocio
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-4 md:grid-cols-2">
+                    <Button
+                      variant="outline"
+                      className="h-auto py-4 flex-col gap-2"
+                      onClick={() => setActiveTab("links")}
+                    >
+                      <Link2 className="h-6 w-6" />
+                      <div className="text-center">
+                        <div className="font-semibold">Compartir Embudo</div>
+                        <div className="text-xs text-muted-foreground">
+                          Copia tu link personalizado
+                        </div>
+                      </div>
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="h-auto py-4 flex-col gap-2"
+                      onClick={() => setActiveTab("leads")}
+                    >
+                      <Users className="h-6 w-6" />
+                      <div className="text-center">
+                        <div className="font-semibold">Ver Leads</div>
+                        <div className="text-xs text-muted-foreground">
+                          {allLeads.length} prospectos capturados
+                        </div>
+                      </div>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* TAB 2 - LEADS */}
+              <TabsContent value="leads" className="space-y-6">
+                <div className="grid gap-4 md:grid-cols-4 mb-6">
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
+                      <Users className="w-5 h-5 text-primary" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-bold text-foreground">{allLeads.length}</div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/30 shadow-xl shadow-accent/20 hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/50 transition-all">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Nuevos</CardTitle>
+                      <Clock className="w-5 h-5 text-accent" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-bold text-foreground">
+                        {allLeads.filter(l => l.status === "new").length}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Contactados</CardTitle>
+                      <MessageSquare className="w-5 h-5 text-primary" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-bold text-foreground">
+                        {allLeads.filter(l => l.status === "contacted").length}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/30 shadow-xl shadow-secondary/20 hover:shadow-2xl hover:shadow-secondary/30 hover:border-secondary/50 transition-all">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Convertidos</CardTitle>
+                      <CheckCircle2 className="w-5 h-5 text-secondary" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-bold text-foreground">
+                        {allLeads.filter(l => l.status === "converted").length}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
+                  <CardHeader>
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div>
+                        <CardTitle>Gestión de Leads</CardTitle>
+                        <CardDescription>
+                          Administra y da seguimiento a tus prospectos
+                        </CardDescription>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <div className="relative flex-1 md:flex-initial md:w-64">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                          <Input
+                            placeholder="Buscar leads..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="pl-10 bg-background/60 border-primary/20 focus:border-primary/50"
+                          />
+                        </div>
+                        <Select value={statusFilter} onValueChange={setStatusFilter}>
+                          <SelectTrigger className="w-full md:w-[180px] bg-background/60 border-primary/20">
+                            <SelectValue placeholder="Filtrar por estado" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">Todos</SelectItem>
+                            <SelectItem value="new">Nuevos</SelectItem>
+                            <SelectItem value="contacted">Contactados</SelectItem>
+                            <SelectItem value="converted">Convertidos</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <Button 
+                          onClick={exportToCSV}
+                          variant="outline"
+                          className="bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
                         >
-                          {/* Mobile & Desktop Layout */}
-                          <div className="flex flex-col gap-4">
-                            {/* Header Row */}
-                            <div className="flex items-start justify-between gap-3">
-                              <div className="flex-1 min-w-0">
-                                <h3 className="text-lg font-bold text-foreground mb-1 truncate">
-                                  {lead.name}
-                                </h3>
-                                <Badge className={getStatusBadgeColor(lead.status)}>
-                                  {getStatusText(lead.status)}
-                                </Badge>
-                              </div>
-                              <Button
-                                size="sm"
-                                onClick={() => window.open(`https://wa.me/${lead.phone.replace(/\D/g, "")}`, "_blank")}
-                                className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20 shrink-0"
-                              >
-                                <MessageSquare className="w-4 h-4 mr-2" />
-                                <span className="hidden sm:inline">Contactar</span>
-                                <span className="sm:hidden">WhatsApp</span>
-                              </Button>
-                            </div>
-
-                            {/* Info Grid */}
-                            <div className="grid sm:grid-cols-2 gap-3 text-sm">
-                              <div className="flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
-                                <Mail className="w-4 h-4 text-primary shrink-0" />
-                                <span className="text-foreground truncate font-medium">{lead.email}</span>
-                              </div>
-                              <div className="flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
-                                <Phone className="w-4 h-4 text-accent shrink-0" />
-                                <span className="text-foreground font-medium">{lead.phone}</span>
-                              </div>
-                              <div className="flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
-                                <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
-                                <span className="text-foreground">{formatDate(lead.created_at)}</span>
-                              </div>
-                              <div className="flex items-center gap-2">
+                          <Download className="w-4 h-4 mr-2" />
+                          Exportar
+                        </Button>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    {leads.length === 0 ? (
+                      <div className="text-center py-12 text-muted-foreground">
+                        <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                        <p>No hay leads que coincidan con tu búsqueda</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        {leads.map((lead) => (
+                          <div
+                            key={lead.id}
+                            className="p-4 rounded-lg bg-card/90 backdrop-blur-sm border border-border/50 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all"
+                          >
+                            {/* Mobile & Desktop Layout */}
+                            <div className="flex flex-col gap-4">
+                              {/* Header Row */}
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1 min-w-0">
+                                  <h3 className="text-lg font-bold text-foreground mb-1 truncate">
+                                    {lead.name}
+                                  </h3>
+                                  <Badge className={getStatusBadgeColor(lead.status)}>
+                                    {getStatusText(lead.status)}
+                                  </Badge>
+                                </div>
                                 <Button
                                   size="sm"
-                                  variant="outline"
-                                  onClick={() => {
-                                    setSelectedLead(lead);
-                                    setShowNoteDialog(true);
-                                  }}
-                                  className="flex-1 bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
+                                  onClick={() => window.open(`https://wa.me/${lead.phone.replace(/\D/g, "")}`, "_blank")}
+                                  className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20 shrink-0"
                                 >
-                                  <Plus className="w-4 h-4 mr-2" />
-                                  Nota
+                                  <MessageSquare className="w-4 h-4 mr-2" />
+                                  <span className="hidden sm:inline">Contactar</span>
+                                  <span className="sm:hidden">WhatsApp</span>
                                 </Button>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => loadLeadNotes(lead)}
-                                  className="flex-1 bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
-                                >
-                                  <Eye className="w-4 h-4 mr-2" />
-                                  Ver
-                                </Button>
+                              </div>
+
+                              {/* Info Grid */}
+                              <div className="grid sm:grid-cols-2 gap-3 text-sm">
+                                <div className="flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
+                                  <Mail className="w-4 h-4 text-primary shrink-0" />
+                                  <span className="text-foreground truncate font-medium">{lead.email}</span>
+                                </div>
+                                <div className="flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
+                                  <Phone className="w-4 h-4 text-accent shrink-0" />
+                                  <span className="text-foreground font-medium">{lead.phone}</span>
+                                </div>
+                                <div className="flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
+                                  <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
+                                  <span className="text-foreground">{formatDate(lead.created_at)}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setSelectedLead(lead);
+                                      setShowNoteDialog(true);
+                                    }}
+                                    className="flex-1 bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
+                                  >
+                                    <Plus className="w-4 h-4 mr-2" />
+                                    Nota
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => loadLeadNotes(lead)}
+                                    className="flex-1 bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
+                                  >
+                                    <Eye className="w-4 h-4 mr-2" />
+                                    Ver
+                                  </Button>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* TAB 3 - NETWORK */}
-            <TabsContent value="network" className="space-y-6">
-              <div className="grid gap-4 md:grid-cols-3">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Total Ganado</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold">
-                      ${(stats?.total_earned ?? 0).toFixed(2)}
-                    </div>
+                        ))}
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              {/* TAB 3 - NETWORK */}
+              <TabsContent value="network" className="space-y-6">
+                <div className="grid gap-4 md:grid-cols-3">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Total Ganado</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold">
+                        ${(stats?.total_earned ?? 0).toFixed(2)}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Disponible para Retiro</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold">
+                        ${(stats?.available_balance ?? 0).toFixed(2)}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Referidos Activos</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold">
+                        {stats?.total_referrals ?? 0}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>Disponible para Retiro</CardTitle>
+                    <CardTitle>Historial de Comisiones</CardTitle>
+                    <CardDescription>
+                      Comisiones ganadas del 50% por cada referido
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold">
-                      ${(stats?.available_balance ?? 0).toFixed(2)}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Referidos Activos</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold">
-                      {stats?.total_referrals ?? 0}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Historial de Comisiones</CardTitle>
-                  <CardDescription>
-                    Comisiones ganadas del 50% por cada referido
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {commissions.length === 0 ? (
-                    <div className="text-center py-12 text-muted-foreground">
-                      <DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>Aún no has ganado comisiones</p>
-                      <p className="text-sm mt-2">Comparte tu link de referidos para empezar a ganar</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      {commissions.map((commission) => (
-                        <div
-                          key={commission.id}
-                          className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/30"
-                        >
-                          <div>
-                            <div className="font-medium">
-                              {commission.referred_user?.username || commission.referred_user?.email || "Usuario"}
+                    {commissions.length === 0 ? (
+                      <div className="text-center py-12 text-muted-foreground">
+                        <DollarSign className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                        <p>Aún no has ganado comisiones</p>
+                        <p className="text-sm mt-2">Comparte tu link de referidos para empezar a ganar</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {commissions.map((commission) => (
+                          <div
+                            key={commission.id}
+                            className="flex items-center justify-between p-3 rounded-lg bg-background/50 border border-border/30"
+                          >
+                            <div>
+                              <div className="font-medium">
+                                {commission.referred_user?.username || commission.referred_user?.email || "Usuario"}
+                              </div>
+                              <div className="text-sm text-muted-foreground">
+                                {new Date(commission.created_at).toLocaleDateString("es-ES")}
+                              </div>
                             </div>
-                            <div className="text-sm text-muted-foreground">
-                              {new Date(commission.created_at).toLocaleDateString("es-ES")}
+                            <div className="text-right">
+                              <div className="text-lg font-bold text-secondary">
+                                ${(commission.amount_usd ?? 0).toFixed(2)}
+                              </div>
+                              <Badge variant={
+                                commission.status === "paid" ? "default" :
+                                commission.status === "pending" ? "secondary" :
+                                "outline"
+                              }>
+                                {commission.status === "paid" ? "Pagado" :
+                                 commission.status === "pending" ? "Pendiente" : "Disponible"}
+                              </Badge>
                             </div>
                           </div>
-                          <div className="text-right">
-                            <div className="text-lg font-bold text-secondary">
-                              ${(commission.amount_usd ?? 0).toFixed(2)}
-                            </div>
-                            <Badge variant={
-                              commission.status === "paid" ? "default" :
-                              commission.status === "pending" ? "secondary" :
-                              "outline"
-                            }>
-                              {commission.status === "paid" ? "Pagado" :
-                               commission.status === "pending" ? "Pendiente" : "Disponible"}
-                            </Badge>
-                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Solicitar Retiro</CardTitle>
+                    <CardDescription>
+                      Retiros mínimos de $39.50 USD a tu billetera USDT (BSC)
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button
+                      onClick={requestWithdrawal}
+                      disabled={!stats || (stats.available_balance ?? 0) < 39.50}
+                      size="lg"
+                      className="w-full"
+                    >
+                      <Wallet className="h-5 w-5 mr-2" />
+                      Solicitar Retiro de ${(stats?.available_balance ?? 0).toFixed(2)}
+                    </Button>
+                    {stats && (stats.available_balance ?? 0) < 39.50 && (
+                      <p className="text-sm text-muted-foreground mt-2 text-center">
+                        Necesitas ${(39.50 - (stats.available_balance ?? 0)).toFixed(2)} más para solicitar un retiro
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* TAB 4 - LINKS */}
+              <TabsContent value="links" className="space-y-6">
+                <Card className="bg-gradient-to-br from-primary/20 to-accent/10 backdrop-blur-sm border-primary/40 shadow-2xl shadow-primary/30">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
+                          <Link2 className="w-6 h-6 text-primary" />
                         </div>
-                      ))}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle>Solicitar Retiro</CardTitle>
-                  <CardDescription>
-                    Retiros mínimos de $39.50 USD a tu billetera USDT (BSC)
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button
-                    onClick={requestWithdrawal}
-                    disabled={!stats || (stats.available_balance ?? 0) < 39.50}
-                    size="lg"
-                    className="w-full"
-                  >
-                    <Wallet className="h-5 w-5 mr-2" />
-                    Solicitar Retiro de ${(stats?.available_balance ?? 0).toFixed(2)}
-                  </Button>
-                  {stats && (stats.available_balance ?? 0) < 39.50 && (
-                    <p className="text-sm text-muted-foreground mt-2 text-center">
-                      Necesitas ${(39.50 - (stats.available_balance ?? 0)).toFixed(2)} más para solicitar un retiro
-                    </p>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* TAB 4 - LINKS */}
-            <TabsContent value="links" className="space-y-6">
-              <Card className="bg-gradient-to-br from-primary/20 to-accent/10 backdrop-blur-sm border-primary/40 shadow-2xl shadow-primary/30">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
-                        <Link2 className="w-6 h-6 text-primary" />
+                        <div>
+                          <CardTitle>Tu Embudo de Ventas</CardTitle>
+                          <CardDescription>Comparte este link para capturar leads</CardDescription>
+                        </div>
                       </div>
-                      <div>
-                        <CardTitle>Tu Embudo de Ventas</CardTitle>
-                        <CardDescription>Comparte este link para capturar leads</CardDescription>
-                      </div>
-                    </div>
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}/ambassador/${profile?.username || ""}`);
-                        setCopiedFunnel(true);
-                        setTimeout(() => setCopiedFunnel(false), 2000);
-                      }}
-                      className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30"
-                    >
-                      {copiedFunnel ? (
-                        <>
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Copiado
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-4 h-4 mr-2" />
-                          Copiar
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-primary/30 shadow-inner">
-                    <code className="text-sm text-primary font-mono break-all">
-                      {window.location.origin}/ambassador/{profile?.username || "tu-usuario"}
-                    </code>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-br from-secondary/20 to-accent/10 backdrop-blur-sm border-secondary/40 shadow-2xl shadow-secondary/30">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 bg-secondary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-secondary/30 shadow-lg shadow-secondary/20">
-                        <Gift className="w-6 h-6 text-secondary" />
-                      </div>
-                      <div>
-                        <CardTitle>Link de Referidos</CardTitle>
-                        <CardDescription>Genera ingresos por cada persona que se una</CardDescription>
-                      </div>
-                    </div>
-                    <Button
-                      size="sm"
-                      onClick={() => {
-                        navigator.clipboard.writeText(`${window.location.origin}/?ref=${profile?.username || ""}`);
-                        setCopiedReferral(true);
-                        setTimeout(() => setCopiedReferral(false), 2000);
-                      }}
-                      className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/30"
-                    >
-                      {copiedReferral ? (
-                        <>
-                          <CheckCircle className="w-4 h-4 mr-2" />
-                          Copiado
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-4 h-4 mr-2" />
-                          Copiar
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-secondary/30 shadow-inner">
-                    <code className="text-sm text-secondary font-mono break-all">
-                      {window.location.origin}/?ref={profile?.username || "tu-usuario"}
-                    </code>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            {/* TAB 5 - PERFIL */}
-            <TabsContent value="perfil" className="space-y-6">
-              <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
-                <CardHeader>
-                  <CardTitle>Información Personal</CardTitle>
-                  <CardDescription>
-                    Datos de tu cuenta y preferencias
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Nombre Completo</Label>
-                    <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
-                      {profile?.full_name || "No configurado"}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Email</Label>
-                    <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
-                      {profile?.email || "No configurado"}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Username</Label>
-                    <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
-                      @{profile?.username || "No configurado"}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Billetera USDT (BSC)</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="0x..."
-                        value={walletAddress}
-                        onChange={(e) => setWalletAddress(e.target.value)}
-                        className="flex-1 bg-background/60 border-primary/20 focus:border-primary/50"
-                      />
                       <Button
-                        onClick={async () => {
-                          setSavingWallet(true);
-                          const { error } = await supabase
-                            .from("profiles")
-                            .update({ usdt_wallet_address: walletAddress })
-                            .eq("id", profile?.id || "");
-                          
-                          if (error) {
-                            toast({
-                              title: "Error",
-                              description: "No se pudo guardar la billetera",
-                              variant: "destructive"
-                            });
-                          } else {
-                            toast({
-                              title: "✅ Guardado",
-                              description: "Dirección de billetera actualizada"
-                            });
-                            await loadData();
-                          }
-                          setSavingWallet(false);
+                        size="sm"
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/ambassador/${profile?.username || ""}`);
+                          setCopiedFunnel(true);
+                          setTimeout(() => setCopiedFunnel(false), 2000);
                         }}
-                        disabled={savingWallet}
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
+                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30"
                       >
-                        {savingWallet ? (
-                          <Loader2 className="w-4 h-4 animate-spin" />
+                        {copiedFunnel ? (
+                          <>
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Copiado
+                          </>
                         ) : (
-                          "Guardar"
+                          <>
+                            <Copy className="w-4 h-4 mr-2" />
+                            Copiar
+                          </>
                         )}
                       </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground">
-                      Necesaria para recibir tus comisiones en USDT
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-primary/30 shadow-inner">
+                      <code className="text-sm text-primary font-mono break-all">
+                        {window.location.origin}/ambassador/{profile?.username || "tu-usuario"}
+                      </code>
+                    </div>
+                  </CardContent>
+                </Card>
 
-          {/* Dialog para agregar nota */}
-          <Dialog open={showNoteDialog} onOpenChange={setShowNoteDialog}>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Agregar Nota</DialogTitle>
-                <DialogDescription>
-                  Agrega una nota de seguimiento para {selectedLead?.name}
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4">
-                <textarea
-                  className="w-full min-h-32 p-3 border rounded-md bg-background"
-                  placeholder="Escribe tu nota aquí..."
-                  value={noteText}
-                  onChange={(e) => setNoteText(e.target.value)}
-                />
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      setShowNoteDialog(false);
-                      setNoteText("");
-                      setSelectedLead(null);
-                    }}
-                  >
-                    Cancelar
-                  </Button>
-                  <Button onClick={handleAddNote}>
-                    Guardar Nota
-                  </Button>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+                <Card className="bg-gradient-to-br from-secondary/20 to-accent/10 backdrop-blur-sm border-secondary/40 shadow-2xl shadow-secondary/30">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-secondary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-secondary/30 shadow-lg shadow-secondary/20">
+                          <Gift className="w-6 h-6 text-secondary" />
+                        </div>
+                        <div>
+                          <CardTitle>Link de Referidos</CardTitle>
+                          <CardDescription>Genera ingresos por cada persona que se una</CardDescription>
+                        </div>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/?ref=${profile?.username || ""}`);
+                          setCopiedReferral(true);
+                          setTimeout(() => setCopiedReferral(false), 2000);
+                        }}
+                        className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/30"
+                      >
+                        {copiedReferral ? (
+                          <>
+                            <CheckCircle className="w-4 h-4 mr-2" />
+                            Copiado
+                          </>
+                        ) : (
+                          <>
+                            <Copy className="w-4 h-4 mr-2" />
+                            Copiar
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-secondary/30 shadow-inner">
+                      <code className="text-sm text-secondary font-mono break-all">
+                        {window.location.origin}/?ref={profile?.username || "tu-usuario"}
+                      </code>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
 
-          {/* Dialog para seleccionar mensaje */}
-          <Dialog open={showMessageDialog} onOpenChange={setShowMessageDialog}>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Enviar Mensaje a {selectedLead?.name}</DialogTitle>
-                <DialogDescription>
-                  Selecciona un template de mensaje según la etapa del seguimiento
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {Object.entries(messageTemplates).map(([key, template]) => (
-                  <div
-                    key={key}
-                    className="border rounded-lg p-4 hover:bg-muted cursor-pointer transition"
-                    onClick={() => {
-                      if (selectedLead) {
-                        sendWhatsAppMessage(selectedLead, key);
-                      }
-                    }}
-                  >
-                    <h4 className="font-semibold mb-2 flex items-center gap-2">
-                      <MessageSquare className="h-4 w-4 text-green-600" />
-                      {template.title}
-                    </h4>
-                    <p className="text-sm text-muted-foreground whitespace-pre-line">
-                      {selectedLead ? template.template(selectedLead.name).substring(0, 150) + "..." : ""}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </DialogContent>
-          </Dialog>
+              {/* TAB 5 - PERFIL */}
+              <TabsContent value="perfil" className="space-y-6">
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
+                  <CardHeader>
+                    <CardTitle>Información Personal</CardTitle>
+                    <CardDescription>
+                      Datos de tu cuenta y preferencias
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Nombre Completo</Label>
+                      <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
+                        {profile?.full_name || "No configurado"}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Email</Label>
+                      <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
+                        {profile?.email || "No configurado"}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Username</Label>
+                      <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
+                        @{profile?.username || "No configurado"}
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Billetera USDT (BSC)</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="0x..."
+                          value={walletAddress}
+                          onChange={(e) => setWalletAddress(e.target.value)}
+                          className="flex-1 bg-background/60 border-primary/20 focus:border-primary/50"
+                        />
+                        <Button
+                          onClick={async () => {
+                            setSavingWallet(true);
+                            const { error } = await supabase
+                              .from("profiles")
+                              .update({ usdt_wallet_address: walletAddress })
+                              .eq("id", profile?.id || "");
+                            
+                            if (error) {
+                              toast({
+                                title: "Error",
+                                description: "No se pudo guardar la billetera",
+                                variant: "destructive"
+                              });
+                            } else {
+                              toast({
+                                title: "✅ Guardado",
+                                description: "Dirección de billetera actualizada"
+                              });
+                              await loadData();
+                            }
+                            setSavingWallet(false);
+                          }}
+                          disabled={savingWallet}
+                          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
+                        >
+                          {savingWallet ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            "Guardar"
+                          )}
+                        </Button>
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Necesaria para recibir tus comisiones en USDT
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
 
-          {/* Dialog para ver historial de notas */}
-          <Dialog open={showNotesListDialog} onOpenChange={setShowNotesListDialog}>
-            <DialogContent className="max-w-2xl">
-              <DialogHeader>
-                <DialogTitle>Notas de {selectedLead?.name}</DialogTitle>
-                <DialogDescription>
-                  Historial completo de seguimiento
-                </DialogDescription>
-              </DialogHeader>
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                {leadNotes.length === 0 ? (
-                  <div className="text-center py-8 text-muted-foreground">
-                    <svg className="h-12 w-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <p>No hay notas para este lead</p>
+            {/* Dialog para agregar nota */}
+            <Dialog open={showNoteDialog} onOpenChange={setShowNoteDialog}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Agregar Nota</DialogTitle>
+                  <DialogDescription>
+                    Agrega una nota de seguimiento para {selectedLead?.name}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <textarea
+                    className="w-full min-h-32 p-3 border rounded-md bg-background"
+                    placeholder="Escribe tu nota aquí..."
+                    value={noteText}
+                    onChange={(e) => setNoteText(e.target.value)}
+                  />
+                  <div className="flex justify-end gap-2">
                     <Button
-                      size="sm"
                       variant="outline"
-                      className="mt-4"
                       onClick={() => {
-                        setShowNotesListDialog(false);
-                        setShowNoteDialog(true);
+                        setShowNoteDialog(false);
+                        setNoteText("");
+                        setSelectedLead(null);
                       }}
                     >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Agregar primera nota
+                      Cancelar
+                    </Button>
+                    <Button onClick={handleAddNote}>
+                      Guardar Nota
                     </Button>
                   </div>
-                ) : (
-                  <>
-                    {leadNotes.map((note) => (
-                      <div key={note.id} className="border rounded-lg p-4 bg-card">
-                        <div className="flex items-start justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                              <span className="text-xs font-semibold text-primary">
-                                {note.profiles?.full_name?.[0] || note.profiles?.username?.[0] || "?"}
-                              </span>
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium">
-                                {note.profiles?.full_name || note.profiles?.username || "Usuario"}
-                              </p>
-                              <p className="text-xs text-muted-foreground">
-                                {new Date(note.created_at).toLocaleString("es-ES", {
-                                  day: "2-digit",
-                                  month: "short",
-                                  year: "numeric",
-                                  hour: "2-digit",
-                                  minute: "2-digit"
-                                })}
-                              </p>
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            {/* Dialog para seleccionar mensaje */}
+            <Dialog open={showMessageDialog} onOpenChange={setShowMessageDialog}>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Enviar Mensaje a {selectedLead?.name}</DialogTitle>
+                  <DialogDescription>
+                    Selecciona un template de mensaje según la etapa del seguimiento
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {Object.entries(messageTemplates).map(([key, template]) => (
+                    <div
+                      key={key}
+                      className="border rounded-lg p-4 hover:bg-muted cursor-pointer transition"
+                      onClick={() => {
+                        if (selectedLead) {
+                          sendWhatsAppMessage(selectedLead, key);
+                        }
+                      }}
+                    >
+                      <h4 className="font-semibold mb-2 flex items-center gap-2">
+                        <MessageSquare className="h-4 w-4 text-green-600" />
+                        {template.title}
+                      </h4>
+                      <p className="text-sm text-muted-foreground whitespace-pre-line">
+                        {selectedLead ? template.template(selectedLead.name).substring(0, 150) + "..." : ""}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </DialogContent>
+            </Dialog>
+
+            {/* Dialog para ver historial de notas */}
+            <Dialog open={showNotesListDialog} onOpenChange={setShowNotesListDialog}>
+              <DialogContent className="max-w-2xl">
+                <DialogHeader>
+                  <DialogTitle>Notas de {selectedLead?.name}</DialogTitle>
+                  <DialogDescription>
+                    Historial completo de seguimiento
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {leadNotes.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <svg className="h-12 w-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <p>No hay notas para este lead</p>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="mt-4"
+                        onClick={() => {
+                          setShowNotesListDialog(false);
+                          setShowNoteDialog(true);
+                        }}
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Agregar primera nota
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      {leadNotes.map((note) => (
+                        <div key={note.id} className="border rounded-lg p-4 bg-card">
+                          <div className="flex items-start justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                <span className="text-xs font-semibold text-primary">
+                                  {note.profiles?.full_name?.[0] || note.profiles?.username?.[0] || "?"}
+                                </span>
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium">
+                                  {note.profiles?.full_name || note.profiles?.username || "Usuario"}
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                  {new Date(note.created_at).toLocaleString("es-ES", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit"
+                                  })}
+                                </p>
+                              </div>
                             </div>
                           </div>
+                          <p className="text-sm whitespace-pre-line">{note.note}</p>
                         </div>
-                        <p className="text-sm whitespace-pre-line">{note.note}</p>
-                      </div>
-                    ))}
-                    <Button
-                      variant="outline"
-                      className="w-full"
-                      onClick={() => {
-                        setShowNotesListDialog(false);
-                        setShowNoteDialog(true);
-                      }}
-                    >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Agregar nueva nota
-                    </Button>
-                  </>
-                )}
-              </div>
-            </DialogContent>
-          </Dialog>
+                      ))}
+                      <Button
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => {
+                          setShowNotesListDialog(false);
+                          setShowNoteDialog(true);
+                        }}
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Agregar nueva nota
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
         </main>
       </div>
     </>
