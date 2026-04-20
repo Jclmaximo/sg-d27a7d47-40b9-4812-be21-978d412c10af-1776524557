@@ -548,17 +548,22 @@ Estoy aquí para resolver cualquier duda que tengas.
           </div>
         </header>
 
-        {/* Banner */}
-        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-48 md:h-64 overflow-hidden">
-          <img 
-            src="/dashboard-banner-clean.jpg" 
-            alt="Dashboard Banner" 
-            className="w-full h-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
+        {/* Hero Message */}
+        <div className="w-full py-12 md:py-16 bg-gradient-to-b from-background via-primary/5 to-background">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-center leading-tight">
+              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
+                Gestiona Tu Red de Referidos
+              </span>
+              <br />
+              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-primary bg-clip-text text-transparent">
+                con un Sistema Automático
+              </span>
+            </h2>
+          </div>
         </div>
 
-        <main className="max-w-7xl mx-auto px-4 py-8 -mt-32 relative z-10">
+        <main className="max-w-7xl mx-auto px-4 py-8 relative z-10">
           {/* Navigation Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
             <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid mb-8">
