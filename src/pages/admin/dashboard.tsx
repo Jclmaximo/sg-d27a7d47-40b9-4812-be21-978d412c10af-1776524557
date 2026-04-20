@@ -29,7 +29,7 @@ interface Lead {
   email: string;
   phone: string;
   country: string;
-  interest: string;
+  interest?: string;
   status: string;
   created_at: string;
 }

@@ -26,9 +26,9 @@ interface Lead {
   email: string;
   phone: string;
   country: string;
-  interest: string;
+  interest?: string;
   status: string;
-  contact_method: string;
+  contact_method?: string;
   created_at: string;
 }
 
@@ -113,7 +113,7 @@ export default function LeadsPage() {
     }
   };
 
-  const getInterestIcon = (interest: string) => {
+  const getInterestIcon = (interest?: string) => {
     return interest === "ahorrar" ? "💰" : interest === "ganar" ? "📈" : "🎯";
   };
 
