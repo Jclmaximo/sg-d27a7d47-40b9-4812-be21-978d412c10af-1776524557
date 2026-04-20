@@ -551,8 +551,8 @@ Estoy aquí para resolver cualquier duda que tengas.
         {/* Banner */}
         <div className="w-full h-48 md:h-64 relative overflow-hidden">
           <img 
-            src="/dashboard-banner-mountains.png" 
-            alt="Viaja Ligero" 
+            src="/hubia-banner.png" 
+            alt="HubIA" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
