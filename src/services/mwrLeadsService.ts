@@ -1,8 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { Tables, TablesInsert } from "@/integrations/supabase/types";
+import type { Database } from "@/integrations/supabase/types";
 
-type MWRLead = Tables<"mwr_leads">;
-type MWRLeadInsert = TablesInsert<"mwr_leads">;
+type MWRLead = Database["public"]["Tables"]["mwr_leads"]["Row"];
+type MWRLeadInsert = Database["public"]["Tables"]["mwr_leads"]["Insert"];
 
 export const mwrLeadsService = {
   /**
