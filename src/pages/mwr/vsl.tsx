@@ -80,22 +80,29 @@ export default function VSLPage() {
             {/* Video Container */}
             <Card className="relative overflow-hidden bg-card/50 backdrop-blur-xl border-border/50 shadow-2xl shadow-primary/5">
               <CardContent className="p-0">
-                <div className="relative aspect-video bg-background/50">
+                <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-background/30">
                   <video
+                    ref={videoRef}
+                    className="w-full h-full object-cover"
+                    poster="/ChatGPT_Image_20_abr_2026_02_15_20_p.m.png"
                     controls
-                    className="w-full h-full"
-                    poster="/dashboard-banner.jpg"
+                    onClick={handleVideoClick}
                   >
                     <source src="/v2_1776702836375-392447068.mp4" type="video/mp4" />
                     Tu navegador no soporta el elemento de video.
                   </video>
 
-                  {/* Play Overlay (opcional) */}
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="w-20 h-20 rounded-full bg-primary/80 backdrop-blur-sm flex items-center justify-center">
-                      <Play className="w-10 h-10 text-primary-foreground ml-1" />
+                  {!isPlaying && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-background/20 backdrop-blur-sm">
+                      <Button
+                        size="lg"
+                        onClick={handlePlayClick}
+                        className="h-20 w-20 rounded-full bg-primary hover:bg-primary/90 border-2 border-primary/50 shadow-2xl shadow-primary/20 transform hover:scale-110 transition-all"
+                      >
+                        <Play className="h-8 w-8 text-primary-foreground ml-1" fill="currentColor" />
+                      </Button>
                     </div>
-                  </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
