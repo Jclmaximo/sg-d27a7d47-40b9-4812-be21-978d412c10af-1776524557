@@ -166,19 +166,27 @@ export default function OnboardingPage() {
     <>
       <SEO title="Configura tu Username - Viaja Ligero" />
       
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center p-4">
-        <Card className="w-full max-w-2xl">
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center p-4 relative">
+        {/* Floating Orbs */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float-delayed" />
+        </div>
+
+        <Card className="w-full max-w-2xl bg-card/50 backdrop-blur-sm border-border/50 relative z-10">
           <CardHeader className="text-center">
-            <CardTitle className="text-3xl font-bold">¡Bienvenido a Viaja Ligero! 🎉</CardTitle>
-            <CardDescription className="text-lg">
+            <CardTitle className="text-3xl font-bold bg-gradient-heading bg-clip-text text-transparent">
+              ¡Bienvenido a Viaja Ligero! 🎉
+            </CardTitle>
+            <CardDescription className="text-lg text-muted-foreground">
               Configura tu username para obtener tu funnel personalizado
             </CardDescription>
           </CardHeader>
           
           <CardContent className="space-y-6">
-            <Alert>
-              <LinkIcon className="h-4 w-4" />
-              <AlertDescription>
+            <Alert className="bg-primary/10 border-primary/20">
+              <LinkIcon className="h-4 w-4 text-primary" />
+              <AlertDescription className="text-primary/90">
                 Tu funnel estará disponible en una URL única que podrás compartir con tus contactos.
                 Todos los leads capturados se guardarán automáticamente en tu cuenta.
               </AlertDescription>
@@ -196,7 +204,7 @@ export default function OnboardingPage() {
                     placeholder="tu-nombre"
                     value={username}
                     onChange={(e) => handleUsernameChange(e.target.value)}
-                    className="pr-10"
+                    className="pr-10 bg-background/50 border-border/50"
                     maxLength={30}
                   />
                   {checking && (
@@ -204,7 +212,7 @@ export default function OnboardingPage() {
                   )}
                   {!checking && username.length >= 3 && isAvailable !== null && (
                     isAvailable ? (
-                      <CheckCircle className="absolute right-3 top-3 h-4 w-4 text-green-500" />
+                      <CheckCircle className="absolute right-3 top-3 h-4 w-4 text-secondary" />
                     ) : (
                       <XCircle className="absolute right-3 top-3 h-4 w-4 text-destructive" />
                     )
@@ -214,7 +222,7 @@ export default function OnboardingPage() {
                   <p className="text-sm text-destructive">{error}</p>
                 )}
                 {!error && isAvailable && (
-                  <p className="text-sm text-green-600">✓ Username disponible</p>
+                  <p className="text-sm text-secondary">✓ Username disponible</p>
                 )}
                 <p className="text-xs text-muted-foreground">
                   Solo letras, números y guiones. Mínimo 3 caracteres.
@@ -223,7 +231,7 @@ export default function OnboardingPage() {
 
               <div className="space-y-2">
                 <Label>Tu URL será:</Label>
-                <div className="p-4 bg-muted rounded-lg border">
+                <div className="p-4 bg-background/30 rounded-lg border border-border/50">
                   <p className="font-mono text-primary break-all">
                     {previewUrl}
                   </p>
@@ -233,7 +241,7 @@ export default function OnboardingPage() {
               <Button
                 type="submit"
                 size="lg"
-                className="w-full"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
                 disabled={loading || !isAvailable || username.length < 3}
               >
                 {loading ? (
