@@ -5,7 +5,7 @@ import { Sparkles, TrendingUp, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { DollarSign, TrendingUp, Target } from "lucide-react";
+import { DollarSign, Target } from "lucide-react";
 
 interface SegmentationProps {
   onSelect: (option: "save" | "earn" | "both") => void;

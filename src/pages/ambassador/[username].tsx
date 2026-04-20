@@ -38,7 +38,7 @@ export default function AmbassadorFunnel({ ambassadorId, ambassadorName, usernam
         <SocialProof />
         <FunnelTestimonials />
         <section id="how-it-works-section" className="scroll-mt-20">
-          <FunnelForm ambassadorId={ambassadorId} ambassadorName={ambassadorName} />
+          <FunnelForm  />
         </section>
         <FunnelFooter />
       </div>

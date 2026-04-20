@@ -48,18 +48,8 @@ export default function DashboardPage() {
 
   const loadDashboardData = async () => {
     try {
-      const { data, error } = await leadsService.getAllLeads();
+      const data = await leadsService.getLeads();
       
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message || "Error al cargar datos",
-          variant: "destructive",
-        });
-        setLoading(false);
-        return;
-      }
-
       if (data) {
         setLeads(data);
         const newStats = {

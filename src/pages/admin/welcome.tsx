@@ -50,6 +50,7 @@ export default function WelcomePage() {
   const [username, setUsername] = useState("");
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [stats, setStats] = useState({ total: 0, new: 0, contacted: 0, converted: 0 });
+  const [leads, setLeads] = useState<Lead[]>([]);
   const [recentLeads, setRecentLeads] = useState<Lead[]>([]);
   const [copiedFunnel, setCopiedFunnel] = useState(false);
   const [copiedReferral, setCopiedReferral] = useState(false);
@@ -59,17 +60,8 @@ export default function WelcomePage() {
 
   const loadDashboardData = async () => {
     try {
-      const { data, error } = await leadsService.getAllLeads();
+      const data = await leadsService.getLeads();
       
-      if (error) {
-        toast({
-          title: "Error",
-          description: error.message || "Error al cargar datos",
-          variant: "destructive",
-        });
-        return;
-      }
-
       if (data) {
         setLeads(data);
         const newStats = {
