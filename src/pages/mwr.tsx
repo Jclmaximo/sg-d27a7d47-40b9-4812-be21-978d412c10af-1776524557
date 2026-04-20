@@ -82,7 +82,7 @@ export default function MWRPage() {
             <Button
               size="lg"
               onClick={() => router.push("/mwr/vsl")}
-              className="h-16 px-8 bg-white hover:bg-white/90 text-blue-600 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all">
+              className="h-16 px-8 bg-white hover:bg-white/90 text-blue-600 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all" style={{ backgroundColor: "#eab308", backgroundImage: "none", color: "#ffffff", fontWeight: "900" }}>
               
               <Sparkles className="mr-3 h-6 w-6" />
               Ver Cómo Funciona (60 seg)
