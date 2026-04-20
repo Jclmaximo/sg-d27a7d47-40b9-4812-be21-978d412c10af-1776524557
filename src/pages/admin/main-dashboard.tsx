@@ -442,7 +442,8 @@ Estoy aquí para resolver cualquier duda que tengas.
       return;
     }
 
-    if (!stats || (stats.available_balance || 0) < 39.50) {
+    const availableBalance = stats?.available_balance ?? 0;
+    if (availableBalance < 39.50) {
       toast({
         title: "Saldo insuficiente",
         description: "Necesitas al menos $39.50 USD para solicitar un retiro",
@@ -455,7 +456,7 @@ Estoy aquí para resolver cualquier duda que tengas.
       .from("withdrawal_requests")
       .insert({
         user_id: profile.id,
-        amount_usd: stats.available_balance,
+        amount_usd: availableBalance,
         wallet_address: profile.usdt_wallet_address,
         status: "pending"
       });
@@ -469,7 +470,7 @@ Estoy aquí para resolver cualquier duda que tengas.
     } else {
       toast({
         title: "✅ Solicitud creada",
-        description: `Se procesará tu retiro de $${stats.available_balance.toFixed(2)} USD`
+        description: `Se procesará tu retiro de $${availableBalance.toFixed(2)} USD`
       });
       await loadData();
     }
@@ -700,7 +701,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      ${stats?.total_earned?.toFixed(2) || "0.00"}
+                      ${(stats?.total_earned ?? 0).toFixed(2)}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       Total ganado
@@ -715,7 +716,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      ${stats?.available_balance?.toFixed(2) || "0.00"}
+                      ${(stats?.available_balance ?? 0).toFixed(2)}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       Para retirar
@@ -903,7 +904,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold">
-                      ${stats?.total_earned?.toFixed(2) || "0.00"}
+                      ${(stats?.total_earned ?? 0).toFixed(2)}
                     </div>
                   </CardContent>
                 </Card>
@@ -914,7 +915,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold">
-                      ${stats?.available_balance?.toFixed(2) || "0.00"}
+                      ${(stats?.available_balance ?? 0).toFixed(2)}
                     </div>
                   </CardContent>
                 </Card>
@@ -925,7 +926,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold">
-                      {stats?.total_referrals || 0}
+                      {stats?.total_referrals ?? 0}
                     </div>
                   </CardContent>
                 </Card>
@@ -961,7 +962,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                             <TableRow key={commission.id}>
                               <TableCell>{commission.referred_user?.username || commission.referred_user?.email || "Usuario"}</TableCell>
                               <TableCell className="font-medium">
-                                ${commission.amount_usd.toFixed(2)}
+                                ${(commission.amount_usd ?? 0).toFixed(2)}
                               </TableCell>
                               <TableCell>
                                 <Badge variant={
