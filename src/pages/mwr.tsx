@@ -258,7 +258,7 @@ export default function MWRLandingPage() {
                 <Users className="w-12 h-12 text-yellow-400 mb-6" />
                 <h3 className="text-2xl font-bold mb-4">Duplica tu sistema</h3>
                 <p className="text-blue-100">
-                  Todo tu equipo MWR puede usar el mismo proceso
+                  Todo tu equipo MLM puede usar el mismo proceso
                 </p>
               </CardContent>
             </Card>
@@ -273,7 +273,7 @@ export default function MWRLandingPage() {
             Prueba el sistema 14 días
           </h2>
           <p className="text-xl text-white/90 mb-12">
-            Acceso completo al sistema piloto. Si no generas actividad en tu negocio MWR, no pagas mensualidad.
+            Acceso completo al sistema piloto. Si no generas actividad en Tu Negocio MLM, no pagas mensualidad.
           </p>
 
           <Card className="bg-white shadow-2xl max-w-md mx-auto">

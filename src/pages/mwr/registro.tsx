@@ -187,7 +187,7 @@ export default function MWRRegistroPage() {
               </Button>
 
               <p className="text-center text-sm text-muted-foreground">
-                Al registrarte, aceptas recibir comunicaciones sobre el sistema MWR
+                Al registrarte, aceptas recibir comunicaciones sobre el sistema para Tu Negocio MLM
               </p>
             </form>
           </CardContent>
