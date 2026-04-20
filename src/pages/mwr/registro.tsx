@@ -21,9 +21,8 @@ export default function MWRRegistroPage() {
     nombre: "",
     apellido: "",
     email: "",
-    telefono: "",
-    pais: "",
-    negocio_mlm: "",
+    whatsapp: "",
+    nivel_mwr: "nuevo",
     acepta_terminos: false,
   });
 
@@ -45,9 +44,8 @@ export default function MWRRegistroPage() {
       const { data, error } = await mwrLeadsService.createLead({
         nombre: `${formData.nombre} ${formData.apellido}`.trim(),
         email: formData.email,
-        telefono: formData.telefono,
-        pais: formData.pais,
-        negocio_mlm: formData.negocio_mlm,
+        whatsapp: formData.whatsapp,
+        nivel_mwr: formData.nivel_mwr,
         estado: "nuevo",
       });
 
@@ -204,49 +202,30 @@ export default function MWRRegistroPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="telefono">WhatsApp (con código de país)</Label>
+                    <Label htmlFor="whatsapp">WhatsApp (con código de país)</Label>
                     <Input
-                      id="telefono"
+                      id="whatsapp"
                       type="tel"
                       placeholder="+1 234 567 8900"
-                      value={formData.telefono}
-                      onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                      value={formData.whatsapp}
+                      onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                       required
                       className="bg-background/50 border-border/50"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="pais">País</Label>
-                    <Select value={formData.pais} onValueChange={(value) => setFormData({ ...formData, pais: value })}>
+                    <Label htmlFor="nivel_mwr">¿Cuál es tu nivel actual en MWR?</Label>
+                    <Select value={formData.nivel_mwr} onValueChange={(value) => setFormData({ ...formData, nivel_mwr: value })}>
                       <SelectTrigger className="bg-background/50 border-border/50">
-                        <SelectValue placeholder="Selecciona tu país" />
+                        <SelectValue placeholder="Selecciona tu nivel" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="mexico">México</SelectItem>
-                        <SelectItem value="colombia">Colombia</SelectItem>
-                        <SelectItem value="españa">España</SelectItem>
-                        <SelectItem value="argentina">Argentina</SelectItem>
-                        <SelectItem value="chile">Chile</SelectItem>
-                        <SelectItem value="peru">Perú</SelectItem>
-                        <SelectItem value="venezuela">Venezuela</SelectItem>
-                        <SelectItem value="ecuador">Ecuador</SelectItem>
-                        <SelectItem value="usa">Estados Unidos</SelectItem>
-                        <SelectItem value="otro">Otro</SelectItem>
+                        <SelectItem value="nuevo">Nuevo / Aún no me registro</SelectItem>
+                        <SelectItem value="activo">Distribuidor Activo</SelectItem>
+                        <SelectItem value="lider">Líder (con equipo)</SelectItem>
                       </SelectContent>
                     </Select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="negocio_mlm">¿En qué negocio MLM participas?</Label>
-                    <Input
-                      id="negocio_mlm"
-                      placeholder="Ej: Herbalife, Amway, etc."
-                      value={formData.negocio_mlm}
-                      onChange={(e) => setFormData({ ...formData, negocio_mlm: e.target.value })}
-                      required
-                      className="bg-background/50 border-border/50"
-                    />
                   </div>
 
                   {/* Terms and Conditions */}
