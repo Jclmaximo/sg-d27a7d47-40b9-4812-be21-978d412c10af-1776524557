@@ -78,11 +78,11 @@ export default function MWRPage() {
 
           {/* Hero Video Button */}
           <div className="flex justify-center mb-12">
-            <Button 
+            <Button
               size="lg"
               onClick={() => router.push("/mwr/vsl")}
-              className="h-16 px-8 bg-white hover:bg-white/90 text-blue-600 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all animate-pulse hover:animate-none ring-4 ring-yellow-400/50 hover:ring-yellow-400 hover:shadow-yellow-400/50"
-            >
+              className="h-16 px-8 bg-white hover:bg-white/90 text-blue-600 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all animate-pulse hover:animate-none ring-4 ring-yellow-400/50 hover:ring-yellow-400 hover:shadow-yellow-400/50" style={{ backgroundColor: "#eab308", backgroundImage: "none", color: "#ffffff" }}>
+              
               <Sparkles className="mr-3 h-6 w-6 animate-spin-slow" />
               Ver Cómo Funciona (60 seg)
               <ArrowRight className="ml-3 h-5 w-5 animate-bounce" />
@@ -300,22 +300,22 @@ export default function MWRPage() {
           <Card className="bg-white shadow-2xl max-w-md mx-auto">
             <CardContent className="p-8">
               <div className="space-y-4">
-                <Button 
+                <Button
                   size="lg"
                   onClick={() => router.push("/mwr/registro")}
-                  className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg font-semibold"
-                >
+                  className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg font-semibold">
+                  
                   Empezar Ya! - Solo $29 USD
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
                 
                 {/* Video Button */}
-                <Button 
+                <Button
                   size="lg"
                   variant="outline"
                   onClick={() => router.push("/mwr/vsl")}
-                  className="w-full h-12 border-2 border-blue-200 bg-white hover:bg-blue-50 text-blue-600 text-base font-semibold"
-                >
+                  className="w-full h-12 border-2 border-blue-200 bg-white hover:bg-blue-50 text-blue-600 text-base font-semibold">
+                  
                   <Sparkles className="mr-2 h-5 w-5" />
                   Ver Video de 60 Segundos
                 </Button>
