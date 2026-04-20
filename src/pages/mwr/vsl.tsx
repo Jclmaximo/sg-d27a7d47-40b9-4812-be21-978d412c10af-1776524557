@@ -13,7 +13,8 @@ import {
   Zap,
   MessageSquare,
   BarChart3,
-  Clock
+  Clock,
+  XCircle
 } from "lucide-react";
 
 export default function MWRVSLPage() {
@@ -73,51 +74,150 @@ export default function MWRVSLPage() {
         </section>
 
         {/* Problem Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-4xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                El Problema Real en MWR
+        {currentSection === "problema" && (
+          <section className="min-h-screen flex items-center justify-center px-4 py-20">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="inline-block mb-8">
+                <div className="bg-red-500/10 border border-red-500/30 rounded-full px-6 py-2">
+                  <span className="text-red-400 font-semibold">⚠️ El Problema Real</span>
+                </div>
+              </div>
+
+              <h2 className="text-3xl md:text-5xl font-bold mb-8">
+                ¿Por qué la mayoría de distribuidores <br className="hidden md:block" />
+                <span className="text-red-400">no construyen equipos grandes?</span>
               </h2>
-              <p className="text-xl text-muted-foreground">
-                "En MWR, el crecimiento depende de cuántas personas invites...{" "}
-                <span className="text-red-600 font-semibold">
-                  pero nadie te enseña un sistema
-                </span>
-                "
-              </p>
+
+              <div className="space-y-8 text-left">
+                <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-red-500/20 p-3 rounded-xl flex-shrink-0">
+                      <XCircle className="w-8 h-8 text-red-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold mb-3 text-white">Trabajan EN el negocio, no EN el sistema</h3>
+                      <p className="text-slate-300 text-lg leading-relaxed">
+                        Cada prospecto requiere tu tiempo, cada seguimiento consume tu energía, cada cierre depende de tu presencia. 
+                        <span className="text-yellow-400 font-semibold"> No hay procesos automatizados.</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-red-500/20 p-3 rounded-xl flex-shrink-0">
+                      <XCircle className="w-8 h-8 text-red-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold mb-3 text-white">Dependen de motivación, no de metodología</h3>
+                      <p className="text-slate-300 text-lg leading-relaxed">
+                        Van a eventos, escuchan audios, se cargan de energía... pero al día siguiente no tienen un proceso claro de qué hacer, cómo hacerlo, y cuándo hacerlo.
+                        <span className="text-yellow-400 font-semibold"> El sistema no existe.</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700">
+                  <div className="flex items-start gap-4">
+                    <div className="bg-red-500/20 p-3 rounded-xl flex-shrink-0">
+                      <XCircle className="w-8 h-8 text-red-400" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold mb-3 text-white">No pueden duplicar porque no hay nada que duplicar</h3>
+                      <p className="text-slate-300 text-lg leading-relaxed">
+                        Tu equipo te pregunta "¿qué hago?", "¿cómo invito?", "¿qué digo?". 
+                        No hay guiones, no hay embudos, no hay seguimiento automático.
+                        <span className="text-yellow-400 font-semibold"> Sin sistema, no hay duplicación.</span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-12 p-8 bg-gradient-to-br from-red-900/20 to-orange-900/20 rounded-2xl border border-red-500/30">
+                <p className="text-2xl md:text-3xl font-bold text-white mb-4">
+                  El resultado inevitable:
+                </p>
+                <p className="text-xl text-slate-300">
+                  Trabajas más duro, cierras menos ventas, tu equipo no crece, y terminas quemado preguntándote 
+                  <span className="text-red-400 font-semibold"> "¿por qué no funciona para mí?"</span>
+                </p>
+              </div>
             </div>
+          </section>
+        )}
 
-            <div className="grid md:grid-cols-3 gap-6">
-              <Card className="border-2 border-red-100">
-                <CardContent className="p-6 text-center">
-                  <div className="text-4xl mb-4">😰</div>
-                  <p className="text-muted-foreground">
-                    Dependes de tu energía diaria
-                  </p>
-                </CardContent>
-              </Card>
+        {currentSection === "revelacion" && (
+          <section className="min-h-screen flex items-center justify-center px-4 py-20">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="inline-block mb-8">
+                <div className="bg-green-500/10 border border-green-500/30 rounded-full px-6 py-2">
+                  <span className="text-green-400 font-semibold">💡 La Revelación</span>
+                </div>
+              </div>
 
-              <Card className="border-2 border-red-100">
-                <CardContent className="p-6 text-center">
-                  <div className="text-4xl mb-4">📱</div>
-                  <p className="text-muted-foreground">
-                    Envías mensajes sin respuesta
-                  </p>
-                </CardContent>
-              </Card>
+              <h2 className="text-3xl md:text-5xl font-bold mb-8">
+                Los líderes que crecen equipos grandes <br className="hidden md:block" />
+                <span className="text-green-400">tienen una cosa en común</span>
+              </h2>
 
-              <Card className="border-2 border-red-100">
-                <CardContent className="p-6 text-center">
-                  <div className="text-4xl mb-4">🔄</div>
-                  <p className="text-muted-foreground">
-                    Tu equipo no puede duplicarte
+              <div className="bg-gradient-to-br from-green-900/20 to-blue-900/20 rounded-2xl p-12 border border-green-500/30 mb-12">
+                <p className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
+                  No venden con su carisma.
+                  <br />
+                  <span className="text-green-400">Venden con su sistema.</span>
+                </p>
+                <p className="text-xl text-slate-300">
+                  Tienen procesos automatizados que generan prospectos, dan seguimiento, y duplican su metodología en cada miembro del equipo.
+                </p>
+              </div>
+
+              <div className="grid md:grid-cols-3 gap-6 mb-12">
+                <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                  <div className="text-5xl mb-4">🔄</div>
+                  <h3 className="text-xl font-bold mb-3 text-white">Procesos Automatizados</h3>
+                  <p className="text-slate-300">
+                    El embudo trabaja 24/7 generando interés sin que tú estés presente
                   </p>
-                </CardContent>
-              </Card>
+                </div>
+
+                <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                  <div className="text-5xl mb-4">📋</div>
+                  <h3 className="text-xl font-bold mb-3 text-white">Metodología Clara</h3>
+                  <p className="text-slate-300">
+                    Cada paso documentado, cada mensaje escrito, cada acción medible
+                  </p>
+                </div>
+
+                <div className="bg-slate-800/50 rounded-xl p-6 border border-slate-700">
+                  <div className="text-5xl mb-4">👥</div>
+                  <h3 className="text-xl font-bold mb-3 text-white">Duplicación Instantánea</h3>
+                  <p className="text-slate-300">
+                    Tu equipo copia el sistema exacto que estás usando con un click
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-2xl p-10 border border-blue-500/30">
+                <p className="text-2xl md:text-3xl font-bold text-white mb-4">
+                  La diferencia entre trabajar duro y construir riqueza:
+                </p>
+                <p className="text-xl text-slate-300 mb-6">
+                  Los líderes de 6 y 7 cifras no tienen más tiempo que tú.
+                  <br />
+                  <span className="text-blue-400 font-semibold">Tienen mejores sistemas.</span>
+                </p>
+                <div className="flex items-center justify-center gap-4 text-lg">
+                  <span className="text-slate-400">Esfuerzo manual</span>
+                  <ArrowRight className="text-yellow-400" />
+                  <span className="text-green-400 font-semibold">Sistema automatizado</span>
+                </div>
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Revelation Section */}
         <section className="py-16 bg-slate-50">
