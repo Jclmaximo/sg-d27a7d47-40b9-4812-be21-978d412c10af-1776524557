@@ -60,7 +60,9 @@ import {
   Check,
   Copy,
   ExternalLink,
-  Plus
+  Plus,
+  Gift,
+  CheckCircle
 } from "lucide-react";
 import Link from "next/link";
 
