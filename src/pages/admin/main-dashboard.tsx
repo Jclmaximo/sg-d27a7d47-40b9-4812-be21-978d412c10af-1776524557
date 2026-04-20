@@ -220,13 +220,13 @@ export default function MainDashboard() {
       }
 
       // Load network stats
-      const networkStats = await referralService.getNetworkStats();
+      const networkStats = await referralService.getNetworkStats(session.user.id);
       if (networkStats) {
         setStats(networkStats);
       }
 
       // Load commissions
-      const commissionsData = await referralService.getCommissions();
+      const commissionsData = await referralService.getUserCommissions(session.user.id);
       if (commissionsData) {
         setCommissions(commissionsData);
       }

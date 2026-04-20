@@ -199,17 +199,16 @@ ${window.location.origin}/admin/main-dashboard
   },
 
   // Update lead status
-  async updateLeadStatus(leadId: string, status: string) {
+  async updateLeadStatus(id: string, status: string) {
     const { data, error } = await supabase
       .from("leads")
       .update({ status })
-      .eq("id", leadId)
+      .eq("id", id)
       .select()
       .single();
     
-    console.log("Update lead status:", { data, error });
     if (error) throw error;
-    return data;
+    return { data, error: null };
   },
 
   // Add note to lead
@@ -282,13 +281,33 @@ ${window.location.origin}/admin/main-dashboard
   },
 
   // Delete lead
-  async deleteLead(leadId: string) {
+  async deleteLead(id: string) {
     const { error } = await supabase
       .from("leads")
       .delete()
-      .eq("id", leadId);
+      .eq("id", id);
+      
+    return { error };
+  },
+
+  async addLeadNote(leadId: string, note: string) {
+    const session = await supabase.auth.getSession();
+    if (!session.data.session) throw new Error("No session");
     
-    console.log("Delete lead:", { error });
-    if (error) throw error;
+    const { data, error } = await supabase
+      .from("lead_notes")
+      .insert({
+        lead_id: leadId,
+        created_by: session.data.session.user.id,
+        note: note
+      })
+      .select()
+      .single();
+      
+    if (error) {
+      console.error("Error adding note:", error);
+      throw error;
+    }
+    return data;
   }
 };
