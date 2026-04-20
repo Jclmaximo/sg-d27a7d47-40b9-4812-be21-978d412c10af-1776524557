@@ -51,9 +51,25 @@ export default function MWRVSLPage() {
             </p>
 
             {/* Video Player */}
-            <div className="max-w-4xl mx-auto mb-8">
+            <div className="max-w-4xl mx-auto mb-8 px-2 md:px-0">
               <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl border-2 md:border-4 border-blue-500/30 bg-black">
-                <div className="relative w-full" style={{ paddingTop: "56.25%" }}>
+                {/* Mobile: Aspect ratio vertical (9:16) */}
+                {/* Desktop: Aspect ratio horizontal (16:9) */}
+                <div className="relative w-full md:hidden" style={{ paddingTop: "177.78%" }}>
+                  <video 
+                    className="absolute top-0 left-0 w-full h-full object-cover"
+                    controls
+                    autoPlay
+                    playsInline
+                    onPlay={() => setShowCTA(true)}
+                  >
+                    <source src="/v2_1776702836375-392447068.mp4" type="video/mp4" />
+                    Tu navegador no soporta la reproducción de video.
+                  </video>
+                </div>
+                
+                {/* Desktop version - 16:9 */}
+                <div className="relative w-full hidden md:block" style={{ paddingTop: "56.25%" }}>
                   <video 
                     className="absolute top-0 left-0 w-full h-full object-contain"
                     controls
@@ -66,7 +82,7 @@ export default function MWRVSLPage() {
                   </video>
                 </div>
               </div>
-              <p className="text-xs md:text-sm text-slate-400 mt-4 px-2">
+              <p className="text-xs md:text-sm text-slate-400 mt-4 text-center">
                 ⏱️ Duración: 3 minutos | 🎯 Descubre cómo sistematizar tu negocio MLM
               </p>
             </div>
