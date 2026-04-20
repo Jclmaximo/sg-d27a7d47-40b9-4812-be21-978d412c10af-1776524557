@@ -517,7 +517,7 @@ Estoy aquí para resolver cualquier duda que tengas.
         title="Dashboard Principal - Viaja Ligero"
         description="Panel de control principal para gestionar leads y comisiones"
       />
-      <div className="min-h-screen bg-background relative overflow-hidden">
+      <div className="min-h-screen bg-background relative">
         {/* Background Orbs */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
