@@ -33,45 +33,43 @@ export default function MWRVSLPage() {
 
       <div className="min-h-screen bg-slate-50">
         {/* Hero / Intro */}
-        {currentSection === "intro" && (
-          <section className="min-h-screen flex items-center justify-center px-4 py-20 pt-32">
-            <div className="max-w-4xl mx-auto text-center">
-              <div className="inline-block mb-8">
-                <div className="bg-blue-500/10 border border-blue-500/30 rounded-full px-6 py-2">
-                  <span className="text-blue-400 font-semibold">🎯 Sistema de Marketing MLM</span>
-                </div>
-              </div>
-
-              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                El Crecimiento en Tu Negocio MLM no Depende de tu Energía...
-                <br />
-                <span className="text-yellow-400">Depende de Sistematizar tus Procesos</span>
-              </h1>
-              <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-12">
-                El problema no es la falta de motivación. Es la falta de procesos duplicables que trabajen por ti mientras duermes.
-              </p>
-
-              {/* Video Player */}
-              <div className="max-w-4xl mx-auto mb-8">
-                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-500/30">
-                  <video 
-                    className="w-full h-auto"
-                    controls
-                    autoPlay
-                    playsInline
-                    poster="/registro-hero-final.jpg"
-                  >
-                    <source src="/v2_1776702836375-392447068.mp4" type="video/mp4" />
-                    Tu navegador no soporta la reproducción de video.
-                  </video>
-                </div>
-                <p className="text-sm text-slate-400 mt-4">
-                  ⏱️ Duración: 3 minutos | 🎯 Descubre cómo sistematizar tu negocio MLM
-                </p>
+        <section className="min-h-screen flex items-center justify-center px-4 py-20 pt-32">
+          <div className="max-w-4xl mx-auto text-center">
+            <div className="inline-block mb-8">
+              <div className="bg-blue-500/10 border border-blue-500/30 rounded-full px-6 py-2">
+                <span className="text-blue-600 font-semibold">🎯 Sistema de Marketing MLM</span>
               </div>
             </div>
-          </section>
-        )}
+
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight text-slate-900">
+              El Crecimiento en Tu Negocio MLM no Depende de tu Energía...
+              <br />
+              <span className="text-blue-600">Depende de Sistematizar tus Procesos</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed mb-12">
+              El problema no es la falta de motivación. Es la falta de procesos duplicables que trabajen por ti mientras duermes.
+            </p>
+
+            {/* Video Player */}
+            <div className="max-w-4xl mx-auto mb-8">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
+                <video 
+                  className="w-full h-auto aspect-video object-cover bg-black"
+                  controls
+                  autoPlay
+                  playsInline
+                  onPlay={() => setShowCTA(true)}
+                >
+                  <source src="/v2_1776702836375-392447068.mp4" type="video/mp4" />
+                  Tu navegador no soporta la reproducción de video.
+                </video>
+              </div>
+              <p className="text-sm text-slate-500 mt-4">
+                ⏱️ Descubre cómo sistematizar tu negocio MLM
+              </p>
+            </div>
+          </div>
+        </section>
 
         {/* Problem Section */}
         <section className="py-20 bg-white">
@@ -82,7 +80,7 @@ export default function MWRVSLPage() {
               </div>
             </div>
 
-            <h2 className="text-3xl md:text-5xl font-bold mb-12">
+            <h2 className="text-3xl md:text-5xl font-bold mb-12 text-slate-900">
               ¿Por qué la mayoría de distribuidores <br className="hidden md:block" />
               <span className="text-red-500">no logran escalar su red?</span>
             </h2>
@@ -94,7 +92,7 @@ export default function MWRVSLPage() {
                     <XCircle className="w-8 h-8 text-red-600" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold mb-3">Trabajan EN el negocio, no EN el sistema</h3>
+                    <h3 className="text-2xl font-bold mb-3 text-slate-900">Trabajan EN el negocio, no EN el sistema</h3>
                     <p className="text-slate-600 text-lg leading-relaxed">
                       Cada prospecto requiere tu tiempo, cada seguimiento consume tu energía, cada cierre depende de tu presencia. 
                       <span className="text-slate-900 font-semibold"> Todo es manual, nada es automático.</span>
@@ -109,7 +107,7 @@ export default function MWRVSLPage() {
                     <XCircle className="w-8 h-8 text-red-600" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold mb-3">Dependen de motivación, no de metodología</h3>
+                    <h3 className="text-2xl font-bold mb-3 text-slate-900">Dependen de motivación, no de metodología</h3>
                     <p className="text-slate-600 text-lg leading-relaxed">
                       Se cargan de energía en los eventos... pero al día siguiente no tienen un proceso claro de qué hacer, cómo hacerlo ni cuándo hacerlo.
                       <span className="text-slate-900 font-semibold"> La falta de procesos mata la constancia.</span>
@@ -124,7 +122,7 @@ export default function MWRVSLPage() {
                     <XCircle className="w-8 h-8 text-red-600" />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold mb-3">No pueden duplicar porque no hay qué duplicar</h3>
+                    <h3 className="text-2xl font-bold mb-3 text-slate-900">No pueden duplicar porque no hay qué duplicar</h3>
                     <p className="text-slate-600 text-lg leading-relaxed">
                       Tu equipo pregunta "¿qué hago?", "¿cómo invito?". Si no tienes guiones estandarizados ni embudos comprobados...
                       <span className="text-slate-900 font-semibold"> Sin procesos claros, no hay duplicación real.</span>
@@ -145,7 +143,7 @@ export default function MWRVSLPage() {
               </div>
             </div>
 
-            <h2 className="text-3xl md:text-5xl font-bold mb-8">
+            <h2 className="text-3xl md:text-5xl font-bold mb-8 text-slate-900">
               Los líderes de 6 y 7 cifras <br className="hidden md:block" />
               <span className="text-green-600">tienen una cosa en común</span>
             </h2>
@@ -164,24 +162,24 @@ export default function MWRVSLPage() {
             <div className="grid md:grid-cols-3 gap-6 mb-12">
               <div className="bg-white rounded-xl p-6 border shadow-sm">
                 <div className="text-5xl mb-4">🔄</div>
-                <h3 className="text-xl font-bold mb-3">Sistemas Automatizados</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl font-bold mb-3 text-slate-900">Sistemas Automatizados</h3>
+                <p className="text-slate-600">
                   El embudo trabaja 24/7 generando interés y educando al prospecto sin que tú estés presente.
                 </p>
               </div>
 
               <div className="bg-white rounded-xl p-6 border shadow-sm">
                 <div className="text-5xl mb-4">📋</div>
-                <h3 className="text-xl font-bold mb-3">Metodología Medible</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl font-bold mb-3 text-slate-900">Metodología Medible</h3>
+                <p className="text-slate-600">
                   Cada paso documentado. Las interacciones y seguimientos ya no son improvisados.
                 </p>
               </div>
 
               <div className="bg-white rounded-xl p-6 border shadow-sm">
                 <div className="text-5xl mb-4">👥</div>
-                <h3 className="text-xl font-bold mb-3">Duplicación Instantánea</h3>
-                <p className="text-muted-foreground">
+                <h3 className="text-xl font-bold mb-3 text-slate-900">Duplicación Instantánea</h3>
+                <p className="text-slate-600">
                   Tu equipo ya no tiene que "aprender a vender". Solo ejecutan el mismo proceso paso a paso.
                 </p>
               </div>
@@ -193,7 +191,7 @@ export default function MWRVSLPage() {
         <section className="py-16 bg-white">
           <div className="max-w-4xl mx-auto px-4">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-slate-900">
                 El Nuevo Sistema Operativo para Tu Negocio MLM
               </h2>
             </div>
@@ -206,7 +204,7 @@ export default function MWRVSLPage() {
                       1
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold mb-3">Embudo de Viajes Sistematizado</h3>
+                      <h3 className="text-2xl font-bold mb-3 text-slate-900">Embudo de Viajes Sistematizado</h3>
                       <p className="text-lg text-slate-700 mb-4">
                         Tu página personal captura prospectos interesados en ahorrar en viajes, filtrando a los curiosos y dejando solo a los verdaderamente interesados.
                       </p>
@@ -222,7 +220,7 @@ export default function MWRVSLPage() {
                       2
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold mb-3">CRM de Gestión de Leads</h3>
+                      <h3 className="text-2xl font-bold mb-3 text-slate-900">CRM de Gestión de Leads</h3>
                       <p className="text-lg text-slate-700 mb-4">
                         Cada contacto entra a tu pipeline organizado. Sabes exactamente en qué etapa del proceso está cada persona, sin perder seguimientos.
                       </p>
@@ -238,7 +236,7 @@ export default function MWRVSLPage() {
                       3
                     </div>
                     <div>
-                      <h3 className="text-2xl font-bold mb-3">Comunicación por IA</h3>
+                      <h3 className="text-2xl font-bold mb-3 text-slate-900">Comunicación por IA</h3>
                       <p className="text-lg text-slate-700 mb-4">
                         Procesos de comunicación estandarizados. La IA crea el mensaje de seguimiento perfecto basado en el comportamiento del prospecto.
                       </p>
@@ -290,22 +288,24 @@ export default function MWRVSLPage() {
 
         {/* CTA Section */}
         {showCTA && (
-          <section className="py-12 bg-gradient-to-r from-yellow-500 to-orange-500 sticky bottom-0 shadow-2xl z-50">
-            <div className="max-w-4xl mx-auto px-4 text-center">
-              <h2 className="text-2xl md:text-4xl font-bold text-white mb-4">
-                Sistematiza Tu Negocio MLM Hoy
-              </h2>
-              <p className="text-lg md:text-xl text-white/90 mb-6">
-                Accede al sistema piloto por 14 días • Solo $29 USD
-              </p>
+          <section className="py-12 bg-gradient-to-r from-blue-600 to-indigo-600 sticky bottom-0 shadow-2xl z-50">
+            <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
+              <div className="text-left">
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                  Sistematiza Tu Negocio MLM Hoy
+                </h2>
+                <p className="text-blue-100">
+                  Accede al sistema piloto por 14 días • Solo $29 USD
+                </p>
+              </div>
 
               <Button
                 size="lg"
                 onClick={() => router.push("/mwr/checkout")}
-                className="h-16 px-8 md:px-12 bg-white text-orange-600 hover:bg-gray-100 text-lg md:text-xl font-bold shadow-xl"
+                className="h-14 px-8 bg-yellow-500 hover:bg-yellow-400 text-slate-900 text-lg font-bold shadow-xl"
               >
                 Acceder al Sistema Piloto
-                <ArrowRight className="ml-3 h-6 w-6" />
+                <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
           </section>
