@@ -2,16 +2,12 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Loader2, MessageSquare } from "lucide-react";
 
 interface FunnelFormProps {
   username?: string;
-  ambassadorId?: string;
-  ambassadorName?: string;
 }
 
-export function FunnelForm({ username, ambassadorId, ambassadorName }: FunnelFormProps) {
+export function FunnelForm({ username }: FunnelFormProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
@@ -35,7 +31,7 @@ export function FunnelForm({ username, ambassadorId, ambassadorName }: FunnelFor
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    console.log("Form submitted:", { ...formData, username, ambassadorId });
+    console.log("Form submitted:", { ...formData, username });
     setLoading(false);
   };
 
@@ -46,7 +42,7 @@ export function FunnelForm({ username, ambassadorId, ambassadorName }: FunnelFor
           {/* Header */}
           <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              {ambassadorName ? `Empieza tu experiencia con ${ambassadorName}` : "Empieza tu experiencia con Viaja Ligero"}
+              {username ? `Empieza tu experiencia con ${username}` : "Empieza tu experiencia con Viaja Ligero"}
             </h2>
             <p className="text-lg text-muted-foreground">
               Completa el formulario y te contactaremos para mostrarte cómo acceder a beneficios exclusivos

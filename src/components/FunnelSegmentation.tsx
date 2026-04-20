@@ -2,8 +2,10 @@
 
 import { useState } from "react";
 import { Sparkles, TrendingUp, Zap } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { DollarSign, TrendingUp, Target } from "lucide-react";
 
 interface SegmentationProps {
   onSelect: (option: "save" | "earn" | "both") => void;

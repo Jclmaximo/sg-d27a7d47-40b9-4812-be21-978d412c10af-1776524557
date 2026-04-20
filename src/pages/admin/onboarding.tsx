@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -19,44 +19,72 @@ export default function OnboardingPage() {
   const [isAvailable, setIsAvailable] = useState<boolean | null>(null);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  const checkAuth = useCallback(async () => {
+    const session = await authService.getCurrentSession();
+    if (!session) {
+      router.push("/auth/reset-password");
+      return;
+    }
+    
+    try {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("id", session.user.id)
+        .single();
 
-  useEffect(() => {
-    // Debounce username validation
-    if (username.length < 3) {
-      setIsAvailable(null);
+      if (profile?.username) {
+        router.push("/admin/welcome");
+      }
+    } catch (error) {
+      console.error("Error checking profile:", error);
+    }
+  }, [router]);
+
+  const checkUsernameAvailability = useCallback(async () => {
+    if (!username || username.length < 3) {
+      setIsAvailable(false);
+      setError("");
       return;
     }
 
+    setChecking(true);
+    
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("username", username.toLowerCase())
+        .maybeSingle();
+
+      if (error) throw error;
+
+      if (data) {
+        setIsAvailable(false);
+        setError("Este nombre de usuario ya está en uso");
+      } else {
+        setIsAvailable(true);
+        setError("");
+      }
+    } catch (error) {
+      console.error("Error checking username:", error);
+      setError("Error al verificar disponibilidad");
+    } finally {
+      setChecking(false);
+    }
+  }, [username]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
-      checkUsernameAvailability(username);
+      checkUsernameAvailability();
     }, 500);
 
     return () => clearTimeout(timer);
-  }, [username]);
-
-  const checkAuth = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      router.push("/admin");
-      return;
-    }
-
-    // Check if user already has a username
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("username")
-      .eq("id", user.id)
-      .single();
-
-    if (profile?.username) {
-      router.push("/admin/main-dashboard");
-      return;
-    }
-  };
+  }, [checkUsernameAvailability]);
 
   const validateUsername = (value: string): string | null => {
     if (value.length < 3) {
@@ -72,37 +100,6 @@ export default function OnboardingPage() {
       return "No puede comenzar ni terminar con guión";
     }
     return null;
-  };
-
-  const checkUsernameAvailability = async (value: string) => {
-    const validationError = validateUsername(value);
-    if (validationError) {
-      setError(validationError);
-      setIsAvailable(false);
-      return;
-    }
-
-    setError("");
-    setChecking(true);
-
-    try {
-      const normalizedUsername = value.toLowerCase().trim();
-      
-      const { data, error: checkError } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("username", normalizedUsername)
-        .maybeSingle();
-
-      if (checkError) throw checkError;
-
-      setIsAvailable(!data);
-    } catch (err) {
-      console.error("Error checking username:", err);
-      setError("Error al verificar disponibilidad");
-    } finally {
-      setChecking(false);
-    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

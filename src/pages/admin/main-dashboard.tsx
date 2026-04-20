@@ -1,39 +1,51 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "@/integrations/supabase/client";
-import { referralService, type Commission, type NetworkStats, type ReferralTreeNode } from "@/services/referralService";
-import { leadsService } from "@/services/leadsService";
+import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { SEO } from "@/components/SEO";
-import { 
-  LayoutDashboard, 
-  Users, 
-  Network, 
-  Link2, 
-  Settings, 
-  LogOut, 
-  Copy, 
-  Check, 
-  DollarSign, 
-  TrendingUp, 
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { authService } from "@/services/authService";
+import { leadsService } from "@/services/leadsService";
+import { referralService } from "@/services/referralService";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Users,
+  TrendingUp,
+  DollarSign,
+  UserPlus,
+  Search,
+  Download,
   MessageSquare,
-  ExternalLink,
-  Wallet,
-  User,
-  ShieldCheck,
-  Plus
+  Mail,
+  Phone,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  Loader2,
+  LogOut,
+  Eye,
+  FileText,
+  Share2,
+  Filter as FilterIcon
 } from "lucide-react";
 import Link from "next/link";
-import { useToast } from "@/hooks/use-toast";
 
 interface Lead {
   id: string;
@@ -70,14 +82,13 @@ export default function MainDashboard() {
   
   // Leads
   const [leads, setLeads] = useState<Lead[]>([]);
+  const [allLeads, setAllLeads] = useState<Lead[]>([]);
   const [filteredLeads, setFilteredLeads] = useState<Lead[]>([]);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [interestFilter, setInterestFilter] = useState<string>("all");
-  const [newNote, setNewNote] = useState("");
-  const [newStatus, setNewStatus] = useState("");
-  const [noteText, setNoteText] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [showDetailsDialog, setShowDetailsDialog] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showNotesListDialog, setShowNotesListDialog] = useState(false);
@@ -97,100 +108,76 @@ export default function MainDashboard() {
   const [walletAddress, setWalletAddress] = useState("");
   const [savingWallet, setSavingWallet] = useState(false);
 
-  useEffect(() => {
-    loadData();
+  const loadData = useCallback(async () => {
+    try {
+      const [leadsResult, referralsResult] = await Promise.all([
+        leadsService.getAllLeads(),
+        referralService.getReferrals()
+      ]);
+
+      if (leadsResult.data) {
+        setAllLeads(leadsResult.data);
+        setLeads(leadsResult.data);
+        
+        const newStats = {
+          totalLeads: leadsResult.data.length,
+          newLeads: leadsResult.data.filter(l => l.status === "new").length,
+          contacted: leadsResult.data.filter(l => l.status === "contacted").length,
+          converted: leadsResult.data.filter(l => l.status === "converted").length,
+          totalReferrals: 0,
+          activeMembers: 0,
+          totalCommissions: 0
+        };
+        setStats(newStats);
+      }
+
+      if (referralsResult.data) {
+        setReferrals(referralsResult.data);
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error loading data:", error);
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => {
-    filterLeads();
-  }, [searchTerm, statusFilter, leads]);
-
-  useEffect(() => {
-    // Check if coming from registration or payment
-    const urlParams = new URLSearchParams(window.location.search);
-    const fromPayment = urlParams.get("payment");
-    const fromRegistration = urlParams.get("new");
-
-    if (fromPayment === "success") {
-      toast({
-        title: "¡Pago confirmado! 🎉",
-        description: "Tu suscripción está activa. Bienvenido al club.",
-      });
-      // Clean URL
-      window.history.replaceState({}, "", "/admin/main-dashboard");
-    }
-
-    if (fromRegistration === "true") {
-      toast({
-        title: "¡Cuenta creada! 🎉",
-        description: "Completa tu perfil y empieza a capturar leads.",
-      });
-      // Clean URL
-      window.history.replaceState({}, "", "/admin/main-dashboard");
-    }
-  }, [toast]);
-
-  const loadData = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      router.push("/admin");
-      return;
-    }
-
-    // Load profile
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", user.id)
-      .single();
-
-    if (profileData) {
-      setProfile(profileData);
-      setWalletAddress(profileData.usdt_wallet_address || "");
-    }
-
-    // Load leads
-    const { data: leadsData } = await supabase
-      .from("leads")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false });
-
-    if (leadsData) {
-      setLeads(leadsData);
-    }
-
-    // Load network data
-    const [statsData, commissionsData, treeData] = await Promise.all([
-      referralService.getNetworkStats(user.id),
-      referralService.getUserCommissions(user.id),
-      referralService.getReferralTree(user.id, 2)
-    ]);
-
-    setStats(statsData);
-    setCommissions(commissionsData);
-    setTree(treeData);
-    setLoading(false);
-  };
-
-  const filterLeads = () => {
-    let filtered = leads;
+  const filterLeads = useCallback(() => {
+    let filtered = [...allLeads];
 
     if (searchTerm) {
-      filtered = filtered.filter(lead =>
-        lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        lead.phone.includes(searchTerm)
+      filtered = filtered.filter(
+        (lead) =>
+          lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          lead.phone.includes(searchTerm)
       );
     }
 
     if (statusFilter !== "all") {
-      filtered = filtered.filter(lead => lead.status === statusFilter);
+      filtered = filtered.filter((lead) => lead.status === statusFilter);
     }
 
-    setFilteredLeads(filtered);
-  };
+    setLeads(filtered);
+  }, [allLeads, searchTerm, statusFilter]);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const session = await authService.getCurrentSession();
+      if (!session) {
+        router.push("/auth/reset-password");
+        return;
+      }
+      setUserEmail(session.user?.email || "");
+      loadData();
+    };
+
+    checkAuth();
+  }, [router, loadData]);
+
+  useEffect(() => {
+    filterLeads();
+  }, [filterLeads]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -392,67 +379,80 @@ Estoy aquí para resolver cualquier duda que tengas.
     }
   };
 
-  const handleChangeLeadStatus = async (leadId: string, newStatus: string) => {
+  const updateLeadStatus = async (leadId: string, newStatus: string) => {
     try {
-      await leadsService.updateLeadStatus(leadId, newStatus);
-      
+      const result = await leadsService.updateLeadStatus(leadId, newStatus);
+
+      if (result.error) {
+        toast({
+          title: "Error",
+          description: result.error.message || "Error al actualizar estado",
+          variant: "destructive",
+        });
+        return;
+      }
+
       toast({
         title: "Estado actualizado",
-        description: `Lead marcado como ${newStatus}`
+        description: `Lead marcado como ${getStatusText(newStatus)}`,
       });
-      
-      await loadData();
-    } catch (error) {
+
+      loadData();
+    } catch (err) {
+      console.error("Error updating status:", err);
       toast({
         title: "Error",
-        description: "No se pudo actualizar el estado",
-        variant: "destructive"
+        description: "Error al actualizar estado",
+        variant: "destructive",
       });
     }
   };
 
-  const handleAddNote = async () => {
-    if (!selectedLead || !noteText.trim()) return;
+  const contactViaWhatsApp = (phone: string) => {
+    const cleanPhone = phone.replace(/\D/g, "");
+    window.open(`https://wa.me/${cleanPhone}`, "_blank");
+  };
 
+  const contactViaEmail = (email: string) => {
+    window.location.href = `mailto:${email}`;
+  };
+
+  const exportToCSV = () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      const headers = ["Nombre", "Email", "Teléfono", "País", "Interés", "Estado", "Fecha"];
+      const rows = leads.map(lead => [
+        lead.name,
+        lead.email,
+        lead.phone,
+        lead.country || "",
+        lead.interest || "",
+        getStatusText(lead.status),
+        formatDate(lead.created_at)
+      ]);
 
-      await leadsService.addNote({
-        lead_id: selectedLead.id,
-        note: noteText,
-        created_by: user.id
-      });
+      const csvContent = [
+        headers.join(","),
+        ...rows.map(row => row.map(cell => `"${cell}"`).join(","))
+      ].join("\n");
+
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `leads_${new Date().toISOString().split("T")[0]}.csv`;
+      link.click();
 
       toast({
-        title: "Nota agregada",
-        description: "La nota se guardó correctamente"
+        title: "Exportación exitosa",
+        description: "Los leads se han exportado correctamente",
       });
-
-      setNoteText("");
-      setShowNoteDialog(false);
-      setSelectedLead(null);
-      await loadData();
-    } catch (error) {
+    } catch (err) {
+      console.error("Error exporting:", err);
       toast({
         title: "Error",
-        description: "No se pudo guardar la nota",
-        variant: "destructive"
+        description: "Error al exportar leads",
+        variant: "destructive",
       });
     }
-  };
-
-  const sendWhatsAppMessage = (lead: Lead, templateKey: string) => {
-    const template = messageTemplates[templateKey as keyof typeof messageTemplates];
-    if (!template) return;
-
-    const message = template.template(lead.name);
-    const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
-    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(message)}`;
-    
-    window.open(whatsappUrl, "_blank");
-    setShowMessageDialog(false);
-    setSelectedLead(null);
   };
 
   const loadLeadNotes = async (lead: Lead) => {
@@ -735,7 +735,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                               <TableCell>
                                 <Select
                                   value={lead.status}
-                                  onValueChange={(value) => handleChangeLeadStatus(lead.id, value)}
+                                  onValueChange={(value) => updateLeadStatus(lead.id, value)}
                                 >
                                   <SelectTrigger className="w-32">
                                     <SelectValue />

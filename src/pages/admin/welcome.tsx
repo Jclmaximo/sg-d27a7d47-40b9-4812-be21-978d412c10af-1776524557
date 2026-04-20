@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -6,29 +6,27 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
-  TrendingUp, 
   Mail, 
-  Phone, 
   LogOut,
   Calendar,
   CheckCircle2,
   Clock,
-  XCircle,
   Loader2,
-  Plane,
-  LayoutDashboard,
-  PlayCircle,
-  MessageSquare,
+  Eye,
   Link2,
   Share2,
-  ArrowRight,
-  CheckCircle,
   Copy,
-  Gift
+  CheckCircle,
+  MessageSquare,
+  LayoutDashboard,
+  TrendingUp,
+  Gift,
+  Zap,
+  Star,
+  ArrowRight
 } from "lucide-react";
 
 interface Lead {
@@ -56,37 +54,77 @@ export default function WelcomePage() {
   const funnelLink = typeof window !== "undefined" ? `${window.location.origin}/ambassador/${username}` : "";
   const referralLink = typeof window !== "undefined" ? `${window.location.origin}/pricing?ref=${username}` : "";
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    const session = await authService.getCurrentSession();
-    if (!session) {
-      router.push("/auth/reset-password");
-      return;
-    }
-    
-    setUserEmail(session.user?.email || "");
-    
-    // Get profile data
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", session.user.id)
-      .single();
+  const loadDashboardData = async () => {
+    try {
+      const { data, error } = await leadsService.getAllLeads();
       
-    if (profileData) {
-      setProfile(profileData);
-      setUsername(profileData.username || "");
-      if (!profileData.username) {
+      if (error) {
+        toast({
+          title: "Error",
+          description: error.message || "Error al cargar datos",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data) {
+        setLeads(data);
+        const newStats = {
+          total: data.length,
+          new: data.filter(l => l.status === "new").length,
+          contacted: data.filter(l => l.status === "contacted").length,
+          converted: data.filter(l => l.status === "converted").length,
+        };
+        setStats(newStats);
+        
+        const recent = data
+          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+          .slice(0, 5);
+        setRecentLeads(recent);
+      }
+    } catch (err) {
+      const error = err as Error;
+      console.error("Error loading data:", error);
+    }
+  };
+
+  const checkAuth = useCallback(async () => {
+    try {
+      const session = await authService.getCurrentSession();
+      
+      if (!session) {
+        router.push("/auth/reset-password");
+        return;
+      }
+
+      setUserEmail(session.user?.email || "");
+      
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("username, full_name")
+        .eq("id", session.user.id)
+        .single();
+
+      if (!profile?.username) {
         router.push("/admin/onboarding");
         return;
       }
+
+      setProfile(profile);
+      setUsername(profile.username);
+      await loadDashboardData();
+      
+    } catch (error) {
+      console.error("Error checking auth:", error);
+      router.push("/auth/reset-password");
+    } finally {
+      setLoading(false);
     }
-    
-    loadDashboardData();
-  };
+  }, [router]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const copyFunnelLink = () => {
     if (typeof navigator !== "undefined") {
@@ -103,27 +141,6 @@ export default function WelcomePage() {
       setCopiedReferral(true);
       toast({ title: "¡Copiado!", description: "Link de referidos copiado" });
       setTimeout(() => setCopiedReferral(false), 2000);
-    }
-  };
-
-  const loadDashboardData = async () => {
-    try {
-      const data = await leadsService.getLeads();
-      
-      if (data) {
-        setRecentLeads(data.slice(0, 5));
-        
-        setStats({
-          total: data.length,
-          new: data.filter(l => l.status === "new").length,
-          contacted: data.filter(l => l.status === "contacted").length,
-          converted: data.filter(l => l.status === "converted").length,
-        });
-      }
-    } catch (error) {
-      console.error("Error loading dashboard data:", error);
-    } finally {
-      setLoading(false);
     }
   };
 

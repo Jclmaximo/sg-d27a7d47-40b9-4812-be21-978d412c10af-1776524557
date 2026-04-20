@@ -37,7 +37,7 @@ export default function AdminPage() {
     }
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -54,13 +54,14 @@ export default function AdminPage() {
       if (user) {
         router.push("/admin/welcome");
       }
-    } catch (err: any) {
-      setError(err.message || "Error al iniciar sesión");
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || "Error al iniciar sesión");
       setLoading(false);
     }
   };
 
-  const handleResetPassword = async (e: React.FormEvent) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
@@ -76,8 +77,9 @@ export default function AdminPage() {
 
       setResetSent(true);
       setLoading(false);
-    } catch (err: any) {
-      setError(err.message || "Error al enviar email de recuperación");
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || "Error al enviar email de recuperación");
       setLoading(false);
     }
   };

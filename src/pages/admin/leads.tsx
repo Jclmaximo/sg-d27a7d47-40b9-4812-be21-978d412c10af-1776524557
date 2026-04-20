@@ -1,23 +1,34 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
 import { useToast } from "@/hooks/use-toast";
-import { 
-  ArrowLeft,
+import {
+  Users,
   Search,
-  Filter,
-  Download,
   Mail,
   Phone,
   Calendar,
-  MapPin,
-  Loader2
+  Download,
+  MessageSquare,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  Loader2,
+  LogOut,
+  TrendingUp,
+  Eye
 } from "lucide-react";
 
 interface Lead {
@@ -41,22 +52,40 @@ export default function LeadsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  useEffect(() => {
-    filterLeads();
-  }, [searchQuery, filterStatus, leads]);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     const session = await authService.getCurrentSession();
     if (!session) {
       router.push("/auth/reset-password");
       return;
     }
     loadLeads();
-  };
+  }, [router]);
+
+  const filterLeads = useCallback(() => {
+    let filtered = [...leads];
+
+    if (searchQuery) {
+      filtered = filtered.filter(lead =>
+        lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lead.phone.includes(searchQuery)
+      );
+    }
+
+    if (filterStatus !== "all") {
+      filtered = filtered.filter(lead => lead.status === filterStatus);
+    }
+
+    setFilteredLeads(filtered);
+  }, [leads, searchQuery, filterStatus]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  useEffect(() => {
+    filterLeads();
+  }, [filterLeads]);
 
   const loadLeads = async () => {
     setLoading(true);
@@ -76,24 +105,6 @@ export default function LeadsPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const filterLeads = () => {
-    let filtered = leads;
-
-    if (searchQuery) {
-      filtered = filtered.filter(lead =>
-        lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lead.phone.includes(searchQuery)
-      );
-    }
-
-    if (filterStatus !== "all") {
-      filtered = filtered.filter(lead => lead.status === filterStatus);
-    }
-
-    setFilteredLeads(filtered);
   };
 
   const formatDate = (dateString: string) => {

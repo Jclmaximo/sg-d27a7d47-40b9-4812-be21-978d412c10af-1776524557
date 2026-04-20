@@ -46,6 +46,38 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<Stats>({ total: 0, contacted: 0, converted: 0, pending: 0 });
   const [userEmail, setUserEmail] = useState<string>("");
 
+  const loadDashboardData = async () => {
+    try {
+      const { data, error } = await leadsService.getAllLeads();
+      
+      if (error) {
+        toast({
+          title: "Error",
+          description: error.message || "Error al cargar datos",
+          variant: "destructive",
+        });
+        setLoading(false);
+        return;
+      }
+
+      if (data) {
+        setLeads(data);
+        const newStats = {
+          total: data.length,
+          contacted: data.filter(l => l.status === "contacted").length,
+          converted: data.filter(l => l.status === "converted").length,
+          pending: data.filter(l => l.status === "new").length,
+        };
+        setStats(newStats);
+      }
+      
+      setLoading(false);
+    } catch (err) {
+      console.error("Error loading dashboard:", err);
+      setLoading(false);
+    }
+  };
+
   const checkAuth = useCallback(async () => {
     const session = await authService.getCurrentSession();
     if (!session) {
@@ -59,34 +91,6 @@ export default function DashboardPage() {
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
-
-  const loadDashboardData = async () => {
-    setLoading(true);
-    try {
-      const leadsData = await leadsService.getLeads();
-      
-      if (leadsData) {
-        setLeads(leadsData);
-        
-        const statsData = {
-          total: leadsData.length,
-          contacted: leadsData.filter(l => l.status === "contacted").length,
-          converted: leadsData.filter(l => l.status === "converted").length,
-          pending: leadsData.filter(l => l.status === "new").length,
-        };
-        setStats(statsData);
-      }
-    } catch (error) {
-      console.error("Error loading dashboard:", error);
-      toast({
-        title: "Error",
-        description: "No se pudieron cargar los datos del dashboard",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleLogout = async () => {
     await authService.signOut();
