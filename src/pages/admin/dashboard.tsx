@@ -1,26 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
-  TrendingUp, 
   Mail, 
   Phone, 
   LogOut,
-  DollarSign,
-  Eye,
   Calendar,
   CheckCircle2,
   Clock,
   XCircle,
-  Loader2
+  Loader2,
+  Eye
 } from "lucide-react";
 
 interface Lead {
@@ -49,11 +46,7 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<Stats>({ total: 0, contacted: 0, converted: 0, pending: 0 });
   const [userEmail, setUserEmail] = useState<string>("");
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     const session = await authService.getCurrentSession();
     if (!session) {
       router.push("/auth/reset-password");
@@ -61,7 +54,11 @@ export default function DashboardPage() {
     }
     setUserEmail(session.user?.email || "");
     loadDashboardData();
-  };
+  }, [router]);
+
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   const loadDashboardData = async () => {
     setLoading(true);

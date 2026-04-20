@@ -1,13 +1,14 @@
 "use client";
 
-import { ArrowDown, Sparkles, Plane, Globe, Shield, Users, ChevronDown, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ArrowRight, Sparkles, Users, TrendingUp } from "lucide-react";
 
 interface FunnelHeroProps {
-  username?: string;
+  onCTAClick: () => void;
 }
 
-export function FunnelHero({ username }: FunnelHeroProps) {
+export function FunnelHero({ onCTAClick }: FunnelHeroProps) {
   const scrollToBenefits = () => {
     const benefitsSection = document.getElementById("benefits-section");
     if (benefitsSection) {

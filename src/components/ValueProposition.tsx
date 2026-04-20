@@ -1,92 +1,101 @@
-import { MapPin, Plane, Gift, Award } from "lucide-react";
+import Image from "next/image";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Plane, DollarSign, Users, Shield, TrendingUp, Zap } from "lucide-react";
 
 const benefits = [
   {
-    icon: Plane,
-    title: "Plataforma Privada de Viajes",
-    description: "Acceso a más de 1 millón de hoteles, vuelos, cruceros y alquiler de autos con tarifas preferenciales exclusivas para miembros.",
-    image: "/luxury-resort.jpg"
+    icon: <DollarSign className="w-6 h-6" />,
+    title: "Hasta 70% de Descuento",
+    description: "Acceso a tarifas mayoristas en hoteles, vuelos y paquetes premium",
   },
   {
-    icon: Award,
-    title: "Life Experiences®",
-    description: "Viajes curados de lujo a destinos exclusivos como Dubái, París, Nueva York y más, con experiencias inolvidables.",
-    image: "/cruise-sunset.jpg"
+    icon: <Users className="w-6 h-6" />,
+    title: "Red Global",
+    description: "Más de 500,000 miembros viajando con nosotros en 180+ países",
   },
   {
-    icon: Gift,
-    title: "Créditos de Viaje",
-    description: "Gana créditos canjeables para reducir el costo de tus futuras reservas y viaja más gastando menos.",
-    image: "/happy-travelers.jpg"
+    icon: <Shield className="w-6 h-6" />,
+    title: "100% Garantizado",
+    description: "Protección total de tu inversión con nuestra garantía de satisfacción",
   },
   {
-    icon: MapPin,
-    title: "Cobertura Global",
-    description: "Más de 1 millón de hoteles, resorts y opciones de viaje en más de 190 países alrededor del mundo.",
-    image: "/egypt-temple.jpg"
-  }
+    icon: <TrendingUp className="w-6 h-6" />,
+    title: "Genera Ingresos",
+    description: "Gana comisiones por cada referido que se una al club",
+  },
+  {
+    icon: <Zap className="w-6 h-6" />,
+    title: "Reservas Instantáneas",
+    description: "Plataforma 24/7 para reservar tus viajes en minutos",
+  },
+  {
+    icon: <Plane className="w-6 h-6" />,
+    title: "Destinos Exclusivos",
+    description: "Acceso a resorts y experiencias que no encontrarás en otro lugar",
+  },
 ];
 
 export function ValueProposition() {
   return (
-    <section className="py-24 bg-gradient-to-b from-white to-slate-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 px-4 bg-card/20">
+      <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">
-            Beneficios Exclusivos para Miembros
+          <Badge className="mb-4 bg-primary/20 text-primary border-primary/30">
+            <Plane className="w-4 h-4 mr-2" />
+            Beneficios Exclusivos
+          </Badge>
+          <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-heading bg-clip-text text-transparent">
+            Por Qué Miles Eligen Viaja Ligero
           </h2>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Accede a una plataforma completa diseñada para transformar la forma en que viajas
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            La forma inteligente de viajar más, gastar menos y generar ingresos pasivos
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {benefits.map((benefit, index) => {
-            const Icon = benefit.icon;
-            const isGlobalCoverage = benefit.title === "Cobertura Global";
-            
-            return (
-              <div
-                key={index}
-                className={`group ${isGlobalCoverage ? 'rounded-3xl' : 'rounded-2xl'} overflow-hidden bg-white shadow-lg hover:shadow-2xl transition-all duration-500 border ${isGlobalCoverage ? 'border-slate-200' : 'border-transparent'} hover:border-accent`}
-              >
-                <div className="relative h-80 overflow-hidden">
-                  <img
-                    src={benefit.image}
-                    alt={benefit.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  />
-                  <div className={`absolute inset-0 ${isGlobalCoverage ? 'bg-gradient-to-b from-black/30 via-black/10 to-transparent' : 'bg-gradient-to-t from-black/60 via-black/20 to-transparent'}`} />
-                  <div className={`absolute ${isGlobalCoverage ? 'top-4 right-4' : 'top-4 right-4'} ${isGlobalCoverage ? 'bg-white' : 'bg-white/90 backdrop-blur-sm'} p-3 rounded-full shadow-lg`}>
-                    <Icon className={`w-6 h-6 ${isGlobalCoverage ? 'text-primary' : 'text-blue-600'}`} />
-                  </div>
+        {/* Benefits Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {benefits.map((benefit, index) => (
+            <Card 
+              key={index}
+              className="bg-card/50 backdrop-blur-sm border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/10 transition-all"
+            >
+              <CardContent className="p-6">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4 text-primary">
+                  {benefit.icon}
                 </div>
+                <h3 className="text-lg font-semibold mb-2 text-foreground">{benefit.title}</h3>
+                <p className="text-sm text-muted-foreground">{benefit.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
 
-                <div className={`p-8 ${isGlobalCoverage ? 'bg-white' : 'bg-white'}`}>
-                  {isGlobalCoverage && (
-                    <div className="mb-3">
-                      <span className="text-sm font-semibold text-primary tracking-wider uppercase">
-                        {benefit.title.replace("Cobertura Global", "COBERTURA GLOBAL")}
-                      </span>
-                    </div>
-                  )}
-                  
-                  <h3 className={`${isGlobalCoverage ? 'text-3xl' : 'text-2xl'} font-bold mb-3 ${isGlobalCoverage ? 'text-slate-900' : 'text-foreground'}`}>
-                    {isGlobalCoverage ? "Explora sin fronteras" : benefit.title}
-                  </h3>
-                  
-                  {isGlobalCoverage && (
-                    <div className="w-12 h-1 bg-primary mb-4" />
-                  )}
-                  
-                  <p className={`${isGlobalCoverage ? 'text-slate-700' : 'text-muted-foreground'} leading-relaxed`}>
-                    {benefit.description}
+        {/* Social Proof Image */}
+        <Card className="bg-card/50 backdrop-blur-sm border-border/50 overflow-hidden">
+          <CardContent className="p-0">
+            <div className="relative h-64 md:h-96">
+              <Image
+                src="/happy-travelers.jpg"
+                alt="Viajeros felices disfrutando de descuentos exclusivos"
+                fill
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 1200px"
+                priority={false}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent flex items-end">
+                <div className="p-8">
+                  <p className="text-2xl md:text-3xl font-bold text-foreground mb-2">
+                    "Ahorré $4,800 en mi último viaje a Maldivas"
+                  </p>
+                  <p className="text-muted-foreground">
+                    - María González, Miembro desde 2023
                   </p>
                 </div>
               </div>
-            );
-          })}
-        </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </section>
   );

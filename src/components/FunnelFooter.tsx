@@ -1,83 +1,54 @@
-import { MapPin, Award, Shield } from "lucide-react";
-
-const licenses = [
-"Florida Seller of Travel #ST43597",
-"Iowa Seller of Travel #1242",
-"California Seller of Travel #2124590-70"];
-
-
-const offices = [
-{ city: "Hong Kong", address: "Levels 30-32, 68 Yee Wo Street, Causeway Bay" },
-{ city: "Florida", address: "5830 Coral Ridge Drive, Coral Springs, FL 33076" },
-{ city: "París", address: "35 Boulevard des Capucines, 75002" },
-{ city: "Dubái", address: "Business Bay, Clover Bay Tower" }];
-
+import { MapPin, Phone, Mail } from "lucide-react";
 
 export function FunnelFooter() {
   return (
-    <footer className="bg-foreground text-background py-12">
-      <div className="container mx-auto px-4">
+    <footer className="bg-card/30 backdrop-blur-sm border-t border-border/50 py-12">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8 mb-8">
-          {/* Logo y descripción */}
+          {/* Company Info */}
           <div>
-            
-
-
-
-            
-            <p className="text-sm text-background/80">
-              Club exclusivo de viajes con acceso a tarifas preferenciales y experiencias únicas.
+            <h3 className="font-bold text-lg mb-4 text-foreground">Viaja Ligero</h3>
+            <p className="text-sm text-muted-foreground mb-4">
+              Club exclusivo de viajes con descuentos de hasta 70% en destinos premium
             </p>
           </div>
 
-          {/* Licenses */}
+          {/* Contact */}
           <div>
-            <h3 className="font-semibold mb-4">Licencias y Certificaciones</h3>
+            <h3 className="font-bold text-lg mb-4 text-foreground">Contacto</h3>
             <div className="space-y-2 text-sm text-muted-foreground">
-              <div className="flex items-start gap-2">
-                <Shield className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                <span>Seller of Travel - Florida (ST-43417)</span>
+              <div className="flex items-center gap-2">
+                <Mail className="w-4 h-4 text-primary" />
+                <span>soporte@viajaligero.com</span>
               </div>
-              <div className="flex items-start gap-2">
-                <Shield className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                <span>Seller of Travel - Iowa (1563)</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <Shield className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                <span>Seller of Travel - California (2193504-70)</span>
+              <div className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-primary" />
+                <span>+1 (305) 555-0123</span>
               </div>
             </div>
           </div>
 
-          {/* Offices */}
+          {/* Legal */}
           <div>
-            <h3 className="font-semibold mb-4">Oficinas Corporativas</h3>
-            <div className="space-y-2 text-sm text-muted-foreground">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                <span>Hong Kong</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                <span>Florida, USA</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                <span>París, Francia</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 mt-0.5 text-primary flex-shrink-0" />
-                <span>Dubái, EAU</span>
-              </div>
+            <h3 className="font-bold text-lg mb-4 text-foreground">Legal</h3>
+            <div className="space-y-2 text-sm">
+              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
+                Términos y Condiciones
+              </a>
+              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
+                Política de Privacidad
+              </a>
+              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
+                Política de Reembolso
+              </a>
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="border-t pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Viaja Ligero. Todos los derechos reservados.</p>
+        <div className="border-t border-border/50 pt-8 text-center text-sm text-muted-foreground">
+          <p>&copy; 2026 Viaja Ligero. Todos los derechos reservados.</p>
         </div>
       </div>
-    </footer>);
-
+    </footer>
+  );
 }

@@ -2,113 +2,32 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { MessageSquare } from "lucide-react";
-import { leadsService } from "@/services/leadsService";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { Card, CardContent } from "@/components/ui/card";
+import { ArrowRight, Loader2 } from "lucide-react";
 
 interface FunnelFormProps {
-  ambassadorId?: string;
-  ambassadorName?: string;
+  username?: string;
 }
 
-export function FunnelForm({ ambassadorId, ambassadorName }: FunnelFormProps) {
-  const { toast } = useToast();
+export function FunnelForm({ username }: FunnelFormProps) {
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [contactMethod, setContactMethod] = useState("whatsapp");
   const [formData, setFormData] = useState({
-    name: "",
+    nombre: "",
     email: "",
-    phone: "",
-    country: ""
+    telefono: "",
+    interes: "ahorrar",
   });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    try {
-      // Insert lead with ambassador tracking
-      const { error } = await supabase.from("leads").insert({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        country: formData.country,
-        user_id: ambassadorId || null, // Track which ambassador captured this lead
-        source: ambassadorId ? `ambassador/${ambassadorName}` : "funnel",
-        status: "nuevo"
-      });
-
-      if (error) throw error;
-
-      toast({
-        title: "¡Gracias por tu interés!",
-        description: "Nos pondremos en contacto contigo muy pronto."
-      });
-
-      // Reset form
-      setFormData({ name: "", email: "", phone: "", country: "" });
-    } catch (error) {
-      console.error("Error submitting lead:", error);
-      toast({
-        title: "Error",
-        description: "Hubo un problema al enviar tu información. Intenta de nuevo.",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
+    // Simulate form submission
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    console.log("Form submitted:", { ...formData, username });
+    setLoading(false);
   };
-
-  if (submitted) {
-    return (
-      <section className="py-20 bg-gradient-to-br from-green-50 to-emerald-50">
-        <div className="container mx-auto max-w-2xl px-4">
-          <div className="bg-white rounded-2xl shadow-2xl p-12 text-center border-4 border-green-500">
-            <div className="mb-6">
-              <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                <svg
-                  className="w-12 h-12 text-green-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={3}
-                    d="M5 13l4 4L19 7" />
-                  
-                </svg>
-              </div>
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">
-                ¡Registro Exitoso! 🎉
-              </h2>
-              <p className="text-xl text-gray-700 mb-6">
-                Gracias por tu interés en Viaja Ligero
-              </p>
-              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 mb-6">
-                <p className="text-lg text-gray-800 leading-relaxed">
-                  <strong>Nos pondremos en contacto contigo muy pronto</strong> por {contactMethod === "whatsapp" ? "WhatsApp" : "email"} para compartir más información sobre el club y responder todas tus preguntas.
-                </p>
-              </div>
-              <div className="flex items-center justify-center gap-2 text-gray-600">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                </svg>
-                <span className="text-sm">Respuesta en menos de 24 horas</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>);
-
-  }
 
   return (
     <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-accent/5" style={{ backgroundImage: "none", backgroundColor: "transparent" }}>
