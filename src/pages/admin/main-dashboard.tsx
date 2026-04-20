@@ -107,12 +107,6 @@ export default function MainDashboard() {
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [noteText, setNoteText] = useState("");
-  const [selectedMessageTemplate, setSelectedMessageTemplate] = useState("");
-  const getStatusText = (s: string) => s;
-  const formatDate = (d: string) => d;
-  const handleAddNote = () => {};
-  const sendWhatsAppMessage = (l: any, t: any) => {};
-
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showNotesListDialog, setShowNotesListDialog] = useState(false);
@@ -121,7 +115,6 @@ export default function MainDashboard() {
   // Network
   const [stats, setStats] = useState<NetworkStats | null>(null);
   const [commissions, setCommissions] = useState<any[]>([]);
-  const [tree, setTree] = useState<ReferralTreeNode | null>(null);
   
   // Links
   const [copiedFunnel, setCopiedFunnel] = useState(false);
@@ -131,31 +124,111 @@ export default function MainDashboard() {
   const [walletAddress, setWalletAddress] = useState("");
   const [savingWallet, setSavingWallet] = useState(false);
 
+  // Helper functions
+  const getStatusText = (status: string) => {
+    const statusMap: Record<string, string> = {
+      "nuevo": "Nuevo",
+      "new": "Nuevo",
+      "contactado": "Contactado",
+      "contacted": "Contactado",
+      "interesado": "Interesado",
+      "interested": "Interesado",
+      "convertido": "Convertido",
+      "converted": "Convertido",
+      "descartado": "Descartado",
+      "discarded": "Descartado"
+    };
+    return statusMap[status] || status;
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric"
+    });
+  };
+
+  const handleAddNote = async () => {
+    if (!selectedLead || !noteText.trim()) {
+      toast({
+        title: "Error",
+        description: "Por favor escribe una nota",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      await leadsService.addLeadNote(selectedLead.id, noteText);
+      toast({
+        title: "✅ Nota agregada",
+        description: "La nota se guardó correctamente"
+      });
+      setNoteText("");
+      setShowNoteDialog(false);
+      setSelectedLead(null);
+    } catch (error) {
+      console.error("Error adding note:", error);
+      toast({
+        title: "Error",
+        description: "No se pudo guardar la nota",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const sendWhatsAppMessage = (lead: Lead, templateKey: string) => {
+    const template = messageTemplates[templateKey as keyof typeof messageTemplates];
+    if (!template) return;
+
+    const message = template.template(lead.name);
+    const cleanPhone = lead.phone.replace(/\D/g, "");
+    const encodedMessage = encodeURIComponent(message);
+    
+    window.open(`https://wa.me/${cleanPhone}?text=${encodedMessage}`, "_blank");
+    setShowMessageDialog(false);
+  };
+
   const loadData = useCallback(async () => {
     try {
-      const [leadsResult, referralsResult] = await Promise.all([
-        leadsService.getLeads(),
-        { data: [] }
-      ]);
+      // Get current user session
+      const session = await authService.getCurrentSession();
+      if (!session) {
+        router.push("/auth/reset-password");
+        return;
+      }
 
+      // Load profile
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (profileData) {
+        setProfile(profileData);
+        setWalletAddress(profileData.usdt_wallet_address || "");
+      }
+
+      // Load leads
+      const leadsResult = await leadsService.getLeads();
       if (leadsResult) {
         setAllLeads(leadsResult);
         setLeads(leadsResult);
-        
-        const newStats: any = {
-          totalLeads: leadsResult.length,
-          newLeads: leadsResult.filter((l: any) => l.status === "new").length,
-          contacted: leadsResult.filter((l: any) => l.status === "contacted").length,
-          converted: leadsResult.filter((l: any) => l.status === "converted").length,
-          totalReferrals: 0,
-          activeMembers: 0,
-          totalCommissions: 0
-        };
-        setStats(newStats);
+        setFilteredLeads(leadsResult);
       }
 
-      if (referralsResult.data) {
-        /* setReferrals */
+      // Load network stats
+      const networkStats = await referralService.getNetworkStats();
+      if (networkStats) {
+        setStats(networkStats);
+      }
+
+      // Load commissions
+      const commissionsData = await referralService.getCommissions();
+      if (commissionsData) {
+        setCommissions(commissionsData);
       }
 
       setLoading(false);
@@ -163,7 +236,7 @@ export default function MainDashboard() {
       console.error("Error loading data:", error);
       setLoading(false);
     }
-  }, []);
+  }, [router]);
 
   const filterLeads = useCallback(() => {
     let filtered = [...allLeads];
@@ -369,7 +442,7 @@ Estoy aquí para resolver cualquier duda que tengas.
       return;
     }
 
-    if (!stats || stats.available_balance < 39.50) {
+    if (!stats || (stats.available_balance || 0) < 39.50) {
       toast({
         title: "Saldo insuficiente",
         description: "Necesitas al menos $39.50 USD para solicitar un retiro",
@@ -627,7 +700,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      ${stats?.total_earned.toFixed(2) || "0.00"}
+                      ${stats?.total_earned?.toFixed(2) || "0.00"}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       Total ganado
@@ -642,7 +715,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </CardHeader>
                   <CardContent>
                     <div className="text-2xl font-bold">
-                      ${stats?.available_balance.toFixed(2) || "0.00"}
+                      ${stats?.available_balance?.toFixed(2) || "0.00"}
                     </div>
                     <p className="text-xs text-muted-foreground">
                       Para retirar
@@ -830,7 +903,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold">
-                      ${stats?.total_earned.toFixed(2) || "0.00"}
+                      ${stats?.total_earned?.toFixed(2) || "0.00"}
                     </div>
                   </CardContent>
                 </Card>
@@ -841,7 +914,7 @@ Estoy aquí para resolver cualquier duda que tengas.
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold">
-                      ${stats?.available_balance.toFixed(2) || "0.00"}
+                      ${stats?.available_balance?.toFixed(2) || "0.00"}
                     </div>
                   </CardContent>
                 </Card>
