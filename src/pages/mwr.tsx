@@ -5,19 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { 
-  ArrowRight, 
-  CheckCircle2, 
-  TrendingUp, 
-  Users, 
-  Zap, 
-  XCircle, 
+import {
+  ArrowRight,
+  CheckCircle2,
+  TrendingUp,
+  Users,
+  Zap,
+  XCircle,
   Clock,
   Shield,
   Target,
   Sparkles,
-  BarChart3
-} from "lucide-react";
+  BarChart3 } from
+"lucide-react";
 
 export default function MWRPage() {
   const router = useRouter();
@@ -35,10 +35,10 @@ export default function MWRPage() {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Sistema Automático MWR - Hub IA Marketing Solutions"
-        description="Genera prospectos, automatiza seguimientos y duplica tu red MWR con IA"
-      />
+        description="Genera prospectos, automatiza seguimientos y duplica tu red MWR con IA" />
+      
 
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-20">
@@ -278,8 +278,8 @@ export default function MWRPage() {
       {/* CTA Final Section */}
       <section className="py-20 bg-gradient-to-r from-yellow-500 to-orange-500">
         <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Prueba el sistema 14 días
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">Prueba el sistema 30 días
+
           </h2>
           <p className="text-xl text-white/90 mb-12">
             Acceso completo al sistema piloto. Si no generas actividad en Tu Negocio MLM, no pagas mensualidad.
@@ -288,18 +288,18 @@ export default function MWRPage() {
           <Card className="bg-white shadow-2xl max-w-md mx-auto">
             <CardContent className="p-8">
               <div className="space-y-4">
-                <Input 
+                <Input
                   placeholder="Tu email"
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="h-12 text-lg"
-                />
-                <Button 
+                  className="h-12 text-lg" />
+                
+                <Button
                   size="lg"
                   onClick={() => router.push("/mwr/registro")}
-                  className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg font-semibold"
-                >
+                  className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg font-semibold">
+                  
                   Empezar Ahora - Solo $29 USD
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -335,8 +335,8 @@ export default function MWRPage() {
       </section>
 
       {/* Floating CTA */}
-      {showCTA && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-600 to-purple-600 border-t-4 border-yellow-400 shadow-2xl">
+      {showCTA &&
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-600 to-purple-600 border-t-4 border-yellow-400 shadow-2xl">
           <div className="max-w-4xl mx-auto px-3 py-3 md:px-6 md:py-6">
             <div className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-6">
               <div className="text-center md:text-left">
@@ -347,18 +347,18 @@ export default function MWRPage() {
                   Accede al sistema piloto por 30 días • Solo $29 USD
                 </p>
               </div>
-              <Button 
-                size="lg"
-                onClick={() => router.push("/mwr/registro")}
-                className="w-full md:w-auto h-12 md:h-14 px-6 md:px-8 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-base md:text-lg font-semibold shadow-xl whitespace-nowrap flex-shrink-0"
-              >
+              <Button
+              size="lg"
+              onClick={() => router.push("/mwr/registro")}
+              className="w-full md:w-auto h-12 md:h-14 px-6 md:px-8 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-base md:text-lg font-semibold shadow-xl whitespace-nowrap flex-shrink-0">
+              
                 Acceder al Sistema Piloto
                 <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
               </Button>
             </div>
           </div>
         </div>
-      )}
-    </>
-  );
+      }
+    </>);
+
 }
