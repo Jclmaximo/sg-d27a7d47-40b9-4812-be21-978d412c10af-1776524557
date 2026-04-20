@@ -61,7 +61,7 @@ export default function LeadsPage() {
   const loadLeads = async () => {
     setLoading(true);
     try {
-      const { data } = await leadsService.getLeads();
+      const data = await leadsService.getLeads();
       if (data) {
         setLeads(data);
         setFilteredLeads(data);

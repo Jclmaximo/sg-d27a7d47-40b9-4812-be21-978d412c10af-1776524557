@@ -66,7 +66,7 @@ export default function DashboardPage() {
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const { data: leadsData } = await leadsService.getLeads();
+      const leadsData = await leadsService.getLeads();
       
       if (leadsData) {
         setLeads(leadsData);
