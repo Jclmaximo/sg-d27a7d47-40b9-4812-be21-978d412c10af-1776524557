@@ -62,19 +62,32 @@ export default function MWRPage() {
             Genera más prospectos interesados, automatiza seguimientos inteligentes y duplica tu equipo con un sistema completo de marketing
           </p>
 
-          <div className="flex flex-wrap gap-6 justify-center items-center mb-12 text-slate-300">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-400" />
-              <span>147 embajadores activos</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-400" />
-              <span>2,847 prospectos generados</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-400" />
-              <span>89% tasa de respuesta IA</span>
-            </div>
+          <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
+            <Badge variant="secondary" className="px-4 py-2 text-sm bg-white/20 text-white border-white/30">
+              <Users className="w-4 h-4 mr-2" />
+              147 embajadores activos
+            </Badge>
+            <Badge variant="secondary" className="px-4 py-2 text-sm bg-white/20 text-white border-white/30">
+              <TrendingUp className="w-4 h-4 mr-2" />
+              2,847 prospectos generados
+            </Badge>
+            <Badge variant="secondary" className="px-4 py-2 text-sm bg-white/20 text-white border-white/30">
+              <Zap className="w-4 h-4 mr-2" />
+              89% tasa de respuesta IA
+            </Badge>
+          </div>
+
+          {/* Hero Video Button */}
+          <div className="flex justify-center mb-12">
+            <Button 
+              size="lg"
+              onClick={() => router.push("/mwr/vsl")}
+              className="h-16 px-8 bg-white hover:bg-white/90 text-blue-600 text-lg font-bold shadow-2xl transform hover:scale-105 transition-all"
+            >
+              <Sparkles className="mr-3 h-6 w-6" />
+              Ver Cómo Funciona (3 min)
+              <ArrowRight className="ml-3 h-5 w-5" />
+            </Button>
           </div>
         </div>
       </section>
