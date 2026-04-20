@@ -32,42 +32,46 @@ export default function MWRVSLPage() {
       />
 
       <div className="min-h-screen bg-slate-50">
-        {/* Video Section */}
-        <section className="bg-gradient-to-br from-blue-950 to-purple-950 py-20">
-          <div className="max-w-5xl mx-auto px-4">
-            <div className="text-center mb-12">
-              <Badge className="mb-4 bg-yellow-500 text-white">
-                Masterclass Exclusiva
-              </Badge>
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
+        {/* Hero / Intro */}
+        {currentSection === "intro" && (
+          <section className="min-h-screen flex items-center justify-center px-4 py-20 pt-32">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="inline-block mb-8">
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-full px-6 py-2">
+                  <span className="text-blue-400 font-semibold">🎯 Sistema de Marketing MLM</span>
+                </div>
+              </div>
+
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                 El Crecimiento en Tu Negocio MLM no Depende de tu Energía...
                 <br />
                 <span className="text-yellow-400">Depende de Sistematizar tus Procesos</span>
               </h1>
-              <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
-                Descubre cómo los top líderes han convertido la prospección en una máquina predecible que trabaja 24/7.
+              <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-12">
+                El problema no es la falta de motivación. Es la falta de procesos duplicables que trabajen por ti mientras duermes.
               </p>
-            </div>
 
-            {/* Video Player */}
-            <Card className="bg-black shadow-2xl">
-              <CardContent className="p-0">
-                <div 
-                  className="aspect-video bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center cursor-pointer"
-                  onClick={handleVideoProgress}
-                >
-                  <div className="text-center">
-                    <div className="w-20 h-20 bg-yellow-500 rounded-full flex items-center justify-center mx-auto mb-4 hover:bg-yellow-600 transition-colors">
-                      <Play className="w-10 h-10 text-white ml-1" />
-                    </div>
-                    <p className="text-white text-lg font-medium">Click para descubrir la estrategia</p>
-                    <p className="text-slate-400 text-sm mt-2">Duración: 12 minutos</p>
-                  </div>
+              {/* Video Player */}
+              <div className="max-w-4xl mx-auto mb-8">
+                <div className="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-blue-500/30">
+                  <video 
+                    className="w-full h-auto"
+                    controls
+                    autoPlay
+                    playsInline
+                    poster="/registro-hero-final.jpg"
+                  >
+                    <source src="/v2_1776702836375-392447068.mp4" type="video/mp4" />
+                    Tu navegador no soporta la reproducción de video.
+                  </video>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+                <p className="text-sm text-slate-400 mt-4">
+                  ⏱️ Duración: 3 minutos | 🎯 Descubre cómo sistematizar tu negocio MLM
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Problem Section */}
         <section className="py-20 bg-white">
