@@ -43,7 +43,7 @@ export default function AdminPage() {
     setLoading(true);
 
     try {
-      const { data, error: loginError } = await authService.signInWithPassword(email, password);
+      const { data, error: loginError } = await authService.signIn(email, password);
 
       if (loginError) {
         setError(loginError.message || "Credenciales incorrectas");
