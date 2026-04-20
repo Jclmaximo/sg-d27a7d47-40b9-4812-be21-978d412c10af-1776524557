@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Work+Sans:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,24 +6,26 @@
 
 @layer base {
   :root {
-    --primary: 215 85% 45%;
+    --background: 210 24% 6%;
+    --foreground: 220 13% 91%;
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 174 72% 45%;
+    --secondary: 142 71% 45%;
     --secondary-foreground: 0 0% 100%;
-    --accent: 215 75% 55%;
-    --muted: 215 20% 95%;
-    --background: 0 0% 100%;
-    --foreground: 220 15% 15%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 15%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 15%;
-    --border: 215 20% 90%;
-    --input: 215 20% 90%;
-    --ring: 215 85% 45%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+    --muted: 217 10% 15%;
+    --muted-foreground: 220 9% 46%;
+    --card: 217 19% 12%;
+    --card-foreground: 220 13% 91%;
+    --popover: 217 19% 12%;
+    --popover-foreground: 220 13% 91%;
+    --border: 217 19% 16%;
+    --input: 217 19% 16%;
+    --ring: 217 91% 60%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 }
 
@@ -56,10 +58,45 @@
   .animate-spin-slow {
     animation: spin-slow 3s linear infinite;
   }
+  
+  @keyframes gradient-shift {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
 }
 
 @layer components {
   .container {
     @apply mx-auto px-4 md:px-6 lg:px-8 max-w-7xl w-full;
+  }
+  
+  .glass-card {
+    @apply bg-card/50 backdrop-blur-xl border border-border/50;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent;
   }
 }
