@@ -237,6 +237,45 @@ export type Database = {
         }
         Relationships: []
       }
+      mwr_leads: {
+        Row: {
+          created_at: string | null
+          email: string
+          estado: string | null
+          id: string
+          nivel_mwr: string
+          nombre: string
+          notas: string | null
+          referrer_username: string | null
+          updated_at: string | null
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          estado?: string | null
+          id?: string
+          nivel_mwr: string
+          nombre: string
+          notas?: string | null
+          referrer_username?: string | null
+          updated_at?: string | null
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          estado?: string | null
+          id?: string
+          nivel_mwr?: string
+          nombre?: string
+          notas?: string | null
+          referrer_username?: string | null
+          updated_at?: string | null
+          whatsapp?: string
+        }
+        Relationships: []
+      }
       payments: {
         Row: {
           amount: number
