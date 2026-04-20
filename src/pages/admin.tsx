@@ -43,7 +43,7 @@ export default function AdminPage() {
     setLoading(true);
 
     try {
-      const { data, error: loginError } = await authService.signIn(email, password);
+      const { user, error: loginError } = await authService.signIn(email, password);
 
       if (loginError) {
         setError(loginError.message || "Credenciales incorrectas");
@@ -51,7 +51,7 @@ export default function AdminPage() {
         return;
       }
 
-      if (data?.user) {
+      if (user) {
         router.push("/admin/welcome");
       }
     } catch (err: any) {
