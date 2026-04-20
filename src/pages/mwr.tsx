@@ -1,28 +1,36 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { 
-  Sparkles, 
+  ArrowRight, 
+  CheckCircle2, 
   TrendingUp, 
   Users, 
-  MessageSquare, 
-  Target,
-  CheckCircle2,
-  ArrowRight,
-  Zap,
-  BarChart3,
+  Zap, 
+  XCircle, 
   Clock,
   Shield,
-  XCircle
+  Target,
+  Sparkles
 } from "lucide-react";
-import { useRouter } from "next/navigation";
 
-export default function MWRLandingPage() {
-  const [email, setEmail] = useState("");
+export default function MWRPage() {
   const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [showCTA, setShowCTA] = useState(false);
+
+  // Auto-show CTA after 3 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowCTA(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
@@ -303,22 +311,53 @@ export default function MWRLandingPage() {
             </CardContent>
           </Card>
 
-          <div className="mt-12 flex flex-col sm:flex-row gap-8 justify-center text-white">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5" />
-              <span>Sin contratos</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5" />
-              <span>Cancela cuando quieras</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5" />
-              <span>Soporte incluido</span>
+          <div className="text-center mt-12">
+            <p className="text-sm text-muted-foreground mb-4">
+              Usado por 147 embajadores activos • Más de 2,800 prospectos generados
+            </p>
+            <div className="flex items-center justify-center gap-6 text-xs text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                <span>Pago seguro</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Target className="w-4 h-4" />
+                <span>Soporte 24/7</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Garantía 14 días</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Floating CTA */}
+      {showCTA && (
+        <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-600 to-purple-600 border-t-4 border-yellow-400 shadow-2xl">
+          <div className="max-w-4xl mx-auto px-3 py-3 md:px-6 md:py-6">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-6">
+              <div className="text-center md:text-left">
+                <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">
+                  Sistematiza Tu Negocio MLM Hoy
+                </h3>
+                <p className="text-xs md:text-base text-blue-100">
+                  Accede al sistema piloto por 14 días • Solo $29 USD
+                </p>
+              </div>
+              <Button 
+                size="lg"
+                onClick={() => router.push("/mwr/registro")}
+                className="w-full md:w-auto h-12 md:h-14 px-6 md:px-8 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-base md:text-lg font-semibold shadow-xl whitespace-nowrap flex-shrink-0"
+              >
+                Acceder al Sistema Piloto
+                <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
