@@ -4,14 +4,14 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
+import {
   Play,
   ArrowRight,
   TrendingUp,
   Users,
   Clock,
-  XCircle
-} from "lucide-react";
+  XCircle } from
+"lucide-react";
 
 export default function MWRVSLPage() {
   const router = useRouter();
@@ -26,10 +26,10 @@ export default function MWRVSLPage() {
 
   return (
     <>
-      <SEO 
+      <SEO
         title="Cómo Funciona - Sistema MLM"
-        description="Sistematiza tu negocio MLM con procesos duplicables y escalables"
-      />
+        description="Sistematiza tu negocio MLM con procesos duplicables y escalables" />
+      
 
       <div className="min-h-screen bg-slate-50">
         {/* Hero / Intro */}
@@ -55,20 +55,20 @@ export default function MWRVSLPage() {
               <div className="relative rounded-xl md:rounded-2xl overflow-hidden shadow-2xl border-2 md:border-4 border-blue-500/30 bg-black">
                 {/* Single video element with adaptive sizing */}
                 <div className="relative w-full" style={{ paddingTop: "177.78%" }}>
-                  <video 
+                  <video
                     className="absolute top-0 left-0 w-full h-full object-cover md:object-contain"
                     controls
                     autoPlay
                     playsInline
-                    onPlay={() => setShowCTA(true)}
-                  >
+                    onPlay={() => setShowCTA(true)}>
+                    
                     <source src="/v2_1776702836375-392447068.mp4" type="video/mp4" />
                     Tu navegador no soporta la reproducción de video.
                   </video>
                 </div>
               </div>
-              <p className="text-xs md:text-sm text-slate-400 mt-4 text-center">
-                ⏱️ Duración: 3 minutos | 🎯 Descubre cómo sistematizar tu negocio MLM
+              <p className="text-xs md:text-sm text-slate-400 mt-4 text-center">⏱️ Duración: 60 segundos | 🎯 Descubre cómo sistematizar tu negocio MLM
+
               </p>
             </div>
           </div>
@@ -208,8 +208,8 @@ export default function MWRVSLPage() {
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold mb-3 text-slate-900">Embudo de Viajes Sistematizado</h3>
-                      <p className="text-lg text-slate-700 mb-4">
-                        Tu página personal captura prospectos interesados en ahorrar en viajes, filtrando a los curiosos y dejando solo a los verdaderamente interesados.
+                      <p className="text-lg text-slate-700 mb-4">Tu página personal captura prospectos interesados en ahorrar en viajes / generar ingresos, filtrando a los curiosos y dejando solo a los verdaderamente interesados.
+
                       </p>
                     </div>
                   </div>
@@ -224,8 +224,8 @@ export default function MWRVSLPage() {
                     </div>
                     <div>
                       <h3 className="text-2xl font-bold mb-3 text-slate-900">CRM de Gestión de Leads</h3>
-                      <p className="text-lg text-slate-700 mb-4">
-                        Cada contacto entra a tu pipeline organizado. Sabes exactamente en qué etapa del proceso está cada persona, sin perder seguimientos.
+                      <p className="text-lg text-slate-700 mb-4">Cada contacto entra a tu panel administrador bien organizado. Sabes exactamente en qué etapa del proceso está cada persona, sin perder seguimientos.
+
                       </p>
                     </div>
                   </div>
@@ -290,8 +290,8 @@ export default function MWRVSLPage() {
         </section>
 
         {/* CTA Section */}
-        {showCTA && (
-          <section className="py-12 bg-gradient-to-r from-blue-600 to-indigo-600 sticky bottom-0 shadow-2xl z-50">
+        {showCTA &&
+        <section className="py-12 bg-gradient-to-r from-blue-600 to-indigo-600 sticky bottom-0 shadow-2xl z-50">
             <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
               <div className="text-left">
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
@@ -303,17 +303,17 @@ export default function MWRVSLPage() {
               </div>
 
               <Button
-                size="lg"
-                onClick={() => router.push("/mwr/checkout")}
-                className="h-14 px-8 bg-yellow-500 hover:bg-yellow-400 text-slate-900 text-lg font-bold shadow-xl"
-              >
+              size="lg"
+              onClick={() => router.push("/mwr/checkout")}
+              className="h-14 px-8 bg-yellow-500 hover:bg-yellow-400 text-slate-900 text-lg font-bold shadow-xl">
+              
                 Acceder al Sistema Piloto
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
           </section>
-        )}
+        }
       </div>
-    </>
-  );
+    </>);
+
 }
