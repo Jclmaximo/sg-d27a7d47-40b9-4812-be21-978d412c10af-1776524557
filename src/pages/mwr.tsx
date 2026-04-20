@@ -15,7 +15,8 @@ import {
   Clock,
   Shield,
   Target,
-  Sparkles
+  Sparkles,
+  BarChart3
 } from "lucide-react";
 
 export default function MWRPage() {
