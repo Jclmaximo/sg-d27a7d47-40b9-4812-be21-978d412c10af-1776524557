@@ -549,11 +549,11 @@ Estoy aquí para resolver cualquier duda que tengas.
         </header>
 
         {/* Banner */}
-        <div className="w-full h-48 md:h-64 relative overflow-hidden">
+        <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] h-48 md:h-64 overflow-hidden">
           <img 
             src="/dashboard-banner-clean.jpg" 
             alt="Dashboard Banner" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
         </div>
