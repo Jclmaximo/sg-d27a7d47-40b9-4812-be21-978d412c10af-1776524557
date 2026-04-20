@@ -4,194 +4,315 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, UserPlus, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
 import { mwrLeadsService } from "@/services/mwrLeadsService";
+import { ArrowRight, Loader2, Shield, Sparkles, Users, TrendingUp, Zap, Check } from "lucide-react";
 
 export default function MWRRegistroPage() {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
   const [formData, setFormData] = useState({
     nombre: "",
+    apellido: "",
     email: "",
-    whatsapp: "",
-    nivelMWR: ""
+    telefono: "",
+    pais: "",
+    negocio_mlm: "",
+    acepta_terminos: false,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
     
-    if (!formData.nombre || !formData.email || !formData.whatsapp || !formData.nivelMWR) {
-      setError("Por favor completa todos los campos");
+    if (!formData.acepta_terminos) {
+      toast({
+        title: "Error",
+        description: "Debes aceptar los términos y condiciones",
+        variant: "destructive",
+      });
       return;
     }
 
-    setLoading(true);
+    setIsSubmitting(true);
 
     try {
-      const { data, error: leadError } = await mwrLeadsService.createLead({
+      const { data, error } = await mwrLeadsService.createLead({
         nombre: formData.nombre,
+        apellido: formData.apellido,
         email: formData.email,
-        whatsapp: formData.whatsapp,
-        nivel_mwr: formData.nivelMWR,
+        telefono: formData.telefono,
+        pais: formData.pais,
+        negocio_mlm: formData.negocio_mlm,
         estado: "nuevo",
-        notas: null,
-        referrer_username: null
       });
 
-      if (leadError) {
-        throw new Error(leadError.message || "Error al guardar registro");
+      if (error) {
+        console.error("Error creating MWR lead:", error);
+        toast({
+          title: "Error",
+          description: "Hubo un problema al enviar tu información. Por favor intenta de nuevo.",
+          variant: "destructive",
+        });
+        return;
       }
 
-      console.log("Lead MWR creado:", data);
-      
-      // Redirect to VSL
-      setTimeout(() => {
-        router.push("/mwr/vsl");
-      }, 500);
-    } catch (err: any) {
-      console.error("Error al registrar:", err);
-      setError(err.message || "Error al procesar registro");
+      toast({
+        title: "¡Registro exitoso!",
+        description: "Redirigiendo al checkout...",
+      });
+
+      // Redirect to checkout with lead ID
+      if (data?.id) {
+        router.push(`/mwr/checkout?lead_id=${data.id}`);
+      } else {
+        router.push("/mwr/checkout");
+      }
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      toast({
+        title: "Error",
+        description: "Ocurrió un error inesperado. Por favor intenta de nuevo.",
+        variant: "destructive",
+      });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
   };
 
   return (
     <>
-      <SEO 
-        title="Registro - Sistema de Marketing MLM"
-        description="Regístrate para acceder al sistema automático de prospectos"
+      <SEO
+        title="Registro - Sistema MWR"
+        description="Únete al sistema automático para hacer crecer tu negocio MLM"
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 flex items-center justify-center px-4 py-12">
-        <Card className="w-full max-w-2xl border-slate-700 bg-slate-800/50 backdrop-blur-sm">
-          <CardHeader className="text-center space-y-4">
-            <div className="inline-block mx-auto">
-              <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-full px-6 py-2">
-                <span className="text-yellow-300 font-semibold">🚀 Paso 1 de 3</span>
-              </div>
+      <div className="min-h-screen bg-background text-foreground">
+        {/* Floating Orbs Background */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float-delayed" />
+        </div>
+
+        <div className="relative py-20 px-4">
+          <div className="max-w-2xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <Badge variant="secondary" className="mb-6 px-4 py-2 bg-card/50 backdrop-blur-sm border-border/50">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Acceso al Sistema Piloto
+              </Badge>
+              
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-heading bg-clip-text text-transparent">
+                Crea Tu Cuenta
+              </h1>
+              
+              <p className="text-xl text-muted-foreground">
+                Comienza a generar prospectos calificados en las próximas 24 horas
+              </p>
             </div>
-            <CardTitle className="text-4xl font-bold text-white">
-              Comienza tu Prueba Piloto
-            </CardTitle>
-            <CardDescription className="text-lg text-slate-300">
-              Completa tus datos para acceder al video de presentación del sistema
-            </CardDescription>
-          </CardHeader>
 
-          <CardContent>
-            {error && (
-              <Alert variant="destructive" className="mb-6">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="nombre" className="text-white">Nombre Completo</Label>
-                <Input
-                  id="nombre"
-                  type="text"
-                  placeholder="Juan Pérez"
-                  value={formData.nombre}
-                  onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                  className="h-12 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-white">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="tu@email.com"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="h-12 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="whatsapp" className="text-white">WhatsApp</Label>
-                <Input
-                  id="whatsapp"
-                  type="tel"
-                  placeholder="+1 234 567 8900"
-                  value={formData.whatsapp}
-                  onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                  className="h-12 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
-                  required
-                  disabled={loading}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="nivelMWR" className="text-white">¿Cuál es tu nivel actual en MLM?</Label>
-                <Select 
-                  value={formData.nivelMWR} 
-                  onValueChange={(value) => setFormData({ ...formData, nivelMWR: value })}
-                  disabled={loading}
-                >
-                  <SelectTrigger className="h-12 bg-slate-700 border-slate-600 text-white">
-                    <SelectValue placeholder="Selecciona tu nivel" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="nuevo">Nuevo (menos de 3 meses)</SelectItem>
-                    <SelectItem value="activo">Activo (3-12 meses)</SelectItem>
-                    <SelectItem value="lider">Líder (más de 1 año)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-                  <div className="text-sm text-blue-900">
-                    <p className="font-semibold mb-1">Lo que recibirás:</p>
-                    <ul className="space-y-1 text-blue-700">
-                      <li>• Acceso inmediato al sistema piloto</li>
-                      <li>• Embudo de viajes configurado</li>
-                      <li>• CRM con IA incluido</li>
-                      <li>• 30 días de prueba</li>
-                    </ul>
+            {/* Benefits Quick View */}
+            <Card className="bg-card/50 backdrop-blur-sm border-border/50 mb-8">
+              <CardContent className="p-6">
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                      <Users className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold mb-1">Prospectos Diarios</div>
+                      <div className="text-xs text-muted-foreground">5-10 leads calificados automáticos</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-secondary/10 rounded-lg flex items-center justify-center shrink-0">
+                      <TrendingUp className="w-5 h-5 text-secondary" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold mb-1">CRM Inteligente</div>
+                      <div className="text-xs text-muted-foreground">Seguimiento automatizado 24/7</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center shrink-0">
+                      <Zap className="w-5 h-5 text-accent" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-semibold mb-1">IA Conversacional</div>
+                      <div className="text-xs text-muted-foreground">89% tasa de respuesta</div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
 
-              <Button 
-                type="submit"
-                size="lg"
-                className="w-full h-14 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-lg font-semibold shadow-lg"
-                disabled={loading}
+            {/* Registration Form */}
+            <Card className="bg-card/50 backdrop-blur-sm border-border/50 shadow-2xl shadow-primary/10">
+              <CardHeader>
+                <CardTitle>Información de Registro</CardTitle>
+                <CardDescription>
+                  Completa tus datos para acceder al sistema piloto
+                </CardDescription>
+              </CardHeader>
+              
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Name Fields */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="nombre">Nombre</Label>
+                      <Input
+                        id="nombre"
+                        placeholder="Juan"
+                        value={formData.nombre}
+                        onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                        required
+                        className="bg-background/50 border-border/50"
+                      />
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="apellido">Apellido</Label>
+                      <Input
+                        id="apellido"
+                        placeholder="Pérez"
+                        value={formData.apellido}
+                        onChange={(e) => setFormData({ ...formData, apellido: e.target.value })}
+                        required
+                        className="bg-background/50 border-border/50"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Contact Fields */}
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      placeholder="tu@email.com"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      required
+                      className="bg-background/50 border-border/50"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="telefono">WhatsApp (con código de país)</Label>
+                    <Input
+                      id="telefono"
+                      type="tel"
+                      placeholder="+1 234 567 8900"
+                      value={formData.telefono}
+                      onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                      required
+                      className="bg-background/50 border-border/50"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="pais">País</Label>
+                    <Select value={formData.pais} onValueChange={(value) => setFormData({ ...formData, pais: value })}>
+                      <SelectTrigger className="bg-background/50 border-border/50">
+                        <SelectValue placeholder="Selecciona tu país" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="mexico">México</SelectItem>
+                        <SelectItem value="colombia">Colombia</SelectItem>
+                        <SelectItem value="españa">España</SelectItem>
+                        <SelectItem value="argentina">Argentina</SelectItem>
+                        <SelectItem value="chile">Chile</SelectItem>
+                        <SelectItem value="peru">Perú</SelectItem>
+                        <SelectItem value="venezuela">Venezuela</SelectItem>
+                        <SelectItem value="ecuador">Ecuador</SelectItem>
+                        <SelectItem value="usa">Estados Unidos</SelectItem>
+                        <SelectItem value="otro">Otro</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="negocio_mlm">¿En qué negocio MLM participas?</Label>
+                    <Input
+                      id="negocio_mlm"
+                      placeholder="Ej: Herbalife, Amway, etc."
+                      value={formData.negocio_mlm}
+                      onChange={(e) => setFormData({ ...formData, negocio_mlm: e.target.value })}
+                      required
+                      className="bg-background/50 border-border/50"
+                    />
+                  </div>
+
+                  {/* Terms and Conditions */}
+                  <div className="flex items-start space-x-3">
+                    <Checkbox
+                      id="terminos"
+                      checked={formData.acepta_terminos}
+                      onCheckedChange={(checked) => setFormData({ ...formData, acepta_terminos: checked as boolean })}
+                    />
+                    <Label htmlFor="terminos" className="text-sm cursor-pointer leading-relaxed">
+                      Acepto los términos y condiciones del sistema piloto. Entiendo que solo pagaré la mensualidad si genero actividad en mi negocio MLM.
+                    </Label>
+                  </div>
+
+                  {/* Submit Button */}
+                  <Button 
+                    type="submit" 
+                    size="lg"
+                    disabled={isSubmitting}
+                    className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl shadow-primary/20 border border-primary/50"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Procesando...
+                      </>
+                    ) : (
+                      <>
+                        Continuar al Pago - $29 USD
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </>
+                    )}
+                  </Button>
+
+                  {/* Trust Badges */}
+                  <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Shield className="w-4 h-4 text-secondary" />
+                      <span>Pago seguro</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-secondary" />
+                      <span>Garantía 30 días</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Check className="w-4 h-4 text-secondary" />
+                      <span>Cancela cuando quieras</span>
+                    </div>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
+            {/* Back Link */}
+            <div className="mt-8 text-center">
+              <Button
+                variant="ghost"
+                onClick={() => router.push("/mwr")}
+                className="text-muted-foreground hover:text-foreground"
               >
-                {loading ? (
-                  <>
-                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                    Procesando...
-                  </>
-                ) : (
-                  <>
-                    Continuar al Sistema
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </>
-                )}
+                ← Volver a la página anterior
               </Button>
-
-              <p className="text-center text-sm text-muted-foreground">
-                Al registrarte, aceptas recibir comunicaciones sobre el sistema para Tu Negocio MLM
-              </p>
-            </form>
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

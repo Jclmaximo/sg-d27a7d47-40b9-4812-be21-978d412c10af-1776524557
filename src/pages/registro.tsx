@@ -1,508 +1,342 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
-import Link from "next/link";
-import { supabase } from "@/integrations/supabase/client";
+import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { SEO } from "@/components/SEO";
-import { Loader2, UserPlus, CheckCircle2, XCircle, Sparkles, Plane, Zap, TrendingUp, Clock, Eye, EyeOff } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { useToast } from "@/hooks/use-toast";
+import { leadsService } from "@/services/leadsService";
+import { 
+  ArrowRight, 
+  Check, 
+  Loader2, 
+  Shield,
+  Sparkles,
+  Globe,
+  DollarSign,
+  Plane
+} from "lucide-react";
 
 export default function RegistroPage() {
   const router = useRouter();
-  const [mounted, setMounted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [whatsapp, setWhatsapp] = useState("");
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
-  const [checkingUsername, setCheckingUsername] = useState(false);
-  const [referrerUsername, setReferrerUsername] = useState<string | null>(null);
-  const [existingUser, setExistingUser] = useState<{email: string; id: string;} | null>(null);
-  const [checkingSession, setCheckingSession] = useState(true);
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    nombre: "",
+    apellido: "",
+    email: "",
+    telefono: "",
+    pais: "",
+    interes: "",
+    metodo_contacto: "whatsapp",
+    acepta_terminos: false,
+  });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    
-    checkExistingSession();
-
-    // Get referrer from URL or localStorage
-    const { ref } = router.query;
-    if (ref && typeof ref === "string") {
-      setReferrerUsername(ref);
-      localStorage.setItem("referrer", ref);
-    } else {
-      const savedRef = localStorage.getItem("referrer");
-      if (savedRef) {
-        setReferrerUsername(savedRef);
-      }
-    }
-  }, [mounted, router.query]);
-
-  const checkExistingSession = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (user) {
-      // User already logged in - show options instead of auto-redirect
-      setExistingUser({ email: user.email || "Usuario", id: user.id });
-    }
-
-    setCheckingSession(false);
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    setExistingUser(null);
-    setError("");
-    setSuccess("Sesión cerrada. Ahora puedes crear una nueva cuenta.");
-  };
-
-  const goToDashboard = () => {
-    const savedRef = localStorage.getItem("referrer");
-    const refParam = savedRef ? `?ref=${savedRef}` : "";
-    router.push(`/pricing${refParam}`);
-  };
-
-  // Check username availability in real-time
-  useEffect(() => {
-    const checkUsername = async () => {
-      if (username.length < 3) {
-        setUsernameAvailable(null);
-        return;
-      }
-
-      // Validate format
-      const usernameRegex = /^[a-z0-9-]+$/;
-      if (!usernameRegex.test(username)) {
-        setUsernameAvailable(false);
-        return;
-      }
-
-      setCheckingUsername(true);
-
-      const { data, error } = await supabase.
-      from("profiles").
-      select("username").
-      eq("username", username).
-      maybeSingle();
-
-      if (error) {
-        console.error("Error checking username:", error);
-        setUsernameAvailable(null);
-      } else {
-        setUsernameAvailable(!data);
-      }
-
-      setCheckingUsername(false);
-    };
-
-    const timeoutId = setTimeout(checkUsername, 500);
-    return () => clearTimeout(timeoutId);
-  }, [username]);
-
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
-
-    // Validation
-    if (!fullName.trim()) {
-      setError("Por favor ingresa tu nombre completo");
+    
+    if (!formData.acepta_terminos) {
+      toast({
+        title: "Error",
+        description: "Debes aceptar los términos y condiciones",
+        variant: "destructive",
+      });
       return;
     }
 
-    if (!email.trim() || !email.includes("@")) {
-      setError("Por favor ingresa un email válido");
-      return;
-    }
-
-    if (!whatsapp.trim()) {
-      setError("Por favor ingresa tu número de WhatsApp");
-      return;
-    }
-
-    if (username.length < 3) {
-      setError("El username debe tener al menos 3 caracteres");
-      return;
-    }
-
-    if (usernameAvailable === false) {
-      setError("Este username no está disponible");
-      return;
-    }
-
-    if (password.length < 6) {
-      setError("La contraseña debe tener al menos 6 caracteres");
-      return;
-    }
-
-    setLoading(true);
+    setIsSubmitting(true);
 
     try {
-      // 1. Create auth user
-      const { data, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
+      const { data, error } = await leadsService.createLead({
+        nombre: formData.nombre,
+        apellido: formData.apellido,
+        email: formData.email,
+        telefono: formData.telefono,
+        pais: formData.pais,
+        interes: formData.interes as "ahorrar" | "ganar" | "ambas",
+        metodo_contacto: formData.metodo_contacto as "whatsapp" | "email" | "telefono",
+        estado: "nuevo",
       });
 
-      if (signUpError) throw signUpError;
-      if (!data.user) throw new Error("No se pudo crear el usuario");
+      if (error) {
+        console.error("Error creating lead:", error);
+        toast({
+          title: "Error",
+          description: "Hubo un problema al enviar tu información. Por favor intenta de nuevo.",
+          variant: "destructive",
+        });
+        return;
+      }
 
-      console.log("✅ Auth user created:", data.user.id);
-
-      // 2. Sign in immediately to establish session (CRITICAL for UPDATE to work)
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      toast({
+        title: "¡Registro exitoso!",
+        description: "Nos pondremos en contacto contigo pronto.",
       });
 
-      if (signInError) {
-        console.error("⚠️ Auto sign-in failed:", signInError);
-        // Continue anyway - profile might still update
-      } else {
-        console.log("✅ Session established via auto sign-in");
-      }
-
-      // 3. Wait for profile to be created by trigger
-      let profileExists = false;
-      let retries = 0;
-      const maxRetries = 10;
-
-      while (!profileExists && retries < maxRetries) {
-        retries++;
-        console.log(`⏳ Waiting for profile... attempt ${retries}/${maxRetries}`);
-        
-        // Initial delay to let trigger complete
-        await new Promise((resolve) => setTimeout(resolve, retries === 1 ? 300 : 800));
-
-        const { data: profile, error: checkError } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("id", data.user.id)
-          .maybeSingle();
-
-        if (!checkError && profile) {
-          profileExists = true;
-          console.log("✅ Profile found in database");
-        }
-      }
-
-      if (!profileExists) {
-        throw new Error("El perfil no se creó correctamente. Por favor contacta soporte.");
-      }
-
-      // 4. Update profile with all data (now session is active)
-      const { error: profileError } = await supabase
-        .from("profiles")
-        .update({
-          full_name: fullName,
-          username: username.toLowerCase(),
-          whatsapp_number: whatsapp,
-          ambassador_active: true
-        })
-        .eq("id", data.user.id);
-
-      if (profileError) {
-        console.error("❌ Profile update error:", profileError);
-        throw profileError;
-      }
-
-      console.log("✅ Profile updated with username and data");
-
-      // 5. Verify username was saved
-      const { data: verifyProfile, error: verifyError } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("id", data.user.id)
-        .single();
-
-      if (verifyError || !verifyProfile?.username) {
-        console.error("❌ Username verification failed:", verifyError);
-        throw new Error("No se pudo guardar el username correctamente");
-      }
-
-      console.log("✅ Username verified:", verifyProfile.username);
-
-      // 6. Save referrer if exists
-      if (referrerUsername) {
-        const { data: referrerProfile } = await supabase
-          .from("profiles")
-          .select("id")
-          .eq("username", referrerUsername)
-          .single();
-
-        if (referrerProfile) {
-          await supabase
-            .from("profiles")
-            .update({ referred_by: referrerProfile.id })
-            .eq("id", data.user.id);
-
-          console.log("✅ Referrer saved:", referrerUsername);
-        }
-      }
-
-      console.log("✅ Registration complete");
-
-      setSuccess("¡Cuenta creada exitosamente! Redirigiendo...");
-      setError("");
-
-      // Redirect to pricing with ref
-      setTimeout(() => {
-        const refParam = referrerUsername ? `?ref=${referrerUsername}` : "";
-        router.push(`/pricing${refParam}`);
-      }, 1500);
-    } catch (err: any) {
-      console.error("❌ Registration error:", err);
-      setError(err.message || "Error al crear la cuenta. Intenta de nuevo.");
+      // Redirect to thank you page or pricing
+      router.push("/pricing");
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      toast({
+        title: "Error",
+        description: "Ocurrió un error inesperado. Por favor intenta de nuevo.",
+        variant: "destructive",
+      });
     } finally {
-      setLoading(false);
+      setIsSubmitting(false);
     }
-  };
-
-  const getUsernameStatus = () => {
-    if (username.length < 3) return null;
-
-    const usernameRegex = /^[a-z0-9-]+$/;
-    if (!usernameRegex.test(username)) {
-      return (
-        <div className="flex items-center gap-2 text-sm text-destructive">
-          <XCircle className="w-4 h-4" />
-          Solo minúsculas, números y guiones
-        </div>);
-
-    }
-
-    if (checkingUsername) {
-      return (
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="w-4 h-4 animate-spin" />
-          Verificando...
-        </div>);
-
-    }
-
-    if (usernameAvailable === true) {
-      return (
-        <div className="flex items-center gap-2 text-sm text-green-600">
-          <CheckCircle2 className="w-4 h-4" />
-          ¡Disponible!
-        </div>);
-
-    }
-
-    if (usernameAvailable === false) {
-      return (
-        <div className="flex items-center gap-2 text-sm text-destructive">
-          <XCircle className="w-4 h-4" />
-          No disponible
-        </div>);
-
-    }
-
-    return null;
   };
 
   return (
     <>
       <SEO
         title="Registro - Viaja Ligero"
-        description="Crea tu cuenta en Viaja Ligero y comienza a ahorrar en tus viajes" />
-      
-      
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-        <div className="container mx-auto px-4 py-8">
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 items-stretch">
-            {/* Left side - Form */}
-            <Card className="w-full flex flex-col h-full" style={{ borderRadius: "16px" }}>
-              <CardHeader className="space-y-2 text-center pb-6">
-                <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-2">
-                  <Plane className="w-8 h-8 text-primary" />
+        description="Únete al club exclusivo de viajes y accede a tarifas preferenciales"
+      />
+
+      <div className="min-h-screen bg-background text-foreground">
+        {/* Floating Orbs Background */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-float-delayed" />
+        </div>
+
+        <div className="relative py-20 px-4">
+          <div className="max-w-2xl mx-auto">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <Badge variant="secondary" className="mb-6 px-4 py-2 bg-card/50 backdrop-blur-sm border-border/50">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Registro Exclusivo
+              </Badge>
+              
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-heading bg-clip-text text-transparent">
+                Únete al Club
+              </h1>
+              
+              <p className="text-xl text-muted-foreground">
+                Accede a tarifas exclusivas y experiencias de viaje premium
+              </p>
+            </div>
+
+            {/* Benefits Quick View */}
+            <Card className="bg-card/50 backdrop-blur-sm border-border/50 mb-8">
+              <CardContent className="p-6">
+                <div className="grid md:grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-2">
+                      <Plane className="w-6 h-6 text-primary" />
+                    </div>
+                    <div className="text-sm font-semibold">Descuentos hasta 70%</div>
+                  </div>
+                  <div>
+                    <div className="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center mx-auto mb-2">
+                      <DollarSign className="w-6 h-6 text-secondary" />
+                    </div>
+                    <div className="text-sm font-semibold">Genera Ingresos</div>
+                  </div>
+                  <div>
+                    <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-2">
+                      <Globe className="w-6 h-6 text-accent" />
+                    </div>
+                    <div className="text-sm font-semibold">Experiencias Exclusivas</div>
+                  </div>
                 </div>
-                <CardTitle className="text-2xl md:text-3xl font-bold">
-                  Únete a Viaja Ligero
-                </CardTitle>
-                <CardDescription className="text-base">
-                  Crea tu cuenta y comienza a disfrutar de viajes exclusivos
+              </CardContent>
+            </Card>
+
+            {/* Registration Form */}
+            <Card className="bg-card/50 backdrop-blur-sm border-border/50 shadow-2xl shadow-primary/10">
+              <CardHeader>
+                <CardTitle>Información de Contacto</CardTitle>
+                <CardDescription>
+                  Completa el formulario para comenzar tu experiencia exclusiva
                 </CardDescription>
               </CardHeader>
-              <CardContent className="flex-1">
-                <form onSubmit={handleSignup} className="space-y-4">
-                  {/* Full Name */}
-                  <div className="space-y-2">
-                    <Label htmlFor="fullName">Nombre Completo</Label>
-                    <Input
-                      id="fullName"
-                      type="text"
-                      placeholder="Juan Pérez"
-                      value={fullName}
-                      onChange={(e) => setFullName(e.target.value)}
-                      required
-                      disabled={loading} />
+              
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Name Fields */}
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="nombre">Nombre</Label>
+                      <Input
+                        id="nombre"
+                        placeholder="Juan"
+                        value={formData.nombre}
+                        onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                        required
+                        className="bg-background/50 border-border/50"
+                      />
+                    </div>
                     
+                    <div className="space-y-2">
+                      <Label htmlFor="apellido">Apellido</Label>
+                      <Input
+                        id="apellido"
+                        placeholder="Pérez"
+                        value={formData.apellido}
+                        onChange={(e) => setFormData({ ...formData, apellido: e.target.value })}
+                        required
+                        className="bg-background/50 border-border/50"
+                      />
+                    </div>
                   </div>
 
-                  {/* Email */}
+                  {/* Contact Fields */}
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
                       type="email"
                       placeholder="tu@email.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
-                      disabled={loading} />
-                    
+                      className="bg-background/50 border-border/50"
+                    />
                   </div>
 
-                  {/* WhatsApp */}
                   <div className="space-y-2">
-                    <Label htmlFor="whatsapp">WhatsApp</Label>
+                    <Label htmlFor="telefono">Teléfono (con código de país)</Label>
                     <Input
-                      id="whatsapp"
+                      id="telefono"
                       type="tel"
-                      placeholder="+52 123 456 7890"
-                      value={whatsapp}
-                      onChange={(e) => setWhatsapp(e.target.value)}
+                      placeholder="+1 234 567 8900"
+                      value={formData.telefono}
+                      onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
                       required
-                      disabled={loading} />
-                    
-                    <p className="text-xs text-muted-foreground">
-                      Incluye el código de país (ej: +52 para México)
-                    </p>
+                      className="bg-background/50 border-border/50"
+                    />
                   </div>
 
-                  {/* Username */}
                   <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
-                    <Input
-                      id="username"
-                      type="text"
-                      placeholder="juan-perez"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value.toLowerCase())}
-                      required
-                      disabled={loading} />
-                    
-                    {getUsernameStatus()}
-                    <p className="text-xs text-muted-foreground">
-                      Tu URL será: viajaligero.com/ambassador/<span className="font-medium">{username || "tu-username"}</span>
-                    </p>
+                    <Label htmlFor="pais">País</Label>
+                    <Select value={formData.pais} onValueChange={(value) => setFormData({ ...formData, pais: value })}>
+                      <SelectTrigger className="bg-background/50 border-border/50">
+                        <SelectValue placeholder="Selecciona tu país" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="mexico">México</SelectItem>
+                        <SelectItem value="colombia">Colombia</SelectItem>
+                        <SelectItem value="españa">España</SelectItem>
+                        <SelectItem value="argentina">Argentina</SelectItem>
+                        <SelectItem value="chile">Chile</SelectItem>
+                        <SelectItem value="peru">Perú</SelectItem>
+                        <SelectItem value="venezuela">Venezuela</SelectItem>
+                        <SelectItem value="ecuador">Ecuador</SelectItem>
+                        <SelectItem value="otro">Otro</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  {/* Password */}
+                  {/* Interest Selection */}
+                  <div className="space-y-4">
+                    <Label>¿Qué te interesa más?</Label>
+                    <RadioGroup value={formData.interes} onValueChange={(value) => setFormData({ ...formData, interes: value })}>
+                      <div className="flex items-start space-x-3 p-4 rounded-lg border border-border/50 bg-background/30 hover:bg-background/50 transition-colors">
+                        <RadioGroupItem value="ahorrar" id="ahorrar" />
+                        <Label htmlFor="ahorrar" className="cursor-pointer flex-1">
+                          <div className="font-semibold">Solo ahorrar en viajes</div>
+                          <div className="text-sm text-muted-foreground">Accede a tarifas exclusivas y descuentos</div>
+                        </Label>
+                      </div>
+                      
+                      <div className="flex items-start space-x-3 p-4 rounded-lg border border-border/50 bg-background/30 hover:bg-background/50 transition-colors">
+                        <RadioGroupItem value="ganar" id="ganar" />
+                        <Label htmlFor="ganar" className="cursor-pointer flex-1">
+                          <div className="font-semibold">Generar ingresos</div>
+                          <div className="text-sm text-muted-foreground">Conviértete en Lifestyle Ambassador</div>
+                        </Label>
+                      </div>
+                      
+                      <div className="flex items-start space-x-3 p-4 rounded-lg border border-accent/50 bg-accent/5 hover:bg-accent/10 transition-colors">
+                        <RadioGroupItem value="ambas" id="ambas" />
+                        <Label htmlFor="ambas" className="cursor-pointer flex-1">
+                          <div className="font-semibold flex items-center gap-2">
+                            Ambas opciones
+                            <Badge variant="secondary" className="bg-accent/20 text-accent border-accent/30">Recomendado</Badge>
+                          </div>
+                          <div className="text-sm text-muted-foreground">Ahorra y genera ingresos simultáneamente</div>
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  {/* Contact Method */}
                   <div className="space-y-2">
-                    <Label htmlFor="password">Contraseña</Label>
-                    <div className="relative">
-                      <Input
-                        id="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Mínimo 6 caracteres"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        disabled={loading}
-                        className="pr-10"
-                      />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                        onClick={() => setShowPassword(!showPassword)}
-                        disabled={loading}
-                      >
-                        {showPassword ? (
-                          <EyeOff className="h-4 w-4 text-muted-foreground" />
-                        ) : (
-                          <Eye className="h-4 w-4 text-muted-foreground" />
-                        )}
-                      </Button>
-                    </div>
+                    <Label htmlFor="metodo_contacto">¿Cómo prefieres que te contactemos?</Label>
+                    <Select value={formData.metodo_contacto} onValueChange={(value) => setFormData({ ...formData, metodo_contacto: value })}>
+                      <SelectTrigger className="bg-background/50 border-border/50">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                        <SelectItem value="email">Email</SelectItem>
+                        <SelectItem value="telefono">Llamada telefónica</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  {/* Error Alert */}
-                  {error &&
-                  <Alert variant="destructive">
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  }
-
-                  {/* Success Alert */}
-                  {success &&
-                  <Alert className="bg-green-50 text-green-900 border-green-200 dark:bg-green-900/10 dark:text-green-100 dark:border-green-800">
-                      <CheckCircle2 className="h-4 w-4" />
-                      <AlertDescription className="ml-2">
-                        {success}
-                        <p className="mt-2 text-sm font-medium">
-                          Redirigiendo a la página de pago...
-                        </p>
-                      </AlertDescription>
-                    </Alert>
-                  }
+                  {/* Terms and Conditions */}
+                  <div className="flex items-start space-x-3">
+                    <Checkbox
+                      id="terminos"
+                      checked={formData.acepta_terminos}
+                      onCheckedChange={(checked) => setFormData({ ...formData, acepta_terminos: checked as boolean })}
+                    />
+                    <Label htmlFor="terminos" className="text-sm cursor-pointer leading-relaxed">
+                      Acepto los términos y condiciones, y autorizo el uso de mis datos para contacto según la política de privacidad
+                    </Label>
+                  </div>
 
                   {/* Submit Button */}
-                  <Button
-                    type="submit"
-                    className="w-full"
+                  <Button 
+                    type="submit" 
                     size="lg"
-                    disabled={loading || usernameAvailable === false}>
-                    
-                    {loading ?
-                    <>
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        Creando cuenta...
-                      </> :
-
-                    <>
-                        <UserPlus className="w-4 h-4 mr-2" />
-                        Crear Cuenta
+                    disabled={isSubmitting}
+                    className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl shadow-primary/20 border border-primary/50"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Enviando...
                       </>
-                    }
+                    ) : (
+                      <>
+                        Continuar
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </>
+                    )}
                   </Button>
 
-                  {/* Login Link */}
-                  <div className="text-center text-sm text-muted-foreground">
-                    ¿Ya tienes cuenta?{" "}
-                    <Button
-                      type="button"
-                      variant="link"
-                      className="px-0"
-                      onClick={() => router.push("/admin")}>
-                      
-                      Inicia sesión aquí
-                    </Button>
+                  {/* Trust Badge */}
+                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                    <Shield className="w-4 h-4 text-secondary" />
+                    <span>Información protegida y segura</span>
                   </div>
                 </form>
               </CardContent>
             </Card>
 
-            {/* Right side - Visual/Benefits */}
-            <div className="hidden lg:block relative">
-              <div className="sticky top-8 h-full">
-                <div className="relative h-full min-h-[800px] rounded-2xl overflow-hidden bg-slate-50">
-                  <img
-                    src="/registro-hero-final.jpg"
-                    alt="Viaja Ligero - Marketing Digital Automatizado"
-                    className="w-full h-full object-cover" />
-                  
-                </div>
-              </div>
+            {/* Legal Info */}
+            <div className="mt-8 text-center">
+              <p className="text-xs text-muted-foreground mb-2">
+                Licencias de operación: Florida ST-37449, Iowa 951, California 2106836-40
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Oficinas corporativas: Hong Kong • Florida, USA • París, Francia • Dubái, UAE
+              </p>
             </div>
           </div>
         </div>
       </div>
-    </>);
-
+    </>
+  );
 }
