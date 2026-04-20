@@ -289,30 +289,31 @@ export default function MWRVSLPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        {showCTA &&
-        <section className="py-12 bg-gradient-to-r from-blue-600 to-indigo-600 sticky bottom-0 shadow-2xl z-50">
-            <div className="max-w-4xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
-              <div className="text-left">
-                <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
-                  Sistematiza Tu Negocio MLM Hoy
-                </h2>
-                <p className="text-blue-100">
-                  Accede al sistema piloto por 14 días • Solo $29 USD
-                </p>
+        {/* Floating CTA */}
+        {showCTA && (
+          <div className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-r from-blue-600 to-purple-600 border-t-4 border-yellow-400 shadow-2xl">
+            <div className="max-w-4xl mx-auto px-3 py-3 md:px-6 md:py-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-6">
+                <div className="text-center md:text-left">
+                  <h3 className="text-lg md:text-2xl font-bold text-white mb-1 md:mb-2">
+                    Sistematiza Tu Negocio MLM Hoy
+                  </h3>
+                  <p className="text-xs md:text-base text-blue-100">
+                    Accede al sistema piloto por 14 días • Solo $29 USD
+                  </p>
+                </div>
+                <Button 
+                  size="lg"
+                  onClick={() => router.push("/mwr/checkout")}
+                  className="w-full md:w-auto h-12 md:h-14 px-6 md:px-8 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-base md:text-lg font-semibold shadow-xl whitespace-nowrap flex-shrink-0"
+                >
+                  Acceder al Sistema Piloto
+                  <ArrowRight className="ml-2 h-4 w-4 md:h-5 md:w-5" />
+                </Button>
               </div>
-
-              <Button
-              size="lg"
-              onClick={() => router.push("/mwr/checkout")}
-              className="h-14 px-8 bg-yellow-500 hover:bg-yellow-400 text-slate-900 text-lg font-bold shadow-xl">
-              
-                Acceder al Sistema Piloto
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
             </div>
-          </section>
-        }
+          </div>
+        )}
       </div>
     </>);
 
