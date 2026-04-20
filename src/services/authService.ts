@@ -177,5 +177,25 @@ export const authService = {
   // Listen to auth state changes
   onAuthStateChange(callback: (event: string, session: Session | null) => void) {
     return supabase.auth.onAuthStateChange(callback);
+  },
+
+  /**
+   * Get the appropriate redirect URL based on environment
+   * Supports Vercel preview deployments and production
+   */
+  getRedirectUrl(): string {
+    // Check for environment variable first
+    if (typeof window !== "undefined") {
+      const envUrl = process.env.NEXT_PUBLIC_SITE_URL;
+      if (envUrl) {
+        return envUrl;
+      }
+
+      // Fallback to window.location.origin for dynamic environments
+      return window.location.origin;
+    }
+
+    // Server-side fallback
+    return process.env.NEXT_PUBLIC_SITE_URL || "https://mwr.hubia.vip";
   }
 };
