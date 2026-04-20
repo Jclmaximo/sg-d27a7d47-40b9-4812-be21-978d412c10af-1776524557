@@ -307,7 +307,7 @@ export default function MWRPage() {
 
               <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
                 <Shield className="w-4 h-4" />
-                <span>Garantía de 14 días</span>
+                <span>Garantía de 30 días</span>
               </div>
             </CardContent>
           </Card>
@@ -344,7 +344,7 @@ export default function MWRPage() {
                   Sistematiza Tu Negocio MLM Hoy
                 </h3>
                 <p className="text-xs md:text-base text-blue-100">
-                  Accede al sistema piloto por 14 días • Solo $29 USD
+                  Accede al sistema piloto por 30 días • Solo $29 USD
                 </p>
               </div>
               <Button 

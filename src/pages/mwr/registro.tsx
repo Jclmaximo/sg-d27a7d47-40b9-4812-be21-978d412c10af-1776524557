@@ -161,7 +161,7 @@ export default function MWRRegistroPage() {
                       <li>• Acceso inmediato al sistema piloto</li>
                       <li>• Embudo de viajes configurado</li>
                       <li>• CRM con IA incluido</li>
-                      <li>• 14 días de prueba</li>
+                      <li>• 30 días de prueba</li>
                     </ul>
                   </div>
                 </div>

@@ -74,7 +74,7 @@ export default function MWRCheckoutPage() {
                     <div className="flex justify-between items-start pb-3 border-b">
                       <div>
                         <h3 className="font-semibold text-lg">Sistema Piloto MLM</h3>
-                        <p className="text-sm text-muted-foreground">Acceso completo 14 días</p>
+                        <p className="text-sm text-muted-foreground">Acceso completo 30 días</p>
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-blue-600">$29</div>
@@ -125,7 +125,7 @@ export default function MWRCheckoutPage() {
                     <div className="flex items-start gap-3">
                       <Shield className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
                       <div className="text-sm">
-                        <p className="font-semibold text-blue-900 mb-1">Garantía de 14 días</p>
+                        <p className="font-semibold text-blue-900 mb-1">Garantía de 30 días</p>
                         <p className="text-blue-700">
                           Si no generas actividad en tu negocio MLM, no pagas mensualidad
                         </p>

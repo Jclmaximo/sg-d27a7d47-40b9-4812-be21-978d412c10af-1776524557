@@ -303,7 +303,7 @@ export default function MWRVSLPage() {
                     Sistematiza Tu Negocio MLM Hoy
                   </h3>
                   <p className="text-xs md:text-base text-blue-100">
-                    Accede al sistema piloto por 14 días • Solo $29 USD
+                    Accede al sistema piloto por 30 días • Solo $29 USD
                   </p>
                 </div>
                 <Button 
