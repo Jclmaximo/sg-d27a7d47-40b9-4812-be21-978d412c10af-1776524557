@@ -1,11 +1,14 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   Select,
   SelectContent,
@@ -19,10 +22,13 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
 import { referralService } from "@/services/referralService";
+import { supabase } from "@/integrations/supabase/client";
+import type { Commission, NetworkStats, ReferralTreeNode } from "@/services/referralService";
 import { useToast } from "@/hooks/use-toast";
 import {
   Users,
@@ -43,7 +49,18 @@ import {
   Eye,
   FileText,
   Share2,
-  Filter as FilterIcon
+  Filter,
+  Settings,
+  ShieldCheck,
+  LayoutDashboard,
+  Network,
+  Link2,
+  User,
+  Wallet,
+  Check,
+  Copy,
+  ExternalLink,
+  Plus
 } from "lucide-react";
 import Link from "next/link";
 

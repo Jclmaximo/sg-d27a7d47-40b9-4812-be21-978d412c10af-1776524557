@@ -28,8 +28,12 @@ import {
   Loader2,
   LogOut,
   TrendingUp,
-  Eye
+  Eye,
+  ArrowLeft,
+  MapPin,
+  Filter
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 interface Lead {
   id: string;

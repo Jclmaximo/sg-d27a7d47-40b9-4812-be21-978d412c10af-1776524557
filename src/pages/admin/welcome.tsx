@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
+import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
@@ -26,7 +27,9 @@ import {
   Gift,
   Zap,
   Star,
-  ArrowRight
+  ArrowRight,
+  Plane,
+  PlayCircle
 } from "lucide-react";
 
 interface Lead {
