@@ -58,21 +58,21 @@ export default function CheckoutPage() {
     }
 
     try {
-      const discount = await discountService.validateDiscount(discountCode.trim());
+      const discount = await discountService.validateDiscountCode(discountCode.trim());
       
-      if (discount) {
+      if (discount.valid && discount.discount) {
         setDiscountApplied({
-          percentage: discount.percentage,
+          percentage: discount.discount.percentage,
           code: discountCode.trim()
         });
         toast({
           title: "¡Código aplicado!",
-          description: `Descuento del ${discount.percentage}% aplicado`,
+          description: `Descuento del ${discount.discount.percentage}% aplicado`,
         });
       } else {
         toast({
           title: "Código inválido",
-          description: "El código no existe o ya expiró",
+          description: discount.error || "El código no existe o ya expiró",
           variant: "destructive"
         });
       }
