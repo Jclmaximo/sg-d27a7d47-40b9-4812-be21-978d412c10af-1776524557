@@ -46,7 +46,7 @@ export default function MWRPage() {
         
         <div className="relative z-10 max-w-6xl mx-auto text-center">
           <div className="inline-block mb-8 animate-bounce">
-            <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-full px-6 py-2 backdrop-blur-sm">
+            <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-full px-6 py-2 backdrop-blur-sm" style={{ borderRadius: "16px" }}>
               <span className="text-yellow-300 font-semibold text-lg">🚀 Lanzamiento Piloto - Acceso Anticipado</span>
             </div>
           </div>
