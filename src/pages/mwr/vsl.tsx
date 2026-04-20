@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -16,13 +16,17 @@ import {
 export default function MWRVSLPage() {
   const router = useRouter();
   const [showCTA, setShowCTA] = useState(false);
+  const [currentSection, setCurrentSection] = useState("intro");
+  const [progress, setProgress] = useState(0);
 
-  // Simulate video progress to show CTA
-  const handleVideoProgress = () => {
-    setTimeout(() => {
+  // Auto-show CTA after 3 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
       setShowCTA(true);
     }, 3000);
-  };
+
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <>
