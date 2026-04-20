@@ -2,13 +2,14 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles, Users, TrendingUp } from "lucide-react";
+import { ArrowRight, Sparkles, Users, TrendingUp, Plane, Globe, Shield, ChevronDown } from "lucide-react";
 
 interface FunnelHeroProps {
   onCTAClick: () => void;
+  username?: string; // Add username to fix TS error in ambassador page
 }
 
-export function FunnelHero({ onCTAClick }: FunnelHeroProps) {
+export function FunnelHero({ onCTAClick, username }: FunnelHeroProps) {
   const scrollToBenefits = () => {
     const benefitsSection = document.getElementById("benefits-section");
     if (benefitsSection) {

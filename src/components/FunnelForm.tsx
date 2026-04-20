@@ -3,20 +3,30 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2, MessageSquare } from "lucide-react";
 
 interface FunnelFormProps {
   username?: string;
+  ambassadorId?: string;
+  ambassadorName?: string;
 }
 
-export function FunnelForm({ username }: FunnelFormProps) {
+export function FunnelForm({ username, ambassadorId, ambassadorName }: FunnelFormProps) {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     nombre: "",
     email: "",
     telefono: "",
+    pais: "",
     interes: "ahorrar",
   });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,7 +35,7 @@ export function FunnelForm({ username }: FunnelFormProps) {
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1500));
     
-    console.log("Form submitted:", { ...formData, username });
+    console.log("Form submitted:", { ...formData, username, ambassadorId });
     setLoading(false);
   };
 
@@ -36,7 +46,7 @@ export function FunnelForm({ username }: FunnelFormProps) {
           {/* Header */}
           <div className="text-center mb-8">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Empieza tu experiencia con Viaja Ligero
+              {ambassadorName ? `Empieza tu experiencia con ${ambassadorName}` : "Empieza tu experiencia con Viaja Ligero"}
             </h2>
             <p className="text-lg text-muted-foreground">
               Completa el formulario y te contactaremos para mostrarte cómo acceder a beneficios exclusivos
@@ -47,17 +57,16 @@ export function FunnelForm({ username }: FunnelFormProps) {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Name */}
             <div className="space-y-2">
-              <Label htmlFor="name">Nombre Completo *</Label>
+              <Label htmlFor="nombre">Nombre Completo *</Label>
               <Input
-                id="name"
-                name="name"
+                id="nombre"
+                name="nombre"
                 type="text"
                 placeholder="Juan Pérez"
-                value={formData.name}
+                value={formData.nombre}
                 onChange={handleChange}
                 required
                 className="h-12" />
-              
             </div>
 
             {/* Email */}
@@ -72,37 +81,34 @@ export function FunnelForm({ username }: FunnelFormProps) {
                 onChange={handleChange}
                 required
                 className="h-12" />
-              
             </div>
 
             {/* Phone */}
             <div className="space-y-2">
-              <Label htmlFor="phone">Teléfono (WhatsApp) *</Label>
+              <Label htmlFor="telefono">Teléfono (WhatsApp) *</Label>
               <Input
-                id="phone"
-                name="phone"
+                id="telefono"
+                name="telefono"
                 type="tel"
                 placeholder="+52 33 1234 5678"
-                value={formData.phone}
+                value={formData.telefono}
                 onChange={handleChange}
                 required
                 className="h-12" />
-              
             </div>
 
             {/* Country */}
             <div className="space-y-2">
-              <Label htmlFor="country">País *</Label>
+              <Label htmlFor="pais">País *</Label>
               <Input
-                id="country"
-                name="country"
+                id="pais"
+                name="pais"
                 type="text"
                 placeholder="México"
-                value={formData.country}
+                value={formData.pais}
                 onChange={handleChange}
                 required
                 className="h-12" />
-              
             </div>
 
             {/* Submit Button */}
@@ -117,12 +123,12 @@ export function FunnelForm({ username }: FunnelFormProps) {
             </Button>
 
             {/* Privacy Note */}
-            <p className="text-xs text-center text-muted-foreground mt-4">Al enviar este formulario, aceptas que un embajador de Viaja Ligero Club se comunique contigo por WhatsApp para brindarte más información.
-
+            <p className="text-xs text-center text-muted-foreground mt-4">
+              Al enviar este formulario, aceptas que un embajador de Viaja Ligero Club se comunique contigo por WhatsApp para brindarte más información.
             </p>
           </form>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }
