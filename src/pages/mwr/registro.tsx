@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, UserPlus, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { mwrLeadsService } from "@/services/mwrLeadsService";
 
 export default function MWRRegistroPage() {
   const router = useRouter();
@@ -32,14 +33,28 @@ export default function MWRRegistroPage() {
     setLoading(true);
 
     try {
-      // TODO: Guardar lead en base de datos
-      console.log("Registro MWR:", formData);
+      const { data, error: leadError } = await mwrLeadsService.createLead({
+        nombre: formData.nombre,
+        email: formData.email,
+        whatsapp: formData.whatsapp,
+        nivel_mwr: formData.nivelMWR,
+        estado: "nuevo",
+        notas: null,
+        referrer_username: null
+      });
+
+      if (leadError) {
+        throw new Error(leadError.message || "Error al guardar registro");
+      }
+
+      console.log("Lead MWR creado:", data);
       
       // Redirect to VSL
       setTimeout(() => {
         router.push("/mwr/vsl");
-      }, 1000);
+      }, 500);
     } catch (err: any) {
+      console.error("Error al registrar:", err);
       setError(err.message || "Error al procesar registro");
     } finally {
       setLoading(false);

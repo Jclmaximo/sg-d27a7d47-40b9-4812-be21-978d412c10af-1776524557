@@ -17,9 +17,11 @@ import {
   Clock,
   Shield
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function MWRLandingPage() {
   const [email, setEmail] = useState("");
+  const router = useRouter();
 
   return (
     <>
@@ -53,6 +55,7 @@ export default function MWRLandingPage() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
             <Button 
               size="lg"
+              onClick={() => router.push("/mwr/registro")}
               className="h-14 px-8 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-lg font-semibold shadow-2xl"
             >
               Acceder al Sistema Piloto
@@ -305,6 +308,7 @@ export default function MWRLandingPage() {
                 />
                 <Button 
                   size="lg"
+                  onClick={() => router.push("/mwr/registro")}
                   className="w-full h-14 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg font-semibold"
                 >
                   Empezar Ahora - Solo $29 USD
