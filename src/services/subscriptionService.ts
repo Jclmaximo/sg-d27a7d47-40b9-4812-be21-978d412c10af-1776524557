@@ -23,7 +23,7 @@ export const subscriptionService = {
     return !!data;
   },
 
-  // Create initial subscription (with $79 initial payment)
+  // Create initial subscription (with $29 initial payment)
   async createInitialSubscription(userId: string, txHash: string, discountCode?: string, discountPercentage?: number, originalPrice?: number, finalPrice?: number) {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 30); // 30 days from now
@@ -34,16 +34,16 @@ export const subscriptionService = {
         user_id: userId,
         status: "active",
         payment_method: "usdt_bsc",
-        price_usd: finalPrice || 79.00,
+        price_usd: finalPrice || 29.00,
         transaction_hash: txHash,
         end_date: expiresAt.toISOString(),
-        initial_payment_amount: 79.00,
-        monthly_payment_amount: 10.00,
+        initial_payment_amount: 29.00,
+        monthly_payment_amount: 19.00,
         is_initial_payment: true,
         discount_code_used: discountCode || null,
         discount_percentage: discountPercentage || 0,
-        original_price: originalPrice || 79.00,
-        final_price: finalPrice || 79.00
+        original_price: originalPrice || 29.00,
+        final_price: finalPrice || 29.00
       }])
       .select()
       .single();
@@ -52,7 +52,7 @@ export const subscriptionService = {
     return data;
   },
 
-  // Renew subscription (with $10 monthly payment)
+  // Renew subscription (with $19 monthly payment)
   async renewSubscription(userId: string, txHash: string, discountCode?: string, discountPercentage?: number, originalPrice?: number, finalPrice?: number) {
     // Get current subscription
     const { data: currentSub } = await supabase
@@ -76,16 +76,16 @@ export const subscriptionService = {
         user_id: userId,
         status: "active",
         payment_method: "usdt_bsc",
-        price_usd: finalPrice || 10.00,
+        price_usd: finalPrice || 19.00,
         transaction_hash: txHash,
         end_date: expiresAt.toISOString(),
-        initial_payment_amount: 79.00,
-        monthly_payment_amount: 10.00,
+        initial_payment_amount: 29.00,
+        monthly_payment_amount: 19.00,
         is_initial_payment: false,
         discount_code_used: discountCode || null,
         discount_percentage: discountPercentage || 0,
-        original_price: originalPrice || 10.00,
-        final_price: finalPrice || 10.00
+        original_price: originalPrice || 19.00,
+        final_price: finalPrice || 19.00
       }])
       .select()
       .single();

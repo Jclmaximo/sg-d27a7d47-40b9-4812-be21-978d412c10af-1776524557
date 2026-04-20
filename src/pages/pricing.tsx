@@ -15,9 +15,10 @@ export default function PricingPage() {
     {
       name: "Viajero Básico",
       description: "Ideal para viajeros ocasionales que buscan ahorrar",
-      price: billingPeriod === "monthly" ? 29 : 290,
+      price: billingPeriod === "monthly" ? 19 : 190,
       period: billingPeriod === "monthly" ? "/mes" : "/año",
-      savings: billingPeriod === "annual" ? "Ahorra $58" : null,
+      savings: billingPeriod === "annual" ? "Ahorra $38" : null,
+      initialPrice: 29,
       features: [
         "Acceso a plataforma de viajes",
         "Descuentos exclusivos en hoteles",

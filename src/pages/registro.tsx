@@ -79,8 +79,8 @@ export default function RegistroPage() {
         description: "Nos pondremos en contacto contigo pronto.",
       });
 
-      // Redirect to thank you page or pricing
-      router.push("/pricing");
+      // Redirect to checkout page
+      router.push("/checkout");
     } catch (err) {
       console.error("Unexpected error:", err);
       toast({
