@@ -322,7 +322,7 @@ export default function MWRPage() {
                   size="lg"
                   variant="outline"
                   onClick={() => router.push("/mwr/vsl")}
-                  className="w-full h-12 border-2 border-white bg-white/10 hover:bg-white/20 text-white text-base font-semibold backdrop-blur-sm">
+                  className="w-full h-12 border-2 border-white bg-white/10 hover:bg-white/20 text-white text-base font-semibold backdrop-blur-sm" style={{ backgroundColor: "#eab308", backgroundImage: "none" }}>
                   
                   <Sparkles className="mr-2 h-5 w-5" />
                   Ver Video de 3 Minutos
