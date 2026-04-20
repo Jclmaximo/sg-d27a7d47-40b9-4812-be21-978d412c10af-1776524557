@@ -1,725 +1,323 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, CheckCircle2, Shield, Globe, TrendingUp, Loader2, QrCode, Copy, ExternalLink, MapPin } from "lucide-react";
-import { discountService } from "@/services/discountService";
-import { disruptiveService } from "@/services/disruptiveService";
-import { supabase } from "@/integrations/supabase/client";
-import React from "react";
-import { useToast } from "@/hooks/use-toast";
-import { subscriptionService } from "@/services/subscriptionService";
-import { referralService } from "@/services/referralService";
+import { Check, ArrowRight, Star, Users, Calendar, Shield } from "lucide-react";
 
-export default function Pricing() {
+export default function PricingPage() {
   const router = useRouter();
-  const { toast } = useToast();
-  const [selectedPlan, setSelectedPlan] = useState<"initial" | "renewal">("initial");
-  const [discountCode, setDiscountCode] = useState("");
-  const [appliedDiscount, setAppliedDiscount] = useState<{ percentage: number; code: string } | null>(null);
-  const [discountError, setDiscountError] = useState("");
-  const [isValidatingCode, setIsValidatingCode] = useState(false);
-  const [referrerUsername, setReferrerUsername] = useState<string | null>(null);
-  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("annual");
 
-  useEffect(() => {
-    checkAuthAndReferrer();
-  }, [router.query]);
-
-  const checkAuthAndReferrer = async () => {
-    // Check for referral code in URL
-    const { ref } = router.query;
-    if (ref && typeof ref === "string") {
-      setReferrerUsername(ref);
-      localStorage.setItem("referrer", ref);
-    } else {
-      // Check localStorage for saved referrer
-      const savedRef = localStorage.getItem("referrer");
-      if (savedRef) {
-        setReferrerUsername(savedRef);
-      }
-    }
-
-    // Check authentication
-    const { data: { user } } = await supabase.auth.getUser();
-    
-    if (!user) {
-      // Not authenticated - redirect to registro with ref
-      const refParam = ref && typeof ref === "string" ? `?ref=${ref}` : "";
-      router.push(`/registro${refParam}`);
-      return;
-    }
-    
-    // User is authenticated, allow rendering
-    setCheckingAuth(false);
-  };
-
-  // Payment state
-  const [showCheckout, setShowCheckout] = useState(false);
-  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
-  const [paymentData, setPaymentData] = useState<{
-    paymentId: string;
-    address: string;
-    amount: number;
-    qrCode?: string;
-    expiresAt?: string;
-  } | null>(null);
-  const [copied, setCopied] = useState(false);
-
-  const initialPrice = 79;
-  const renewalPrice = 10;
-
-  const currentPrice = selectedPlan === "initial" ? initialPrice : renewalPrice;
-  const finalPrice = appliedDiscount 
-    ? discountService.calculateDiscountedPrice(currentPrice, appliedDiscount.percentage)
-    : currentPrice;
-
-  const handleApplyDiscount = async () => {
-    if (!discountCode.trim()) return;
-
-    setIsValidatingCode(true);
-    setDiscountError("");
-
-    try {
-      // Try to validate with database first
-      const result = await discountService.validateDiscountCode(discountCode);
-
-      if (result.valid && result.discount) {
-        setAppliedDiscount({
-          percentage: result.discount.discount_percentage,
-          code: result.discount.code
-        });
-        setDiscountError("");
-      } else {
-        // If database validation fails, check hardcoded codes as fallback
-        const hardcodedDiscounts: Record<string, number> = {
-          "VL50": 50,
-          "VL40": 40,
-          "VL30": 30
-        };
-
-        const discountPercentage = hardcodedDiscounts[discountCode.toUpperCase()];
-        
-        if (discountPercentage) {
-          setAppliedDiscount({
-            percentage: discountPercentage,
-            code: discountCode.toUpperCase()
-          });
-          setDiscountError("");
-        } else {
-          setAppliedDiscount(null);
-          setDiscountError(result.error || "Código inválido");
-        }
-      }
-    } catch (error) {
-      console.error("Error applying discount:", error);
-      setDiscountError("Error al validar código. Intenta de nuevo.");
-    } finally {
-      setIsValidatingCode(false);
-    }
-  };
-
-  const handleRemoveDiscount = () => {
-    setAppliedDiscount(null);
-    setDiscountCode("");
-    setDiscountError("");
-  };
-
-  const handleCreatePayment = async () => {
-    setIsProcessingPayment(true);
-
-    try {
-      // Check if user is logged in
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (!user) {
-        // Redirect to admin login page with return URL
-        alert("Debes iniciar sesión o crear una cuenta primero para continuar con el pago.");
-        router.push(`/admin?redirect=/pricing`);
-        setIsProcessingPayment(false);
-        return;
-      }
-
-      // Generate order ID
-      const orderId = `VL-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-      // Get webhook URL
-      const webhookUrl = `${window.location.origin}/api/webhooks/disruptive`;
-
-      // Create payment with Disruptive
-      const payment = await disruptiveService.createPayment({
-        amount: finalPrice,
-        currency: "USDT",
-        network: "BSC",
-        orderId: orderId,
-        description: `Viaja Ligero - ${selectedPlan === "initial" ? "Membresía Inicial" : "Renovación Mensual"}`,
-        customerEmail: user.email,
-        webhookUrl: webhookUrl
-      });
-
-      if (payment.success) {
-        // Save payment record
-        await disruptiveService.savePaymentRecord({
-          userId: user.id,
-          paymentId: payment.paymentId,
-          amount: finalPrice,
-          currency: "USDT",
-          network: "BSC",
-          status: "pending",
-          discountCode: appliedDiscount?.code
-        });
-
-        // Show checkout
-        setPaymentData({
-          paymentId: payment.paymentId,
-          address: payment.address || "",
-          amount: payment.amount,
-          qrCode: payment.qrCode,
-          expiresAt: payment.expiresAt
-        });
-        setShowCheckout(true);
-
-        // Payment status will be updated via webhook only
-        // No polling needed - Disruptive doesn't support status queries by address
-      }
-    } catch (error) {
-      console.error("Error creating payment:", error);
-      alert("Error al crear el pago. Por favor intenta de nuevo.");
-    } finally {
-      setIsProcessingPayment(false);
-    }
-  };
-
-  const copyAddress = () => {
-    if (paymentData?.address) {
-      navigator.clipboard.writeText(paymentData.address);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  const checkStatus = async () => {
-    if (!paymentData) return;
-
-    try {
-      // Step 1: Check if payment is still in-processing
-      const inProcessingAddresses = await disruptiveService.getPaymentsInProcessing("BSC");
-      const isStillProcessing = inProcessingAddresses.includes(paymentData.address);
-
-      console.log("🔍 Payment status:", {
-        address: paymentData.address,
-        stillInProcessing: isStillProcessing
-      });
-
-      // If payment is NO LONGER in processing list, it means it was processed
-      if (!isStillProcessing) {
-        console.log("✅ Payment no longer in processing - checking final status...");
-
-        // Step 2: Get final status
-        const status = await disruptiveService.getPaymentStatus(paymentData.address, "BSC");
-        console.log("📦 Final payment status:", status);
-
-        // Check if payment is funded (completed)
-        if (status.fundStatus === "FUNDED" && status.amountCaptured > 0) {
-          // Get current user
-          const { data: { user } } = await supabase.auth.getUser();
-          
-          if (user) {
-            // Activate subscription directly (don't wait for webhook)
-            const { data: subscription, error: subError } = await supabase
-              .from("subscriptions")
-              .select("id")
-              .eq("user_id", user.id)
-              .eq("status", "active")
-              .maybeSingle();
-
-            // If no active subscription, create one
-            if (!subscription) {
-              const startDate = new Date();
-              const endDate = new Date();
-              endDate.setDate(endDate.getDate() + 30);
-
-              // Save referred_by if referrer exists
-              if (referrerUsername) {
-                const { data: referrerProfile } = await supabase
-                  .from("profiles")
-                  .select("id")
-                  .eq("username", referrerUsername)
-                  .single();
-
-                if (referrerProfile) {
-                  await supabase
-                    .from("profiles")
-                    .update({ referred_by: referrerProfile.id })
-                    .eq("id", user.id);
-                }
-              }
-
-              const { data: newSub, error: subError } = await supabase
-                .from("subscriptions")
-                .insert({
-                  user_id: user.id,
-                  status: "active",
-                  price_usd: finalPrice,
-                  start_date: startDate.toISOString(),
-                  end_date: endDate.toISOString(),
-                  transaction_hash: paymentData.paymentId,
-                  discount_code_used: appliedDiscount?.code || null,
-                  discount_percentage: appliedDiscount?.percentage || 0,
-                  original_price: currentPrice,
-                  final_price: finalPrice,
-                  is_initial_payment: selectedPlan === "initial",
-                  plan_type: "monthly"
-                })
-                .select()
-                .single();
-
-              if (subError) throw subError;
-
-              // Create commissions for referrer(s)
-              if (newSub) {
-                await referralService.createCommissionsForSubscription(
-                  user.id,
-                  newSub.id,
-                  finalPrice
-                );
-              }
-
-              // Activate ambassador status
-              await supabase
-                .from("profiles")
-                .update({ ambassador_active: true })
-                .eq("id", user.id);
-
-              console.log("✅ Subscription created, commissions generated, ambassador activated");
-              
-              // Clear referrer from localStorage
-              localStorage.removeItem("referrer");
-            }
-
-            // Update payment status
-            await supabase
-              .from("payments")
-              .update({ status: "completed" })
-              .eq("payment_id", paymentData.paymentId);
-          }
-
-          toast({
-            title: "¡Pago Confirmado!",
-            description: "Tu suscripción está activa. Configurando tu cuenta..."
-          });
-          
-          // Check if user has username configured
-          const { data: profile } = await supabase
-            .from("profiles")
-            .select("username")
-            .eq("id", user.id)
-            .single();
-
-          setTimeout(() => {
-            setPaymentData(null);
-            setShowCheckout(false);
-            
-            // Always redirect to welcome page after first payment
-            toast({
-              title: "¡Suscripción activa!",
-              description: "Redirigiendo a tu dashboard...",
-            });
-
-            router.push("/admin/main-dashboard");
-            return;
-          }, 2000);
-        } else if (status.fundStatus === "EXPIRED") {
-          toast({
-            title: "Pago Expirado",
-            description: "El tiempo para completar el pago ha expirado. Por favor intenta de nuevo.",
-            variant: "destructive"
-          });
-          setPaymentData(null);
-          setShowCheckout(false);
-        }
-      } else {
-        console.log("⏳ Payment still processing, checking again in 5 seconds...");
-      }
-    } catch (error) {
-      console.error("Error checking payment status:", error);
-    }
-  };
-
-  // Poll payment status every 5 seconds
-  React.useEffect(() => {
-    if (!paymentData) return;
-
-    // Check immediately
-    checkStatus();
-
-    // Then check every 5 seconds
-    const interval = setInterval(checkStatus, 5000);
-    return () => clearInterval(interval);
-  }, [paymentData]);
-
-  const formatDate = (date: string) => {
-    return new Date(date).toLocaleDateString("es-ES", {
-      year: "numeric",
-      month: "short",
-      day: "numeric"
-    });
-  };
-
-  // Show loading screen while checking authentication
-  if (checkingAuth) {
-    return (
-      <>
-        <SEO 
-          title="Membresía Viaja Ligero - Sistema de Embudo de Ventas" 
-          description="Accede al sistema completo de embudo de ventas para embajadores de Viaja Ligero. Desde $39.50 USD con descuentos disponibles."
-        />
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5">
-          <div className="text-center">
-            <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-            <p className="text-lg text-muted-foreground">Verificando acceso...</p>
-          </div>
-        </div>
-      </>
-    );
-  }
+  const plans = [
+    {
+      name: "Viajero Básico",
+      description: "Ideal para viajeros ocasionales que buscan ahorrar",
+      price: billingPeriod === "monthly" ? 29 : 290,
+      period: billingPeriod === "monthly" ? "/mes" : "/año",
+      savings: billingPeriod === "annual" ? "Ahorra $58" : null,
+      features: [
+        "Acceso a plataforma de viajes",
+        "Descuentos exclusivos en hoteles",
+        "Hasta 10% de ahorro en reservas",
+        "Soporte por email",
+        "1 usuario",
+      ],
+      cta: "Empezar Ahora",
+      popular: false,
+      color: "muted",
+    },
+    {
+      name: "Lifestyle Ambassador",
+      description: "Para quienes buscan viajar más Y generar ingresos",
+      price: billingPeriod === "monthly" ? 99 : 990,
+      period: billingPeriod === "monthly" ? "/mes" : "/año",
+      savings: billingPeriod === "annual" ? "Ahorra $198" : null,
+      features: [
+        "Todo en Viajero Básico",
+        "Hasta 25% de ahorro en reservas",
+        "Programa Life Experiences®",
+        "Comisiones por referidos",
+        "Portal personalizado de afiliado",
+        "Soporte prioritario",
+        "Acceso a eventos exclusivos",
+        "Hasta 5 usuarios en tu equipo",
+      ],
+      cta: "Convertirse en Ambassador",
+      popular: true,
+      color: "primary",
+    },
+    {
+      name: "Empresarial",
+      description: "Para agencias y equipos grandes",
+      price: null,
+      period: "",
+      savings: null,
+      features: [
+        "Todo en Lifestyle Ambassador",
+        "Usuarios ilimitados",
+        "API personalizada",
+        "Integración con sistemas existentes",
+        "Gestor de cuenta dedicado",
+        "Soporte 24/7",
+        "Reportes personalizados",
+        "Capacitación para tu equipo",
+      ],
+      cta: "Contactar Ventas",
+      popular: false,
+      color: "secondary",
+    },
+  ];
 
   return (
     <>
-      <SEO 
-        title="Membresía Viaja Ligero - Sistema de Embudo de Ventas" 
-        description="Accede al sistema completo de embudo de ventas para embajadores de Viaja Ligero. Desde $39.50 USD con descuentos disponibles."
+      <SEO
+        title="Planes y Precios - Viaja Ligero"
+        description="Elige el plan perfecto para ti. Ahorra en viajes o genera ingresos como Lifestyle Ambassador."
       />
-      
-      <div className="min-h-screen bg-background">
+
+      <div className="min-h-screen bg-background text-foreground">
+        {/* Floating Orbs Background */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
+          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float-delayed" />
+        </div>
+
         {/* Header */}
-        <header className="border-b bg-card sticky top-0 z-50">
-          <div className="container mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <img 
-                  src="/viaja-ligero-logo.png" 
-                  alt="Viaja Ligero" 
-                  className="h-8 md:h-10 w-auto"
-                />
-                <h1 className="text-xl md:text-2xl font-bold">Viaja Ligero</h1>
-              </div>
-              <Button variant="outline" onClick={() => router.push("/admin")}>
-                Iniciar Sesión
-              </Button>
+        <header className="relative z-10 border-b border-border/50 bg-card/30 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
+            <Link href="/" className="text-2xl font-bold bg-gradient-heading bg-clip-text text-transparent">
+              Viaja Ligero
+            </Link>
+            <div className="flex items-center gap-4">
+              <Link href="/auth/reset-password">
+                <Button variant="ghost" className="text-muted-foreground hover:text-foreground">
+                  Iniciar Sesión
+                </Button>
+              </Link>
+              <Link href="/registro">
+                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                  Registrarse
+                </Button>
+              </Link>
             </div>
           </div>
         </header>
 
         {/* Hero Section */}
-        <section className="container mx-auto px-4 py-20 text-center">
-          <div className="max-w-3xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary-foreground text-sm font-medium">
-              <Sparkles className="w-4 h-4" />
-              Sistema Premium para Embajadores
-            </div>
+        <section className="relative py-20 px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <Badge className="mb-6 px-4 py-2 bg-accent/20 text-accent border border-accent/30">
+              <Star className="w-4 h-4 mr-2" />
+              Precios Especiales de Lanzamiento
+            </Badge>
             
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-              Impulsa tu negocio con <span className="text-primary">Viaja Ligero</span>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-heading bg-clip-text text-transparent">
+              Elige Tu Camino
             </h1>
             
-            <p className="text-xl text-muted-foreground">
-              Accede al sistema completo de embudo de ventas, gestión de leads y herramientas de conversión diseñadas para embajadores de Viaja Ligero
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Ya sea que busques ahorrar en tus viajes o generar ingresos recomendando experiencias increíbles, tenemos el plan perfecto para ti.
             </p>
+
+            {/* Billing Toggle */}
+            <div className="flex items-center justify-center gap-4 mb-12">
+              <span className={`text-sm ${billingPeriod === "monthly" ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+                Mensual
+              </span>
+              <button
+                onClick={() => setBillingPeriod(billingPeriod === "monthly" ? "annual" : "monthly")}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                  billingPeriod === "annual" ? "bg-primary" : "bg-border"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    billingPeriod === "annual" ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+              <span className={`text-sm ${billingPeriod === "annual" ? "text-foreground font-semibold" : "text-muted-foreground"}`}>
+                Anual
+              </span>
+              {billingPeriod === "annual" && (
+                <Badge className="bg-secondary/20 text-secondary border border-secondary/30">
+                  Ahorra 20%
+                </Badge>
+              )}
+            </div>
           </div>
         </section>
 
         {/* Pricing Cards */}
-        <section className="container mx-auto px-4 pb-20">
-          <div className="max-w-5xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-6 mb-8">
-              {/* Initial Payment Card */}
-              <Card 
-                className={`p-6 cursor-pointer transition-all border-2 ${
-                  selectedPlan === "initial" 
-                    ? "border-primary shadow-lg scale-105" 
-                    : "border-muted hover:border-primary/50"
+        <section className="relative pb-20 px-4">
+          <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+            {plans.map((plan, index) => (
+              <Card
+                key={index}
+                className={`relative bg-card/50 backdrop-blur-sm border-border/50 transition-all hover:shadow-2xl ${
+                  plan.popular ? "shadow-2xl shadow-primary/10 border-primary/20" : ""
                 }`}
-                onClick={() => setSelectedPlan("initial")}
               >
-                <Badge className="mb-4 bg-secondary">MEJOR VALOR</Badge>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold">Pago Inicial</h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold">$79</span>
-                    <span className="text-muted-foreground">USD una vez</span>
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-primary text-primary-foreground px-4 py-1">
+                      Más Popular
+                    </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">30 días de acceso completo</p>
-                </div>
-              </Card>
+                )}
 
-              {/* Renewal Card */}
-              <Card 
-                className={`p-6 cursor-pointer transition-all border-2 ${
-                  selectedPlan === "renewal" 
-                    ? "border-primary shadow-lg scale-105" 
-                    : "border-muted hover:border-primary/50"
-                }`}
-                onClick={() => setSelectedPlan("renewal")}
-              >
-                <Badge variant="outline" className="mb-4">PARA RENOVACIÓN</Badge>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold">Mensualidad</h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold">$10</span>
-                    <span className="text-muted-foreground">USD/mes</span>
+                <CardHeader className="text-center pb-8 pt-6">
+                  <CardTitle className="text-2xl mb-2">{plan.name}</CardTitle>
+                  <CardDescription className="text-muted-foreground">{plan.description}</CardDescription>
+                </CardHeader>
+
+                <CardContent>
+                  <div className="text-center mb-8">
+                    {plan.price !== null ? (
+                      <>
+                        <div className="flex items-baseline justify-center gap-1">
+                          <span className="text-2xl font-semibold text-muted-foreground">$</span>
+                          <span className="text-5xl font-bold text-foreground">{plan.price}</span>
+                          <span className="text-xl text-muted-foreground">{plan.period}</span>
+                        </div>
+                        {plan.savings && (
+                          <Badge variant="secondary" className="mt-3 bg-secondary/20 text-secondary border border-secondary/30">
+                            {plan.savings}
+                          </Badge>
+                        )}
+                      </>
+                    ) : (
+                      <div className="text-3xl font-bold text-foreground">Personalizado</div>
+                    )}
                   </div>
-                  <p className="text-sm text-muted-foreground">Renovación cada 30 días</p>
-                </div>
+
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <Check className={`w-5 h-5 ${plan.color === "primary" ? "text-primary" : "text-secondary"} flex-shrink-0 mt-0.5`} />
+                        <span className="text-sm text-muted-foreground">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+
+                <CardFooter>
+                  <Button
+                    size="lg"
+                    className={`w-full ${
+                      plan.popular
+                        ? "bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
+                        : "bg-background/50 hover:bg-background/80 text-foreground border border-border/50"
+                    }`}
+                    onClick={() => {
+                      if (plan.price === null) {
+                        window.location.href = "mailto:contacto@viajaligero.com";
+                      } else {
+                        router.push("/registro");
+                      }
+                    }}
+                  >
+                    {plan.cta}
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </CardFooter>
               </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* Features Comparison */}
+        <section className="relative py-20 px-4 bg-card/20">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-heading bg-clip-text text-transparent">
+                ¿Por qué elegir Viaja Ligero?
+              </h2>
+              <p className="text-xl text-muted-foreground">
+                Más que una membresía, es una comunidad de viajeros inteligentes
+              </p>
             </div>
 
-            {/* Main Checkout Card */}
-            <Card className="p-8 md:p-12 border-2 border-primary/20 shadow-xl">
-              <div className="grid md:grid-cols-2 gap-8">
-                {/* Left: Payment */}
-                <div className="space-y-6">
-                  <div>
-                    <p className="text-sm text-muted-foreground uppercase tracking-wider mb-2">
-                      {selectedPlan === "initial" ? "Membresía Inicial" : "Renovación Mensual"}
-                    </p>
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-5xl font-bold">${currentPrice}</span>
-                      <span className="text-2xl text-muted-foreground">USDT</span>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-2">Pago con USDT en Binance Smart Chain (BSC)</p>
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Shield className="w-6 h-6 text-primary" />
                   </div>
+                  <h3 className="text-xl font-semibold mb-2">100% Legal</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Licencias de Seller of Travel en Florida, Iowa y California. Oficinas en 4 continentes.
+                  </p>
+                </CardContent>
+              </Card>
 
-                  {!showCheckout ? (
-                    <div className="space-y-4">
-                      {/* Discount Code Input */}
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">¿Tienes un código de descuento?</label>
-                        <div className="flex gap-2">
-                          <Input
-                            type="text"
-                            placeholder="Ingresa tu código (ej: VL50)"
-                            value={discountCode}
-                            onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
-                            disabled={!!appliedDiscount}
-                            className="flex-1"
-                          />
-                          {appliedDiscount ? (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              onClick={handleRemoveDiscount}
-                            >
-                              Quitar
-                            </Button>
-                          ) : (
-                            <Button
-                              type="button"
-                              onClick={handleApplyDiscount}
-                              disabled={isValidatingCode || !discountCode.trim()}
-                            >
-                              {isValidatingCode ? <Loader2 className="w-4 h-4 animate-spin" /> : "Aplicar"}
-                            </Button>
-                          )}
-                        </div>
-                        {discountError && (
-                          <p className="text-sm text-destructive">{discountError}</p>
-                        )}
-                        {appliedDiscount && (
-                          <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
-                            <CheckCircle2 className="w-4 h-4" />
-                            <span>¡Descuento del {appliedDiscount.percentage}% aplicado! ({appliedDiscount.code})</span>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Price Summary */}
-                      {appliedDiscount && (
-                        <div className="p-4 bg-muted rounded-lg space-y-2">
-                          <div className="flex justify-between text-sm">
-                            <span>Precio original:</span>
-                            <span className="line-through">${currentPrice} USDT</span>
-                          </div>
-                          <div className="flex justify-between text-sm text-green-600 dark:text-green-400">
-                            <span>Descuento ({appliedDiscount.percentage}%):</span>
-                            <span>-${(currentPrice - finalPrice).toFixed(2)} USDT</span>
-                          </div>
-                          <div className="flex justify-between font-bold text-lg border-t pt-2">
-                            <span>Total a pagar:</span>
-                            <span className="text-primary">${finalPrice} USDT</span>
-                          </div>
-                        </div>
-                      )}
-
-                      <Button 
-                        size="lg" 
-                        className="w-full text-lg py-6"
-                        onClick={handleCreatePayment}
-                        disabled={isProcessingPayment}
-                      >
-                        {isProcessingPayment ? (
-                          <>
-                            <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                            Creando pago...
-                          </>
-                        ) : (
-                          <>
-                            <CheckCircle2 className="w-5 h-5 mr-2" />
-                            Proceder al pago
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="p-6 bg-muted rounded-lg space-y-4">
-                        <div className="flex items-center justify-between">
-                          <h3 className="font-semibold">Envía exactamente:</h3>
-                          <Badge className="text-lg px-3 py-1">${finalPrice} USDT</Badge>
-                        </div>
-
-                        {paymentData?.qrCode && (
-                          <div className="flex justify-center">
-                            <img src={paymentData.qrCode} alt="QR Code" className="w-48 h-48" />
-                          </div>
-                        )}
-
-                        <div>
-                          <label className="text-sm text-muted-foreground block mb-2">
-                            Dirección de pago (BSC):
-                          </label>
-                          <div className="flex gap-2">
-                            <code className="flex-1 text-xs break-all bg-background p-3 rounded border">
-                              {paymentData?.address}
-                            </code>
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={copyAddress}
-                            >
-                              {copied ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                            </Button>
-                          </div>
-                        </div>
-
-                        {appliedDiscount && (
-                          <div className="pt-3 border-t">
-                            <p className="text-sm font-medium text-green-600 dark:text-green-400">
-                              ✓ Descuento {appliedDiscount.percentage}% aplicado ({appliedDiscount.code})
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                              Ahorro: ${(currentPrice - finalPrice).toFixed(2)} USDT
-                            </p>
-                          </div>
-                        )}
-
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span>Esperando confirmación del pago...</span>
-                        </div>
-                      </div>
-
-                      <p className="text-xs text-center text-muted-foreground">
-                        El pago se confirmará automáticamente. No cierres esta ventana.
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Trust Badges */}
-                  <div className="flex flex-wrap gap-4 pt-4 border-t">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Shield className="w-4 h-4 text-green-500" />
-                      <span>Pago seguro</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Globe className="w-4 h-4 text-blue-500" />
-                      <span>Sin fronteras</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <TrendingUp className="w-4 h-4 text-primary" />
-                      <span>Crece tu negocio</span>
-                    </div>
+              <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Users className="w-6 h-6 text-secondary" />
                   </div>
-                </div>
+                  <h3 className="text-xl font-semibold mb-2">Comunidad Global</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Únete a miles de viajeros que ya están ahorrando y generando ingresos con nosotros.
+                  </p>
+                </CardContent>
+              </Card>
 
-                {/* Right: Features */}
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-lg mb-4">Todo lo que incluye:</h3>
-                  
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium">Embudo de ventas completo</p>
-                      <p className="text-sm text-muted-foreground">Landing page optimizada para conversión</p>
-                    </div>
+              <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+                <CardContent className="p-6 text-center">
+                  <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Calendar className="w-6 h-6 text-accent" />
                   </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium">Panel de gestión de leads</p>
-                      <p className="text-sm text-muted-foreground">Organiza y da seguimiento a todos tus prospectos</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium">Mensajes automáticos WhatsApp</p>
-                      <p className="text-sm text-muted-foreground">5 templates profesionales listos para usar</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium">Sistema de notas por lead</p>
-                      <p className="text-sm text-muted-foreground">Registra conversaciones y seguimiento detallado</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium">WhatsApp personalizado</p>
-                      <p className="text-sm text-muted-foreground">Configura tu propio número de contacto</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium">Dashboard con métricas</p>
-                      <p className="text-sm text-muted-foreground">Visualiza el estado de todos tus leads</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium">Soporte incluido</p>
-                      <p className="text-sm text-muted-foreground">Asistencia técnica vía WhatsApp</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Card>
-
-            {/* Available Discount Codes */}
-            <div className="mt-8 text-center">
-              <p className="text-sm text-muted-foreground mb-2">Códigos de descuento disponibles:</p>
-              <div className="flex justify-center gap-4 flex-wrap">
-                <Badge variant="outline" className="text-sm">VL50 - 50% OFF</Badge>
-                <Badge variant="outline" className="text-sm">VL40 - 40% OFF</Badge>
-                <Badge variant="outline" className="text-sm">VL30 - 30% OFF</Badge>
-              </div>
+                  <h3 className="text-xl font-semibold mb-2">Sin Compromisos</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Cancela cuando quieras. Sin preguntas. Sin complicaciones. Tu satisfacción es nuestra prioridad.
+                  </p>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
+
+        {/* CTA Section */}
+        <section className="relative py-20 px-4">
+          <div className="max-w-4xl mx-auto">
+            <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/20 backdrop-blur-sm">
+              <CardContent className="p-12 text-center">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4 bg-gradient-heading bg-clip-text text-transparent">
+                  ¿Listo para empezar tu aventura?
+                </h2>
+                <p className="text-xl text-muted-foreground mb-8">
+                  Únete hoy y comienza a disfrutar de descuentos exclusivos en tus viajes
+                </p>
+                <Button
+                  size="lg"
+                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 shadow-xl shadow-primary/20"
+                  onClick={() => router.push("/registro")}
+                >
+                  Crear mi cuenta ahora
+                  <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Footer */}
+        <footer className="relative border-t border-border/50 bg-card/30 backdrop-blur-sm py-12 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center text-sm text-muted-foreground">
+              <p className="mb-2">
+                © {new Date().getFullYear()} Viaja Ligero. Todos los derechos reservados.
+              </p>
+              <p className="text-xs">
+                Licencias: Florida ST-15578 | Iowa 828 | California 2068362-40
+              </p>
+            </div>
+          </div>
+        </footer>
       </div>
     </>
   );
