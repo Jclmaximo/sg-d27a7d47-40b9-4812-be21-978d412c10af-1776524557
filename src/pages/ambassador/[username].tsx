@@ -24,7 +24,13 @@ export default function AmbassadorFunnel({ ambassadorId, ambassadorName, usernam
       />
       
       <div className="min-h-screen bg-background">
-        <FunnelHero username={username} />
+        <FunnelHero 
+          username={username} 
+          onCTAClick={() => {
+            const form = document.getElementById("how-it-works-section");
+            if (form) form.scrollIntoView({ behavior: "smooth", block: "start" });
+          }} 
+        />
         <section id="benefits-section" className="scroll-mt-20">
           <ValueProposition />
         </section>
