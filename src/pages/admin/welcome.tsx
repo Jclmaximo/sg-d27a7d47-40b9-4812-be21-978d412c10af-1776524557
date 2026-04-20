@@ -1,128 +1,129 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { supabase } from "@/integrations/supabase/client";
+import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { SEO } from "@/components/SEO";
-import { Sparkles, Copy, CheckCircle, ArrowRight, Users, TrendingUp, Gift, ExternalLink, LayoutDashboard, Link2, LogOut, Plane, PlayCircle, Clock, MessageSquare, CheckCircle2, Loader2, Share2, Mail, Calendar } from "lucide-react";
+import { authService } from "@/services/authService";
+import { leadsService } from "@/services/leadsService";
 import { useToast } from "@/hooks/use-toast";
-import Link from "next/link";
+import { 
+  Users, 
+  TrendingUp, 
+  Mail, 
+  Phone, 
+  LogOut,
+  Calendar,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  Loader2,
+  Plane,
+  LayoutDashboard,
+  PlayCircle,
+  MessageSquare,
+  Link2,
+  Share2,
+  ArrowRight
+} from "lucide-react";
+
+interface Lead {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  status: string;
+  created_at: string;
+}
 
 export default function WelcomePage() {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
-  const [username, setUsername] = useState<string | null>(null);
-  const [funnelLink, setFunnelLink] = useState("");
-  const [referralLink, setReferralLink] = useState("");
-  const [copiedFunnel, setCopiedFunnel] = useState(false);
-  const [copiedReferral, setCopiedReferral] = useState(false);
+  const [profile, setProfile] = useState<any>(null);
+  const [userEmail, setUserEmail] = useState("");
+  const [username, setUsername] = useState("");
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [stats, setStats] = useState({ total: 0, new: 0, contacted: 0, converted: 0 });
+  const [recentLeads, setRecentLeads] = useState<Lead[]>([]);
 
   useEffect(() => {
     checkAuth();
   }, []);
 
   const checkAuth = async () => {
+    const session = await authService.getCurrentSession();
+    if (!session) {
+      router.push("/auth/reset-password");
+      return;
+    }
+    
+    setUserEmail(session.user?.email || "");
+    
+    // Get profile data
+    const { data: profileData } = await authService.getProfile();
+    if (profileData) {
+      setProfile(profileData);
+      setUsername(profileData.username || "");
+      if (!profileData.username) {
+        router.push("/admin/onboarding");
+        return;
+      }
+    }
+    
+    loadDashboardData();
+  };
+
+  const loadDashboardData = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const data = await leadsService.getLeads();
       
-      if (!user) {
-        console.log("❌ No user found, redirecting to /admin");
-        router.push("/admin");
-        return;
-      }
-
-      console.log("✅ User found:", user.id);
-
-      // Get username
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("id", user.id)
-        .single();
-
-      console.log("Profile query result:", { profile, error });
-
-      if (error) {
-        console.error("❌ Error loading profile:", error);
-        toast({
-          title: "Error",
-          description: "No se pudo cargar tu perfil. Por favor recarga la página.",
-          variant: "destructive"
-        });
-        setLoading(false);
-        return;
-      }
-
-      if (profile?.username) {
-        console.log("✅ Username loaded:", profile.username);
-        setUsername(profile.username);
-      } else {
-        console.error("❌ No username found in profile");
-        toast({
-          title: "Configuración incompleta",
-          description: "No se encontró tu username. Por favor contacta soporte.",
-          variant: "destructive"
+      if (data) {
+        setRecentLeads(data.slice(0, 5));
+        
+        setStats({
+          total: data.length,
+          new: data.filter(l => l.status === "new").length,
+          contacted: data.filter(l => l.status === "contacted").length,
+          converted: data.filter(l => l.status === "converted").length,
         });
       }
-    } catch (err) {
-      console.error("❌ Exception in checkAuth:", err);
-      toast({
-        title: "Error",
-        description: "Ocurrió un error al cargar tu perfil",
-        variant: "destructive"
-      });
+    } catch (error) {
+      console.error("Error loading dashboard data:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    toast({
-      title: "Sesión cerrada",
-      description: "Has cerrado sesión exitosamente"
-    });
-    router.push("/admin");
+    await authService.signOut();
+    router.push("/");
   };
 
-  const copyFunnelLink = () => {
-    const link = `${window.location.origin}/ambassador/${username}`;
-    console.log("📋 Copying funnel link:", link);
-    navigator.clipboard.writeText(link);
-    setCopiedFunnel(true);
-    toast({
-      title: "✅ Link copiado",
-      description: "El link de tu embudo ha sido copiado al portapapeles"
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString("es-ES", {
+      month: "short",
+      day: "numeric",
     });
-    setTimeout(() => setCopiedFunnel(false), 2000);
   };
 
-  const copyReferralLink = () => {
-    const link = `${window.location.origin}/pricing?ref=${username}`;
-    console.log("📋 Copying referral link:", link);
-    navigator.clipboard.writeText(link);
-    setCopiedReferral(true);
-    toast({
-      title: "✅ Link copiado",
-      description: "Tu link de referidos ha sido copiado al portapapeles"
-    });
-    setTimeout(() => setCopiedReferral(false), 2000);
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "new": return "bg-accent/20 text-accent border-accent/30";
+      case "contacted": return "bg-primary/20 text-primary border-primary/30";
+      case "converted": return "bg-secondary/20 text-secondary border-secondary/30";
+      default: return "bg-muted/20 text-muted-foreground border-border/30";
+    }
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-lg">Cargando...</p>
-      </div>
-    );
-  }
-
-  const funnelUrl = username ? `${window.location.origin}/ambassador/${username}` : "";
-  const referralUrl = username ? `${window.location.origin}/pricing?ref=${username}` : "";
-
-  console.log("🔗 Generated URLs:", { funnelUrl, referralUrl, username });
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case "new": return "Nuevo";
+      case "contacted": return "Contactado";
+      case "converted": return "Convertido";
+      default: return status;
+    }
+  };
 
   return (
     <>
