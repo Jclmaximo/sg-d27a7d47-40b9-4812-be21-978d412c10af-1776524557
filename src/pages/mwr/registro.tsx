@@ -64,23 +64,23 @@ export default function MWRRegistroPage() {
   return (
     <>
       <SEO 
-        title="Registro - Sistema MWR"
-        description="Regístrate para acceder al sistema automático de prospectos MWR"
+        title="Registro - Sistema de Marketing MLM"
+        description="Regístrate para acceder al sistema automático de prospectos"
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-purple-950 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-[url('/mountain-lake-boats.jpg')] bg-cover bg-center opacity-10" />
-        
-        <Card className="relative z-10 w-full max-w-2xl bg-white/95 backdrop-blur-sm shadow-2xl">
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900 flex items-center justify-center px-4 py-12">
+        <Card className="w-full max-w-2xl border-slate-700 bg-slate-800/50 backdrop-blur-sm">
           <CardHeader className="text-center space-y-4">
-            <div className="w-16 h-16 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto">
-              <Sparkles className="w-8 h-8 text-white" />
+            <div className="inline-block mx-auto">
+              <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-full px-6 py-2">
+                <span className="text-yellow-300 font-semibold">🚀 Paso 1 de 3</span>
+              </div>
             </div>
-            <CardTitle className="text-3xl font-bold">
-              Accede al Sistema Piloto
+            <CardTitle className="text-4xl font-bold text-white">
+              Comienza tu Prueba Piloto
             </CardTitle>
-            <CardDescription className="text-lg">
-              Completa tus datos para empezar a generar prospectos automáticamente
+            <CardDescription className="text-lg text-slate-300">
+              Completa tus datos para acceder al video de presentación del sistema
             </CardDescription>
           </CardHeader>
 
@@ -93,69 +93,61 @@ export default function MWRRegistroPage() {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="nombre" className="text-base font-semibold">
-                  Nombre completo
-                </Label>
+                <Label htmlFor="nombre" className="text-white">Nombre Completo</Label>
                 <Input
                   id="nombre"
                   type="text"
                   placeholder="Juan Pérez"
                   value={formData.nombre}
                   onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                  className="h-12 text-lg"
+                  className="h-12 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
                   required
                   disabled={loading}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-base font-semibold">
-                  Email
-                </Label>
+                <Label htmlFor="email" className="text-white">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="tu@email.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="h-12 text-lg"
+                  className="h-12 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
                   required
                   disabled={loading}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="whatsapp" className="text-base font-semibold">
-                  WhatsApp (con código de país)
-                </Label>
+                <Label htmlFor="whatsapp" className="text-white">WhatsApp</Label>
                 <Input
                   id="whatsapp"
                   type="tel"
                   placeholder="+1 234 567 8900"
                   value={formData.whatsapp}
                   onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-                  className="h-12 text-lg"
+                  className="h-12 bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
                   required
                   disabled={loading}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="nivel" className="text-base font-semibold">
-                  ¿Cuál es tu nivel en MWR?
-                </Label>
-                <Select
-                  value={formData.nivelMWR}
+                <Label htmlFor="nivelMWR" className="text-white">¿Cuál es tu nivel actual en MLM?</Label>
+                <Select 
+                  value={formData.nivelMWR} 
                   onValueChange={(value) => setFormData({ ...formData, nivelMWR: value })}
                   disabled={loading}
                 >
-                  <SelectTrigger className="h-12 text-lg">
+                  <SelectTrigger className="h-12 bg-slate-700 border-slate-600 text-white">
                     <SelectValue placeholder="Selecciona tu nivel" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="nuevo">Nuevo (recién empezando)</SelectItem>
-                    <SelectItem value="activo">Activo (vendiendo regularmente)</SelectItem>
-                    <SelectItem value="lider">Líder (con equipo)</SelectItem>
+                    <SelectItem value="nuevo">Nuevo (menos de 3 meses)</SelectItem>
+                    <SelectItem value="activo">Activo (3-12 meses)</SelectItem>
+                    <SelectItem value="lider">Líder (más de 1 año)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -15,7 +15,8 @@ import {
   Zap,
   BarChart3,
   Clock,
-  Shield
+  Shield,
+  XCircle
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -31,112 +32,91 @@ export default function MWRLandingPage() {
       />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-blue-950">
-        <div className="absolute inset-0 bg-[url('/mountain-lake-boats.jpg')] bg-cover bg-center opacity-10" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-950/50 to-blue-950" />
+      <section className="min-h-screen flex items-center justify-center relative overflow-hidden px-4 py-20">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-purple-900"></div>
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2YzAtMiAyLTQgNC00czQgMiA0IDQtMiA0LTQgNGMtMiAwLTQtMi00LTR6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-20"></div>
         
-        <div className="relative z-10 max-w-6xl mx-auto px-4 py-20 text-center">
-          <Badge className="mb-6 bg-gradient-to-r from-yellow-500 to-orange-500 text-white border-0 text-sm px-4 py-1">
-            🚀 Sistema Piloto Disponible
-          </Badge>
-
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            Haz crecer tu negocio MWR con un{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
-              sistema automático
-            </span>
-            {" "}de prospectos y ventas
-          </h1>
-
-          <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto">
-            Genera más interés, automatiza seguimientos y duplica tu equipo
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <Button 
-              size="lg"
-              onClick={() => router.push("/mwr/registro")}
-              className="h-14 px-8 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white text-lg font-semibold shadow-2xl"
-            >
-              Acceder al Sistema Piloto
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-            <Button 
-              size="lg"
-              variant="outline"
-              className="h-14 px-8 border-2 border-white text-white hover:bg-white/10 text-lg"
-            >
-              Ver Demo en Video
-            </Button>
+        <div className="relative z-10 max-w-6xl mx-auto text-center">
+          <div className="inline-block mb-8 animate-bounce">
+            <div className="bg-yellow-500/20 border border-yellow-500/50 rounded-full px-6 py-2 backdrop-blur-sm">
+              <span className="text-yellow-300 font-semibold text-lg">🚀 Lanzamiento Piloto - Acceso Anticipado</span>
+            </div>
           </div>
 
-          {/* Trust Indicators */}
-          <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto mt-20">
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-yellow-400 mb-2">30+</div>
-              <div className="text-sm text-blue-200">Prospectos/mes</div>
+          <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            Haz Crecer <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">Tu Negocio MLM</span>
+            <br />
+            con un Sistema Automático
+          </h1>
+
+          <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+            Genera más prospectos interesados, automatiza seguimientos inteligentes y duplica tu equipo con un sistema completo de marketing
+          </p>
+
+          <div className="flex flex-wrap gap-6 justify-center items-center mb-12 text-slate-300">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-green-400" />
+              <span>147 embajadores activos</span>
             </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-yellow-400 mb-2">5X</div>
-              <div className="text-sm text-blue-200">Más seguimiento</div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-green-400" />
+              <span>2,847 prospectos generados</span>
             </div>
-            <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-yellow-400 mb-2">24/7</div>
-              <div className="text-sm text-blue-200">Sistema activo</div>
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="w-5 h-5 text-green-400" />
+              <span>89% tasa de respuesta IA</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Problema Section */}
-      <section className="py-20 bg-slate-50">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-20 px-4 bg-slate-900">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
-            <Badge className="mb-4 bg-red-100 text-red-700 border-red-200">
-              La Realidad
-            </Badge>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              La mayoría no crece porque{" "}
-              <span className="text-red-600">no tiene sistema</span>
+            <div className="inline-block mb-6">
+              <div className="bg-red-500/10 border border-red-500/30 rounded-full px-6 py-2">
+                <span className="text-red-400 font-semibold">⚠️ El Problema Real</span>
+              </div>
+            </div>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              La mayoría no crece porque <span className="text-red-400">no tiene sistema</span>
             </h2>
+            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
+              Tu éxito en MLM no debería depender de tu energía diaria o motivación. Necesitas procesos automatizados.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            <Card className="border-2 border-red-100 bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Target className="w-8 h-8 text-red-600" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">Dependen de motivación</h3>
-                <p className="text-muted-foreground">
-                  No de procesos duplicables que funcionen sin ti
-                </p>
-              </CardContent>
-            </Card>
+            <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700">
+              <div className="bg-red-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
+                <XCircle className="w-8 h-8 text-red-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Sin Embudo = Sin Prospectos</h3>
+              <p className="text-slate-400 leading-relaxed">
+                Depender de contacto manual y redes sociales limita tu alcance. Sin un embudo automático, pierdes oportunidades 24/7.
+              </p>
+            </div>
 
-            <Card className="border-2 border-red-100 bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <MessageSquare className="w-8 h-8 text-red-600" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">Sin seguimiento consistente</h3>
-                <p className="text-muted-foreground">
-                  Los prospectos se pierden porque nadie les da seguimiento
-                </p>
-              </CardContent>
-            </Card>
+            <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700">
+              <div className="bg-red-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
+                <XCircle className="w-8 h-8 text-red-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Motivación vs Metodología</h3>
+              <p className="text-slate-400 leading-relaxed">
+                Ir a eventos y escuchar audios motiva... pero sin un proceso claro de seguimiento, los prospectos se enfrían y se pierden.
+              </p>
+            </div>
 
-            <Card className="border-2 border-red-100 bg-white">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-8 h-8 text-red-600" />
-                </div>
-                <h3 className="text-xl font-bold mb-4">No pueden duplicarse</h3>
-                <p className="text-muted-foreground">
-                  Su equipo no sabe cómo replicar lo que funciona
-                </p>
-              </CardContent>
-            </Card>
+            <div className="bg-slate-800/50 rounded-2xl p-8 border border-slate-700">
+              <div className="bg-red-500/20 w-16 h-16 rounded-xl flex items-center justify-center mb-6">
+                <XCircle className="w-8 h-8 text-red-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Imposible de Duplicar</h3>
+              <p className="text-slate-400 leading-relaxed">
+                Si tu sistema está en tu cabeza, tu equipo no puede copiarlo. La duplicación requiere procesos documentados y automatizados.
+              </p>
+            </div>
           </div>
         </div>
       </section>

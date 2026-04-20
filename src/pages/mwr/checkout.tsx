@@ -44,7 +44,7 @@ export default function MWRCheckoutPage() {
   return (
     <>
       <SEO 
-        title="Checkout - Sistema MWR"
+        title="Checkout - Sistema de Marketing MLM"
         description="Completa tu compra y accede al sistema automático de prospectos"
       />
 
@@ -58,7 +58,7 @@ export default function MWRCheckoutPage() {
               Accede al Sistema Piloto
             </h1>
             <p className="text-xl text-muted-foreground">
-              Únete a los distribuidores MWR que están creciendo su red automáticamente
+              Únete a los distribuidores MLM que están creciendo su red automáticamente
             </p>
           </div>
 
@@ -73,7 +73,7 @@ export default function MWRCheckoutPage() {
                   <div className="space-y-3">
                     <div className="flex justify-between items-start pb-3 border-b">
                       <div>
-                        <h3 className="font-semibold text-lg">Sistema Piloto MWR</h3>
+                        <h3 className="font-semibold text-lg">Sistema Piloto MLM</h3>
                         <p className="text-sm text-muted-foreground">Acceso completo 14 días</p>
                       </div>
                       <div className="text-right">
@@ -127,7 +127,7 @@ export default function MWRCheckoutPage() {
                       <div className="text-sm">
                         <p className="font-semibold text-blue-900 mb-1">Garantía de 14 días</p>
                         <p className="text-blue-700">
-                          Si no generas actividad en tu negocio MWR, no pagas mensualidad
+                          Si no generas actividad en tu negocio MLM, no pagas mensualidad
                         </p>
                       </div>
                     </div>

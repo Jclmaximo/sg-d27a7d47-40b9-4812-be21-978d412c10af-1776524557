@@ -27,11 +27,67 @@ export default function MWRVSLPage() {
   return (
     <>
       <SEO 
-        title="Cómo Funciona - Sistema MWR"
-        description="Sistematiza tu negocio MWR con procesos duplicables y escalables"
+        title="Video de Presentación - Sistema MLM"
+        description="Descubre cómo sistematizar tu negocio MLM"
       />
 
-      <div className="min-h-screen bg-slate-50">
+      <div className="min-h-screen bg-slate-900 text-white">
+        {/* Progress Bar */}
+        <div className="fixed top-0 left-0 right-0 z-50 bg-slate-800 border-b border-slate-700">
+          <div className="max-w-7xl mx-auto px-4 py-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm text-slate-400">Progreso del video</span>
+              <span className="text-sm text-slate-400">{Math.round(progress)}%</span>
+            </div>
+            <div className="w-full bg-slate-700 rounded-full h-2">
+              <div 
+                className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Hero / Intro */}
+        {currentSection === "intro" && (
+          <section className="min-h-screen flex items-center justify-center px-4 py-20 pt-32">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="inline-block mb-8">
+                <div className="bg-blue-500/10 border border-blue-500/30 rounded-full px-6 py-2">
+                  <span className="text-blue-400 font-semibold">🎯 Sistema de Marketing MLM</span>
+                </div>
+              </div>
+
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                El Crecimiento en Tu Negocio MLM no Depende de tu Energía...
+                <br />
+                <span className="text-yellow-400">Depende de Sistematizar tus Procesos</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                El problema no es la falta de motivación. Es la falta de procesos duplicables que trabajen por ti mientras duermes.
+              </p>
+            </div>
+          </section>
+        )}
+
+        {/* Problema */}
+        {currentSection === "problema" && (
+          <section className="min-h-screen flex items-center justify-center px-4 py-20">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="inline-block mb-8">
+                <div className="bg-red-500/10 border border-red-500/30 rounded-full px-6 py-2">
+                  <span className="text-red-400 font-semibold">⚠️ El Problema Real</span>
+                </div>
+              </div>
+
+              <h2 className="text-3xl md:text-5xl font-bold mb-8">
+                ¿Por qué la mayoría de distribuidores <br className="hidden md:block" />
+                <span className="text-red-400">no construyen equipos grandes?</span>
+              </h2>
+            </div>
+          </section>
+        )}
+
         {/* Video Section */}
         <section className="bg-gradient-to-br from-blue-950 to-purple-950 py-20">
           <div className="max-w-5xl mx-auto px-4">
@@ -40,7 +96,7 @@ export default function MWRVSLPage() {
                 Masterclass Exclusiva
               </Badge>
               <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                El Crecimiento en MWR no Depende de tu Energía...
+                El Crecimiento en Tu Negocio MLM no Depende de tu Energía...
                 <br />
                 <span className="text-yellow-400">Depende de Sistematizar tus Procesos</span>
               </h1>
