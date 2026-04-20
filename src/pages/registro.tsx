@@ -54,14 +54,14 @@ export default function RegistroPage() {
 
     try {
       const { data, error } = await leadsService.createLead({
-        nombre: formData.nombre,
-        apellido: formData.apellido,
+        name: `${formData.nombre} ${formData.apellido}`.trim(),
         email: formData.email,
-        telefono: formData.telefono,
-        pais: formData.pais,
-        interes: formData.interes as "ahorrar" | "ganar" | "ambas",
-        metodo_contacto: formData.metodo_contacto as "whatsapp" | "email" | "telefono",
-        estado: "nuevo",
+        phone: formData.telefono,
+        country: formData.pais,
+        source: "landing",
+        interest: formData.interes as "ahorrar" | "ganar" | "ambas",
+        contact_method: formData.metodo_contacto as "whatsapp" | "email" | "telefono",
+        user_id: "anonymous", // Temporal id for public forms
       });
 
       if (error) {

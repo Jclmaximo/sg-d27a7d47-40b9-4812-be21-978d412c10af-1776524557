@@ -43,8 +43,7 @@ export default function MWRRegistroPage() {
 
     try {
       const { data, error } = await mwrLeadsService.createLead({
-        nombre: formData.nombre,
-        apellido: formData.apellido,
+        nombre: `${formData.nombre} ${formData.apellido}`.trim(),
         email: formData.email,
         telefono: formData.telefono,
         pais: formData.pais,
