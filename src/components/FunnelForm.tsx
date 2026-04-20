@@ -76,14 +76,14 @@ export function FunnelForm({ ambassadorId, ambassadorName }: FunnelFormProps) {
                   className="w-12 h-12 text-green-600"
                   fill="none"
                   stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
+                  viewBox="0 0 24 24">
+                  
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={3}
-                    d="M5 13l4 4L19 7"
-                  />
+                    d="M5 13l4 4L19 7" />
+                  
                 </svg>
               </div>
               <h2 className="text-4xl font-bold text-gray-900 mb-4">
@@ -106,8 +106,8 @@ export function FunnelForm({ ambassadorId, ambassadorName }: FunnelFormProps) {
             </div>
           </div>
         </div>
-      </section>
-    );
+      </section>);
+
   }
 
   return (
@@ -191,7 +191,7 @@ export function FunnelForm({ ambassadorId, ambassadorName }: FunnelFormProps) {
               type="submit"
               size="lg"
               className="w-full h-14 text-lg font-semibold bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg hover:shadow-xl transition-all"
-              disabled={loading}>
+              disabled={loading} style={{ backgroundColor: "#3b82f6", backgroundImage: "none" }}>
               
               {loading ? "Enviando..." : <MessageSquare className="mr-2 h-5 w-5" />}
               Empezar Ahora
