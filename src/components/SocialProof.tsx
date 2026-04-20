@@ -40,7 +40,7 @@ export function SocialProof() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
           {stats.map((stat, index) =>
           <div key={index} className="text-center">
-              <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: "#99f6e4", backgroundImage: "none" }}>
+              <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: "#ffffff", backgroundImage: "none" }}>
                 <stat.icon className="w-8 h-8 text-accent" />
               </div>
               <p className="text-3xl md:text-4xl font-bold mb-2">{stat.value}</p>
