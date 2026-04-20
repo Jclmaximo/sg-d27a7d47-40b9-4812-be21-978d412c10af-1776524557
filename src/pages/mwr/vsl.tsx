@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,8 @@ import { Play, ArrowRight, Check, Users, TrendingUp, Zap, Clock } from "lucide-r
 export default function VSLPage() {
   const router = useRouter();
   const [showCTA, setShowCTA] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   // Auto-show CTA after 3 seconds
   useEffect(() => {
@@ -18,6 +20,25 @@ export default function VSLPage() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handlePlayClick = () => {
+    if (videoRef.current) {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  const handleVideoClick = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        videoRef.current.play();
+        setIsPlaying(true);
+      }
+    }
+  };
 
   return (
     <>
