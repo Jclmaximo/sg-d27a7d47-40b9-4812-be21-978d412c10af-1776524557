@@ -73,12 +73,8 @@ export default function MWRRegistroPage() {
         description: "Redirigiendo al checkout...",
       });
 
-      // Redirect to checkout with lead ID
-      if (data?.id) {
-        router.push(`/mwr/checkout?lead_id=${data.id}`);
-      } else {
-        router.push("/mwr/checkout");
-      }
+      // Redirect to checkout
+      router.push("/checkout");
     } catch (err) {
       console.error("Unexpected error:", err);
       toast({
