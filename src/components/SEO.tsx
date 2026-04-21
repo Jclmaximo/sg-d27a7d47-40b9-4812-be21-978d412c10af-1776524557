@@ -9,9 +9,9 @@ interface SEOProps {
 
 // SEO elements that can be used in _document.tsx (returns JSX without Head wrapper)
 export function SEOElements({
-  title = "Hello World",
-  description = "Welcome to my app",
-  image = "/og-image.png",
+  title = "Viaja Ligero - Descuentos Exclusivos en Viajes",
+  description = "Accede a tarifas preferenciales en hoteles, vuelos y experiencias únicas. Únete al club de viajeros inteligentes.",
+  image = "/ChatGPT_Image_21_abr_2026_03_33_28_p.m.png",
   url,
 }: SEOProps) {
   return (
@@ -39,9 +39,9 @@ export function SEOElements({
 // SEO component for use in pages/_app.tsx or individual pages (uses next/head)
 // Note: Flattened structure (no fragment) for better Next.js Head compatibility during hot reload
 export function SEO({
-  title = "Hello World",
-  description = "Welcome to my app",
-  image = "/og-image.png",
+  title = "Viaja Ligero - Descuentos Exclusivos en Viajes",
+  description = "Accede a tarifas preferenciales en hoteles, vuelos y experiencias únicas. Únete al club de viajeros inteligentes.",
+  image = "/ChatGPT_Image_21_abr_2026_03_33_28_p.m.png",
   url,
 }: SEOProps) {
   return (
