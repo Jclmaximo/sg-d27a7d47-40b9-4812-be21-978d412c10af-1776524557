@@ -123,29 +123,25 @@ export default function LeadsPage() {
   const checkAuth = useCallback(async () => {
     const session = await authService.getCurrentSession();
     
-    // TEMPORARILY DISABLED FOR TESTING
-    // if (!session) {
-    //   router.push("/auth/reset-password");
-    //   return;
-    // }
+    // Authentication required to access this page
+    if (!session) {
+      router.push("/auth/reset-password");
+      return;
+    }
 
-    // Get username for redirect (use default if no session)
-    let profileUsername = "test-user";
-    
-    if (session) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("id", session.user.id)
-        .single();
+    // Get username for redirect URL
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("username")
+      .eq("id", session.user.id)
+      .single();
 
-      if (profile?.username) {
-        profileUsername = profile.username;
-      }
+    if (profile?.username) {
+      setUsername(profile.username);
     }
     
-    setUsername(profileUsername);
-    loadLeads();
+    // Load real leads from database
+    loadLeads(session.user.id);
   }, [router]);
 
   const filterLeads = useCallback(() => {
@@ -174,47 +170,12 @@ export default function LeadsPage() {
     filterLeads();
   }, [filterLeads]);
 
-  const loadLeads = async () => {
+  const loadLeads = async (userId: string) => {
     setLoading(true);
     try {
-      // USING MOCK DATA FOR TESTING (no auth required)
-      const mockLeads = [
-        {
-          id: "1",
-          name: "Juan Pérez",
-          email: "juan@example.com",
-          phone: "+52 123 456 7890",
-          country: "mexico",
-          status: "nuevo",
-          created_at: new Date().toISOString(),
-          source: "ambassador_landing",
-          interest: "membresia_viajes"
-        },
-        {
-          id: "2",
-          name: "María González",
-          email: "maria@example.com",
-          phone: "+57 321 654 9870",
-          country: "colombia",
-          status: "contactado",
-          created_at: new Date().toISOString(),
-          source: "ambassador_landing",
-          interest: "membresia_viajes"
-        },
-        {
-          id: "3",
-          name: "Carlos Rodríguez",
-          email: "carlos@example.com",
-          phone: "+34 612 345 678",
-          country: "españa",
-          status: "nuevo",
-          created_at: new Date().toISOString(),
-          source: "ambassador_landing",
-          interest: "membresia_viajes"
-        }
-      ];
-      
-      setLeads(mockLeads);
+      // Load real leads from database filtered by ambassador user_id
+      const data = await leadsService.getLeads(userId);
+      setLeads(data);
     } catch (error) {
       console.error("Error loading leads:", error);
       toast({
