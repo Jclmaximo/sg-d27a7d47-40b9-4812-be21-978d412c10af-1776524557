@@ -248,6 +248,7 @@ export type Database = {
           notas: string | null
           referrer_username: string | null
           updated_at: string | null
+          user_id: string | null
           whatsapp: string
         }
         Insert: {
@@ -260,6 +261,7 @@ export type Database = {
           notas?: string | null
           referrer_username?: string | null
           updated_at?: string | null
+          user_id?: string | null
           whatsapp: string
         }
         Update: {
@@ -272,6 +274,7 @@ export type Database = {
           notas?: string | null
           referrer_username?: string | null
           updated_at?: string | null
+          user_id?: string | null
           whatsapp?: string
         }
         Relationships: []
