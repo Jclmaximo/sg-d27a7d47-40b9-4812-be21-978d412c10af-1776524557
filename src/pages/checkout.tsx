@@ -14,15 +14,22 @@ import { disruptiveService } from "@/services/disruptiveService";
 import { subscriptionService } from "@/services/subscriptionService";
 import { referralService } from "@/services/referralService";
 import { discountService } from "@/services/discountService";
+import type { Database } from "@/integrations/supabase/types";
+
+type MWRLead = Database["public"]["Tables"]["mwr_leads"]["Row"];
 
 export default function CheckoutPage() {
   const router = useRouter();
   const { toast } = useToast();
+  const { lead_id } = router.query;
+  
   const [loading, setLoading] = useState(false);
   const [paymentCreated, setPaymentCreated] = useState(false);
   const [checkingPayment, setCheckingPayment] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
   const [discountApplied, setDiscountApplied] = useState<{ percentage: number; code: string } | null>(null);
+  const [leadData, setLeadData] = useState<MWRLead | null>(null);
+  const [loadingLead, setLoadingLead] = useState(true);
   
   const [paymentData, setPaymentData] = useState<{
     paymentId: string;
@@ -35,6 +42,41 @@ export default function CheckoutPage() {
   const finalPrice = discountApplied 
     ? disruptiveService.calculateDiscountedPrice(INITIAL_PRICE, discountApplied.percentage)
     : INITIAL_PRICE;
+
+  // Fetch lead data from mwr_leads table
+  useEffect(() => {
+    const fetchLead = async () => {
+      if (!lead_id || typeof lead_id !== 'string') {
+        setLoadingLead(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase
+          .from("mwr_leads")
+          .select("*")
+          .eq("id", lead_id)
+          .single();
+
+        if (error) {
+          console.error("Error fetching lead:", error);
+          toast({
+            title: "Error",
+            description: "No se pudo cargar la información del registro",
+            variant: "destructive"
+          });
+        } else {
+          setLeadData(data);
+        }
+      } catch (err) {
+        console.error("Error fetching lead:", err);
+      } finally {
+        setLoadingLead(false);
+      }
+    };
+
+    fetchLead();
+  }, [lead_id]);
 
   const applyDiscount = async () => {
     if (!discountCode.trim()) {
@@ -75,22 +117,26 @@ export default function CheckoutPage() {
   };
 
   const createPayment = async () => {
+    if (!leadData) {
+      toast({
+        title: "Error",
+        description: "No se encontró información del registro",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        router.push("/auth/reset-password");
-        return;
-      }
-
       const payment = await disruptiveService.createPayment({
         amount: finalPrice,
         currency: "USDT",
         network: "BSC",
-        description: "Viaja Ligero - Membresía Inicial (30 días)",
+        description: "Sistema Piloto MWR - Membresía Inicial (30 días)",
         metadata: {
-          userId: session.user.id,
-          type: "initial_subscription",
+          leadId: leadData.id,
+          email: leadData.email,
+          type: "mwr_subscription",
           discountCode: discountApplied?.code
         }
       });
@@ -121,51 +167,71 @@ export default function CheckoutPage() {
   };
 
   const checkPaymentStatus = async () => {
-    if (!paymentData) return;
+    if (!paymentData || !leadData) return;
 
     setCheckingPayment(true);
     try {
       const status = await disruptiveService.getPaymentStatus(paymentData.address);
       
       if (status.fundStatus === "Complete" || status.amountCaptured >= paymentData.amount) {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (!session) return;
+        // Payment confirmed - create Supabase Auth account
+        try {
+          // 1. Create Supabase Auth account
+          const { data: authData, error: authError } = await supabase.auth.signUp({
+            email: leadData.email,
+            password: Math.random().toString(36).slice(-12) + "Aa1!", // Generate random password
+            options: {
+              data: {
+                full_name: leadData.nombre,
+                whatsapp: leadData.whatsapp,
+              }
+            }
+          });
 
-        // Create subscription
-        const subscription = await subscriptionService.createInitialSubscription(
-          session.user.id,
-          paymentData.paymentId, // use paymentId as the tx hash reference
-          discountApplied?.code,
-          discountApplied?.percentage,
-          INITIAL_PRICE,
-          finalPrice
-        );
+          if (authError) throw authError;
+          if (!authData.user) throw new Error("No user created");
 
-        console.log("Subscription created:", subscription);
+          const userId = authData.user.id;
 
-        // COMISIONES DESACTIVADAS
-        // No se generarán comisiones por ahora
-        // Para reactivar, descomentar el siguiente código:
-        
-        // try {
-        //   await referralService.createCommissionsForSubscription(
-        //     session.user.id,
-        //     finalPrice,
-        //     subscription.id
-        //   );
-        //   console.log("Commissions created successfully");
-        // } catch (commError) {
-        //   console.error("Error creating commissions:", commError);
-        // }
+          // 2. Create subscription
+          const subscription = await subscriptionService.createInitialSubscription(
+            userId,
+            paymentData.paymentId,
+            discountApplied?.code,
+            discountApplied?.percentage,
+            INITIAL_PRICE,
+            finalPrice
+          );
 
-        toast({
-          title: "¡Pago confirmado!",
-          description: "Redirigiendo a tu dashboard...",
-        });
+          console.log("Subscription created:", subscription);
 
-        setTimeout(() => {
-          router.push("/admin/welcome");
-        }, 2000);
+          // 3. Update MWR lead with user_id
+          await supabase
+            .from("mwr_leads")
+            .update({ 
+              user_id: userId,
+              estado: "cerrado"
+            })
+            .eq("id", leadData.id);
+
+          toast({
+            title: "¡Pago confirmado!",
+            description: "Tu cuenta ha sido creada. Redirigiendo...",
+          });
+
+          // 4. Redirect to welcome dashboard
+          setTimeout(() => {
+            router.push("/admin/welcome");
+          }, 2000);
+
+        } catch (accountError: any) {
+          console.error("Error creating account:", accountError);
+          toast({
+            title: "Error",
+            description: "El pago fue confirmado pero hubo un error al crear la cuenta. Contacta soporte.",
+            variant: "destructive"
+          });
+        }
       } else {
         toast({
           title: "Pago pendiente",
@@ -194,11 +260,35 @@ export default function CheckoutPage() {
     }
   };
 
+  if (loadingLead) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!leadData && lead_id) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle>Error</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground mb-4">No se encontró el registro. Por favor completa el formulario nuevamente.</p>
+            <Button onClick={() => router.push("/mwr/registro")}>Volver al registro</Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <>
       <SEO 
-        title="Checkout - Viaja Ligero"
-        description="Completa tu pago y accede a descuentos exclusivos en viajes"
+        title="Checkout - Sistema Piloto MWR"
+        description="Completa tu pago y accede al sistema piloto"
       />
 
       <div className="min-h-screen bg-background text-foreground py-12 px-4 relative">
