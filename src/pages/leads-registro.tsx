@@ -87,15 +87,14 @@ export default function LeadsRegistroPage() {
     try {
       // Create lead in database
       await leadsService.createLead({
-        nombre: formData.nombre,
-        apellido: formData.apellido,
+        name: `${formData.nombre} ${formData.apellido}`.trim(),
         email: formData.email,
-        telefono: formData.telefono,
-        pais: formData.pais,
-        interes: "membresia_viajes",
-        metodo_contacto: "whatsapp",
-        user_id: ambassadorUserId,
-        estado: "nuevo"
+        phone: formData.telefono,
+        country: formData.pais,
+        source: "ambassador_landing",
+        interest: "membresia_viajes",
+        contact_method: "whatsapp",
+        user_id: ambassadorUserId
       });
 
       toast({
