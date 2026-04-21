@@ -47,6 +47,42 @@ const COMMISSION_RATES = {
 
 export const referralService = {
   /**
+   * Process a new user registration with a referral code (username)
+   * This links the new user to their referrer in the profiles table
+   */
+  async processReferral(newUserId: string, referralUsername: string): Promise<boolean> {
+    try {
+      // 1. Find the referrer by username
+      const { data: referrer, error: findError } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("username", referralUsername.toLowerCase())
+        .single();
+
+      if (findError || !referrer) {
+        console.error("Referrer not found:", referralUsername);
+        return false;
+      }
+
+      // 2. Link the new user to the referrer
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ referred_by: referrer.id })
+        .eq("id", newUserId);
+
+      if (updateError) {
+        console.error("Error linking referral:", updateError);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error in processReferral:", error);
+      return false;
+    }
+  },
+
+  /**
    * Calculate and create commissions when a new subscription is created
    */
   async createCommissionsForSubscription(
