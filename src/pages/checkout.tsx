@@ -36,17 +36,6 @@ export default function CheckoutPage() {
     ? disruptiveService.calculateDiscountedPrice(INITIAL_PRICE, discountApplied.percentage)
     : INITIAL_PRICE;
 
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      router.push("/auth/reset-password");
-    }
-  };
-
   const applyDiscount = async () => {
     if (!discountCode.trim()) {
       toast({
