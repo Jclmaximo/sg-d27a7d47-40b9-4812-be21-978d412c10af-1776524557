@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+/**
+ * Middleware para redirigir todas las URLs temporales de Vercel 
+ * al dominio personalizado mwr.hubia.vip
+ * 
+ * Esto asegura que los emails de Supabase (que usan las URLs de Vercel)
+ * redirijan automáticamente al dominio correcto manteniendo todos los
+ * parámetros (tokens, query params, etc.)
+ */
 export function middleware(request: NextRequest) {
   const hostname = request.headers.get("host") || "";
   const url = request.nextUrl.clone();
