@@ -51,7 +51,7 @@ export const leadsService = {
         country: leadData.country,
         source: leadData.source,
         user_id: leadData.user_id,
-        status: "new",
+        status: "nuevo",
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }])
