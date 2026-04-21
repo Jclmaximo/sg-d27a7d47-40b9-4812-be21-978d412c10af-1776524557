@@ -38,7 +38,7 @@ export const subscriptionService = {
         transaction_hash: txHash,
         end_date: expiresAt.toISOString(),
         initial_payment_amount: 29.00,
-        monthly_payment_amount: 19.00,
+        monthly_payment_amount: 9.00,
         is_initial_payment: true,
         discount_code_used: discountCode || null,
         discount_percentage: discountPercentage || 0,
@@ -52,7 +52,7 @@ export const subscriptionService = {
     return data;
   },
 
-  // Renew subscription (with $19 monthly payment)
+  // Renew subscription (with $9 monthly payment)
   async renewSubscription(userId: string, txHash: string, discountCode?: string, discountPercentage?: number, originalPrice?: number, finalPrice?: number) {
     // Get current subscription
     const { data: currentSub } = await supabase
@@ -76,16 +76,16 @@ export const subscriptionService = {
         user_id: userId,
         status: "active",
         payment_method: "usdt_bsc",
-        price_usd: finalPrice || 19.00,
+        price_usd: finalPrice || 9.00,
         transaction_hash: txHash,
         end_date: expiresAt.toISOString(),
         initial_payment_amount: 29.00,
-        monthly_payment_amount: 19.00,
+        monthly_payment_amount: 9.00,
         is_initial_payment: false,
         discount_code_used: discountCode || null,
         discount_percentage: discountPercentage || 0,
-        original_price: originalPrice || 19.00,
-        final_price: finalPrice || 19.00
+        original_price: originalPrice || 9.00,
+        final_price: finalPrice || 9.00
       }])
       .select()
       .single();

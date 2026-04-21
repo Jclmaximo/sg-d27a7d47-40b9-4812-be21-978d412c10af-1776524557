@@ -328,23 +328,19 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <CheckCircle2 className="w-4 h-4 text-accent" />
-                      <span>Acceso a plataforma de viajes exclusiva</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <CheckCircle2 className="w-4 h-4 text-accent" />
-                      <span>Descuentos hasta 70% en hoteles y vuelos</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <CheckCircle2 className="w-4 h-4 text-accent" />
-                      <span>Programa Life Experiences®</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-muted-foreground">
-                      <CheckCircle2 className="w-4 h-4 text-accent" />
-                      <span>Créditos de viaje por referidos</span>
-                    </div>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      Acceso inmediato al sistema completo
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      Solo $9 USD/mes para mantener tu membresía activa
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-primary" />
+                      Cancela cuando quieras, sin compromisos
+                    </p>
                   </div>
                 </div>
 
@@ -389,7 +385,7 @@ export default function CheckoutPage() {
                     <div className="text-sm">
                       <p className="font-semibold mb-1">Después de 30 días</p>
                       <p className="text-muted-foreground">
-                        Solo $19 USD/mes para mantener tu membresía activa
+                        Solo $9 USD/mes para mantener tu membresía activa
                       </p>
                     </div>
                   </div>

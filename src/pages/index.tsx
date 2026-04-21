@@ -274,10 +274,12 @@ export default function Home() {
                   Empieza Hoy con Todo Incluido
                 </h2>
                 
-                <div className="mb-6">
-                  <div className="text-5xl font-bold text-primary mb-2">$29 USD</div>
-                  <div className="text-lg text-muted-foreground mb-1">Primeros 30 días de acceso completo</div>
-                  <div className="text-sm text-muted-foreground">Después solo $19 USD/mes</div>
+                <div className="text-center mb-6">
+                  <div className="text-6xl font-bold mb-2 bg-gradient-heading bg-clip-text text-transparent">
+                    $29
+                  </div>
+                  <div className="text-lg text-muted-foreground mb-2">pago único inicial</div>
+                  <div className="text-sm text-muted-foreground">Después solo $9 USD/mes</div>
                 </div>
 
                 <ul className="text-left max-w-md mx-auto mb-8 space-y-2">

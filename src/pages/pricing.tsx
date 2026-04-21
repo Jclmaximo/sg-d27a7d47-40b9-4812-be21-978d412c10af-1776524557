@@ -13,22 +13,21 @@ export default function PricingPage() {
 
   const plans = [
     {
-      name: "Viajero Básico",
-      description: "Ideal para viajeros ocasionales que buscan ahorrar",
-      price: billingPeriod === "monthly" ? 19 : 190,
+      name: "Viajero Inteligente",
+      description: "Acceso a descuentos exclusivos en viajes",
+      price: billingPeriod === "monthly" ? 9 : 90,
       period: billingPeriod === "monthly" ? "/mes" : "/año",
-      savings: billingPeriod === "annual" ? "Ahorra $38" : null,
-      initialPrice: 29,
-      features: [
-        "Acceso a plataforma de viajes",
-        "Descuentos exclusivos en hoteles",
-        "Hasta 10% de ahorro en reservas",
-        "Soporte por email",
-        "1 usuario",
-      ],
-      cta: "Empezar Ahora",
       popular: false,
-      color: "muted",
+      features: [
+        "Acceso a la plataforma de viajes",
+        "Descuentos en hoteles y vuelos",
+        "Programa Life Experiences®",
+        "Créditos de Viaje",
+        "Soporte prioritario"
+      ],
+      cta: "Comenzar Ahora",
+      gradient: "from-primary/20 to-accent/20",
+      savings: billingPeriod === "annual" ? "Ahorra $18" : null,
     },
     {
       name: "Lifestyle Ambassador",
