@@ -348,7 +348,7 @@ export default function LeadsRegistroPage() {
                     </Button>
 
                     <p className="text-xs text-center text-muted-foreground mt-4">
-                      Un asesor se pondrá en contacto contigo para completar tu membresía de $179 USD anuales
+                      Un asesor se pondrá en contacto contigo.
                     </p>
                   </form>
                 </CardContent>
