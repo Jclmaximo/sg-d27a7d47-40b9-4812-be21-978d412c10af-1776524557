@@ -186,23 +186,15 @@ ${window.location.origin}/admin/main-dashboard
     }
   },
 
-  // Get all leads
-  async getLeads() {
-    // Get current user session
-    const { data: { session } } = await supabase.auth.getSession();
-    
-    if (!session) {
-      throw new Error("No authenticated session");
-    }
-
-    // Only return leads belonging to the current user
+  // Get all leads for a specific user
+  async getLeads(userId: string) {
     const { data, error } = await supabase
       .from("leads")
       .select("*")
-      .eq("user_id", session.user.id)
+      .eq("user_id", userId)
       .order("created_at", { ascending: false });
     
-    console.log("Get leads for user:", session.user.id, { data, error });
+    console.log("Get leads for user:", userId, { data, error });
     if (error) throw error;
     return data || [];
   },
