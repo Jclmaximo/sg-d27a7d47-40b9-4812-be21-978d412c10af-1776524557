@@ -167,7 +167,7 @@ export default function AmbassadorPage() {
               <Button 
                 size="lg" 
                 variant="outline"
-                onClick={() => router.push(`/leads-registro?ref=${username}`)}
+                onClick={() => router.push("/mwr/vsl")}
                 className="border-primary/30 hover:bg-primary/10 text-base px-8"
               >
                 Registrarme Ahora
