@@ -62,12 +62,12 @@ export default function CheckoutPage() {
       
       if (discount.valid && discount.discount) {
         setDiscountApplied({
-          percentage: discount.discount.percentage,
+          percentage: discount.discount.discount_percentage,
           code: discountCode.trim()
         });
         toast({
           title: "¡Código aplicado!",
-          description: `Descuento del ${discount.discount.percentage}% aplicado`,
+          description: `Descuento del ${discount.discount.discount_percentage}% aplicado`,
         });
       } else {
         toast({
