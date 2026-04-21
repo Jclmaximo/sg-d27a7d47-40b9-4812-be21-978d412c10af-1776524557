@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { SEO } from "@/components/SEO";
-import { Loader2, Lock, Eye, EyeOff, KeyRound, CheckCircle2, ArrowRight } from "lucide-react";
+import { Loader2, Lock, Eye, EyeOff, KeyRound, CheckCircle2, ArrowRight, Plane } from "lucide-react";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -24,17 +24,16 @@ export default function ResetPasswordPage() {
 
     const setupAuth = async () => {
       try {
-        // Listen for auth state changes
         const { data: authListenerData } = supabase.auth.onAuthStateChange(async (event, session) => {
           console.log("Auth state change:", { event, session });
           
           if (!mounted) return;
 
-          if (event === 'PASSWORD_RECOVERY') {
+          if (event === "PASSWORD_RECOVERY") {
             console.log("✅ Password recovery session detected");
             setValidatingToken(false);
             setError("");
-          } else if (event === 'SIGNED_IN' && session) {
+          } else if (event === "SIGNED_IN" && session) {
             console.log("✅ User signed in, checking if recovery session");
             setValidatingToken(false);
             setError("");
@@ -43,7 +42,6 @@ export default function ResetPasswordPage() {
 
         authListener = authListenerData;
 
-        // Also check current session after a short delay
         await new Promise(resolve => setTimeout(resolve, 500));
         
         if (!mounted) return;
@@ -69,7 +67,6 @@ export default function ResetPasswordPage() {
           }
         } else {
           console.warn("⚠️ No session found after 500ms");
-          // Give it a bit more time before showing error
           await new Promise(resolve => setTimeout(resolve, 1000));
           
           if (!mounted) return;
@@ -97,7 +94,6 @@ export default function ResetPasswordPage() {
 
     setupAuth();
 
-    // Cleanup
     return () => {
       mounted = false;
       if (authListener?.subscription) {
@@ -111,7 +107,6 @@ export default function ResetPasswordPage() {
     setError("");
     setSuccess("");
 
-    // Validations
     if (password.length < 6) {
       setError("La contraseña debe tener al menos 6 caracteres");
       return;
@@ -127,7 +122,6 @@ export default function ResetPasswordPage() {
     try {
       console.log("Attempting to update password...");
       
-      // Verify we have a session first
       const { data: { session } } = await supabase.auth.getSession();
       
       if (!session) {
@@ -149,10 +143,8 @@ export default function ResetPasswordPage() {
 
       setSuccess("¡Contraseña actualizada exitosamente!");
       
-      // Sign out to clear the recovery session
       await supabase.auth.signOut();
       
-      // Redirect to login after 2 seconds
       setTimeout(() => {
         router.push("/admin");
       }, 2000);
@@ -176,19 +168,16 @@ export default function ResetPasswordPage() {
           title="Validando - Viaja Ligero"
           description="Validando link de recuperación"
         />
-        <div className="min-h-screen relative flex items-center justify-center overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: "url('/login-background.jpg')",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-green-900/20" />
-          </div>
-          <div className="relative text-center bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-2xl">
-            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
-            <p className="text-muted-foreground">Validando link de recuperación...</p>
-          </div>
+        <div className="min-h-screen bg-background relative overflow-hidden flex items-center justify-center">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
+          
+          <Card className="relative bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20 p-8">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-4" />
+              <p className="text-muted-foreground">Validando link de recuperación...</p>
+            </div>
+          </Card>
         </div>
       </>
     );
@@ -201,32 +190,32 @@ export default function ResetPasswordPage() {
         description="Crea una nueva contraseña para tu cuenta"
       />
       
-      <div className="min-h-screen relative flex items-center justify-center p-4 overflow-hidden">
-        <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url('/login-background.jpg')",
-          }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/20 via-transparent to-green-900/20" />
-        </div>
+      <div className="min-h-screen bg-background relative overflow-hidden flex items-center justify-center p-4">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
 
-        <Card className="relative w-full max-w-md bg-white/95 backdrop-blur-sm shadow-2xl border-0">
+        <Card className="relative w-full max-w-md bg-card/80 backdrop-blur-sm border-primary/30 shadow-2xl shadow-primary/20">
           <CardHeader className="text-center space-y-6 pb-4">
-            <div className="flex flex-col items-center gap-2">
-              <div className="text-4xl font-bold tracking-wider">
-                V<span className="text-2xl">_</span>
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-primary/30 shadow-xl shadow-primary/20">
+                <Plane className="w-8 h-8 text-primary" />
               </div>
-              <div className="space-y-0">
-                <div className="text-lg font-semibold tracking-widest">VIAJA LIGERO</div>
-                <div className="text-xs text-muted-foreground tracking-wider">VIVE MÁS CON MENOS</div>
+              <div className="space-y-1">
+                <h1 className="text-2xl font-bold tracking-tight">
+                  <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                    VIAJA LIGERO
+                  </span>
+                </h1>
+                <p className="text-xs text-muted-foreground tracking-wider">VIVE MÁS CON MENOS</p>
               </div>
             </div>
             
-            <div className="space-y-2 pt-4">
+            <div className="space-y-2 pt-2">
               <div className="flex items-center justify-center gap-2">
-                <KeyRound className="w-6 h-6 text-primary" />
-                <h1 className="text-3xl font-bold">Restablecer Contraseña</h1>
+                <KeyRound className="w-5 h-5 text-primary" />
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                  Restablecer Contraseña
+                </h2>
               </div>
               <p className="text-sm text-muted-foreground">
                 Crea una nueva contraseña segura para tu cuenta
@@ -236,13 +225,13 @@ export default function ResetPasswordPage() {
 
           <CardContent className="space-y-6">
             {error && (
-              <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg text-center">
+              <div className="p-3 bg-destructive/10 border border-destructive/30 text-destructive text-sm rounded-lg text-center">
                 {error}
               </div>
             )}
             
             {success && (
-              <div className="p-3 bg-green-500/10 text-green-600 text-sm rounded-lg text-center flex items-center justify-center gap-2">
+              <div className="p-3 bg-green-500/10 border border-green-500/30 text-green-600 text-sm rounded-lg text-center flex items-center justify-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
                 {success}
               </div>
@@ -250,7 +239,7 @@ export default function ResetPasswordPage() {
 
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium">Nueva Contraseña</label>
+                <label className="text-sm font-medium text-foreground">Nueva Contraseña</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -261,7 +250,7 @@ export default function ResetPasswordPage() {
                     required
                     minLength={6}
                     disabled={loading || !!error}
-                    className="pl-10 pr-10 bg-background border-muted"
+                    className="pl-10 pr-10 bg-background/60 border-primary/20 focus:border-primary/50"
                   />
                   <button
                     type="button"
@@ -275,7 +264,7 @@ export default function ResetPasswordPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm font-medium">Confirmar Contraseña</label>
+                <label className="text-sm font-medium text-foreground">Confirmar Contraseña</label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
@@ -286,7 +275,7 @@ export default function ResetPasswordPage() {
                     required
                     minLength={6}
                     disabled={loading || !!error}
-                    className="pl-10 pr-10 bg-background border-muted"
+                    className="pl-10 pr-10 bg-background/60 border-primary/20 focus:border-primary/50"
                   />
                   <button
                     type="button"
@@ -299,13 +288,13 @@ export default function ResetPasswordPage() {
                 </div>
               </div>
 
-              <div className="text-xs text-muted-foreground space-y-1">
-                <p className="font-medium">Tu contraseña debe tener:</p>
-                <ul className="list-disc list-inside space-y-0.5 pl-2">
-                  <li className={password.length >= 6 ? "text-green-600" : ""}>
+              <div className="text-xs text-muted-foreground space-y-2 bg-muted/30 rounded-lg p-3 border border-border/30">
+                <p className="font-medium text-foreground">Tu contraseña debe tener:</p>
+                <ul className="list-disc list-inside space-y-1 pl-2">
+                  <li className={password.length >= 6 ? "text-green-600 font-medium" : ""}>
                     Al menos 6 caracteres
                   </li>
-                  <li className={password === confirmPassword && password !== "" ? "text-green-600" : ""}>
+                  <li className={password === confirmPassword && password !== "" ? "text-green-600 font-medium" : ""}>
                     Ambas contraseñas deben coincidir
                   </li>
                 </ul>
@@ -313,7 +302,7 @@ export default function ResetPasswordPage() {
 
               <Button 
                 type="submit" 
-                className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-medium shadow-lg" 
+                className="w-full h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 transition-all" 
                 disabled={loading || !!error}
               >
                 {loading ? (
@@ -329,12 +318,12 @@ export default function ResetPasswordPage() {
                 )}
               </Button>
 
-              <div className="text-center">
+              <div className="text-center pt-2">
                 <Button
                   type="button"
                   variant="link"
                   onClick={() => router.push("/admin")}
-                  className="text-sm text-muted-foreground hover:text-foreground"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   disabled={loading}
                 >
                   Volver al inicio de sesión
@@ -342,7 +331,7 @@ export default function ResetPasswordPage() {
               </div>
             </form>
 
-            <p className="text-center text-xs text-muted-foreground pt-2">
+            <p className="text-center text-xs text-muted-foreground pt-2 border-t border-border/30">
               Vive más con menos.
             </p>
           </CardContent>
