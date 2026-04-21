@@ -188,12 +188,21 @@ ${window.location.origin}/admin/main-dashboard
 
   // Get all leads
   async getLeads() {
+    // Get current user session
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      throw new Error("No authenticated session");
+    }
+
+    // Only return leads belonging to the current user
     const { data, error } = await supabase
       .from("leads")
       .select("*")
+      .eq("user_id", session.user.id)
       .order("created_at", { ascending: false });
     
-    console.log("Get leads:", { data, error });
+    console.log("Get leads for user:", session.user.id, { data, error });
     if (error) throw error;
     return data || [];
   },
