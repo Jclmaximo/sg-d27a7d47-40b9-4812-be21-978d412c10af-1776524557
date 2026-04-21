@@ -143,23 +143,14 @@ export default function CheckoutPage() {
         if (!session) return;
 
         // Create subscription
-        const subscription = isRenewal 
-          ? await subscriptionService.renewSubscription(
-              session.user.id,
-              verifiedPayment.hash,
-              discountApplied?.code,
-              discountApplied?.percentage,
-              basePrice,
-              finalPrice
-            )
-          : await subscriptionService.createInitialSubscription(
-              session.user.id,
-              verifiedPayment.hash,
-              discountApplied?.code,
-              discountApplied?.percentage,
-              basePrice,
-              finalPrice
-            );
+        const subscription = await subscriptionService.createInitialSubscription(
+          session.user.id,
+          paymentData.paymentId, // use paymentId as the tx hash reference
+          discountApplied?.code,
+          discountApplied?.percentage,
+          INITIAL_PRICE,
+          finalPrice
+        );
 
         console.log("Subscription created:", subscription);
 
@@ -167,17 +158,15 @@ export default function CheckoutPage() {
         // No se generarán comisiones por ahora
         // Para reactivar, descomentar el siguiente código:
         
-        // if (!isRenewal) {
-        //   try {
-        //     await referralService.createCommissionsForSubscription(
-        //       session.user.id,
-        //       finalPrice,
-        //       subscription.id
-        //     );
-        //     console.log("Commissions created successfully");
-        //   } catch (commError) {
-        //     console.error("Error creating commissions:", commError);
-        //   }
+        // try {
+        //   await referralService.createCommissionsForSubscription(
+        //     session.user.id,
+        //     finalPrice,
+        //     subscription.id
+        //   );
+        //   console.log("Commissions created successfully");
+        // } catch (commError) {
+        //   console.error("Error creating commissions:", commError);
         // }
 
         toast({
