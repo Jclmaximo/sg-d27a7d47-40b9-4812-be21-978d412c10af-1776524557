@@ -308,13 +308,8 @@ export default function AmbassadorPage() {
                   Únete al Club Exclusivo
                 </h2>
                 <p className="text-lg text-muted-foreground mb-8">
-                  Comienza a ahorrar en tus viajes hoy mismo
+                  Descubre cómo funciona y comienza a ahorrar en tus viajes
                 </p>
-                <div className="bg-background/60 backdrop-blur-sm rounded-xl p-6 mb-6 inline-block">
-                  <div className="text-sm text-muted-foreground mb-2">Membresía anual</div>
-                  <div className="text-4xl md:text-5xl font-bold text-primary mb-2">$179 USD</div>
-                  <div className="text-sm text-muted-foreground">Acceso completo durante 12 meses</div>
-                </div>
                 <div className="space-y-3 mb-8">
                   <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                     <CheckCircle2 className="w-5 h-5 text-green-500" />
@@ -338,12 +333,9 @@ export default function AmbassadorPage() {
                   onClick={() => router.push(`/leads-registro?ref=${username}`)}
                   className="bg-white hover:bg-white/90 text-primary shadow-xl text-lg px-12"
                 >
-                  Registrarme Ahora
+                  Quiero Más Información
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
-                <p className="text-xs text-muted-foreground mt-4">
-                  🔒 Pago seguro con tarjeta o criptomonedas
-                </p>
               </div>
             </CardContent>
           </Card>
