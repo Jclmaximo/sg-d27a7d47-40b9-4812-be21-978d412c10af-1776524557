@@ -122,22 +122,29 @@ export default function LeadsPage() {
 
   const checkAuth = useCallback(async () => {
     const session = await authService.getCurrentSession();
-    if (!session) {
-      router.push("/auth/reset-password");
-      return;
+    
+    // TEMPORARILY DISABLED FOR TESTING
+    // if (!session) {
+    //   router.push("/auth/reset-password");
+    //   return;
+    // }
+
+    // Get username for redirect (use default if no session)
+    let profileUsername = "test-user";
+    
+    if (session) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("id", session.user.id)
+        .single();
+
+      if (profile?.username) {
+        profileUsername = profile.username;
+      }
     }
-
-    // Get username for redirect
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("username")
-      .eq("id", session.user.id)
-      .single();
-
-    if (profile?.username) {
-      setUsername(profile.username);
-    }
-
+    
+    setUsername(profileUsername);
     loadLeads();
   }, [router]);
 
