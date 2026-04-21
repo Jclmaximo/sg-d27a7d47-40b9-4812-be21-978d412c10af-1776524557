@@ -367,12 +367,6 @@ export default function LeadsPage() {
       </Dialog>
 
       <div className="min-h-screen bg-background text-foreground">
-        {/* Floating Orbs */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float-delayed" />
-        </div>
-
         {/* Header */}
         <header className="relative z-10 border-b border-border/50 bg-card/30 backdrop-blur-sm">
           <div className="max-w-7xl mx-auto px-4 py-4">
