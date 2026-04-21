@@ -77,6 +77,13 @@ interface UserProfile {
   ambassador_active: boolean;
 }
 
+interface MessageTemplate {
+  title: string;
+  emoji: string;
+  color: string;
+  template: (name: string) => string;
+}
+
 export default function MainDashboard() {
   const router = useRouter();
   const { toast } = useToast();
@@ -183,8 +190,100 @@ export default function MainDashboard() {
     }
   };
 
+  // Message templates for different stages
+  const messageTemplates: Record<string, MessageTemplate> = {
+    "bienvenida": {
+      title: "Bienvenida Inicial",
+      emoji: "👋",
+      color: "from-blue-500 to-cyan-400",
+      template: (name: string) => `Hola ${name}! 👋
+
+Vi que te interesa *Viaja Ligero*. Te cuento rápido:
+
+✅ Plataforma privada de viajes
+✅ Hasta 70% descuento en hoteles
+✅ Vuelos y cruceros con tarifa preferencial
+✅ Créditos de viaje acumulables
+
+¿Tienes 5 minutos para que te explique cómo funciona? 😊`
+    },
+    "recordatorio": {
+      title: "Recordatorio Amigable",
+      emoji: "🔔",
+      color: "from-purple-500 to-pink-400",
+      template: (name: string) => `Hola ${name}! 
+
+¿Pudiste revisar la info sobre Viaja Ligero?
+
+Sé que estás ocupado/a, pero solo quería saber si tienes alguna pregunta. 
+
+Estoy aquí para ayudarte 🙂`
+    },
+    "beneficios": {
+      title: "Beneficios Exclusivos",
+      emoji: "💎",
+      color: "from-amber-500 to-orange-400",
+      template: (name: string) => `Hola ${name}! 
+
+Los *beneficios clave* de Viaja Ligero:
+
+✨ Programa Life Experiences (viajes de lujo)
+💰 Inversión: solo $179 USD/año
+🌍 Descuentos en +100 países
+🎁 Créditos de viaje por cada reserva
+📱 Soporte 24/7
+
+¿Listo/a para activar tu membresía? 🚀`
+    },
+    "casos_exito": {
+      title: "Casos de Éxito",
+      emoji: "🌍",
+      color: "from-green-500 to-emerald-400",
+      template: (name: string) => `Hola ${name}! 
+
+Te comparto resultados *reales* de miembros:
+
+🇨🇴 Lorenzo ahorró $493 USD en Colombia
+🇹🇷 Elena ahorró $1,092 USD en Turquía
+💰 Total ahorrado en 2024: $2.8M USD
+
+Tú también puedes viajar más por menos.
+
+¿Empezamos? ✈️`
+    },
+    "urgencia": {
+      title: "Urgencia Limitada",
+      emoji: "🔥",
+      color: "from-red-500 to-rose-400",
+      template: (name: string) => `Hola ${name}! 
+
+Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
+
+🎯 Membresía anual: $179 USD
+⏰ Oferta válida: Últimos días
+
+¿Aseguramos tu lugar ahora? 💳`
+    },
+    "dudas": {
+      title: "Resolver Dudas",
+      emoji: "💬",
+      color: "from-indigo-500 to-violet-400",
+      template: (name: string) => `Hola ${name}! 
+
+¿Hay algo específico que te gustaría saber sobre Viaja Ligero?
+
+Puedo resolver dudas sobre:
+• Cómo funcionan los descuentos
+• Destinos disponibles
+• Proceso de reserva
+• Programa de referidos
+
+¿Qué te gustaría aclarar? 🤔`
+    }
+  };
+
   const sendWhatsAppMessage = (lead: Lead, templateKey: string) => {
-    const template = messageTemplates[templateKey as keyof typeof messageTemplates];
+    const template = messageTemplates[templateKey];
     if (!template) return;
 
     const message = template.template(lead.name);
@@ -283,98 +382,6 @@ export default function MainDashboard() {
   const handleLogout = async () => {
     await supabase.auth.signOut();
     router.push("/admin");
-  };
-
-  // Message templates for different stages
-  const messageTemplates = {
-    "primer_contacto": {
-      title: "Primer Contacto",
-      template: (name: string) => `Hola ${name}! 👋
-
-Vi que te interesa *Viaja Ligero*, el club exclusivo para ahorrar en viajes.
-
-¿Te gustaría que te cuente cómo funciona y los beneficios que incluye? 
-
-Tenemos descuentos en:
-✈️ Vuelos
-🏨 Hoteles 
-🚢 Cruceros
-🚗 Alquiler de autos
-
-Y mucho más... ¿Cuándo tienes 5 minutos para hablar?`
-    },
-    "seguimiento": {
-      title: "Seguimiento",
-      template: (name: string) => `Hola ${name}! 
-
-¿Tuviste oportunidad de revisar la información que te envié sobre *Viaja Ligero*?
-
-Quedo atento a cualquier pregunta que tengas. 
-
-¿Hay algo específico que te gustaría saber? 🤔`
-    },
-    "beneficios_detallados": {
-      title: "Beneficios Detallados",
-      template: (name: string) => `Hola ${name}! 
-
-Te comparto los *beneficios principales* de Viaja Ligero:
-
-✅ Acceso a plataforma privada de viajes
-✅ Descuentos de hasta 70% en hoteles
-✅ Precios especiales en vuelos y cruceros
-✅ Programa Life Experiences (viajes de lujo)
-✅ Créditos de viaje acumulables
-✅ Soporte 24/7
-
-La inversión es de solo $179 USD/año.
-
-¿Te gustaría activar tu membresía? 🎯`
-    },
-    "cierre_membresia": {
-      title: "Cierre - Membresía",
-      template: (name: string) => `Hola ${name}! 
-
-Para activar tu membresía de *Viaja Ligero* y empezar a ahorrar en tus viajes, aquí está el link de pago seguro:
-
-🔗 [Link de registro]
-
-Una vez que completes el pago:
-✅ Acceso inmediato a la plataforma
-✅ Descuentos disponibles 24/7
-✅ Soporte personalizado
-
-¿Tienes alguna duda antes de activar? 💳`
-    },
-    "oportunidad_ganar": {
-      title: "Oportunidad de Ganar",
-      template: (name: string) => `Hola ${name}! 
-
-Además de *ahorrar en viajes*, ¿sabías que puedes *generar ingresos* con Viaja Ligero?
-
-Como Lifestyle Ambassador puedes:
-💰 Ganar $39.50 USD por cada referido directo
-💰 Ganar $7.90 USD por referidos indirectos
-💰 Construir tu red de viajeros
-
-Es simple: compartes tu link personalizado y cuando alguien se registra, ganas comisiones.
-
-¿Te interesa saber más sobre esta oportunidad? 🚀`
-    },
-    "recordatorio": {
-      title: "Recordatorio",
-      template: (name: string) => `Hola ${name}! 
-
-Solo paso a recordarte que la oferta de *Viaja Ligero* sigue disponible.
-
-¿Sigues interesado/a en:
-• Ahorrar en tus viajes? ✈️
-• Generar ingresos por recomendación? 💰
-• Ambas opciones?
-
-Estoy aquí para resolver cualquier duda que tengas. 
-
-¿Hablamos hoy? 📱`
-    }
   };
 
   const exportToCSV = () => {
@@ -1172,31 +1179,53 @@ Estoy aquí para resolver cualquier duda que tengas.
 
             {/* Dialog para seleccionar mensaje */}
             <Dialog open={showMessageDialog} onOpenChange={setShowMessageDialog}>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="max-w-4xl max-h-[85vh] overflow-hidden">
                 <DialogHeader>
-                  <DialogTitle>Enviar Mensaje a {selectedLead?.name}</DialogTitle>
+                  <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                    Mensajes Sugeridos con IA ✨
+                  </DialogTitle>
                   <DialogDescription>
-                    Selecciona un template de mensaje según la etapa del seguimiento
+                    Templates personalizados para {selectedLead?.name}
                   </DialogDescription>
                 </DialogHeader>
-                <div className="space-y-4 max-h-96 overflow-y-auto">
+                <div className="grid md:grid-cols-2 gap-4 overflow-y-auto max-h-[60vh] pr-2">
                   {Object.entries(messageTemplates).map(([key, template]) => (
                     <div
                       key={key}
-                      className="border rounded-lg p-4 hover:bg-muted cursor-pointer transition"
+                      className="group relative overflow-hidden rounded-xl border border-border/50 hover:border-primary/50 transition-all cursor-pointer bg-card/50 backdrop-blur-sm hover:shadow-xl hover:shadow-primary/20"
                       onClick={() => {
                         if (selectedLead) {
                           sendWhatsAppMessage(selectedLead, key);
                         }
                       }}
                     >
-                      <h4 className="font-semibold mb-2 flex items-center gap-2">
-                        <MessageSquare className="h-4 w-4 text-green-600" />
-                        {template.title}
-                      </h4>
-                      <p className="text-sm text-muted-foreground whitespace-pre-line">
-                        {selectedLead ? template.template(selectedLead.name).substring(0, 150) + "..." : ""}
-                      </p>
+                      <div className={`absolute inset-0 bg-gradient-to-br ${template.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
+                      <div className="p-5 relative z-10">
+                        <div className="flex items-start gap-3 mb-3">
+                          <div className={`text-3xl bg-gradient-to-br ${template.color} bg-clip-text`}>
+                            {template.emoji}
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-bold text-lg mb-1 group-hover:text-primary transition-colors">
+                              {template.title}
+                            </h4>
+                          </div>
+                        </div>
+                        <div className="bg-background/80 backdrop-blur-sm rounded-lg p-3 border border-border/30">
+                          <p className="text-sm text-muted-foreground whitespace-pre-line line-clamp-6">
+                            {selectedLead ? template.template(selectedLead.name) : ""}
+                          </p>
+                        </div>
+                        <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <MessageSquare className="h-3 w-3 text-green-600" />
+                            WhatsApp
+                          </span>
+                          <span className="text-primary font-medium group-hover:translate-x-1 transition-transform">
+                            Click para enviar →
+                          </span>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
