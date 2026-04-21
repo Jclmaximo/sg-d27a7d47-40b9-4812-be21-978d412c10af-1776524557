@@ -73,19 +73,10 @@ export default function LeadsRegistroPage() {
       return;
     }
 
-    if (!ambassadorUserId) {
-      toast({
-        title: "Error",
-        description: "No se pudo identificar al embajador que te refirió",
-        variant: "destructive",
-      });
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
-      // Create lead in database
+      // Create lead in database (user_id can be null for direct registrations)
       await leadsService.createLead({
         name: `${formData.nombre} ${formData.apellido}`.trim(),
         email: formData.email,
@@ -94,7 +85,7 @@ export default function LeadsRegistroPage() {
         source: "ambassador_landing",
         interest: "membresia_viajes",
         contact_method: "whatsapp",
-        user_id: ambassadorUserId
+        user_id: ambassadorUserId || null
       });
 
       toast({
