@@ -39,6 +39,14 @@ export default function RegistroPage() {
     acepta_terminos: false,
   });
 
+  // Redirect to /mwr if ref parameter exists
+  useEffect(() => {
+    const { ref } = router.query;
+    if (ref && typeof ref === 'string') {
+      router.push(`/mwr?ref=${ref}`);
+    }
+  }, [router]);
+
   useEffect(() => {
     const { ref } = router.query;
     if (ref && typeof ref === 'string') {
