@@ -142,20 +142,43 @@ export default function CheckoutPage() {
         const { data: { session } } = await supabase.auth.getSession();
         if (!session) return;
 
-        await subscriptionService.createInitialSubscription(
-          session.user.id,
-          paymentData.address,
-          discountApplied?.code,
-          discountApplied?.percentage,
-          INITIAL_PRICE,
-          finalPrice
-        );
+        // Create subscription
+        const subscription = isRenewal 
+          ? await subscriptionService.renewSubscription(
+              session.user.id,
+              verifiedPayment.hash,
+              discountApplied?.code,
+              discountApplied?.percentage,
+              basePrice,
+              finalPrice
+            )
+          : await subscriptionService.createInitialSubscription(
+              session.user.id,
+              verifiedPayment.hash,
+              discountApplied?.code,
+              discountApplied?.percentage,
+              basePrice,
+              finalPrice
+            );
 
-        await referralService.createCommissionsForSubscription(
-          session.user.id,
-          paymentData.paymentId,
-          finalPrice
-        );
+        console.log("Subscription created:", subscription);
+
+        // COMISIONES DESACTIVADAS
+        // No se generarán comisiones por ahora
+        // Para reactivar, descomentar el siguiente código:
+        
+        // if (!isRenewal) {
+        //   try {
+        //     await referralService.createCommissionsForSubscription(
+        //       session.user.id,
+        //       finalPrice,
+        //       subscription.id
+        //     );
+        //     console.log("Commissions created successfully");
+        //   } catch (commError) {
+        //     console.error("Error creating commissions:", commError);
+        //   }
+        // }
 
         toast({
           title: "¡Pago confirmado!",
