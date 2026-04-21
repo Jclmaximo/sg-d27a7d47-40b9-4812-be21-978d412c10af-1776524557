@@ -175,13 +175,46 @@ export default function LeadsPage() {
   }, [filterLeads]);
 
   const loadLeads = async () => {
-    setLoading(true);
+    setIsLoading(true);
     try {
-      const data = await leadsService.getLeads();
-      if (data) {
-        setLeads(data);
-        setFilteredLeads(data);
-      }
+      // USING MOCK DATA FOR TESTING (no auth required)
+      const mockLeads = [
+        {
+          id: "1",
+          name: "Juan Pérez",
+          email: "juan@example.com",
+          phone: "+52 123 456 7890",
+          country: "mexico",
+          status: "nuevo",
+          created_at: new Date().toISOString(),
+          source: "ambassador_landing",
+          interest: "membresia_viajes"
+        },
+        {
+          id: "2",
+          name: "María González",
+          email: "maria@example.com",
+          phone: "+57 321 654 9870",
+          country: "colombia",
+          status: "contactado",
+          created_at: new Date().toISOString(),
+          source: "ambassador_landing",
+          interest: "membresia_viajes"
+        },
+        {
+          id: "3",
+          name: "Carlos Rodríguez",
+          email: "carlos@example.com",
+          phone: "+34 612 345 678",
+          country: "españa",
+          status: "nuevo",
+          created_at: new Date().toISOString(),
+          source: "ambassador_landing",
+          interest: "membresia_viajes"
+        }
+      ];
+      
+      setLeads(mockLeads);
     } catch (error) {
       console.error("Error loading leads:", error);
       toast({
@@ -190,7 +223,7 @@ export default function LeadsPage() {
         variant: "destructive",
       });
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
