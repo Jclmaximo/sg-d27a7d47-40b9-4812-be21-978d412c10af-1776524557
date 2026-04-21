@@ -91,7 +91,7 @@ export default function AmbassadorPage() {
               size="lg" 
               onClick={() => {
                 setShowVideoModal(false);
-                router.push(`/registro?ref=${username}`);
+                router.push(`/leads-registro?ref=${username}`);
               }}
               className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-white"
             >
@@ -167,7 +167,7 @@ export default function AmbassadorPage() {
               <Button 
                 size="lg" 
                 variant="outline"
-                onClick={() => router.push(`/registro?ref=${username}`)}
+                onClick={() => router.push(`/leads-registro?ref=${username}`)}
                 className="border-primary/30 hover:bg-primary/10 text-base px-8"
               >
                 Registrarme Ahora
@@ -335,7 +335,7 @@ export default function AmbassadorPage() {
                 </div>
                 <Button 
                   size="lg" 
-                  onClick={() => router.push(`/registro?ref=${username}`)}
+                  onClick={() => router.push(`/leads-registro?ref=${username}`)}
                   className="bg-white hover:bg-white/90 text-primary shadow-xl text-lg px-12"
                 >
                   Registrarme Ahora
