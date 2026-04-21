@@ -175,7 +175,7 @@ export default function LeadsPage() {
   }, [filterLeads]);
 
   const loadLeads = async () => {
-    setIsLoading(true);
+    setLoading(true);
     try {
       // USING MOCK DATA FOR TESTING (no auth required)
       const mockLeads = [
@@ -223,7 +223,7 @@ export default function LeadsPage() {
         variant: "destructive",
       });
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
