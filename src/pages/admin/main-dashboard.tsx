@@ -217,7 +217,7 @@ export default function MainDashboard() {
       }
 
       // Load leads
-      const leadsResult = await leadsService.getLeads();
+      const leadsResult = await leadsService.getLeads(session.user.id);
       if (leadsResult) {
         setAllLeads(leadsResult);
         setLeads(leadsResult);

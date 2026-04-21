@@ -46,9 +46,9 @@ export default function DashboardPage() {
   const [stats, setStats] = useState<Stats>({ total: 0, contacted: 0, converted: 0, pending: 0 });
   const [userEmail, setUserEmail] = useState<string>("");
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = async (userId: string) => {
     try {
-      const data = await leadsService.getLeads();
+      const data = await leadsService.getLeads(userId);
       
       if (data) {
         setLeads(data);
@@ -75,7 +75,7 @@ export default function DashboardPage() {
       return;
     }
     setUserEmail(session.user?.email || "");
-    loadDashboardData();
+    loadDashboardData(session.user.id);
   }, [router]);
 
   useEffect(() => {

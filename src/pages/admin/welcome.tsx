@@ -101,7 +101,7 @@ export default function WelcomePage() {
 
       setProfile(profile);
       setUsername(profile.username);
-      await loadDashboardData();
+      await loadDashboardData(session.user.id);
       
     } catch (error) {
       console.error("Error checking auth:", error);
@@ -111,9 +111,9 @@ export default function WelcomePage() {
     }
   };
 
-  const loadDashboardData = async () => {
+  const loadDashboardData = async (userId: string) => {
     try {
-      const data = await leadsService.getLeads();
+      const data = await leadsService.getLeads(userId);
       
       if (data) {
         setLeads(data);
