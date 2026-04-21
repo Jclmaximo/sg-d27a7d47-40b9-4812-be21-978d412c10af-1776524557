@@ -123,13 +123,11 @@ export default function LeadsPage() {
   const checkAuth = useCallback(async () => {
     const session = await authService.getCurrentSession();
     
-    // Authentication required to access this page
     if (!session) {
       router.push("/auth/reset-password");
       return;
     }
 
-    // Get username for redirect URL
     const { data: profile } = await supabase
       .from("profiles")
       .select("username")
@@ -140,7 +138,6 @@ export default function LeadsPage() {
       setUsername(profile.username);
     }
     
-    // Load real leads from database
     loadLeads(session.user.id);
   }, [router]);
 
@@ -173,7 +170,6 @@ export default function LeadsPage() {
   const loadLeads = async (userId: string) => {
     setLoading(true);
     try {
-      // Load real leads from database filtered by ambassador user_id
       const data = await leadsService.getLeads(userId);
       setLeads(data);
     } catch (error) {
@@ -217,13 +213,11 @@ export default function LeadsPage() {
   const handleSendMessage = async (template: MessageTemplate) => {
     if (!selectedLead) return;
 
-    // Personalize message
     const personalizedMessage = template.message
       .replace("{nombre}", selectedLead.name.split(" ")[0])
       .replace("{ambassador}", "tu asesor")
       .replace("{días}", "7");
 
-    // Copy to clipboard
     await navigator.clipboard.writeText(personalizedMessage);
     
     setCopiedMessageId(template.id);
@@ -234,7 +228,6 @@ export default function LeadsPage() {
       description: "Abre WhatsApp para enviarlo",
     });
 
-    // Open WhatsApp with personalized message
     const whatsappUrl = `https://wa.me/${selectedLead.phone.replace(/\D/g, "")}?text=${encodeURIComponent(personalizedMessage)}`;
     window.open(whatsappUrl, "_blank");
   };
@@ -243,7 +236,6 @@ export default function LeadsPage() {
     setShowMessagesModal(false);
     setShowThanksModal(true);
 
-    // Auto-redirect after 5 seconds
     setTimeout(() => {
       router.push(`/?ref=${username}`);
     }, 5000);
@@ -253,7 +245,6 @@ export default function LeadsPage() {
     <>
       <SEO title="Leads - Dashboard" description="Gestiona tus prospectos" />
 
-      {/* Messages Modal */}
       <Dialog open={showMessagesModal} onOpenChange={setShowMessagesModal}>
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
@@ -347,7 +338,6 @@ export default function LeadsPage() {
         </DialogContent>
       </Dialog>
 
-      {/* Thanks Modal */}
       <Dialog open={showThanksModal} onOpenChange={setShowThanksModal}>
         <DialogContent className="max-w-md">
           <div className="text-center py-8">
@@ -368,7 +358,6 @@ export default function LeadsPage() {
       </Dialog>
 
       <div className="min-h-screen bg-background text-foreground">
-        {/* Header */}
         <header className="relative z-10 border-b border-border/50 bg-card/30 backdrop-blur-sm">
           <div className="max-w-7xl mx-auto px-4 py-4">
             <div className="flex items-center justify-between">
@@ -402,9 +391,7 @@ export default function LeadsPage() {
           </div>
         </header>
 
-        {/* Main Content */}
         <main className="relative z-10 max-w-7xl mx-auto px-4 py-8">
-          {/* Filters */}
           <Card className="bg-card/50 backdrop-blur-sm border-border/50 mb-6">
             <CardContent className="p-6">
               <div className="grid md:grid-cols-2 gap-4">
@@ -455,7 +442,6 @@ export default function LeadsPage() {
             </CardContent>
           </Card>
 
-          {/* Leads List */}
           {loading ? (
             <div className="flex items-center justify-center py-20">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
