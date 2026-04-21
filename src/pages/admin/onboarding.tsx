@@ -137,7 +137,7 @@ export default function OnboardingPage() {
         description: "Bienvenido a tu panel de control"
       });
 
-      router.push("/admin/main-dashboard");
+      router.push("/admin/welcome");
     } catch (err: any) {
       console.error("Error setting username:", err);
       toast({
@@ -157,8 +157,8 @@ export default function OnboardingPage() {
   };
 
   const previewUrl = username.length >= 3 
-    ? `traveladvantage.com/ambassador/${username.toLowerCase()}`
-    : "traveladvantage.com/ambassador/tu-username";
+    ? `mwr.hubia.vip/ambassador/${username.toLowerCase()}`
+    : "mwr.hubia.vip/ambassador/tu-username";
 
   return (
     <>
