@@ -16,6 +16,7 @@ export default function MWRRegistroPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { ref } = router.query;
   
   const [formData, setFormData] = useState({
     nombre: "",
@@ -41,23 +42,31 @@ export default function MWRRegistroPage() {
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await mwrLeadsService.createLead({
+      const leadPayload = {
         nombre: `${formData.nombre} ${formData.apellido}`.trim(),
         email: formData.email,
         whatsapp: formData.whatsapp,
         nivel_mwr: formData.nivel_mwr,
-        estado: "nuevo",
-      });
+        estado: "nuevo" as const,
+        referrer_username: (ref && typeof ref === 'string') ? ref : null,
+      };
+
+      console.log("Creating MWR lead with data:", leadPayload);
+
+      const { data, error } = await mwrLeadsService.createLead(leadPayload);
 
       if (error) {
         console.error("Error creating MWR lead:", error);
+        console.error("Error details:", JSON.stringify(error, null, 2));
         toast({
           title: "Error",
-          description: "Hubo un problema al enviar tu información. Por favor intenta de nuevo.",
+          description: error.message || "Hubo un problema al enviar tu información. Por favor intenta de nuevo.",
           variant: "destructive",
         });
         return;
       }
+
+      console.log("MWR lead created successfully:", data);
 
       toast({
         title: "¡Registro exitoso!",
