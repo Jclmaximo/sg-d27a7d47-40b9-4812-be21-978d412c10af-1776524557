@@ -63,7 +63,7 @@ export default function Home() {
             <div className="flex flex-wrap items-center justify-center gap-4 mb-12">
               <Button 
                 size="lg"
-                onClick={() => router.push("/registro")}
+                onClick={() => router.push("/mwr/vsl")}
                 className="h-14 px-8 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-xl shadow-primary/20 border border-primary/50"
               >
                 Empezar Ahora - $29 USD
@@ -301,7 +301,7 @@ export default function Home() {
                 
                 <Button 
                   size="lg"
-                  onClick={() => router.push("/registro")}
+                  onClick={() => router.push("/mwr/vsl")}
                   className="h-14 w-full md:w-auto px-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white shadow-xl shadow-primary/20"
                 >
                   Registrarme Ahora
