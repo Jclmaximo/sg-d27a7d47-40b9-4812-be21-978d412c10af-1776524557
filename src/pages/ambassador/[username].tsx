@@ -4,6 +4,7 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Plane, 
@@ -17,7 +18,8 @@ import {
   Star,
   MapPin,
   CheckCircle2,
-  ArrowRight
+  ArrowRight,
+  Play
 } from "lucide-react";
 
 export default function AmbassadorPage() {
@@ -25,6 +27,7 @@ export default function AmbassadorPage() {
   const { username } = router.query;
   const [ambassadorName, setAmbassadorName] = useState<string>("");
   const [loading, setLoading] = useState(true);
+  const [showVideoModal, setShowVideoModal] = useState(false);
 
   useEffect(() => {
     const loadAmbassador = async () => {
@@ -64,6 +67,41 @@ export default function AmbassadorPage() {
         title="Viaja Ligero - Club Exclusivo de Viajes"
         description="Accede a tarifas exclusivas en hoteles, vuelos, cruceros y experiencias de lujo en más de 180 países"
       />
+
+      {/* Video Modal */}
+      <Dialog open={showVideoModal} onOpenChange={setShowVideoModal}>
+        <DialogContent className="max-w-4xl w-full p-0">
+          <DialogHeader className="p-6 pb-4">
+            <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Descubre Cómo Funciona Viaja Ligero
+            </DialogTitle>
+          </DialogHeader>
+          <div className="relative w-full aspect-video bg-black">
+            <video
+              className="w-full h-full"
+              controls
+              autoPlay
+              src="/v2_36e909d4-63ca-4d40-a583-13d8d68e0f1d.mp4"
+            >
+              Tu navegador no soporta la reproducción de video.
+            </video>
+          </div>
+          <div className="p-6 pt-4">
+            <Button 
+              size="lg" 
+              onClick={() => {
+                setShowVideoModal(false);
+                router.push(`/registro?ref=${username}`);
+              }}
+              className="w-full bg-gradient-to-r from-primary to-accent hover:opacity-90 text-white"
+            >
+              Registrarme Ahora
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <div className="min-h-screen bg-background relative overflow-hidden">
         {/* Background Orbs */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
@@ -120,19 +158,20 @@ export default function AmbassadorPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
-                onClick={() => router.push(`/registro?ref=${username}`)}
+                onClick={() => setShowVideoModal(true)}
                 className="bg-gradient-to-r from-primary to-accent hover:opacity-90 text-white shadow-lg shadow-primary/30 text-base px-8"
               >
-                Empezar Ahora
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <Play className="w-5 h-5 mr-2" />
+                Ver Cómo Funciona
               </Button>
               <Button 
                 size="lg" 
                 variant="outline"
-                onClick={() => router.push("/pricing")}
+                onClick={() => router.push(`/registro?ref=${username}`)}
                 className="border-primary/30 hover:bg-primary/10 text-base px-8"
               >
-                Ver Planes
+                Registrarme Ahora
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </div>
 
