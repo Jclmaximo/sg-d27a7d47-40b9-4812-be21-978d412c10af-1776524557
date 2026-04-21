@@ -66,6 +66,7 @@ export default function AmbassadorPage() {
       <SEO 
         title="Viaja Ligero - Club Exclusivo de Viajes"
         description="Accede a tarifas exclusivas en hoteles, vuelos, cruceros y experiencias de lujo en más de 180 países"
+        image="/ChatGPT_Image_21_abr_2026_03_33_28_p.m.png"
       />
 
       {/* Video Modal */}
