@@ -260,7 +260,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -840,31 +840,31 @@ Puedo resolver dudas sobre:
                                       </SelectValue>
                                     </SelectTrigger>
                                     <SelectContent>
-                                      <SelectItem value="new">
+                                      <SelectItem value="nuevo">
                                         <span className="flex items-center gap-2">
                                           <Clock className="w-3 h-3" />
                                           Nuevo
                                         </span>
                                       </SelectItem>
-                                      <SelectItem value="contacted">
+                                      <SelectItem value="contactado">
                                         <span className="flex items-center gap-2">
                                           <MessageSquare className="w-3 h-3" />
                                           Contactado
                                         </span>
                                       </SelectItem>
-                                      <SelectItem value="interested">
+                                      <SelectItem value="interesado">
                                         <span className="flex items-center gap-2">
                                           <TrendingUp className="w-3 h-3" />
                                           Interesado
                                         </span>
                                       </SelectItem>
-                                      <SelectItem value="converted">
+                                      <SelectItem value="convertido">
                                         <span className="flex items-center gap-2">
                                           <CheckCircle2 className="w-3 h-3" />
                                           Convertido
                                         </span>
                                       </SelectItem>
-                                      <SelectItem value="discarded">
+                                      <SelectItem value="descartado">
                                         <span className="flex items-center gap-2">
                                           <Hand className="w-3 h-3" />
                                           Descartado
