@@ -208,21 +208,7 @@ export default function LeadsRegistroPage() {
                   </CardContent>
                 </Card>
 
-                {/* Trust Indicators */}
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center p-4 rounded-lg bg-primary/5 border border-primary/10">
-                    <CheckCircle2 className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <p className="text-sm font-semibold">Pago Seguro</p>
-                  </div>
-                  <div className="text-center p-4 rounded-lg bg-accent/5 border border-accent/10">
-                    <CheckCircle2 className="w-8 h-8 text-accent mx-auto mb-2" />
-                    <p className="text-sm font-semibold">Acceso Inmediato</p>
-                  </div>
-                  <div className="text-center p-4 rounded-lg bg-primary/5 border border-primary/10">
-                    <CheckCircle2 className="w-8 h-8 text-primary mx-auto mb-2" />
-                    <p className="text-sm font-semibold">Soporte 24/7</p>
-                  </div>
-                </div>
+                {/* Removed Trust Indicators section - not needed for info capture funnel */}
               </div>
 
               {/* Right Column - Form */}
