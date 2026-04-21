@@ -260,7 +260,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Of Oferta válida: Últimos días
+⏰ Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -798,9 +798,6 @@ Puedo resolver dudas sobre:
                                   <h3 className="text-lg font-bold text-foreground mb-1 truncate">
                                     {lead.name}
                                   </h3>
-                                  <Badge className={getStatusBadgeColor(lead.status)}>
-                                    {getStatusText(lead.status)}
-                                  </Badge>
                                 </div>
                                 <Button
                                   size="sm"
@@ -830,28 +827,51 @@ Puedo resolver dudas sobre:
                                   <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
                                   <span className="text-foreground">{formatDate(lead.created_at)}</span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => {
-                                      setSelectedLead(lead);
-                                      setShowNoteDialog(true);
-                                    }}
-                                    className="flex-1 bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
+                                <div className="bg-background/50 rounded-lg px-3 py-2">
+                                  <Select
+                                    value={lead.status}
+                                    onValueChange={(value) => updateLeadStatus(lead.id, value)}
                                   >
-                                    <Plus className="w-4 h-4 mr-2" />
-                                    Nota
-                                  </Button>
-                                  <Button
-                                    size="sm"
-                                    variant="outline"
-                                    onClick={() => loadLeadNotes(lead)}
-                                    className="flex-1 bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
-                                  >
-                                    <Eye className="w-4 h-4 mr-2" />
-                                    Ver
-                                  </Button>
+                                    <SelectTrigger className="h-8 border-primary/20 bg-background/80">
+                                      <SelectValue>
+                                        <Badge className={getStatusBadgeColor(lead.status)}>
+                                          {getStatusText(lead.status)}
+                                        </Badge>
+                                      </SelectValue>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="new">
+                                        <span className="flex items-center gap-2">
+                                          <Clock className="w-3 h-3" />
+                                          Nuevo
+                                        </span>
+                                      </SelectItem>
+                                      <SelectItem value="contacted">
+                                        <span className="flex items-center gap-2">
+                                          <MessageSquare className="w-3 h-3" />
+                                          Contactado
+                                        </span>
+                                      </SelectItem>
+                                      <SelectItem value="interested">
+                                        <span className="flex items-center gap-2">
+                                          <TrendingUp className="w-3 h-3" />
+                                          Interesado
+                                        </span>
+                                      </SelectItem>
+                                      <SelectItem value="converted">
+                                        <span className="flex items-center gap-2">
+                                          <CheckCircle2 className="w-3 h-3" />
+                                          Convertido
+                                        </span>
+                                      </SelectItem>
+                                      <SelectItem value="discarded">
+                                        <span className="flex items-center gap-2">
+                                          <Hand className="w-3 h-3" />
+                                          Descartado
+                                        </span>
+                                      </SelectItem>
+                                    </SelectContent>
+                                  </Select>
                                 </div>
                               </div>
                             </div>
