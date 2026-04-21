@@ -260,7 +260,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Of Oferta válida: Últimos días
+⏰ Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -756,14 +756,16 @@ Puedo resolver dudas sobre:
                           />
                         </div>
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
-                          <SelectTrigger className="w-full md:w-[180px] bg-background/60 border-primary/20">
-                            <SelectValue placeholder="Filtrar por estado" />
+                          <SelectTrigger className="w-full sm:w-[180px] bg-background/60 border-primary/30 hover:border-primary/50">
+                            <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="all">Todos</SelectItem>
-                            <SelectItem value="new">Nuevos</SelectItem>
-                            <SelectItem value="contacted">Contactados</SelectItem>
-                            <SelectItem value="converted">Convertidos</SelectItem>
+                            <SelectItem value="nuevo">Nuevos</SelectItem>
+                            <SelectItem value="contactado">Contactados</SelectItem>
+                            <SelectItem value="interesado">Interesados</SelectItem>
+                            <SelectItem value="convertido">Convertidos</SelectItem>
+                            <SelectItem value="descartado">Descartados</SelectItem>
                           </SelectContent>
                         </Select>
                         <Button 
