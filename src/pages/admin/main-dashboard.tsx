@@ -260,7 +260,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -804,7 +804,10 @@ Puedo resolver dudas sobre:
                                 </div>
                                 <Button
                                   size="sm"
-                                  onClick={() => window.open(`https://wa.me/${lead.phone.replace(/\D/g, "")}`, "_blank")}
+                                  onClick={() => {
+                                    setSelectedLead(lead);
+                                    setShowMessageDialog(true);
+                                  }}
                                   className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20 shrink-0"
                                 >
                                   <MessageSquare className="w-4 h-4 mr-2" />
