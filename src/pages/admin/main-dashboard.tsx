@@ -706,7 +706,7 @@ Puedo resolver dudas sobre:
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-bold text-foreground">
-                        {allLeads.filter(l => l.status === "new").length}
+                        {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
                       </div>
                     </CardContent>
                   </Card>
@@ -718,7 +718,7 @@ Puedo resolver dudas sobre:
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-bold text-foreground">
-                        {allLeads.filter(l => l.status === "contacted").length}
+                        {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
                       </div>
                     </CardContent>
                   </Card>
@@ -730,7 +730,7 @@ Puedo resolver dudas sobre:
                     </CardHeader>
                     <CardContent>
                       <div className="text-4xl font-bold text-foreground">
-                        {allLeads.filter(l => l.status === "converted").length}
+                        {allLeads.filter(l => l.status === "convertido" || l.status === "converted").length}
                       </div>
                     </CardContent>
                   </Card>

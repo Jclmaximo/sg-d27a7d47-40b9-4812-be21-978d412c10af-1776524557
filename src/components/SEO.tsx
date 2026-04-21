@@ -11,9 +11,9 @@ interface SEOProps {
 export function SEOElements({
   title = "Viaja Ligero - Descuentos Exclusivos en Viajes",
   description = "Accede a tarifas preferenciales en hoteles, vuelos y experiencias únicas. Únete al club de viajeros inteligentes.",
-  image = "/og-image.png",
+  image = "/ChatGPT_Image_21_abr_2026_03_33_28_p.m.png",
   url,
- SEOProps) {
+}: SEOProps) {
   return (
     <>
       <title>{title}</title>
