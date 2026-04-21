@@ -11,32 +11,44 @@ import type { NextRequest } from "next/server";
  */
 export function middleware(request: NextRequest) {
   const hostname = request.headers.get("host") || "";
+  const path = request.nextUrl.pathname;
+  const search = request.nextUrl.search;
+  
+  // DEBUG: Log SIEMPRE para ver qué está llegando
+  console.log("=== MIDDLEWARE DEBUG ===");
+  console.log("Hostname:", hostname);
+  console.log("Path:", path);
+  console.log("Search:", search);
+  console.log("Full URL:", request.url);
   
   // Dominio objetivo
   const targetDomain = "mwr.hubia.vip";
   
   // Si ya estamos en el dominio correcto, no hacer nada
-  if (hostname.includes(targetDomain)) {
+  if (hostname === targetDomain || hostname.startsWith(targetDomain)) {
+    console.log("✅ Already on target domain, no redirect needed");
     return NextResponse.next();
   }
   
-  // Lista de dominios temporales de Vercel que deben redirigir
-  const shouldRedirect = 
-    hostname.includes("viaja-ligero") && 
-    hostname.includes("vercel.app");
+  // Detectar si es una URL de Vercel que necesita redirect
+  const isVercelURL = hostname.includes("vercel.app");
   
-  // Si viene de un dominio temporal de Vercel, redirigir al dominio principal
-  if (shouldRedirect) {
+  console.log("Is Vercel URL?", isVercelURL);
+  
+  // Si viene de cualquier URL de Vercel, redirigir al dominio principal
+  if (isVercelURL) {
     const url = request.nextUrl.clone();
     url.host = targetDomain;
     url.protocol = "https:";
     
-    console.log(`[Middleware] Redirecting from ${hostname} to ${targetDomain}`);
+    const redirectTo = url.toString();
+    console.log("🔀 REDIRECTING TO:", redirectTo);
     
-    // Mantener toda la URL (path, query params, hash)
-    return NextResponse.redirect(url, 308); // 308 = Permanent Redirect (mantiene método POST)
+    // 308 = Permanent Redirect (mantiene método POST)
+    return NextResponse.redirect(url, 308);
   }
 
+  console.log("⚠️ No redirect conditions met, continuing...");
   return NextResponse.next();
 }
 
