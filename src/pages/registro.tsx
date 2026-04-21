@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,9 +17,10 @@ import {
   Loader2, 
   Shield,
   Sparkles,
-  Globe,
-  DollarSign,
-  Plane
+  Bot,
+  BarChart3,
+  Users,
+  Zap
 } from "lucide-react";
 
 export default function RegistroPage() {
@@ -36,13 +36,10 @@ export default function RegistroPage() {
     password: "",
     telefono: "",
     pais: "",
-    interes: "",
-    metodo_contacto: "whatsapp",
     acepta_terminos: false,
   });
 
   useEffect(() => {
-    // Capture referral code from URL
     const { ref } = router.query;
     if (ref && typeof ref === 'string') {
       setReferralCode(ref);
@@ -73,7 +70,6 @@ export default function RegistroPage() {
     setIsSubmitting(true);
 
     try {
-      // 1. Create auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
@@ -92,13 +88,11 @@ export default function RegistroPage() {
         throw new Error("No se pudo crear el usuario");
       }
 
-      // 2. Process referral if exists
       if (referralCode) {
         try {
           await referralService.processReferral(authData.user.id, referralCode);
         } catch (refError) {
           console.error("Error processing referral:", refError);
-          // Don't block registration if referral fails
         }
       }
 
@@ -107,7 +101,6 @@ export default function RegistroPage() {
         description: "Redirigiendo al pago seguro...",
       });
 
-      // Redirect to checkout page
       router.push("/checkout");
     } catch (err: any) {
       console.error("Unexpected error:", err);
@@ -121,77 +114,119 @@ export default function RegistroPage() {
     }
   };
 
+  const benefits = [
+    {
+      icon: Bot,
+      title: "IA Potenciada",
+      description: "Seguimiento automatizado de leads con mensajes personalizados"
+    },
+    {
+      icon: BarChart3,
+      title: "Dashboard Completo",
+      description: "Panel de control profesional con todas tus métricas"
+    },
+    {
+      icon: Zap,
+      title: "Funnel Automático",
+      description: "Sistema de ventas que trabaja por ti 24/7"
+    },
+    {
+      icon: Users,
+      title: "Red MLM",
+      description: "Gestión completa de tu red y comisiones"
+    }
+  ];
+
   return (
     <>
-      <SEO
-        title="Registro - Viaja Ligero"
-        description="Únete al club exclusivo de viajes y accede a tarifas preferenciales"
+      <SEO 
+        title="Registrarse - Sistema MLM Automatizado"
+        description="Crea tu cuenta y accede al sistema MLM más completo del mercado"
       />
+      
+      <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-background relative overflow-hidden">
+        {/* Background Orbs */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
 
-      <div className="min-h-screen bg-background text-foreground">
-        {/* Floating Orbs Background */}
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/20 rounded-full blur-3xl animate-float-delayed" />
-        </div>
+        <div className="relative z-10 min-h-screen flex items-center justify-center p-4 py-12">
+          <div className="max-w-6xl w-full grid lg:grid-cols-2 gap-8 items-start">
+            
+            {/* Left Column - Benefits */}
+            <div className="lg:sticky lg:top-8 space-y-6">
+              <div className="space-y-4">
+                <Badge className="bg-primary/10 text-primary border-primary/20 hover:bg-primary/20">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Sistema MLM Profesional
+                </Badge>
+                
+                <h1 className="text-4xl md:text-5xl font-bold">
+                  <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">
+                    Comienza a Construir
+                  </span>
+                  <br />
+                  <span className="text-foreground">
+                    Tu Negocio Digital
+                  </span>
+                </h1>
+                
+                <p className="text-lg text-muted-foreground">
+                  Obtén acceso completo al sistema MLM más avanzado del mercado. Dashboard profesional, IA integrada, funnel automatizado y gestión de red.
+                </p>
+              </div>
 
-        <div className="relative py-20 px-4">
-          <div className="max-w-2xl mx-auto">
-            {/* Header */}
-            <div className="text-center mb-12">
-              <Badge variant="secondary" className="mb-6 px-4 py-2 bg-card/50 backdrop-blur-sm border-border/50">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Registro Exclusivo
-              </Badge>
-              
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-heading bg-clip-text text-transparent">
-                Únete al Club
-              </h1>
-              
-              <p className="text-xl text-muted-foreground">
-                Accede a tarifas exclusivas y experiencias de viaje premium
-              </p>
+              {/* Benefits Grid */}
+              <div className="grid sm:grid-cols-2 gap-4">
+                {benefits.map((benefit, index) => (
+                  <Card key={index} className="bg-background/50 backdrop-blur-sm border-border/50 hover:border-primary/50 transition-all">
+                    <CardContent className="p-4 space-y-2">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                        <benefit.icon className="w-5 h-5 text-primary" />
+                      </div>
+                      <h3 className="font-semibold">{benefit.title}</h3>
+                      <p className="text-sm text-muted-foreground">{benefit.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="flex flex-wrap gap-4 pt-4">
+                <div className="flex items-center gap-2 text-sm">
+                  <Shield className="w-4 h-4 text-green-500" />
+                  <span className="text-muted-foreground">Pago seguro con crypto</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span className="text-muted-foreground">Acceso instantáneo</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm">
+                  <Check className="w-4 h-4 text-green-500" />
+                  <span className="text-muted-foreground">Soporte 24/7</span>
+                </div>
+              </div>
             </div>
 
-            {/* Benefits Quick View */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border/50 mb-8">
-              <CardContent className="p-6">
-                <div className="grid md:grid-cols-3 gap-4 text-center">
-                  <div>
-                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-2">
-                      <Plane className="w-6 h-6 text-primary" />
-                    </div>
-                    <div className="text-sm font-semibold">Descuentos hasta 70%</div>
-                  </div>
-                  <div>
-                    <div className="w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center mx-auto mb-2">
-                      <DollarSign className="w-6 h-6 text-secondary" />
-                    </div>
-                    <div className="text-sm font-semibold">Genera Ingresos</div>
-                  </div>
-                  <div>
-                    <div className="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mx-auto mb-2">
-                      <Globe className="w-6 h-6 text-accent" />
-                    </div>
-                    <div className="text-sm font-semibold">Experiencias Exclusivas</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Registration Form */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border/50 shadow-2xl shadow-primary/10">
-              <CardHeader>
-                <CardTitle>Información de Contacto</CardTitle>
+            {/* Right Column - Registration Form */}
+            <Card className="bg-background/80 backdrop-blur-sm border-border/50 shadow-2xl">
+              <CardHeader className="space-y-1 pb-4">
+                <CardTitle className="text-2xl">Crear Cuenta</CardTitle>
                 <CardDescription>
-                  Completa el formulario para comenzar tu experiencia exclusiva
+                  Completa tus datos para acceder al sistema completo
                 </CardDescription>
+                {referralCode && (
+                  <Badge variant="secondary" className="w-fit">
+                    <Users className="w-3 h-3 mr-1" />
+                    Referido por: {referralCode}
+                  </Badge>
+                )}
               </CardHeader>
               
               <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  
                   {/* Name Fields */}
-                  <div className="grid md:grid-cols-2 gap-4">
+                  <div className="grid sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="nombre">Nombre</Label>
                       <Input
@@ -251,7 +286,7 @@ export default function RegistroPage() {
                     <Input
                       id="telefono"
                       type="tel"
-                      placeholder="+1 234 567 8900"
+                      placeholder="+52 1 234 567 8900"
                       value={formData.telefono}
                       onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
                       required
@@ -266,119 +301,78 @@ export default function RegistroPage() {
                         <SelectValue placeholder="Selecciona tu país" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="mexico">México</SelectItem>
-                        <SelectItem value="colombia">Colombia</SelectItem>
-                        <SelectItem value="españa">España</SelectItem>
-                        <SelectItem value="argentina">Argentina</SelectItem>
-                        <SelectItem value="chile">Chile</SelectItem>
-                        <SelectItem value="peru">Perú</SelectItem>
-                        <SelectItem value="venezuela">Venezuela</SelectItem>
-                        <SelectItem value="ecuador">Ecuador</SelectItem>
-                        <SelectItem value="otro">Otro</SelectItem>
+                        <SelectItem value="MX">México</SelectItem>
+                        <SelectItem value="CO">Colombia</SelectItem>
+                        <SelectItem value="AR">Argentina</SelectItem>
+                        <SelectItem value="CL">Chile</SelectItem>
+                        <SelectItem value="PE">Perú</SelectItem>
+                        <SelectItem value="ES">España</SelectItem>
+                        <SelectItem value="US">Estados Unidos</SelectItem>
+                        <SelectItem value="otros">Otro</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
-                  {/* Interest Selection */}
-                  <div className="space-y-4">
-                    <Label>¿Qué te interesa más?</Label>
-                    <RadioGroup value={formData.interes} onValueChange={(value) => setFormData({ ...formData, interes: value })}>
-                      <div className="flex items-start space-x-3 p-4 rounded-lg border border-border/50 bg-background/30 hover:bg-background/50 transition-colors">
-                        <RadioGroupItem value="ahorrar" id="ahorrar" />
-                        <Label htmlFor="ahorrar" className="cursor-pointer flex-1">
-                          <div className="font-semibold">Solo ahorrar en viajes</div>
-                          <div className="text-sm text-muted-foreground">Accede a tarifas exclusivas y descuentos</div>
-                        </Label>
-                      </div>
-                      
-                      <div className="flex items-start space-x-3 p-4 rounded-lg border border-border/50 bg-background/30 hover:bg-background/50 transition-colors">
-                        <RadioGroupItem value="ganar" id="ganar" />
-                        <Label htmlFor="ganar" className="cursor-pointer flex-1">
-                          <div className="font-semibold">Generar ingresos</div>
-                          <div className="text-sm text-muted-foreground">Conviértete en Lifestyle Ambassador</div>
-                        </Label>
-                      </div>
-                      
-                      <div className="flex items-start space-x-3 p-4 rounded-lg border border-accent/50 bg-accent/5 hover:bg-accent/10 transition-colors">
-                        <RadioGroupItem value="ambas" id="ambas" />
-                        <Label htmlFor="ambas" className="cursor-pointer flex-1">
-                          <div className="font-semibold flex items-center gap-2">
-                            Ambas opciones
-                            <Badge variant="secondary" className="bg-accent/20 text-accent border-accent/30">Recomendado</Badge>
-                          </div>
-                          <div className="text-sm text-muted-foreground">Ahorra y genera ingresos simultáneamente</div>
-                        </Label>
-                      </div>
-                    </RadioGroup>
-                  </div>
-
-                  {/* Contact Method */}
-                  <div className="space-y-2">
-                    <Label htmlFor="metodo_contacto">¿Cómo prefieres que te contactemos?</Label>
-                    <Select value={formData.metodo_contacto} onValueChange={(value) => setFormData({ ...formData, metodo_contacto: value })}>
-                      <SelectTrigger className="bg-background/50 border-border/50">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="whatsapp">WhatsApp</SelectItem>
-                        <SelectItem value="email">Email</SelectItem>
-                        <SelectItem value="telefono">Llamada telefónica</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  {/* Terms and Conditions */}
-                  <div className="flex items-start space-x-3">
+                  {/* Terms Checkbox */}
+                  <div className="flex items-start space-x-2">
                     <Checkbox
-                      id="terminos"
+                      id="terms"
                       checked={formData.acepta_terminos}
-                      onCheckedChange={(checked) => setFormData({ ...formData, acepta_terminos: checked as boolean })}
+                      onCheckedChange={(checked) => 
+                        setFormData({ ...formData, acepta_terminos: checked as boolean })
+                      }
                     />
-                    <Label htmlFor="terminos" className="text-sm cursor-pointer leading-relaxed">
-                      Acepto los términos y condiciones, y autorizo el uso de mis datos para contacto según la política de privacidad
+                    <Label htmlFor="terms" className="text-sm leading-tight cursor-pointer">
+                      Acepto los términos y condiciones, y autorizo el uso de mis datos para el servicio del sistema MLM
                     </Label>
                   </div>
 
                   {/* Submit Button */}
                   <Button 
                     type="submit" 
-                    size="lg"
+                    className="w-full bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white font-semibold h-12"
                     disabled={isSubmitting}
-                    className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground shadow-xl shadow-primary/20 border border-primary/50"
                   >
                     {isSubmitting ? (
                       <>
                         <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Enviando...
+                        Creando cuenta...
                       </>
                     ) : (
                       <>
-                        Continuar
+                        Crear Cuenta y Continuar
                         <ArrowRight className="ml-2 h-5 w-5" />
                       </>
                     )}
                   </Button>
 
-                  {/* Trust Badge */}
-                  <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                    <Shield className="w-4 h-4 text-secondary" />
-                    <span>Información protegida y segura</span>
-                  </div>
+                  <p className="text-xs text-center text-muted-foreground">
+                    Al registrarte, serás redirigido al pago seguro de $29 USD para activar tu acceso completo
+                  </p>
                 </form>
               </CardContent>
             </Card>
-
-            {/* Legal Info */}
-            <div className="mt-8 text-center">
-              <p className="text-xs text-muted-foreground mb-2">
-                Licencias de operación: Florida ST-37449, Iowa 951, California 2106836-40
-              </p>
-              <p className="text-xs text-muted-foreground">
-                Oficinas corporativas: Hong Kong • Florida, USA • París, Francia • Dubái, UAE
-              </p>
-            </div>
           </div>
         </div>
+
+        {/* Footer */}
+        <footer className="relative z-10 border-t border-border/30 bg-background/50 backdrop-blur-sm mt-12">
+          <div className="max-w-7xl mx-auto px-4 py-8">
+            <div className="grid md:grid-cols-3 gap-6 text-sm text-muted-foreground">
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">Ubicaciones Corporativas</h4>
+                <p>Hong Kong • Florida, USA • París, Francia • Dubái, UAE</p>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">Licencias Oficiales</h4>
+                <p>Florida ST-37449 | Iowa 951 | California 2106836-40</p>
+              </div>
+              <div className="md:text-right">
+                <p>© 2026 Viaja Ligero. Todos los derechos reservados.</p>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </>
   );
