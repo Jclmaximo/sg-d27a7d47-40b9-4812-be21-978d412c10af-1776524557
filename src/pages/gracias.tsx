@@ -11,15 +11,20 @@ import {
 
 export default function GraciasPage() {
   const router = useRouter();
+  const { ref } = router.query;
 
   useEffect(() => {
-    // Auto redirect after 10 seconds
+    // Auto redirect after 7 seconds to ambassador page or home
     const timer = setTimeout(() => {
-      router.push("/");
-    }, 10000);
+      if (ref && typeof ref === "string") {
+        router.push(`/ambassador/${ref}`);
+      } else {
+        router.push("/");
+      }
+    }, 7000);
 
     return () => clearTimeout(timer);
-  }, [router]);
+  }, [router, ref]);
 
   return (
     <>
@@ -79,7 +84,13 @@ export default function GraciasPage() {
 
             <div className="mt-8 pt-8 border-t border-border">
               <Button
-                onClick={() => router.push("/")}
+                onClick={() => {
+                  if (ref && typeof ref === "string") {
+                    router.push(`/ambassador/${ref}`);
+                  } else {
+                    router.push("/");
+                  }
+                }}
                 variant="outline"
                 className="border-primary/30 hover:bg-primary/10"
               >

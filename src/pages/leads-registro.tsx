@@ -102,9 +102,9 @@ export default function LeadsRegistroPage() {
         description: "Nos pondremos en contacto contigo pronto para completar tu membresía.",
       });
 
-      // Redirect to thank you page or show success
+      // Redirect to thank you page with referral username
       setTimeout(() => {
-        router.push("/gracias");
+        router.push(`/gracias?ref=${referralUsername || 'default'}`);
       }, 2000);
 
     } catch (err: any) {
