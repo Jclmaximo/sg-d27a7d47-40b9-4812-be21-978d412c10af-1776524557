@@ -20,7 +20,8 @@ import {
   Share2,
   TrendingUp,
   ArrowLeft,
-  CheckCircle2
+  CheckCircle2,
+  Globe
 } from "lucide-react";
 import Link from "next/link";
 
@@ -629,7 +630,7 @@ export default function RecursosPage() {
                   <CardHeader>
                     <CardTitle>Tu Link de Referido Principal</CardTitle>
                     <CardDescription>
-                      Comparte este link para que otros se unan al embudo. Ganas 10% de comisión: $2.90 del primer pago + $0.90 mensual
+                      Comparte este link para promocionar membresías de viaje con descuentos exclusivos. Ayuda a tus contactos a viajar más pagando menos.
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -650,15 +651,13 @@ export default function RecursosPage() {
                       <p className="text-sm font-medium mb-2">Vista previa del link:</p>
                       <div className="bg-background p-4 rounded border">
                         <div className="flex gap-3">
-                          <img 
-                            src="/viaja-ligero-logo.png" 
-                            alt="Preview"
-                            className="w-16 h-16 object-cover rounded"
-                          />
+                          <div className="w-16 h-16 bg-primary/10 rounded flex items-center justify-center">
+                            <Globe className="w-8 h-8 text-primary" />
+                          </div>
                           <div>
-                            <h4 className="font-semibold">Viaja Ligero - Embudo MWR</h4>
+                            <h4 className="font-semibold">Viaja Ligero - Membresías Exclusivas</h4>
                             <p className="text-sm text-muted-foreground">
-                              Accede a descuentos exclusivos en viajes y gana comisiones por referir
+                              Accede a descuentos exclusivos en viajes y experiencias de lujo
                             </p>
                           </div>
                         </div>
