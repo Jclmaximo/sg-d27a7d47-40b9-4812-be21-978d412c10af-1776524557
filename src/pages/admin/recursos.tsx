@@ -404,10 +404,10 @@ export default function RecursosPage() {
 
           {/* Stats Cards */}
           <div className="grid gap-6 md:grid-cols-3 mb-8">
-            <Card>
+            <Card className="border-blue-500/30 bg-card/50 shadow-lg shadow-blue-500/10">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Recursos Descargados</CardTitle>
-                <Download className="h-4 w-4 text-muted-foreground" />
+                <Download className="h-4 w-4 text-blue-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.downloadedThisMonth}</div>
@@ -415,10 +415,10 @@ export default function RecursosPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-cyan-500/30 bg-card/50 shadow-lg shadow-cyan-500/10">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Copys Copiados</CardTitle>
-                <Copy className="h-4 w-4 text-muted-foreground" />
+                <Copy className="h-4 w-4 text-cyan-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.copiedThisMonth}</div>
@@ -426,10 +426,10 @@ export default function RecursosPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-green-500/30 bg-card/50 shadow-lg shadow-green-500/10">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Conversiones Generadas</CardTitle>
-                <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                <TrendingUp className="h-4 w-4 text-green-500" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats.conversionsThisMonth}</div>
