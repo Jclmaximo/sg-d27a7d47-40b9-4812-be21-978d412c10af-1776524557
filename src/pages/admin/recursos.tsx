@@ -743,7 +743,7 @@ export default function RecursosPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-primary/50 bg-primary/5">
+                <Card className="border-primary/50 bg-primary/5 shadow-lg shadow-primary/10">
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <CheckCircle2 className="w-5 h-5 text-primary" />
