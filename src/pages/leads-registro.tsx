@@ -196,23 +196,35 @@ export default function LeadsRegistroPage() {
           
           {/* STEP 0: HERO */}
           {step === 0 && (
-            <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-500">
-              <div className="space-y-4">
-                <h1 className="text-[40px] leading-[1.2] font-bold">
-                  Descubre cómo viajar más… incluso GRATIS
-                </h1>
-                
-                <p className="text-lg text-white/70">
-                  Accede a un sistema probado para viajar más pagando menos
-                </p>
-              </div>
+            <div className="w-full h-full relative">
+              {/* Background Image */}
+              <div 
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: 'url(/tropical-paradise.jpg)' }}
+              />
               
-              <button
-                onClick={() => setStep(1)}
-                className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97]"
-              >
-                QUIERO SABER CÓMO
-              </button>
+              {/* Gradient Overlay - transparent top to dark bottom */}
+              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80" />
+              
+              {/* Content - positioned at bottom, left-aligned */}
+              <div className="absolute inset-x-0 bottom-0 px-6 pb-12 space-y-6 text-white animate-in fade-in duration-500">
+                <div className="space-y-4 text-left">
+                  <h1 className="text-[40px] leading-[1.2] font-bold">
+                    Descubre cómo viajar más… incluso GRATIS
+                  </h1>
+                  
+                  <p className="text-lg text-white/90">
+                    Accede a un sistema probado para viajar más pagando menos
+                  </p>
+                </div>
+                
+                <button
+                  onClick={() => setStep(1)}
+                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                >
+                  QUIERO SABER CÓMO
+                </button>
+              </div>
             </div>
           )}
 
