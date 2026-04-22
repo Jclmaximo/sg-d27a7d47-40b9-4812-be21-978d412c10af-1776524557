@@ -227,6 +227,100 @@ Es súper interesante porque además de ahorrar en viajes, puedes ganar comision
 Yo ya empecé y es genial. ¿Tienes alguna pregunta?`
   },
   {
+    id: "copy-9",
+    title: "Email - Viajar Gratis",
+    description: "Email enfocado en créditos y viajar gratis",
+    category: "email",
+    type: "copy",
+    content: `ASUNTO: ¿Y si tu próximo viaje fuera gratis?
+
+Hola [NOMBRE],
+
+Te hago una pregunta:
+
+¿Cuántas veces has cancelado un viaje por el costo?
+
+Ahora imagina esto:
+• Viajar a donde quieras, cuando quieras
+• Sin preocuparte por el precio
+• Incluso viajar completamente gratis
+
+Suena irreal, ¿verdad?
+
+Pero es exactamente lo que están haciendo cientos de miembros de Viaja Ligero.
+
+El sistema es simple:
+→ Ahorras en cada viaje que haces
+→ Compartes tu experiencia con otros viajeros
+→ Ganas créditos que reducen el costo de tus próximos viajes a $0
+
+Algunos incluso han convertido esto en su estilo de vida.
+
+¿Quieres saber cómo funciona?
+
+👉 [TU LINK]
+
+Nos vemos en el próximo destino,
+[TU NOMBRE]
+
+PD: No es un programa de puntos tradicional. Es mucho mejor.`
+  },
+  {
+    id: "copy-10",
+    title: "WhatsApp - Viajar Gratis",
+    description: "Mensaje conversacional sobre viajar más",
+    category: "whatsapp",
+    type: "copy",
+    content: `Hola! 👋
+
+Te comparto algo que cambió mi forma de viajar:
+
+Encontré una manera de viajar más seguido... incluso gratis. 🌍✈️
+
+No es un truco ni nada raro. Es un club privado donde:
+→ Accedes a tarifas exclusivas en hoteles y vuelos
+→ Ahorras en cada viaje
+→ Ganas créditos compartiendo tu experiencia
+
+Los créditos pueden cubrir el costo completo de tus próximos viajes. Literal: viajar gratis.
+
+Yo ya lo probé y es real. Te paso el link:
+
+👉 [TU LINK]
+
+Avísame si tienes dudas. Es más simple de lo que suena 😊`
+  },
+  {
+    id: "copy-11",
+    title: "Facebook Ad - Viajar Gratis",
+    description: "Copy de ad optimizado para conversión",
+    category: "facebook",
+    type: "copy",
+    content: `✈️ ¿Cansado de pagar de más en tus viajes?
+
+Imagina esto:
+→ Viajar a destinos de ensueño
+→ Pagar menos de la mitad del precio normal
+→ Incluso viajar completamente GRATIS
+
+No es ficción. Es Viaja Ligero.
+
+Miembros ahorraron $2.8 millones en 2024.
+Algunos ya viajan gratis compartiendo su experiencia.
+
+¿Cómo?
+• Acceso a tarifas exclusivas (no disponibles al público)
+• Sistema de créditos por referidos
+• Viajes curados en destinos premium
+
+Tu próximo viaje podría costarte $0.
+
+👉 Descubre cómo funciona (gratis)
+[TU LINK]
+
+#ViajaLigero #ViajarGratis #AhorroEnViajes`
+  },
+  {
     id: "copy-7",
     title: "Email - Subject: Descubrimiento",
     description: "Asunto y cuerpo de email",
@@ -276,6 +370,78 @@ Ahorré $493 USD. 🤯
 
 Saludos,
 [TU NOMBRE]`
+  },
+  {
+    id: "copy-9",
+    title: "Post Instagram - Viaja Más",
+    description: "Promociona el viaje más barato",
+    category: "instagram",
+    type: "copy",
+    content: `✈️ ¿Y si pudieras viajar más seguido... incluso viajar gratis?
+
+Con Viaja Ligero puedes:
+✅ Ahorrar en cada viaje
+✅ Generar créditos para viajar gratis
+✅ Convertir tu pasión por viajar en un estilo de vida
+
+Comparte tus experiencias de viaje y gana créditos que te permiten:
+🌍 Reducir el costo de tus próximos viajes a cero
+✈️ Viajar más seguido sin límites
+🏖️ Vivir la vida que siempre soñaste
+
+Es tan simple como compartir lo que ya amas hacer.
+
+👉 Descubre cómo: [TU LINK]
+
+#ViajaLigero #ViajarGratis #VidaDeViajero`
+  },
+  {
+    id: "copy-10",
+    title: "Post Facebook - Viaja Más",
+    description: "Promociona el viaje más barato",
+    category: "facebook",
+    type: "copy",
+    content: `✈️ ¿Y si pudieras viajar más seguido... incluso viajar gratis?
+
+Con Viaja Ligero puedes:
+✅ Ahorrar en cada viaje
+✅ Generar créditos para viajar gratis
+✅ Convertir tu pasión por viajar en un estilo de vida
+
+Comparte tus experiencias de viaje y gana créditos que te permiten:
+🌍 Reducir el costo de tus próximos viajes a cero
+✈️ Viajar más seguido sin límites
+🏖️ Vivir la vida que siempre soñaste
+
+Es tan simple como compartir lo que ya amas hacer.
+
+👉 Descubre cómo: [TU LINK]
+
+#ViajaLigero #ViajarGratis #VidaDeViajero`
+  },
+  {
+    id: "copy-11",
+    title: "Mensaje WhatsApp - Viaja Más",
+    description: "Promociona el viaje más barato",
+    category: "whatsapp",
+    type: "copy",
+    content: `✈️ ¿Y si pudieras viajar más seguido... incluso viajar gratis?
+
+Con Viaja Ligero puedes:
+✅ Ahorrar en cada viaje
+✅ Generar créditos para viajar gratis
+✅ Convertir tu pasión por viajar en un estilo de vida
+
+Comparte tus experiencias de viaje y gana créditos que te permiten:
+🌍 Reducir el costo de tus próximos viajes a cero
+✈️ Viajar más seguido sin límites
+🏖️ Vivir la vida que siempre soñaste
+
+Es tan simple como compartir lo que ya amas hacer.
+
+👉 Descubre cómo: [TU LINK]
+
+#ViajaLigero #ViajarGratis #VidaDeViajero`
   }
 ];
 
