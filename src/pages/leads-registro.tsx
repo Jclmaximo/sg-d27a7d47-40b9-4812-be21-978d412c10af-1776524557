@@ -197,7 +197,7 @@ export default function LeadsRegistroPage() {
           {/* STEP 0: HERO */}
           {step === 0 && (
             <div className="w-full h-full relative">
-              {/* Background Image */}
+              {/* Background Image - Full Coverage */}
               <div 
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                 style={{ backgroundImage: 'url(/10_Coastal_Boho_Bathroom_Ideas_to_Make_a_Splash_in_Your_Florida_Home.jpeg)' }}
