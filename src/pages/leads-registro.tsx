@@ -178,14 +178,9 @@ export default function LeadsRegistroPage() {
         {/* Content */}
         <div className="relative z-10 w-full max-w-lg mx-auto px-4">
           
-          {/* Logo */}
-          <div className="absolute top-8 left-1/2 -translate-x-1/2 w-full max-w-lg px-4">
-            <img src="/viaja-ligero-logo.png" alt="Viaja Ligero" className="h-8 mx-auto" />
-          </div>
-
           {/* Progress bar (only show on questions) */}
           {step > 0 && step < 7 && (
-            <div className="absolute top-20 left-1/2 -translate-x-1/2 w-full max-w-md px-8">
+            <div className="absolute top-8 left-1/2 -translate-x-1/2 w-full max-w-md px-8">
               <div className="h-1 bg-white/20 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-white transition-all duration-500"
