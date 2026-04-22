@@ -822,18 +822,38 @@ Puedo resolver dudas sobre:
                                     {lead.name}
                                   </h3>
                                 </div>
-                                <Button
-                                  size="sm"
-                                  onClick={() => {
-                                    setSelectedLead(lead);
-                                    setShowMessageDialog(true);
-                                  }}
-                                  className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20 shrink-0"
-                                >
-                                  <MessageSquare className="w-4 h-4 mr-2" />
-                                  <span className="hidden sm:inline">Contactar</span>
-                                  <span className="sm:hidden">WhatsApp</span>
-                                </Button>
+                                <div className="flex gap-2 shrink-0">
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => loadLeadNotes(lead)}
+                                    className="border-primary/30 hover:border-primary/50 hover:bg-primary/10"
+                                  >
+                                    <Eye className="w-4 h-4" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => {
+                                      setSelectedLead(lead);
+                                      setShowNoteDialog(true);
+                                    }}
+                                    className="border-accent/30 hover:border-accent/50 hover:bg-accent/10"
+                                  >
+                                    <Plus className="w-4 h-4" />
+                                  </Button>
+                                  <Button
+                                    size="sm"
+                                    onClick={() => {
+                                      setSelectedLead(lead);
+                                      setShowMessageDialog(true);
+                                    }}
+                                    className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20"
+                                  >
+                                    <MessageSquare className="w-4 h-4 sm:mr-2" />
+                                    <span className="hidden sm:inline">Contactar</span>
+                                  </Button>
+                                </div>
                               </div>
 
                               {/* Info Grid */}
