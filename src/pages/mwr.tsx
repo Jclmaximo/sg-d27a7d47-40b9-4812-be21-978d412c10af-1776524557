@@ -346,8 +346,8 @@ export default function MWRPage() {
             </div>
 
             {/* Content Container */}
-            <div className="h-full flex items-center justify-center px-6 py-20">
-              <div className="w-full max-w-2xl mx-auto">
+            <div className="h-full overflow-y-auto flex items-center justify-center px-6 py-20">
+              <div className="w-full max-w-2xl mx-auto my-auto">
                 
                 {/* STEP 1: Challenge */}
                 {flowStep === 1 && (
