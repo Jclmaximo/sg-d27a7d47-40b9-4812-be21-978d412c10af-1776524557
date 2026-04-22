@@ -20,6 +20,7 @@ import {
   MessageSquare,
   FileText
 } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function MWRPage() {
   const router = useRouter();
@@ -27,6 +28,8 @@ export default function MWRPage() {
   const [showGamifiedFlow, setShowGamifiedFlow] = useState(false);
   const [flowStep, setFlowStep] = useState(1);
   const [userName, setUserName] = useState("");
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [leadStatus, setLeadStatus] = useState("Nuevo");
   const [answers, setAnswers] = useState({
     challenge: "",
     desire: ""
@@ -511,8 +514,18 @@ export default function MWRPage() {
                         <div className="flex items-start justify-between">
                           <div className="space-y-1">
                             <h3 className="text-xl font-bold text-foreground">{userName}</h3>
-                            <Badge className="bg-secondary/10 text-secondary border-secondary/30">
-                              Nuevo
+                            <Badge 
+                              className={`cursor-pointer hover:opacity-80 transition-opacity ${
+                                leadStatus === "Nuevo" ? "bg-secondary/10 text-secondary border-secondary/30" :
+                                leadStatus === "Contactado" ? "bg-blue-500/10 text-blue-500 border-blue-500/30" :
+                                leadStatus === "Seguimiento" ? "bg-yellow-500/10 text-yellow-500 border-yellow-500/30" :
+                                leadStatus === "Caliente" ? "bg-orange-500/10 text-orange-500 border-orange-500/30" :
+                                leadStatus === "Cerrado - Ganado" ? "bg-green-500/10 text-green-500 border-green-500/30" :
+                                "bg-red-500/10 text-red-500 border-red-500/30"
+                              }`}
+                              onClick={() => setShowStatusModal(true)}
+                            >
+                              {leadStatus}
                             </Badge>
                           </div>
                           <User className="w-12 h-12 text-muted-foreground" />
@@ -520,7 +533,7 @@ export default function MWRPage() {
                         <div className="space-y-2 text-left">
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Estado:</span>
-                            <span className="text-foreground font-medium">Nuevo</span>
+                            <span className="text-foreground font-medium">{leadStatus}</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Origen:</span>
@@ -534,16 +547,64 @@ export default function MWRPage() {
                       Así es como empieza todo automáticamente
                     </p>
 
-                    <div className="flex justify-center">
-                      <Button
-                        size="lg"
-                        onClick={() => setFlowStep(6)}
-                        className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold"
-                      >
-                        Siguiente
-                        <ArrowRight className="ml-2 h-5 w-5" />
-                      </Button>
-                    </div>
+                    <Button
+                      size="lg"
+                      onClick={() => setFlowStep(6)}
+                      className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold"
+                    >
+                      Continuar
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+
+                    {/* Status Change Modal */}
+                    <Dialog open={showStatusModal} onOpenChange={setShowStatusModal}>
+                      <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                          <DialogTitle>Cambiar estado del lead</DialogTitle>
+                          <DialogDescription>
+                            Selecciona el nuevo estado para {userName}
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="space-y-3 py-4">
+                          {[
+                            { label: "Nuevo", color: "secondary" },
+                            { label: "Contactado", color: "blue-500" },
+                            { label: "Seguimiento", color: "yellow-500" },
+                            { label: "Caliente", color: "orange-500" },
+                            { label: "Cerrado - Ganado", color: "green-500" },
+                            { label: "Cerrado - Perdido", color: "red-500" }
+                          ].map((status) => (
+                            <button
+                              key={status.label}
+                              onClick={() => {
+                                setLeadStatus(status.label);
+                                setShowStatusModal(false);
+                              }}
+                              className={`w-full p-4 rounded-xl border-2 text-left transition-all hover:scale-105 ${
+                                leadStatus === status.label
+                                  ? `border-${status.color} bg-${status.color}/10`
+                                  : "border-border hover:border-primary/50"
+                              }`}
+                            >
+                              <div className="flex items-center gap-3">
+                                {leadStatus === status.label && (
+                                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                                )}
+                                <span className="font-medium text-foreground">{status.label}</span>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                        <DialogFooter>
+                          <Button
+                            variant="outline"
+                            onClick={() => setShowStatusModal(false)}
+                          >
+                            Cancelar
+                          </Button>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 )}
 
