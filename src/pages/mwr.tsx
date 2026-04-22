@@ -763,23 +763,28 @@ export default function MWRPage() {
                 {/* STEP 11: Offer - Activación */}
                 {flowStep === 11 && (
                   <div className="space-y-12 animate-in fade-in duration-500">
-                    <div className="text-center space-y-4">
-                      <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+                    <div className="text-center space-y-6">
+                      <Badge className="mb-4 bg-secondary/10 text-secondary border-secondary/30 text-base px-4 py-2">
+                        Listo para ti
+                      </Badge>
+                      
+                      <h2 className="text-4xl md:text-5xl font-bold text-foreground">
                         Este sistema es para ti
                       </h2>
-                      <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                      
+                      <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
                         Te ayuda a conseguir prospectos, dar seguimiento automático y avanzar más rápido sin complicarte
                       </p>
                     </div>
 
                     <Card className="glass-card border-border/50 shadow-2xl max-w-md mx-auto">
-                      <CardContent className="p-8">
-                        <div className="space-y-4">
+                      <CardContent className="p-8 space-y-6">
+                        <div className="text-center space-y-2">
                           <div className="flex items-baseline justify-center gap-2">
                             <span className="text-5xl font-bold text-foreground">$29</span>
                             <span className="text-xl text-muted-foreground">USD inicio</span>
                           </div>
-                          <p className="text-lg text-muted-foreground">
+                          <p className="text-lg text-center text-muted-foreground">
                             Luego $9 USD/mes
                           </p>
                         </div>
