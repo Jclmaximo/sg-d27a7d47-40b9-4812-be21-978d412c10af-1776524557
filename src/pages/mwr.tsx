@@ -260,45 +260,6 @@ export default function MWRPage() {
           </div>
         </section>
 
-        {/* Value Summary Section */}
-        <section className="py-20 bg-muted/30">
-          <div className="container max-w-3xl mx-auto px-4 md:px-6">
-            <div className="text-center mb-12 space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
-                Esto es lo que ya tienes listo
-              </h2>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-                No tienes que crear nada. Todo ya viene preparado para empezar.
-              </p>
-            </div>
-
-            <div className="space-y-4 mb-12">
-              {[
-                "Tu propia página para atraer personas interesadas",
-                "Un sistema que guarda y organiza tus prospectos",
-                "Mensajes listos para dar seguimiento automáticamente",
-                "Respuestas para WhatsApp, Instagram y email",
-                "Imágenes y textos listos para compartir",
-                "Todo conectado y funcionando desde el inicio"
-              ].map((benefit, index) => (
-                <div 
-                  key={index}
-                  className="flex items-start gap-4 p-4 bg-card rounded-xl border border-border/50 hover:border-primary/30 transition-colors duration-200"
-                >
-                  <CheckCircle2 className="w-6 h-6 text-secondary shrink-0 mt-0.5" />
-                  <p className="text-base md:text-lg text-foreground font-medium">
-                    {benefit}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <p className="text-center text-xl md:text-2xl font-semibold text-foreground">
-              Literalmente entras y ya está funcionando.
-            </p>
-          </div>
-        </section>
-
         {/* Pricing Section */}
         <section className="py-20">
           <div className="container max-w-4xl mx-auto px-4 md:px-6">
@@ -366,13 +327,13 @@ export default function MWRPage() {
             <div className="fixed top-0 left-0 right-0 h-1 bg-muted z-10">
               <div 
                 className="h-full bg-primary transition-all duration-300"
-                style={{ width: `${(flowStep / 4) * 100}%` }}
+                style={{ width: `${(flowStep / 5) * 100}%` }}
               />
             </div>
 
             {/* Step Counter */}
             <div className="fixed top-4 right-4 text-sm text-muted-foreground font-medium z-10">
-              {flowStep}/4
+              {flowStep}/5
             </div>
 
             {/* Content Container */}
@@ -474,8 +435,58 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 4: Offer */}
+                {/* STEP 4: Value Summary */}
                 {flowStep === 4 && (
+                  <div className="space-y-12 animate-in fade-in duration-500">
+                    <div className="text-center space-y-4">
+                      <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+                        Esto es lo que ya tienes listo
+                      </h2>
+                      <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                        No tienes que crear nada. Todo ya viene preparado para empezar.
+                      </p>
+                    </div>
+
+                    <div className="space-y-4 max-w-2xl mx-auto">
+                      {[
+                        "Tu propia página para atraer personas interesadas",
+                        "Un sistema que guarda y organiza tus prospectos",
+                        "Mensajes listos para dar seguimiento automáticamente",
+                        "Respuestas para WhatsApp, Instagram y email",
+                        "Imágenes y textos listos para compartir",
+                        "Todo conectado y funcionando desde el inicio"
+                      ].map((benefit, index) => (
+                        <div 
+                          key={index}
+                          className="flex items-start gap-4 p-4 bg-card rounded-xl border border-border/50"
+                        >
+                          <CheckCircle2 className="w-6 h-6 text-secondary shrink-0 mt-0.5" />
+                          <p className="text-base md:text-lg text-foreground font-medium text-left">
+                            {benefit}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="text-center space-y-6">
+                      <p className="text-xl md:text-2xl font-semibold text-foreground">
+                        Literalmente entras y ya está funcionando.
+                      </p>
+
+                      <Button
+                        size="lg"
+                        onClick={() => setFlowStep(5)}
+                        className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold"
+                      >
+                        Ver mi oferta
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 5: Offer */}
+                {flowStep === 5 && (
                   <div className="space-y-12 animate-in fade-in duration-500">
                     <div className="text-center space-y-6">
                       <Badge className="mb-4 bg-secondary/10 text-secondary border-secondary/30 text-base px-4 py-2">
