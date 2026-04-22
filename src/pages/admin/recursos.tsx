@@ -45,7 +45,7 @@ const marketingImages: MarketingResource[] = [
     category: "instagram",
     type: "image",
     size: "1080x1080",
-    url: "/tropical-paradise.jpg"
+    url: "/marketing/ig-post-descubre.png"
   },
   {
     id: "img-2",
@@ -54,7 +54,7 @@ const marketingImages: MarketingResource[] = [
     category: "instagram",
     type: "image",
     size: "1080x1080",
-    url: "/maldives-kayak.jpg"
+    url: "/marketing/ig-post-ahorro.png"
   },
   {
     id: "img-3",
@@ -63,7 +63,7 @@ const marketingImages: MarketingResource[] = [
     category: "instagram",
     type: "image",
     size: "1080x1920",
-    url: "/happy-travelers.jpg"
+    url: "/marketing/ig-story-testimonial.png"
   },
   {
     id: "img-4",
@@ -72,7 +72,7 @@ const marketingImages: MarketingResource[] = [
     category: "instagram",
     type: "image",
     size: "1080x1920",
-    url: "/burj-khalifa.jpg"
+    url: "/marketing/ig-story-comisiones.png"
   },
   {
     id: "img-5",
@@ -81,7 +81,7 @@ const marketingImages: MarketingResource[] = [
     category: "facebook",
     type: "image",
     size: "1200x628",
-    url: "/cruise-sunset.jpg"
+    url: "/marketing/fb-banner-viaja-mas.png"
   },
   {
     id: "img-6",
@@ -90,7 +90,7 @@ const marketingImages: MarketingResource[] = [
     category: "facebook",
     type: "image",
     size: "1080x1080",
-    url: "/egypt-temple.jpg"
+    url: "/marketing/fb-post-beneficios.png"
   },
   {
     id: "img-7",
@@ -99,7 +99,7 @@ const marketingImages: MarketingResource[] = [
     category: "whatsapp",
     type: "image",
     size: "1080x1920",
-    url: "/luxury-resort.jpg"
+    url: "/marketing/wa-status-oferta.png"
   },
   {
     id: "img-8",
@@ -108,7 +108,7 @@ const marketingImages: MarketingResource[] = [
     category: "whatsapp",
     type: "image",
     size: "1080x1080",
-    url: "/alaska-cruise.jpg"
+    url: "/marketing/wa-compartir.png"
   }
 ];
 
