@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { leadsService } from "@/services/leadsService";
-import { CheckCircle2, Gift } from "lucide-react";
+import { Loader2, CheckCircle2, Gift } from "lucide-react";
 
 type ProfileType = "explorador" | "ahorro" | "tiempo" | "potencial";
 
@@ -31,6 +32,7 @@ export default function LeadsRegistroPage() {
     nombre: "",
     whatsapp: "",
     email: "",
+    pais: "",
   });
 
   // Detect referral
@@ -65,7 +67,7 @@ export default function LeadsRegistroPage() {
       return "explorador";
     }
     
-    // Q3: ¿Cuál es tu mayor obstáculo para viajar?
+    // Q3: ¿Cuál es tu mayor obstáculo?
     if (answers.q3 === "dinero") {
       return "ahorro";
     }
@@ -90,9 +92,9 @@ export default function LeadsRegistroPage() {
         // After Q4, go to loader
         setStep(5);
         // Calculate profile and show loader for 2.5 seconds
-        const calculatedProfile = calculateProfile();
-        setProfile(calculatedProfile);
         setTimeout(() => {
+          const calculatedProfile = calculateProfile();
+          setProfile(calculatedProfile);
           setStep(6); // Go to capture form
         }, 2500);
       }
@@ -109,7 +111,7 @@ export default function LeadsRegistroPage() {
         name: formData.nombre,
         email: formData.email,
         phone: formData.whatsapp,
-        country: "N/A",
+        country: formData.pais || "N/A",
         source: "funnel_interactivo",
         interest: profile,
         contact_method: "whatsapp",
@@ -132,7 +134,7 @@ export default function LeadsRegistroPage() {
   };
 
   // Progress calculation (25%, 50%, 75%, 100%)
-  const progress = step === 0 ? 0 : step <= 4 ? (step / 4) * 100 : 100;
+  const progress = step === 0 ? 0 : step <= 4 ? (step / 4) * 100 : step === 5 ? 100 : 0;
 
   // Profile results
   const profileResults = {
@@ -161,11 +163,11 @@ export default function LeadsRegistroPage() {
         description="Descubre en 30 segundos cómo viajar más pagando menos"
       />
 
-      {/* FULL SCREEN CONTAINER - NO MARGINS, NO MAX-WIDTH */}
+      {/* FULL SCREEN CONTAINER */}
       <div className="fixed inset-0 bg-[#1A1F3A] overflow-hidden">
         
         {/* Progress bar (only show on questions and loader) */}
-        {step > 0 && step < 6 && (
+        {step > 0 && step <= 5 && (
           <div className="absolute top-0 left-0 right-0 pt-6 px-6 z-10">
             <div className="text-center mb-3">
               <p className="text-white/60 text-sm font-medium">
@@ -394,12 +396,33 @@ export default function LeadsRegistroPage() {
                   className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl focus:ring-2 focus:ring-[#4FD1C5] focus:border-transparent"
                 />
 
+                <Select value={formData.pais} onValueChange={(value) => setFormData({ ...formData, pais: value })}>
+                  <SelectTrigger className="h-14 bg-white/10 border-white/20 text-white text-base rounded-2xl focus:ring-2 focus:ring-[#4FD1C5]">
+                    <SelectValue placeholder="País (opcional)" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="mexico">México</SelectItem>
+                    <SelectItem value="colombia">Colombia</SelectItem>
+                    <SelectItem value="argentina">Argentina</SelectItem>
+                    <SelectItem value="chile">Chile</SelectItem>
+                    <SelectItem value="peru">Perú</SelectItem>
+                    <SelectItem value="espana">España</SelectItem>
+                    <SelectItem value="usa">Estados Unidos</SelectItem>
+                    <SelectItem value="otros">Otro</SelectItem>
+                  </SelectContent>
+                </Select>
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] disabled:bg-[#4FD1C5]/50 text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-all active:scale-[0.98] disabled:cursor-not-allowed"
+                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] disabled:bg-[#4FD1C5]/50 text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97] disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? "Enviando..." : "VER MI ACCESO"}
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      Enviando...
+                    </span>
+                  ) : "VER MI ACCESO"}
                 </button>
               </form>
             </div>
@@ -414,7 +437,7 @@ export default function LeadsRegistroPage() {
               
               <div className="space-y-4">
                 <h2 className="text-[#4FD1C5] text-xl font-semibold">
-                  ¡Perfecto, {formData.nombre.split(' ')[0].toLowerCase()}!
+                  ¡Perfecto, {formData.nombre.split(' ')[0]}!
                 </h2>
                 <h1 className="text-[32px] leading-tight font-bold">
                   {profileResults[profile].title}
@@ -427,7 +450,7 @@ export default function LeadsRegistroPage() {
               <div className="space-y-4">
                 <button
                   onClick={() => router.push(`/gracias?ref=${referralUsername || 'default'}`)}
-                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-all active:scale-[0.98]"
+                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97]"
                 >
                   {profileResults[profile].cta}
                 </button>

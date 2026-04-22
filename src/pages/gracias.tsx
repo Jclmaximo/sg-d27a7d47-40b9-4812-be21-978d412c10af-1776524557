@@ -27,7 +27,7 @@ export default function GraciasPage() {
         description="Gracias por registrarte. Te contactaremos pronto."
       />
 
-      {/* FULL SCREEN CONTAINER - NO MARGINS, NO MAX-WIDTH */}
+      {/* FULL SCREEN CONTAINER */}
       <div className="fixed inset-0 bg-[#1A1F3A] overflow-hidden">
         
         {/* Content - FULL WIDTH, CENTERED VERTICALLY */}
@@ -95,7 +95,7 @@ export default function GraciasPage() {
                   router.push("/");
                 }
               }}
-              className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-all active:scale-[0.98]"
+              className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97]"
             >
               Volver al inicio
             </button>
