@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { leadsService } from "@/services/leadsService";
-import { Loader2, Gift, Check } from "lucide-react";
+import { CheckCircle2, Gift } from "lucide-react";
 
 type ProfileType = "explorador" | "ahorro" | "tiempo" | "potencial";
 
@@ -162,30 +161,32 @@ export default function LeadsRegistroPage() {
         description="Descubre en 30 segundos cómo viajar más pagando menos"
       />
 
-      <div className="min-h-screen bg-[#1A1F3A] relative flex items-center justify-center overflow-hidden">
-        {/* Content */}
-        <div className="relative z-10 w-full max-w-[390px] mx-auto px-6 min-h-screen flex flex-col justify-center">
-          
-          {/* Progress bar (only show on questions and loader) */}
-          {step > 0 && step < 6 && (
-            <div className="fixed top-6 left-1/2 -translate-x-1/2 w-full max-w-[340px] px-6">
-              <div className="text-center mb-2">
-                <p className="text-white/60 text-sm">
-                  {step <= 4 ? `Paso ${step} de 4` : "Casi listo..."}
-                </p>
-              </div>
-              <div className="h-1 bg-white/20 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-[#4FD1C5] transition-all duration-500 rounded-full"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
+      {/* FULL SCREEN CONTAINER - NO MARGINS, NO MAX-WIDTH */}
+      <div className="fixed inset-0 bg-[#1A1F3A] overflow-hidden">
+        
+        {/* Progress bar (only show on questions and loader) */}
+        {step > 0 && step < 6 && (
+          <div className="absolute top-0 left-0 right-0 pt-6 px-6 z-10">
+            <div className="text-center mb-3">
+              <p className="text-white/60 text-sm font-medium">
+                {step <= 4 ? `Paso ${step} de 4` : "Casi listo..."}
+              </p>
             </div>
-          )}
+            <div className="h-1 bg-white/20 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-[#4FD1C5] transition-all duration-500 rounded-full"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+          </div>
+        )}
 
+        {/* Content - FULL WIDTH, CENTERED VERTICALLY */}
+        <div className="h-full w-full flex items-center justify-center px-6">
+          
           {/* STEP 0: HERO */}
           {step === 0 && (
-            <div className="text-center text-white space-y-8 animate-in fade-in duration-500">
+            <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-500">
               <div className="space-y-4">
                 <h1 className="text-[40px] leading-[1.2] font-bold">
                   Viajar más... sin gastar más, es posible
@@ -196,39 +197,38 @@ export default function LeadsRegistroPage() {
                 </p>
               </div>
               
-              <Button 
-                size="lg"
+              <button
                 onClick={() => setStep(1)}
-                className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg"
+                className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-all active:scale-[0.98]"
               >
                 QUIERO SABER CÓMO
-              </Button>
+              </button>
             </div>
           )}
 
           {/* STEP 1: Q1 */}
           {step === 1 && (
-            <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
+            <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-300">
               <h2 className="text-2xl font-bold px-4">¿Te gustaría viajar más este año?</h2>
               
               <div className="space-y-3">
                 <button
                   onClick={() => handleAnswer("q1", "definitivamente")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Sí, definitivamente
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q1", "gustaria")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Me gustaría viajar más
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q1", "buscando")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Estoy buscando opciones
                 </button>
@@ -238,34 +238,34 @@ export default function LeadsRegistroPage() {
 
           {/* STEP 2: Q2 */}
           {step === 2 && (
-            <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
+            <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-300">
               <h2 className="text-2xl font-bold px-4">¿Qué tipo de viajes prefieres?</h2>
               
               <div className="space-y-3">
                 <button
                   onClick={() => handleAnswer("q2", "playa")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Playa y relax
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q2", "aventura")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Aventura y naturaleza
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q2", "ciudades")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Ciudades y cultura
                 </button>
 
                 <button
                   onClick={() => handleAnswer("q2", "todo")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Un poco de todo
                 </button>
@@ -275,34 +275,34 @@ export default function LeadsRegistroPage() {
 
           {/* STEP 3: Q3 */}
           {step === 3 && (
-            <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
+            <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-300">
               <h2 className="text-2xl font-bold px-4">¿Cuál es tu mayor obstáculo para viajar?</h2>
               
               <div className="space-y-3">
                 <button
                   onClick={() => handleAnswer("q3", "dinero")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   El dinero
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q3", "tiempo")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Falta de tiempo
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q3", "planificar")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   No sé planificar
                 </button>
 
                 <button
                   onClick={() => handleAnswer("q3", "ninguno")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Ninguno
                 </button>
@@ -312,27 +312,27 @@ export default function LeadsRegistroPage() {
 
           {/* STEP 4: Q4 */}
           {step === 4 && (
-            <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
+            <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-300">
               <h2 className="text-2xl font-bold px-4">¿Qué te gustaría lograr?</h2>
               
               <div className="space-y-3">
                 <button
                   onClick={() => handleAnswer("q4", "descuentos")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Descuentos y viajes gratis
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q4", "ingresos")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Tener ingresos extras
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q4", "ambas")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
                 >
                   Ambas cosas
                 </button>
@@ -342,7 +342,7 @@ export default function LeadsRegistroPage() {
 
           {/* STEP 5: LOADER */}
           {step === 5 && (
-            <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
+            <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-300">
               <div className="relative w-24 h-24 mx-auto">
                 <div className="absolute inset-0 border-4 border-[#4FD1C5] border-t-transparent rounded-full animate-spin"></div>
               </div>
@@ -355,10 +355,10 @@ export default function LeadsRegistroPage() {
 
           {/* STEP 6: CAPTURE FORM */}
           {step === 6 && (
-            <div className="text-white space-y-8 animate-in fade-in duration-300">
+            <div className="w-full text-white space-y-8 animate-in fade-in duration-300">
               <div className="text-center space-y-4">
-                <div className="w-20 h-20 mx-auto bg-[#4FD1C5] rounded-full flex items-center justify-center">
-                  <Check className="w-10 h-10 text-[#1A1F3A]" />
+                <div className="w-20 h-20 mx-auto bg-[#4FD1C5] rounded-full flex items-center justify-center shadow-lg">
+                  <CheckCircle2 className="w-10 h-10 text-[#1A1F3A]" />
                 </div>
                 
                 <div className="space-y-2">
@@ -373,7 +373,7 @@ export default function LeadsRegistroPage() {
                   value={formData.nombre}
                   onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
                   required
-                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl"
+                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl focus:ring-2 focus:ring-[#4FD1C5] focus:border-transparent"
                 />
 
                 <Input
@@ -382,7 +382,7 @@ export default function LeadsRegistroPage() {
                   value={formData.whatsapp}
                   onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
                   required
-                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl"
+                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl focus:ring-2 focus:ring-[#4FD1C5] focus:border-transparent"
                 />
 
                 <Input
@@ -391,31 +391,24 @@ export default function LeadsRegistroPage() {
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   required
-                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl"
+                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl focus:ring-2 focus:ring-[#4FD1C5] focus:border-transparent"
                 />
 
-                <Button
+                <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg"
+                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] disabled:bg-[#4FD1C5]/50 text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-all active:scale-[0.98] disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Enviando...
-                    </>
-                  ) : (
-                    "VER MI ACCESO"
-                  )}
-                </Button>
+                  {isSubmitting ? "Enviando..." : "VER MI ACCESO"}
+                </button>
               </form>
             </div>
           )}
 
           {/* STEP 7: RESULT */}
           {step === 7 && (
-            <div className="text-center text-white space-y-8 animate-in fade-in duration-500">
-              <div className="w-20 h-20 mx-auto bg-[#4FD1C5] rounded-full flex items-center justify-center">
+            <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-500">
+              <div className="w-20 h-20 mx-auto bg-[#4FD1C5] rounded-full flex items-center justify-center shadow-lg">
                 <Gift className="w-10 h-10 text-[#1A1F3A]" />
               </div>
               
@@ -423,7 +416,7 @@ export default function LeadsRegistroPage() {
                 <h2 className="text-[#4FD1C5] text-xl font-semibold">
                   ¡Perfecto, {formData.nombre.split(' ')[0].toLowerCase()}!
                 </h2>
-                <h1 className="text-3xl font-bold leading-tight">
+                <h1 className="text-[32px] leading-tight font-bold">
                   {profileResults[profile].title}
                 </h1>
                 <p className="text-white/70 text-base px-4">
@@ -432,17 +425,16 @@ export default function LeadsRegistroPage() {
               </div>
               
               <div className="space-y-4">
-                <Button 
-                  size="lg"
+                <button
                   onClick={() => router.push(`/gracias?ref=${referralUsername || 'default'}`)}
-                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg"
+                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-all active:scale-[0.98]"
                 >
                   {profileResults[profile].cta}
-                </Button>
+                </button>
 
                 <button 
                   onClick={() => router.push(`/gracias?ref=${referralUsername || 'default'}`)}
-                  className="text-white/60 text-sm underline"
+                  className="text-white/60 text-sm underline active:text-white/80 transition-colors"
                 >
                   Ver más beneficios
                 </button>
