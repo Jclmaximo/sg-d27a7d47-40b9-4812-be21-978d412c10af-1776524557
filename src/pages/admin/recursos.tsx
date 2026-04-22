@@ -153,23 +153,27 @@ Con Viaja Ligero, accedes a tarifas preferenciales en:
   },
   {
     id: "copy-3",
-    title: "Post Comisiones - Redes Sociales",
-    description: "Explica el programa de referidos",
+    title: "Post Viajar Más - Redes Sociales",
+    description: "Explica cómo viajar más o incluso gratis",
     category: "instagram",
     type: "copy",
-    content: `💸 ¿Y si además de ahorrar en viajes, pudieras generar ingresos?
+    content: `✈️ ¿Y si pudieras viajar más seguido... incluso viajar gratis?
 
 Con Viaja Ligero puedes:
-✅ Viajar más pagando menos
-✅ Ganar comisiones del 10% por referir
+✅ Ahorrar en cada viaje
+✅ Generar créditos para viajar gratis
+✅ Convertir tu pasión por viajar en un estilo de vida
 
-Cada referido te genera:
-💵 $2.90 en su primer pago
-💵 $0.90 cada mes que renueve
+Comparte tus experiencias de viaje y gana créditos que te permiten:
+🌍 Reducir el costo de tus próximos viajes a cero
+✈️ Viajar más seguido sin límites
+🏖️ Vivir la vida que siempre soñaste
 
-Es tan simple como compartir tu experiencia.
+Es tan simple como compartir lo que ya amas hacer.
 
-👉 Empieza aquí: [TU LINK]`
+👉 Descubre cómo: [TU LINK]
+
+#ViajaLigero #ViajarGratis #VidaDeViajero`
   },
   {
     id: "copy-4",
