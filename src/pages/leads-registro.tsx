@@ -3,12 +3,10 @@ import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { leadsService } from "@/services/leadsService";
-import { Loader2, ArrowRight, Link as LinkIcon } from "lucide-react";
+import { Loader2, Gift, Check } from "lucide-react";
 
 type ProfileType = "explorador" | "ahorro" | "tiempo" | "potencial";
 
@@ -32,10 +30,8 @@ export default function LeadsRegistroPage() {
 
   const [formData, setFormData] = useState({
     nombre: "",
-    apellido: "",
+    whatsapp: "",
     email: "",
-    telefono: "",
-    pais: "",
   });
 
   // Detect referral
@@ -65,12 +61,12 @@ export default function LeadsRegistroPage() {
 
   // Calculate profile based on answers
   const calculateProfile = (): ProfileType => {
-    // Q1: ¿Qué te gustaría conseguir?
-    if (answers.q1 === "ingresos" || answers.q1 === "ambas") {
+    // Q4: ¿Qué te gustaría lograr?
+    if (answers.q4 === "ingresos" || answers.q4 === "ambas") {
       return "explorador";
     }
     
-    // Q3: ¿Qué te detiene de viajar más?
+    // Q3: ¿Cuál es tu mayor obstáculo para viajar?
     if (answers.q3 === "dinero") {
       return "ahorro";
     }
@@ -94,7 +90,7 @@ export default function LeadsRegistroPage() {
       } else if (step === 4) {
         // After Q4, go to loader
         setStep(5);
-        // Calculate profile and show loader for 2-3 seconds
+        // Calculate profile and show loader for 2.5 seconds
         const calculatedProfile = calculateProfile();
         setProfile(calculatedProfile);
         setTimeout(() => {
@@ -111,10 +107,10 @@ export default function LeadsRegistroPage() {
 
     try {
       await leadsService.createLead({
-        name: `${formData.nombre} ${formData.apellido}`.trim(),
+        name: formData.nombre,
         email: formData.email,
-        phone: formData.telefono,
-        country: formData.pais,
+        phone: formData.whatsapp,
+        country: "N/A",
         source: "funnel_interactivo",
         interest: profile,
         contact_method: "whatsapp",
@@ -136,54 +132,51 @@ export default function LeadsRegistroPage() {
     }
   };
 
-  // Progress calculation
+  // Progress calculation (25%, 50%, 75%, 100%)
   const progress = step === 0 ? 0 : step <= 4 ? (step / 4) * 100 : 100;
 
   // Profile results
   const profileResults = {
     explorador: {
       title: "Puedes viajar incluso sin pagar",
-      cta: "VER CÓMO GENERAR VIAJANDO"
+      cta: "VER CÓMO FUNCIONA"
     },
     ahorro: {
       title: "Puedes viajar más gastando mucho menos",
-      cta: "VER DESCUENTOS"
+      cta: "VER CÓMO FUNCIONA"
     },
     tiempo: {
       title: "Puedes viajar mejor sin perder tiempo",
-      cta: "OPTIMIZAR MIS VIAJES"
+      cta: "VER CÓMO FUNCIONA"
     },
     potencial: {
       title: "Estás más cerca de viajar más",
-      cta: "VER OPCIONES"
+      cta: "VER CÓMO FUNCIONA"
     }
   };
 
   return (
     <>
       <SEO 
-        title="Descubre Tu Perfil de Viajero - Viaja Ligero"
-        description="Descubre cómo puedes viajar más pagando menos"
+        title="Descubre Tarifas Exclusivas de Viaje - Viaja Ligero"
+        description="Descubre en 30 segundos cómo viajar más pagando menos"
       />
 
-      <div className="min-h-screen bg-cover bg-center bg-no-repeat relative flex items-center justify-center"
-        style={{ 
-          backgroundImage: "url('/tropical-paradise.jpg')",
-          backgroundPosition: "center"
-        }}
-      >
-        {/* Dark overlay */}
-        <div className="absolute inset-0 bg-black/60" />
-
+      <div className="min-h-screen bg-[#1A1F3A] relative flex items-center justify-center overflow-hidden">
         {/* Content */}
-        <div className="relative z-10 w-full max-w-lg mx-auto px-4">
+        <div className="relative z-10 w-full max-w-[390px] mx-auto px-6 min-h-screen flex flex-col justify-center">
           
-          {/* Progress bar (only show on questions) */}
-          {step > 0 && step < 7 && (
-            <div className="absolute top-8 left-1/2 -translate-x-1/2 w-full max-w-md px-8">
+          {/* Progress bar (only show on questions and loader) */}
+          {step > 0 && step < 6 && (
+            <div className="fixed top-6 left-1/2 -translate-x-1/2 w-full max-w-[340px] px-6">
+              <div className="text-center mb-2">
+                <p className="text-white/60 text-sm">
+                  {step <= 4 ? `Paso ${step} de 4` : "Casi listo..."}
+                </p>
+              </div>
               <div className="h-1 bg-white/20 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-white transition-all duration-500"
+                  className="h-full bg-[#4FD1C5] transition-all duration-500 rounded-full"
                   style={{ width: `${progress}%` }}
                 />
               </div>
@@ -193,22 +186,22 @@ export default function LeadsRegistroPage() {
           {/* STEP 0: HERO */}
           {step === 0 && (
             <div className="text-center text-white space-y-8 animate-in fade-in duration-500">
-              <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                Descubre
-                <br />
-                <span className="text-blue-400">tarifas exclusivas</span>
-                <br />
-                de viaje
-              </h1>
+              <div className="space-y-4">
+                <h1 className="text-[40px] leading-[1.2] font-bold">
+                  Viajar más... sin gastar más, es posible
+                </h1>
+                
+                <p className="text-lg text-white/70">
+                  Descubre en 30 segundos cómo viajar más pagando menos
+                </p>
+              </div>
               
               <Button 
                 size="lg"
                 onClick={() => setStep(1)}
-                className="bg-white text-blue-600 hover:bg-white/90 rounded-full px-8 h-14 text-lg font-semibold"
+                className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg"
               >
-                <LinkIcon className="w-5 h-5 mr-2" />
-                Comenzar
-                <ArrowRight className="w-5 h-5 ml-2" />
+                QUIERO SABER CÓMO
               </Button>
             </div>
           )}
@@ -216,28 +209,28 @@ export default function LeadsRegistroPage() {
           {/* STEP 1: Q1 */}
           {step === 1 && (
             <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
-              <h2 className="text-3xl font-bold">¿Qué te gustaría conseguir?</h2>
+              <h2 className="text-2xl font-bold px-4">¿Te gustaría viajar más este año?</h2>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <button
-                  onClick={() => handleAnswer("q1", "ahorrar")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q1", "definitivamente")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  Ahorrar en viajes
+                  Sí, definitivamente
                 </button>
                 
                 <button
-                  onClick={() => handleAnswer("q1", "ingresos")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q1", "gustaria")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  Tener ingresos extras
+                  Me gustaría viajar más
                 </button>
                 
                 <button
-                  onClick={() => handleAnswer("q1", "ambas")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q1", "buscando")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  Ambas cosas
+                  Estoy buscando opciones
                 </button>
               </div>
             </div>
@@ -246,28 +239,35 @@ export default function LeadsRegistroPage() {
           {/* STEP 2: Q2 */}
           {step === 2 && (
             <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
-              <h2 className="text-3xl font-bold">¿Con qué frecuencia viajas?</h2>
+              <h2 className="text-2xl font-bold px-4">¿Qué tipo de viajes prefieres?</h2>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <button
-                  onClick={() => handleAnswer("q2", "1-2")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q2", "playa")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  1-2 veces al año
+                  Playa y relax
                 </button>
                 
                 <button
-                  onClick={() => handleAnswer("q2", "3-4")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q2", "aventura")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  3-4 veces al año
+                  Aventura y naturaleza
                 </button>
                 
                 <button
-                  onClick={() => handleAnswer("q2", "5+")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q2", "ciudades")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  5 o más veces al año
+                  Ciudades y cultura
+                </button>
+
+                <button
+                  onClick={() => handleAnswer("q2", "todo")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                >
+                  Un poco de todo
                 </button>
               </div>
             </div>
@@ -276,28 +276,35 @@ export default function LeadsRegistroPage() {
           {/* STEP 3: Q3 */}
           {step === 3 && (
             <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
-              <h2 className="text-3xl font-bold">¿Qué te detiene de viajar más?</h2>
+              <h2 className="text-2xl font-bold px-4">¿Cuál es tu mayor obstáculo para viajar?</h2>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <button
                   onClick={() => handleAnswer("q3", "dinero")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
                   El dinero
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q3", "tiempo")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
                   Falta de tiempo
                 </button>
                 
                 <button
-                  onClick={() => handleAnswer("q3", "ambas")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q3", "planificar")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  Ambas cosas
+                  No sé planificar
+                </button>
+
+                <button
+                  onClick={() => handleAnswer("q3", "ninguno")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
+                >
+                  Ninguno
                 </button>
               </div>
             </div>
@@ -306,35 +313,28 @@ export default function LeadsRegistroPage() {
           {/* STEP 4: Q4 */}
           {step === 4 && (
             <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
-              <h2 className="text-3xl font-bold">¿Qué prefieres?</h2>
+              <h2 className="text-2xl font-bold px-4">¿Qué te gustaría lograr?</h2>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <button
-                  onClick={() => handleAnswer("q4", "playa")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q4", "descuentos")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  Playas y resorts
+                  Descuentos y viajes gratis
                 </button>
                 
                 <button
-                  onClick={() => handleAnswer("q4", "ciudad")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q4", "ingresos")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  Ciudades y cultura
+                  Tener ingresos extras
                 </button>
                 
                 <button
-                  onClick={() => handleAnswer("q4", "aventura")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
+                  onClick={() => handleAnswer("q4", "ambas")}
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 border border-white/20 rounded-2xl text-white font-medium transition-all"
                 >
-                  Aventura y naturaleza
-                </button>
-
-                <button
-                  onClick={() => handleAnswer("q4", "variado")}
-                  className="w-full py-4 px-6 bg-white/10 hover:bg-blue-500 border-2 border-white/30 hover:border-blue-500 rounded-full text-white font-semibold transition-all"
-                >
-                  De todo un poco
+                  Ambas cosas
                 </button>
               </div>
             </div>
@@ -343,99 +343,61 @@ export default function LeadsRegistroPage() {
           {/* STEP 5: LOADER */}
           {step === 5 && (
             <div className="text-center text-white space-y-8 animate-in fade-in duration-300">
-              <Loader2 className="w-16 h-16 mx-auto animate-spin text-blue-400" />
-              <p className="text-2xl font-semibold">Calculando tu perfil...</p>
+              <div className="relative w-24 h-24 mx-auto">
+                <div className="absolute inset-0 border-4 border-[#4FD1C5] border-t-transparent rounded-full animate-spin"></div>
+              </div>
+              <div className="space-y-2">
+                <h2 className="text-2xl font-bold">Generando tu perfil de viajero ideal...</h2>
+                <p className="text-white/60">Analizando tus respuestas</p>
+              </div>
             </div>
           )}
 
           {/* STEP 6: CAPTURE FORM */}
           {step === 6 && (
-            <div className="bg-white/10 backdrop-blur-md rounded-3xl p-8 text-white space-y-6 animate-in fade-in duration-300 border border-white/20">
-              <div className="text-center space-y-2">
-                <h2 className="text-2xl font-bold">Casi listo</h2>
-                <p className="text-white/80">Completa tus datos para ver tu resultado</p>
+            <div className="text-white space-y-8 animate-in fade-in duration-300">
+              <div className="text-center space-y-4">
+                <div className="w-20 h-20 mx-auto bg-[#4FD1C5] rounded-full flex items-center justify-center">
+                  <Check className="w-10 h-10 text-[#1A1F3A]" />
+                </div>
+                
+                <div className="space-y-2">
+                  <h2 className="text-2xl font-bold">Tu resultado está listo</h2>
+                  <p className="text-white/70 text-base">¿A dónde te enviamos tu acceso personalizado?</p>
+                </div>
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="nombre" className="text-white">Nombre</Label>
-                    <Input
-                      id="nombre"
-                      placeholder="Juan"
-                      value={formData.nombre}
-                      onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-                      required
-                      className="bg-white/20 border-white/30 text-white placeholder:text-white/50"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="apellido" className="text-white">Apellido</Label>
-                    <Input
-                      id="apellido"
-                      placeholder="Pérez"
-                      value={formData.apellido}
-                      onChange={(e) => setFormData({ ...formData, apellido: e.target.value })}
-                      required
-                      className="bg-white/20 border-white/30 text-white placeholder:text-white/50"
-                    />
-                  </div>
-                </div>
+                <Input
+                  placeholder="Nombre completo"
+                  value={formData.nombre}
+                  onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
+                  required
+                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl"
+                />
 
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-white">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="tu@email.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    className="bg-white/20 border-white/30 text-white placeholder:text-white/50"
-                  />
-                </div>
+                <Input
+                  placeholder="WhatsApp"
+                  type="tel"
+                  value={formData.whatsapp}
+                  onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                  required
+                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl"
+                />
 
-                <div className="space-y-2">
-                  <Label htmlFor="telefono" className="text-white">Teléfono</Label>
-                  <Input
-                    id="telefono"
-                    type="tel"
-                    placeholder="+1 234 567 8900"
-                    value={formData.telefono}
-                    onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-                    required
-                    className="bg-white/20 border-white/30 text-white placeholder:text-white/50"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="pais" className="text-white">País</Label>
-                  <Select 
-                    value={formData.pais} 
-                    onValueChange={(value) => setFormData({ ...formData, pais: value })}
-                    required
-                  >
-                    <SelectTrigger className="bg-white/20 border-white/30 text-white">
-                      <SelectValue placeholder="Selecciona tu país" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="mexico">México</SelectItem>
-                      <SelectItem value="colombia">Colombia</SelectItem>
-                      <SelectItem value="argentina">Argentina</SelectItem>
-                      <SelectItem value="chile">Chile</SelectItem>
-                      <SelectItem value="peru">Perú</SelectItem>
-                      <SelectItem value="espana">España</SelectItem>
-                      <SelectItem value="usa">Estados Unidos</SelectItem>
-                      <SelectItem value="otro">Otro</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                <Input
+                  placeholder="Email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  required
+                  className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl"
+                />
 
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-full h-14 text-lg font-semibold"
+                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg"
                 >
                   {isSubmitting ? (
                     <>
@@ -443,10 +405,7 @@ export default function LeadsRegistroPage() {
                       Enviando...
                     </>
                   ) : (
-                    <>
-                      Ver Mi Resultado
-                      <ArrowRight className="w-5 h-5 ml-2" />
-                    </>
+                    "VER MI ACCESO"
                   )}
                 </Button>
               </form>
@@ -456,21 +415,38 @@ export default function LeadsRegistroPage() {
           {/* STEP 7: RESULT */}
           {step === 7 && (
             <div className="text-center text-white space-y-8 animate-in fade-in duration-500">
-              <div className="space-y-4">
-                <p className="text-lg text-white/80">Según tus respuestas…</p>
-                <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-                  {profileResults[profile].title}
-                </h1>
+              <div className="w-20 h-20 mx-auto bg-[#4FD1C5] rounded-full flex items-center justify-center">
+                <Gift className="w-10 h-10 text-[#1A1F3A]" />
               </div>
               
-              <Button 
-                size="lg"
-                onClick={() => router.push(`/gracias?ref=${referralUsername || 'default'}`)}
-                className="bg-white text-blue-600 hover:bg-white/90 rounded-full px-8 h-14 text-lg font-semibold"
-              >
-                {profileResults[profile].cta}
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
+              <div className="space-y-4">
+                <h2 className="text-[#4FD1C5] text-xl font-semibold">
+                  ¡Perfecto, {formData.nombre.split(' ')[0].toLowerCase()}!
+                </h2>
+                <h1 className="text-3xl font-bold leading-tight">
+                  {profileResults[profile].title}
+                </h1>
+                <p className="text-white/70 text-base px-4">
+                  Accede a beneficios exclusivos y oportunidades para viajar incluso sin costo
+                </p>
+              </div>
+              
+              <div className="space-y-4">
+                <Button 
+                  size="lg"
+                  onClick={() => router.push(`/gracias?ref=${referralUsername || 'default'}`)}
+                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg"
+                >
+                  {profileResults[profile].cta}
+                </Button>
+
+                <button 
+                  onClick={() => router.push(`/gracias?ref=${referralUsername || 'default'}`)}
+                  className="text-white/60 text-sm underline"
+                >
+                  Ver más beneficios
+                </button>
+              </div>
             </div>
           )}
         </div>
