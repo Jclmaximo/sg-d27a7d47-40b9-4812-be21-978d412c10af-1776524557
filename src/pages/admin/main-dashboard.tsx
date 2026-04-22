@@ -654,7 +654,7 @@ Puedo resolver dudas sobre:
                       Herramientas para hacer crecer tu negocio
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="grid gap-4 md:grid-cols-2">
+                  <CardContent className="grid gap-4 md:grid-cols-3">
                     <Button
                       variant="outline"
                       className="h-auto py-4 flex-col gap-2"
@@ -679,6 +679,20 @@ Puedo resolver dudas sobre:
                         <div className="font-semibold">Ver Leads</div>
                         <div className="text-xs text-muted-foreground">
                           {allLeads.length} prospectos capturados
+                        </div>
+                      </div>
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="h-auto py-4 flex-col gap-2"
+                      onClick={() => router.push("/admin/recursos")}
+                    >
+                      <Gift className="h-6 w-6" />
+                      <div className="text-center">
+                        <div className="font-semibold">Recursos de Marketing</div>
+                        <div className="text-xs text-muted-foreground">
+                          Imágenes, copys y enlaces
                         </div>
                       </div>
                     </Button>
