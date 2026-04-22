@@ -80,10 +80,10 @@ export default function LeadsRegistro() {
         user_id: ownerId
       });
 
-      setStep(7);
-      setTimeout(() => {
-        router.push(referralCode ? `/gracias?ref=${referralCode}` : "/gracias");
-      }, 2000);
+      setIsSubmitting(false);
+      
+      // Redirect directly to thank you page
+      router.push(`/gracias?ref=${referralCode || ""}&nombre=${encodeURIComponent(formData.nombre)}`);
     } catch (err: any) {
       toast({ title: "Error", description: err.message || "Error al enviar", variant: "destructive" });
     } finally {
@@ -360,45 +360,6 @@ export default function LeadsRegistro() {
                       <span>Acceso limitado por tiempo</span>
                     </div>
                   </form>
-                </div>
-              )}
-
-              {/* STEP 7: RESULT */}
-              {step === 7 && (
-                <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-500">
-                  <div className="flex justify-center mb-4">
-                    <div className="w-20 h-20 bg-[#4FD1C5] rounded-full flex items-center justify-center">
-                      <CheckCircle2 className="w-10 h-10 text-[#1A1F3A]" />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <h2 className="text-[#4FD1C5] text-xl font-semibold">
-                      ¡Perfecto, {formData.nombre.split(" ")[0]}!
-                    </h2>
-                    
-                    <h1 className="text-[32px] leading-tight font-bold">
-                      Este es el sistema que te permite viajar más por menos
-                    </h1>
-                    
-                    <p className="text-white/70 text-lg">
-                      Basado en tus respuestas, este acceso es ideal para ti
-                    </p>
-                  </div>
-
-                  <div className="space-y-4">
-                    <button
-                      onClick={() => router.push(referralCode ? `/gracias?ref=${referralCode}` : "/gracias")}
-                      className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97]"
-                    >
-                      {getResultMessage().cta}
-                    </button>
-
-                    <div className="flex items-center justify-center gap-2 text-[#4FD1C5] text-sm">
-                      <Clock className="w-4 h-4" />
-                      <span>Acceso limitado por tiempo</span>
-                    </div>
-                  </div>
                 </div>
               )}
 
