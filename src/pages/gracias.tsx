@@ -8,17 +8,13 @@ export default function Gracias() {
   const referralCode = typeof router.query.ref === "string" ? router.query.ref : null;
 
   useEffect(() => {
-    // Auto-redirect after 10 seconds (longer to give time to read)
+    // Auto-redirect to VSL after 5 seconds if user doesn't click
     const timer = setTimeout(() => {
-      if (referralCode) {
-        router.push(`/ambassador/${referralCode}`);
-      } else {
-        router.push("/");
-      }
-    }, 10000);
+      router.push("/vsl");
+    }, 5000);
 
     return () => clearTimeout(timer);
-  }, [router, referralCode]);
+  }, [router]);
 
   const handleCTA = () => {
     router.push("/vsl");
@@ -39,10 +35,10 @@ export default function Gracias() {
       />
 
       {/* FULL SCREEN CONTAINER */}
-      <div className="fixed inset-0 bg-[#1A1F3A] overflow-hidden">
+      <div className="min-h-screen bg-[#1A1F3A] overflow-auto">
         
         {/* CENTERED CONTENT */}
-        <div className="absolute inset-0 flex items-center justify-center px-6">
+        <div className="min-h-screen flex items-center justify-center px-6 py-12">
           
           <div className="w-full px-6 text-center text-white space-y-8 animate-in fade-in duration-500">
             <div className="flex justify-center">
