@@ -447,11 +447,13 @@ export default function RecursosPage() {
               </TabsTrigger>
               <TabsTrigger value="copys">
                 <FileText className="w-4 h-4 mr-2" />
-                Copy Sugeridos
+                <span className="sm:hidden">Copys</span>
+                <span className="hidden sm:inline">Copy Sugeridos</span>
               </TabsTrigger>
               <TabsTrigger value="links">
                 <LinkIcon className="w-4 h-4 mr-2" />
-                Enlaces de Difusión
+                <span className="sm:hidden">Enlaces</span>
+                <span className="hidden sm:inline">Enlaces de Difusión</span>
               </TabsTrigger>
             </TabsList>
 
