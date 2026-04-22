@@ -395,11 +395,6 @@ export default function RecursosPage() {
                   Volver
                 </Button>
               </Link>
-              <img 
-                src="/viaja-ligero-logo.png" 
-                alt="Viaja Ligero" 
-                className="h-8 w-auto"
-              />
             </div>
             <h1 className="text-4xl font-bold">Recursos para Difusión</h1>
             <p className="text-muted-foreground mt-2">
