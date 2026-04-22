@@ -631,14 +631,14 @@ export default function RecursosPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <input
                         type="text"
                         value={getReferralLink()}
                         readOnly
-                        className="flex-1 px-4 py-2 border rounded-lg bg-muted font-mono text-sm"
+                        className="flex-1 px-4 py-2 border rounded-lg bg-muted font-mono text-sm overflow-x-auto"
                       />
-                      <Button onClick={() => handleCopyLink(getReferralLink())}>
+                      <Button onClick={() => handleCopyLink(getReferralLink())} className="shrink-0">
                         <Copy className="w-4 h-4 mr-2" />
                         Copiar
                       </Button>
@@ -648,12 +648,12 @@ export default function RecursosPage() {
                       <p className="text-sm font-medium mb-2">Vista previa del link:</p>
                       <div className="bg-background p-4 rounded border">
                         <div className="flex gap-3">
-                          <div className="w-16 h-16 bg-primary/10 rounded flex items-center justify-center">
+                          <div className="w-16 h-16 bg-primary/10 rounded flex items-center justify-center shrink-0">
                             <Globe className="w-8 h-8 text-primary" />
                           </div>
-                          <div>
-                            <h4 className="font-semibold">Viaja Ligero - Membresías Exclusivas</h4>
-                            <p className="text-sm text-muted-foreground">
+                          <div className="min-w-0 flex-1">
+                            <h4 className="font-semibold break-words">Viaja Ligero - Membresías Exclusivas</h4>
+                            <p className="text-sm text-muted-foreground break-words">
                               Accede a descuentos exclusivos en viajes y experiencias de lujo
                             </p>
                           </div>
@@ -666,17 +666,17 @@ export default function RecursosPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Links Personalizados por Red Social</CardTitle>
-                    <CardDescription>
+                    <CardDescription className="break-words">
                       Usa estos links para trackear mejor de dónde vienen tus conversiones
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <Instagram className="w-5 h-5 text-pink-600" />
-                        <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <Instagram className="w-5 h-5 text-pink-600 shrink-0" />
+                        <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium">Instagram</p>
-                          <code className="text-xs text-muted-foreground">
+                          <code className="text-xs text-muted-foreground break-all block">
                             {getReferralLink("instagram")}
                           </code>
                         </div>
@@ -684,16 +684,17 @@ export default function RecursosPage() {
                           size="sm" 
                           variant="outline"
                           onClick={() => handleCopyLink(getReferralLink("instagram"))}
+                          className="shrink-0 w-full sm:w-auto"
                         >
                           <Copy className="w-4 h-4" />
                         </Button>
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        <Facebook className="w-5 h-5 text-blue-600" />
-                        <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <Facebook className="w-5 h-5 text-blue-600 shrink-0" />
+                        <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium">Facebook</p>
-                          <code className="text-xs text-muted-foreground">
+                          <code className="text-xs text-muted-foreground break-all block">
                             {getReferralLink("facebook")}
                           </code>
                         </div>
@@ -701,16 +702,17 @@ export default function RecursosPage() {
                           size="sm" 
                           variant="outline"
                           onClick={() => handleCopyLink(getReferralLink("facebook"))}
+                          className="shrink-0 w-full sm:w-auto"
                         >
                           <Copy className="w-4 h-4" />
                         </Button>
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        <MessageSquare className="w-5 h-5 text-green-600" />
-                        <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <MessageSquare className="w-5 h-5 text-green-600 shrink-0" />
+                        <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium">WhatsApp</p>
-                          <code className="text-xs text-muted-foreground">
+                          <code className="text-xs text-muted-foreground break-all block">
                             {getReferralLink("whatsapp")}
                           </code>
                         </div>
@@ -718,16 +720,17 @@ export default function RecursosPage() {
                           size="sm" 
                           variant="outline"
                           onClick={() => handleCopyLink(getReferralLink("whatsapp"))}
+                          className="shrink-0 w-full sm:w-auto"
                         >
                           <Copy className="w-4 h-4" />
                         </Button>
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        <Mail className="w-5 h-5 text-blue-500" />
-                        <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <Mail className="w-5 h-5 text-blue-500 shrink-0" />
+                        <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium">Email</p>
-                          <code className="text-xs text-muted-foreground">
+                          <code className="text-xs text-muted-foreground break-all block">
                             {getReferralLink("email")}
                           </code>
                         </div>
@@ -735,6 +738,7 @@ export default function RecursosPage() {
                           size="sm" 
                           variant="outline"
                           onClick={() => handleCopyLink(getReferralLink("email"))}
+                          className="shrink-0 w-full sm:w-auto"
                         >
                           <Copy className="w-4 h-4" />
                         </Button>
@@ -753,24 +757,24 @@ export default function RecursosPage() {
                   <CardContent>
                     <ul className="space-y-2 text-sm">
                       <li className="flex items-start gap-2">
-                        <span className="text-primary mt-0.5">•</span>
-                        <span>Comparte tus resultados reales (cuánto has ahorrado en viajes)</span>
+                        <span className="text-primary mt-0.5 shrink-0">•</span>
+                        <span className="break-words">Comparte tus resultados reales (cuánto has ahorrado en viajes)</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-primary mt-0.5">•</span>
-                        <span>Usa las imágenes y copys en tus historias de Instagram diariamente</span>
+                        <span className="text-primary mt-0.5 shrink-0">•</span>
+                        <span className="break-words">Usa las imágenes y copys en tus historias de Instagram diariamente</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-primary mt-0.5">•</span>
-                        <span>Envía mensajes personalizados por WhatsApp a viajeros frecuentes</span>
+                        <span className="text-primary mt-0.5 shrink-0">•</span>
+                        <span className="break-words">Envía mensajes personalizados por WhatsApp a viajeros frecuentes</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-primary mt-0.5">•</span>
-                        <span>Publica en grupos de Facebook relacionados con viajes</span>
+                        <span className="text-primary mt-0.5 shrink-0">•</span>
+                        <span className="break-words">Publica en grupos de Facebook relacionados con viajes</span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <span className="text-primary mt-0.5">•</span>
-                        <span>Responde preguntas genuinas sobre cómo funciona el club</span>
+                        <span className="text-primary mt-0.5 shrink-0">•</span>
+                        <span className="break-words">Responde preguntas genuinas sobre cómo funciona el club</span>
                       </li>
                     </ul>
                   </CardContent>
