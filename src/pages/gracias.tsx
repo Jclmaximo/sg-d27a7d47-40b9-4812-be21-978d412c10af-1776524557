@@ -10,14 +10,14 @@ export default function Gracias() {
   useEffect(() => {
     // Auto-redirect to VSL after 5 seconds if user doesn't click
     const timer = setTimeout(() => {
-      router.push("/vsl");
+      router.push(`/vsl?ref=${referralCode || ""}`);
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [router]);
+  }, [router, referralCode]);
 
   const handleCTA = () => {
-    router.push("/vsl");
+    router.push(`/vsl?ref=${referralCode || ""}`);
   };
 
   const handleWhatsApp = () => {

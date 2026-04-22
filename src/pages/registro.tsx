@@ -36,6 +36,7 @@ export default function RegistroPage() {
     password: "",
     telefono: "",
     pais: "",
+    mwr_link: "",
     acepta_terminos: false,
   });
 
@@ -94,6 +95,18 @@ export default function RegistroPage() {
 
       if (!authData.user) {
         throw new Error("No se pudo crear el usuario");
+      }
+
+      // Update profile with MWR link if provided
+      if (formData.mwr_link) {
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .update({ mwr_link: formData.mwr_link })
+          .eq("id", authData.user.id);
+
+        if (profileError) {
+          console.error("Error updating MWR link:", profileError);
+        }
       }
 
       if (referralCode) {
@@ -319,6 +332,21 @@ export default function RegistroPage() {
                         <SelectItem value="otros">Otro</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="mwr_link">MWR Link (Opcional)</Label>
+                    <Input
+                      id="mwr_link"
+                      type="url"
+                      placeholder="https://www.mwrlife.com/username/join"
+                      value={formData.mwr_link}
+                      onChange={(e) => setFormData({ ...formData, mwr_link: e.target.value })}
+                      className="bg-background/50 border-border/50"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Link donde redirigiremos a tus referidos para unirse a MWR
+                    </p>
                   </div>
 
                   {/* Terms Checkbox */}

@@ -1,7 +1,34 @@
+import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
+import { supabase } from "@/integrations/supabase/client";
 import { Play, Check, ArrowRight, MessageCircle, Sparkles, Plane, DollarSign, Users } from "lucide-react";
 
 export default function VSL() {
+  const router = useRouter();
+  const [mwrLink, setMwrLink] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchMwrLink = async () => {
+      const { ref } = router.query;
+      if (ref && typeof ref === "string") {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("mwr_link")
+          .eq("username", ref)
+          .single();
+
+        if (profile?.mwr_link) {
+          setMwrLink(profile.mwr_link);
+        }
+      }
+    };
+
+    if (router.isReady) {
+      fetchMwrLink();
+    }
+  }, [router.isReady, router.query]);
+
   const handleWhatsApp = () => {
     const message = encodeURIComponent(
       "Hola, acabo de ver mi acceso personalizado y quiero más información sobre la membresía"
@@ -13,6 +40,16 @@ export default function VSL() {
     // TODO: Redirect to checkout page
     window.location.href = "/checkout";
   };
+
+  const [referralCode, setReferralCode] = useState(null);
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("ref");
+    if (code) {
+      setReferralCode(code);
+    }
+  }, []);
 
   return (
     <>
@@ -54,7 +91,7 @@ export default function VSL() {
 
             {/* Hero CTA */}
             <button
-              onClick={handleCTA}
+              onClick={() => window.location.href = mwrLink || "/checkout"}
               className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97] flex items-center justify-center gap-2"
             >
               <span>QUIERO MI ACCESO</span>
@@ -241,7 +278,7 @@ export default function VSL() {
 
             <div className="space-y-3">
               <button
-                onClick={handleCTA}
+                onClick={() => window.location.href = mwrLink || "/checkout"}
                 className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97] flex items-center justify-center gap-2"
               >
                 <span>ACTIVAR MI MEMBRESÍA</span>
