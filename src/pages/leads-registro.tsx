@@ -191,8 +191,8 @@ export default function LeadsRegistroPage() {
           </div>
         )}
 
-        {/* Content - FULL WIDTH, CENTERED VERTICALLY */}
-        <div className="h-full w-full flex items-center justify-center px-6">
+        {/* Content - FULL WIDTH NO CENTERING */}
+        <div className="h-full w-full">
           
           {/* STEP 0: HERO */}
           {step === 0 && (
