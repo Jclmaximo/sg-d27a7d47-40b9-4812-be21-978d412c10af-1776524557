@@ -129,24 +129,26 @@ export default function LeadsRegistro() {
             {/* Gradient Overlay - transparent top to dark bottom */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/90" />
             
-            {/* Content - positioned at bottom, left-aligned */}
-            <div className="absolute inset-x-0 bottom-0 px-6 pb-12 space-y-6 text-white animate-in fade-in duration-500 z-10">
-              <div className="space-y-4 text-left">
-                <h1 className="text-[40px] leading-[1.1] font-bold">
-                  Descubre cómo viajar más… incluso GRATIS
-                </h1>
+            {/* Content - centered on desktop, bottom on mobile */}
+            <div className="absolute inset-0 flex items-end md:items-center md:justify-center px-6 pb-12 md:pb-0 z-10">
+              <div className="w-full max-w-[500px] space-y-6 text-white animate-in fade-in duration-500">
+                <div className="space-y-4 text-left md:text-center">
+                  <h1 className="text-[40px] md:text-[48px] leading-[1.1] font-bold">
+                    Descubre cómo viajar más… incluso GRATIS
+                  </h1>
+                  
+                  <p className="text-lg text-white/90 font-medium">
+                    Accede a un sistema probado para viajar más pagando menos
+                  </p>
+                </div>
                 
-                <p className="text-lg text-white/90 font-medium">
-                  Accede a un sistema probado para viajar más pagando menos
-                </p>
+                <button
+                  onClick={() => setStep(1)}
+                  className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97]"
+                >
+                  QUIERO SABER CÓMO
+                </button>
               </div>
-              
-              <button
-                onClick={() => setStep(1)}
-                className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97]"
-              >
-                QUIERO SABER CÓMO
-              </button>
             </div>
           </div>
         )}
@@ -156,7 +158,7 @@ export default function LeadsRegistro() {
           <div className="absolute inset-0 flex flex-col items-center justify-center px-6 z-10">
             
             {/* Inner Wrapper for consistent max-width */}
-            <div className="w-full max-w-[400px]">
+            <div className="w-full max-w-[500px]">
               
               {/* STEP 1: Question 1 */}
               {step === 1 && (
