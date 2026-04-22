@@ -260,52 +260,102 @@ export default function MWRPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="py-32 px-4 relative overflow-hidden">
-          {/* Gradient Background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10" />
-          
-          <div className="container relative z-10">
-            <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-                Prueba el sistema 30 días
+        {/* Value Summary Section */}
+        <section className="py-20 bg-muted/30">
+          <div className="container max-w-3xl mx-auto px-4 md:px-6">
+            <div className="text-center mb-12 space-y-4">
+              <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+                Esto es lo que ya tienes listo
               </h2>
-              
-              <p className="text-xl text-muted-foreground mb-12 max-w-xl mx-auto">
-                Acceso completo al sistema piloto. Si no generas actividad en Tu Negocio MLM, no pagas mensualidad.
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                No tienes que crear nada. Todo ya viene preparado para empezar.
               </p>
-
-              <Card className="glass-card border-border/50 shadow-2xl max-w-md mx-auto">
-                <CardContent className="p-8">
-                  <div className="space-y-4">
-                    <Button 
-                      size="lg"
-                      onClick={() => router.push("/mwr/registro")}
-                      className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold shadow-xl shadow-primary/20 border border-primary/50"
-                    >
-                      Empezar Ya! - Solo $29 USD
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
-                    
-                    {/* Video Button */}
-                    <Button 
-                      size="lg"
-                      variant="outline"
-                      onClick={() => router.push("/mwr/vsl")}
-                      className="w-full h-12 border-2 border-border bg-card/50 hover:bg-card/80 text-foreground hover:text-primary text-base font-semibold backdrop-blur-sm"
-                    >
-                      <Sparkles className="mr-2 h-5 w-5" />
-                      Ver Video de 60 Segundos
-                    </Button>
-                  </div>
-
-                  <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
-                    <Shield className="w-4 h-4 text-secondary" />
-                    <span>Garantía de 30 días</span>
-                  </div>
-                </CardContent>
-              </Card>
             </div>
+
+            <div className="space-y-4 mb-12">
+              {[
+                "Tu propia página para atraer personas interesadas",
+                "Un sistema que guarda y organiza tus prospectos",
+                "Mensajes listos para dar seguimiento automáticamente",
+                "Respuestas para WhatsApp, Instagram y email",
+                "Imágenes y textos listos para compartir",
+                "Todo conectado y funcionando desde el inicio"
+              ].map((benefit, index) => (
+                <div 
+                  key={index}
+                  className="flex items-start gap-4 p-4 bg-card rounded-xl border border-border/50 hover:border-primary/30 transition-colors duration-200"
+                >
+                  <CheckCircle2 className="w-6 h-6 text-secondary shrink-0 mt-0.5" />
+                  <p className="text-base md:text-lg text-foreground font-medium">
+                    {benefit}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <p className="text-center text-xl md:text-2xl font-semibold text-foreground">
+              Literalmente entras y ya está funcionando.
+            </p>
+          </div>
+        </section>
+
+        {/* Pricing Section */}
+        <section className="py-20">
+          <div className="container max-w-4xl mx-auto px-4 md:px-6">
+            <div className="text-center mb-12">
+              <Badge className="mb-4 bg-secondary/10 text-secondary border-secondary/30 text-sm md:text-base px-4 py-2">
+                Oferta de Lanzamiento
+              </Badge>
+            </div>
+
+            {/* CTA Section */}
+            <section className="py-32 px-4 relative overflow-hidden">
+              {/* Gradient Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-secondary/10" />
+              
+              <div className="container relative z-10">
+                <div className="max-w-2xl mx-auto text-center">
+                  <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+                    Prueba el sistema 30 días
+                  </h2>
+                  
+                  <p className="text-xl text-muted-foreground mb-12 max-w-xl mx-auto">
+                    Acceso completo al sistema piloto. Si no generas actividad en Tu Negocio MLM, no pagas mensualidad.
+                  </p>
+
+                  <Card className="glass-card border-border/50 shadow-2xl max-w-md mx-auto">
+                    <CardContent className="p-8">
+                      <div className="space-y-4">
+                        <Button 
+                          size="lg"
+                          onClick={() => router.push("/mwr/registro")}
+                          className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold shadow-xl shadow-primary/20 border border-primary/50"
+                        >
+                          Empezar Ya! - Solo $29 USD
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Button>
+                        
+                        {/* Video Button */}
+                        <Button 
+                          size="lg"
+                          variant="outline"
+                          onClick={() => router.push("/mwr/vsl")}
+                          className="w-full h-12 border-2 border-border bg-card/50 hover:bg-card/80 text-foreground hover:text-primary text-base font-semibold backdrop-blur-sm"
+                        >
+                          <Sparkles className="mr-2 h-5 w-5" />
+                          Ver Video de 60 Segundos
+                        </Button>
+                      </div>
+
+                      <div className="mt-6 flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                        <Shield className="w-4 h-4 text-secondary" />
+                        <span>Garantía de 30 días</span>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+            </section>
           </div>
         </section>
 
