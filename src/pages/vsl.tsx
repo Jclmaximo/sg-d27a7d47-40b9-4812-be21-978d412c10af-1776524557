@@ -1,10 +1,7 @@
-import { useState } from "react";
 import { SEO } from "@/components/SEO";
 import { Play, Check, ArrowRight, MessageCircle, Sparkles, Plane, DollarSign, Users } from "lucide-react";
 
 export default function VSL() {
-  const [showVideo, setShowVideo] = useState(false);
-
   const handleWhatsApp = () => {
     const message = encodeURIComponent(
       "Hola, acabo de ver mi acceso personalizado y quiero más información sobre la membresía"
@@ -42,21 +39,17 @@ export default function VSL() {
             </div>
 
             {/* Video Player */}
-            <div className="relative aspect-video bg-white/5 rounded-3xl overflow-hidden border border-white/10">
-              {!showVideo ? (
-                <button
-                  onClick={() => setShowVideo(true)}
-                  className="absolute inset-0 flex items-center justify-center group"
-                >
-                  <div className="w-20 h-20 rounded-full bg-[#4FD1C5] group-hover:bg-[#3FBFB3] transition-colors flex items-center justify-center">
-                    <Play className="w-10 h-10 text-[#1A1F3A] ml-1" fill="currentColor" />
-                  </div>
-                </button>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center text-white/60">
-                  <p>Video placeholder - Embed your video here</p>
-                </div>
-              )}
+            <div className="relative aspect-video bg-black rounded-3xl overflow-hidden border border-white/10">
+              <video
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover"
+                poster="/public/v2_36e909d4-63ca-4d40-a583-13d8d68e0f1d.mp4"
+              >
+                <source src="/v2_36e909d4-63ca-4d40-a583-13d8d68e0f1d.mp4" type="video/mp4" />
+                Tu navegador no soporta la reproducción de video.
+              </video>
             </div>
 
             {/* Hero CTA */}
