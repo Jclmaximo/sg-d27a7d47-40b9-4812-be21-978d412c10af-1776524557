@@ -260,7 +260,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -573,27 +573,34 @@ Puedo resolver dudas sobre:
         <main className="w-full px-4 py-6 md:py-8 relative z-10">
           <div className="max-w-7xl mx-auto w-full">
             {/* Navigation Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid mb-8">
-                <TabsTrigger value="resumen" className="flex items-center gap-2">
-                  <LayoutDashboard className="h-4 w-4" />
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+              <TabsList className="grid w-full grid-cols-6">
+                <TabsTrigger value="overview">
+                  <LayoutDashboard className="w-4 h-4 mr-2" />
                   <span className="hidden sm:inline">Resumen</span>
                 </TabsTrigger>
-                <TabsTrigger value="leads" className="flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  <span className="hidden sm:inline">Leads</span>
+                <TabsTrigger value="leads">
+                  <Users className="w-4 h-4 mr-2" />
+                  Leads
                 </TabsTrigger>
-                <TabsTrigger value="network" className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
+                <TabsTrigger value="network">
+                  <Users className="w-4 h-4 mr-2" />
                   <span className="hidden sm:inline">Mi Red</span>
                 </TabsTrigger>
-                <TabsTrigger value="links" className="flex items-center gap-2">
-                  <Link2 className="h-4 w-4" />
-                  <span className="hidden sm:inline">Links</span>
+                <TabsTrigger value="links">
+                  <Link2 className="w-4 h-4 mr-2" />
+                  Links
                 </TabsTrigger>
-                <TabsTrigger value="perfil" className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span className="hidden sm:inline">Perfil</span>
+                <TabsTrigger value="profile">
+                  <User className="w-4 h-4 mr-2" />
+                  Perfil
+                </TabsTrigger>
+                <TabsTrigger value="recursos" onClick={(e) => {
+                  e.preventDefault();
+                  router.push("/admin/recursos");
+                }}>
+                  <Gift className="w-4 h-4 mr-2" />
+                  <span className="hidden sm:inline">Recursos</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -1103,7 +1110,7 @@ Puedo resolver dudas sobre:
               </TabsContent>
 
               {/* TAB 5 - PERFIL */}
-              <TabsContent value="perfil" className="space-y-6">
+              <TabsContent value="profile" className="space-y-6">
                 <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
                   <CardHeader>
                     <CardTitle>Información Personal</CardTitle>
