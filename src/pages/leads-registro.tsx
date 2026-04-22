@@ -200,7 +200,7 @@ export default function LeadsRegistroPage() {
               {/* Background Image */}
               <div 
                 className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: 'url(/tropical-paradise.jpg)' }}
+                style={{ backgroundImage: 'url(/10_Coastal_Boho_Bathroom_Ideas_to_Make_a_Splash_in_Your_Florida_Home.jpeg)' }}
               />
               
               {/* Gradient Overlay - transparent top to dark bottom */}
@@ -220,7 +220,7 @@ export default function LeadsRegistroPage() {
                 
                 <button
                   onClick={() => setStep(1)}
-                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                  className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   QUIERO SABER CÓMO
                 </button>
