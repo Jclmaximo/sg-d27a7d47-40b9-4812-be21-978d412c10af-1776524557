@@ -318,7 +318,7 @@ export default function RecursosPage() {
   };
 
   const handleCopyText = async (text: string, label: string) => {
-    const textWithLink = text.replace("[TU LINK]", `https://mwr.hubia.vip/pricing?ref=${username}`);
+    const textWithLink = text.replace("[TU LINK]", `https://mwr.hubia.vip/ambassador/${username}`);
     
     try {
       await navigator.clipboard.writeText(textWithLink);
@@ -352,9 +352,9 @@ export default function RecursosPage() {
   };
 
   const getReferralLink = (source?: string) => {
-    const baseUrl = `https://mwr.hubia.vip/pricing?ref=${username}`;
+    const baseUrl = `https://mwr.hubia.vip/ambassador/${username}`;
     if (source) {
-      return `${baseUrl}&utm_source=${source}&utm_medium=referral`;
+      return `${baseUrl}?utm_source=${source}&utm_medium=referral`;
     }
     return baseUrl;
   };
