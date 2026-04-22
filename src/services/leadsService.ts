@@ -40,7 +40,7 @@ export const leadsService = {
     source: string;
     interest?: string;
     contact_method?: string;
-    user_id: string;
+    user_id: string | null;
   }) {
     const { data, error } = await supabase
       .from("leads")

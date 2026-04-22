@@ -58,8 +58,8 @@ export default function LeadsRegistro() {
 
     setIsSubmitting(true);
     try {
-      // Fetch owner ID if referral code exists
-      let ownerId = "00000000-0000-0000-0000-000000000000";
+      // Fetch owner ID if referral code exists - use null if not found
+      let ownerId: string | null = null;
       if (referralCode) {
         const { data: profile } = await supabase
           .from("profiles")
