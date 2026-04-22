@@ -21,6 +21,12 @@ import {
 export default function MWRPage() {
   const router = useRouter();
   const [showCTA, setShowCTA] = useState(false);
+  const [showGamifiedFlow, setShowGamifiedFlow] = useState(false);
+  const [flowStep, setFlowStep] = useState(1);
+  const [answers, setAnswers] = useState({
+    challenge: "",
+    desire: ""
+  });
 
   // Auto-show CTA after 3 seconds
   useEffect(() => {
@@ -30,6 +36,24 @@ export default function MWRPage() {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const handleAnswer = (step: number, answer: string) => {
+    if (step === 1) {
+      setAnswers({ ...answers, challenge: answer });
+      setFlowStep(2);
+    } else if (step === 2) {
+      setAnswers({ ...answers, desire: answer });
+      // Save to localStorage
+      localStorage.setItem("mwr_quiz_answers", JSON.stringify({ ...answers, desire: answer }));
+      setFlowStep(3);
+    }
+  };
+
+  const closeFlow = () => {
+    setShowGamifiedFlow(false);
+    setFlowStep(1);
+    setAnswers({ challenge: "", desire: "" });
+  };
 
   return (
     <>
@@ -81,7 +105,7 @@ export default function MWRPage() {
               <div className="flex justify-center mb-12">
                 <Button 
                   size="lg"
-                  onClick={() => router.push("/mwr/vsl")}
+                  onClick={() => setShowGamifiedFlow(true)}
                   className="h-16 px-8 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-bold shadow-2xl shadow-primary/20 hover:shadow-primary/40 border border-primary/50 transition-all duration-300 hover:scale-105"
                 >
                   <Sparkles className="mr-3 h-6 w-6" />
@@ -284,6 +308,182 @@ export default function MWRPage() {
             </div>
           </div>
         </section>
+
+        {/* Gamified Flow Overlay */}
+        {showGamifiedFlow && (
+          <div className="fixed inset-0 z-[100] bg-background">
+            {/* Progress Bar */}
+            <div className="fixed top-0 left-0 right-0 h-1 bg-muted z-10">
+              <div 
+                className="h-full bg-primary transition-all duration-300"
+                style={{ width: `${(flowStep / 4) * 100}%` }}
+              />
+            </div>
+
+            {/* Step Counter */}
+            <div className="fixed top-4 right-4 text-sm text-muted-foreground font-medium z-10">
+              {flowStep}/4
+            </div>
+
+            {/* Content Container */}
+            <div className="h-full flex items-center justify-center px-6 py-20">
+              <div className="w-full max-w-2xl mx-auto">
+                
+                {/* STEP 1: Challenge */}
+                {flowStep === 1 && (
+                  <div className="space-y-8 animate-in fade-in duration-500">
+                    <div className="text-center space-y-4">
+                      <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+                        Responde esto rápido
+                      </h2>
+                      <p className="text-xl text-muted-foreground">(30 segundos)</p>
+                    </div>
+
+                    <div className="space-y-4">
+                      <h3 className="text-2xl font-bold text-foreground text-center mb-8">
+                        ¿Qué es lo que más te cuesta hoy?
+                      </h3>
+
+                      <div className="grid gap-4">
+                        {[
+                          "Conseguir prospectos",
+                          "Dar seguimiento",
+                          "Cerrar ventas",
+                          "Todo"
+                        ].map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => handleAnswer(1, option)}
+                            className="w-full p-6 text-lg font-semibold text-left bg-card hover:bg-accent hover:text-accent-foreground border-2 border-border hover:border-primary rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 2: Desire */}
+                {flowStep === 2 && (
+                  <div className="space-y-8 animate-in fade-in duration-500">
+                    <div className="space-y-4">
+                      <h3 className="text-2xl font-bold text-foreground text-center mb-8">
+                        ¿Qué te gustaría que pasara?
+                      </h3>
+
+                      <div className="grid gap-4">
+                        {[
+                          "Tener prospectos todos los días",
+                          "Automatizar respuestas",
+                          "Dejar de perseguir gente",
+                          "Generar ingresos constantes"
+                        ].map((option) => (
+                          <button
+                            key={option}
+                            onClick={() => handleAnswer(2, option)}
+                            className="w-full p-6 text-lg font-semibold text-left bg-card hover:bg-accent hover:text-accent-foreground border-2 border-border hover:border-primary rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                          >
+                            {option}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 3: Validation */}
+                {flowStep === 3 && (
+                  <div className="space-y-12 animate-in fade-in duration-500 text-center">
+                    <div className="space-y-6">
+                      <div className="w-20 h-20 mx-auto rounded-full bg-secondary/10 flex items-center justify-center">
+                        <CheckCircle2 className="w-10 h-10 text-secondary" />
+                      </div>
+                      
+                      <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+                        Perfecto.
+                      </h2>
+                      
+                      <p className="text-2xl text-foreground font-medium">
+                        Eso es exactamente lo que este sistema hace por ti.
+                      </p>
+                      
+                      <p className="text-xl text-muted-foreground">
+                        Ya dejamos listo todo para que funcione a tu favor
+                      </p>
+                    </div>
+
+                    <Button
+                      size="lg"
+                      onClick={() => setFlowStep(4)}
+                      className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold"
+                    >
+                      Continuar
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </div>
+                )}
+
+                {/* STEP 4: Offer */}
+                {flowStep === 4 && (
+                  <div className="space-y-12 animate-in fade-in duration-500">
+                    <div className="text-center space-y-6">
+                      <Badge className="mb-4 bg-secondary/10 text-secondary border-secondary/30 text-base px-4 py-2">
+                        Listo para ti
+                      </Badge>
+                      
+                      <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+                        Este sistema es para ti
+                      </h2>
+                      
+                      <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                        Te ayuda a conseguir prospectos, dar seguimiento automático y avanzar más rápido sin complicarte
+                      </p>
+                    </div>
+
+                    <Card className="glass-card border-border/50 shadow-2xl max-w-md mx-auto">
+                      <CardContent className="p-8 space-y-6">
+                        <div className="text-center space-y-2">
+                          <div className="flex items-baseline justify-center gap-2">
+                            <span className="text-5xl font-bold text-foreground">$29</span>
+                            <span className="text-xl text-muted-foreground">USD inicio</span>
+                          </div>
+                          <p className="text-lg text-muted-foreground">
+                            Luego $9 USD/mes
+                          </p>
+                        </div>
+
+                        <Button
+                          size="lg"
+                          onClick={() => router.push("/mwr/registro")}
+                          className="w-full h-16 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-bold shadow-xl shadow-primary/20"
+                        >
+                          Activar mi sistema ahora
+                          <ArrowRight className="ml-2 h-5 w-5" />
+                        </Button>
+
+                        <p className="text-sm text-center text-muted-foreground">
+                          Acceso inmediato • Empieza hoy
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
+
+              </div>
+            </div>
+
+            {/* Close button (only show on step 1) */}
+            {flowStep === 1 && (
+              <button
+                onClick={closeFlow}
+                className="fixed top-4 left-4 w-10 h-10 rounded-full bg-muted hover:bg-muted/80 flex items-center justify-center transition-colors z-10"
+              >
+                <span className="text-2xl text-muted-foreground">×</span>
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Fixed CTA */}
         {showCTA && (
