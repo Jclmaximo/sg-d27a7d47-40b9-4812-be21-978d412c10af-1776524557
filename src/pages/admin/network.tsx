@@ -266,7 +266,7 @@ export default function NetworkPage() {
             </div>
             <h1 className="text-4xl font-bold">Mi Red de Referidos del Funnel</h1>
             <p className="text-muted-foreground mt-2">
-              Gana comisiones del 50% invitando nuevos ambassadors
+              Gana comisiones del 10% invitando nuevos ambassadors
             </p>
           </div>
 
@@ -276,7 +276,7 @@ export default function NetworkPage() {
               <CardHeader>
                 <CardTitle>Tu Link de Referidos del Funnel</CardTitle>
                 <CardDescription>
-                  Comparte este link para que otros miembros de tu equipo obtengan su propio embudo (ganas $39.50 por cada uno)
+                  Comparte este link para que otros miembros de tu equipo obtengan su propio embudo (ganas 10% de todos sus pagos: $2.90 del primer pago + $0.90 mensual)
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -303,7 +303,7 @@ export default function NetworkPage() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{stats?.directReferrals || 0}</div>
-                <p className="text-xs text-muted-foreground">50% comisión por cada uno</p>
+                <p className="text-xs text-muted-foreground">10% comisión de cada pago</p>
               </CardContent>
             </Card>
 
@@ -425,7 +425,7 @@ export default function NetworkPage() {
           <Card className="mb-8">
             <CardHeader>
               <CardTitle>Historial de Comisiones</CardTitle>
-              <CardDescription>Todas tus comisiones generadas (50% por cada referido)</CardDescription>
+              <CardDescription>Todas tus comisiones generadas (10% de cada pago de tus referidos)</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="rounded-md border">

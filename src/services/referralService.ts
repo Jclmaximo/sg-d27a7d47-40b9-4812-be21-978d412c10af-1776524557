@@ -41,8 +41,7 @@ export interface ReferralTreeNode {
 }
 
 const COMMISSION_RATES = {
-  LEVEL_1: 30, // 30% for direct referrals
-  LEVEL_2: 10  // 10% for indirect referrals
+  LEVEL_1: 10, // 10% for direct referrals on all payments
 };
 
 export const referralService = {
@@ -84,6 +83,7 @@ export const referralService = {
 
   /**
    * Calculate and create commissions when a new subscription is created
+   * Now only creates Level 1 commission (10% for direct referrals)
    */
   async createCommissionsForSubscription(
     subscriberId: string,
@@ -105,7 +105,7 @@ export const referralService = {
 
       const referrerId = subscriberProfile.referred_by;
 
-      // Level 1 Commission (Direct referral)
+      // Level 1 Commission ONLY (10% - Direct referral)
       const level1Amount = (pricePaid * COMMISSION_RATES.LEVEL_1) / 100;
       await supabase.from("commissions").insert({
         user_id: referrerId,
@@ -117,27 +117,7 @@ export const referralService = {
         status: "pending"
       });
 
-      // Level 2 Commission (Indirect referral - referrer's referrer)
-      const { data: referrerProfile, error: referrerError } = await supabase
-        .from("profiles")
-        .select("referred_by")
-        .eq("id", referrerId)
-        .single();
-
-      if (!referrerError && referrerProfile?.referred_by) {
-        const level2Amount = (pricePaid * COMMISSION_RATES.LEVEL_2) / 100;
-        await supabase.from("commissions").insert({
-          user_id: referrerProfile.referred_by,
-          referred_user_id: subscriberId,
-          subscription_id: subscriptionId,
-          amount_usd: level2Amount,
-          commission_level: 2,
-          percentage: COMMISSION_RATES.LEVEL_2,
-          status: "pending"
-        });
-      }
-
-      console.log("✅ Commissions created successfully");
+      console.log(`✅ Commission created: $${level1Amount.toFixed(2)} (${COMMISSION_RATES.LEVEL_1}%)`);
     } catch (error) {
       console.error("Error creating commissions:", error);
     }
