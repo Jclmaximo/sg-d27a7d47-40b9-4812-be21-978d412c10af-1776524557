@@ -374,7 +374,7 @@ export default function MWRPage() {
                           <button
                             key={option}
                             onClick={() => handleAnswer(1, option)}
-                            className="w-full p-6 text-lg font-semibold text-left bg-card hover:bg-accent hover:text-accent-foreground border-2 border-border hover:border-primary rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                            className="w-full p-6 bg-card hover:bg-accent hover:text-accent-foreground border-2 border-border hover:border-primary rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                           >
                             {option}
                           </button>
@@ -402,7 +402,7 @@ export default function MWRPage() {
                           <button
                             key={option}
                             onClick={() => handleAnswer(2, option)}
-                            className="w-full p-6 text-lg font-semibold text-left bg-card hover:bg-accent hover:text-accent-foreground border-2 border-border hover:border-primary rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                            className="w-full p-6 bg-card hover:bg-accent hover:text-accent-foreground border-2 border-border hover:border-primary rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                           >
                             {option}
                           </button>
@@ -454,27 +454,6 @@ export default function MWRPage() {
                       <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
                         No tienes que crear nada. Todo ya viene preparado para empezar.
                       </p>
-                    </div>
-
-                    <div className="space-y-4 max-w-2xl mx-auto">
-                      {[
-                        "Tu propia página para atraer personas interesadas",
-                        "Un sistema que guarda y organiza tus prospectos",
-                        "Mensajes listos para dar seguimiento automáticamente",
-                        "Respuestas para WhatsApp, Instagram y email",
-                        "Imágenes y textos listos para compartir",
-                        "Todo conectado y funcionando desde el inicio"
-                      ].map((benefit, index) => (
-                        <div 
-                          key={index}
-                          className="flex items-start gap-4 p-4 bg-card rounded-xl border border-border/50"
-                        >
-                          <CheckCircle2 className="w-6 h-6 text-secondary shrink-0 mt-0.5" />
-                          <p className="text-base md:text-lg text-foreground font-medium text-left">
-                            {benefit}
-                          </p>
-                        </div>
-                      ))}
                     </div>
 
                     <div className="text-center space-y-6">
@@ -555,14 +534,16 @@ export default function MWRPage() {
                       Así es como empieza todo automáticamente
                     </p>
 
-                    <Button
-                      size="lg"
-                      onClick={() => setFlowStep(6)}
-                      className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold"
-                    >
-                      Continuar
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
+                    <div className="flex justify-center">
+                      <Button
+                        size="lg"
+                        onClick={() => setFlowStep(6)}
+                        className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold"
+                      >
+                        Siguiente
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </div>
                   </div>
                 )}
 
