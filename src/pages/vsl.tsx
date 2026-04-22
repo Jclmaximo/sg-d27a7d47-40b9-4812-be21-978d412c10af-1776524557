@@ -91,7 +91,7 @@ export default function VSL() {
 
             {/* Hero CTA */}
             <button
-              onClick={() => window.location.href = mwrLink || "/checkout"}
+              onClick={() => window.location.href = mwrLink || "/registro"}
               className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97] flex items-center justify-center gap-2"
             >
               <span>QUIERO MI ACCESO</span>
@@ -278,7 +278,7 @@ export default function VSL() {
 
             <div className="space-y-3">
               <button
-                onClick={() => window.location.href = mwrLink || "/checkout"}
+                onClick={() => window.location.href = mwrLink || "/registro"}
                 className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97] flex items-center justify-center gap-2"
               >
                 <span>ACTIVAR MI MEMBRESÍA</span>
