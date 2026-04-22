@@ -534,7 +534,7 @@ export default function MWRPage() {
                                 {leadStatus} 👆
                               </Badge>
                               {!statusChanged && (
-                                <div className="absolute -top-10 left-0 text-xs text-muted-foreground italic whitespace-nowrap animate-pulse">
+                                <div className="absolute -bottom-6 left-0 text-xs text-secondary font-medium italic whitespace-nowrap animate-pulse">
                                   👆 Haz clic aquí
                                 </div>
                               )}
