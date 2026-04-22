@@ -4,6 +4,7 @@ import { SEO } from "@/components/SEO";
 import { Loader2, CheckCircle2, Clock } from "lucide-react";
 import { leadsService } from "@/services/leadsService";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function LeadsRegistro() {
   const router = useRouter();
@@ -57,13 +58,26 @@ export default function LeadsRegistro() {
 
     setIsSubmitting(true);
     try {
+      // Fetch owner ID if referral code exists
+      let ownerId = "00000000-0000-0000-0000-000000000000";
+      if (referralCode) {
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("id")
+          .eq("username", referralCode)
+          .single();
+        if (profile) ownerId = profile.id;
+      }
+
       await leadsService.createLead({
-        nombre: formData.nombre,
-        whatsapp: formData.whatsapp,
+        name: formData.nombre,
+        phone: formData.whatsapp,
         email: formData.email,
-        pais: "N/A",
-        respuestas: answers,
-        referido_por: referralCode || undefined,
+        country: "N/A",
+        source: "Funnel Viaja Ligero",
+        interest: answers.q4 || "N/A",
+        contact_method: "whatsapp",
+        user_id: ownerId
       });
 
       setStep(7);
@@ -86,7 +100,7 @@ export default function LeadsRegistro() {
         
         {/* Progress bar (only show on questions and loader) */}
         {step > 0 && step <= 5 && (
-          <div className="absolute top-0 left-0 right-0 pt-6 px-6 z-10">
+          <div className="absolute top-0 left-0 right-0 pt-8 px-6 z-20">
             <div className="text-center mb-3">
               <p className="text-white/60 text-sm font-medium">
                 {step <= 4 ? `Paso ${step} de 4` : "Casi listo..."}
@@ -101,73 +115,71 @@ export default function LeadsRegistro() {
           </div>
         )}
 
-        {/* Content - FULL WIDTH NO CENTERING */}
-        <div className="h-full w-full">
-
-          {/* STEP 0: HERO */}
-          {step === 0 && (
-            <div className="absolute inset-0">
-              {/* Background Image - Full Edge-to-Edge Coverage */}
-              <div 
-                className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
-                style={{ 
-                  backgroundImage: 'url(/10_Coastal_Boho_Bathroom_Ideas_to_Make_a_Splash_in_Your_Florida_Home.jpeg)',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center'
-                }}
-              />
-              
-              {/* Gradient Overlay - transparent top to dark bottom */}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/80" />
-              
-              {/* Content - positioned at bottom, left-aligned */}
-              <div className="absolute inset-x-0 bottom-0 px-6 pb-12 space-y-6 text-white animate-in fade-in duration-500">
-                <div className="space-y-4 text-left">
-                  <h1 className="text-[40px] leading-[1.2] font-bold">
-                    Descubre cómo viajar más… incluso GRATIS
-                  </h1>
-                  
-                  <p className="text-lg text-white/90">
-                    Accede a un sistema probado para viajar más pagando menos
-                  </p>
-                </div>
+        {/* STEP 0: HERO - Full Screen with Image */}
+        {step === 0 && (
+          <div className="absolute inset-0">
+            {/* Background Image - Full Edge-to-Edge Coverage */}
+            <div 
+              className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+              style={{ 
+                backgroundImage: 'url(/10_Coastal_Boho_Bathroom_Ideas_to_Make_a_Splash_in_Your_Florida_Home.jpeg)'
+              }}
+            />
+            
+            {/* Gradient Overlay - transparent top to dark bottom */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/90" />
+            
+            {/* Content - positioned at bottom, left-aligned */}
+            <div className="absolute inset-x-0 bottom-0 px-6 pb-12 space-y-6 text-white animate-in fade-in duration-500 z-10">
+              <div className="space-y-4 text-left">
+                <h1 className="text-[40px] leading-[1.1] font-bold">
+                  Descubre cómo viajar más… incluso GRATIS
+                </h1>
                 
-                <button
-                  onClick={() => setStep(1)}
-                  className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97]"
-                >
-                  QUIERO SABER CÓMO
-                </button>
+                <p className="text-lg text-white/90 font-medium">
+                  Accede a un sistema probado para viajar más pagando menos
+                </p>
               </div>
+              
+              <button
+                onClick={() => setStep(1)}
+                className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97]"
+              >
+                QUIERO SABER CÓMO
+              </button>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* STEPS 1-8: Centered Content */}
-          {step >= 1 && (
-            <div className="h-full w-full flex items-center justify-center px-6">
+        {/* STEPS 1-8: Centered Content Absolute Positioning */}
+        {step >= 1 && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center px-6 z-10">
+            
+            {/* Inner Wrapper for consistent max-width */}
+            <div className="w-full max-w-[400px]">
               
               {/* STEP 1: Question 1 */}
               {step === 1 && (
-                <div className="w-full h-full px-6 text-center text-white space-y-8 animate-in fade-in duration-500">
+                <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-500">
                   <h2 className="text-2xl font-bold">
                     ¿Te gustaría viajar más este año?
                   </h2>
                   <div className="space-y-3">
                     <button
                       onClick={() => handleAnswer("q1", "definitivamente")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Sí, definitivamente
                     </button>
                     <button
                       onClick={() => handleAnswer("q1", "gustaria")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Me gustaría viajar más
                     </button>
                     <button
                       onClick={() => handleAnswer("q1", "opciones")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Quiero mejores opciones para viajar
                     </button>
@@ -177,32 +189,32 @@ export default function LeadsRegistro() {
 
               {/* STEP 2: Question 2 */}
               {step === 2 && (
-                <div className="w-full h-full px-6 text-center text-white space-y-8 animate-in fade-in duration-500">
+                <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-500">
                   <h2 className="text-2xl font-bold">
                     ¿Qué tipo de viajes prefieres?
                   </h2>
                   <div className="space-y-3">
                     <button
                       onClick={() => handleAnswer("q2", "playa")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Playa y relax
                     </button>
                     <button
                       onClick={() => handleAnswer("q2", "aventura")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Aventura y naturaleza
                     </button>
                     <button
                       onClick={() => handleAnswer("q2", "ciudades")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Ciudades y cultura
                     </button>
                     <button
                       onClick={() => handleAnswer("q2", "todo")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Un poco de todo
                     </button>
@@ -212,32 +224,32 @@ export default function LeadsRegistro() {
 
               {/* STEP 3: Question 3 */}
               {step === 3 && (
-                <div className="w-full h-full px-6 text-center text-white space-y-8 animate-in fade-in duration-500">
+                <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-500">
                   <h2 className="text-2xl font-bold">
                     ¿Cuál es tu mayor obstáculo para viajar?
                   </h2>
                   <div className="space-y-3">
                     <button
                       onClick={() => handleAnswer("q3", "dinero")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       El dinero
                     </button>
                     <button
                       onClick={() => handleAnswer("q3", "tiempo")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Falta de tiempo
                     </button>
                     <button
                       onClick={() => handleAnswer("q3", "planificar")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       No sé planificar
                     </button>
                     <button
                       onClick={() => handleAnswer("q3", "ninguno")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Ninguno
                     </button>
@@ -247,26 +259,26 @@ export default function LeadsRegistro() {
 
               {/* STEP 4: Question 4 */}
               {step === 4 && (
-                <div className="w-full h-full px-6 text-center text-white space-y-8 animate-in fade-in duration-500">
+                <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-500">
                   <h2 className="text-2xl font-bold">
                     ¿Qué te gustaría lograr?
                   </h2>
                   <div className="space-y-3">
                     <button
                       onClick={() => handleAnswer("q4", "descuentos")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Descuentos y viajes gratis
                     </button>
                     <button
                       onClick={() => handleAnswer("q4", "ingresos")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Tener ingresos extras
                     </button>
                     <button
                       onClick={() => handleAnswer("q4", "ambas")}
-                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       Ambas cosas
                     </button>
@@ -338,7 +350,7 @@ export default function LeadsRegistro() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97] disabled:opacity-50"
+                      className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97] disabled:opacity-50"
                     >
                       {isSubmitting ? "Enviando..." : "VER MI ACCESO"}
                     </button>
@@ -377,7 +389,7 @@ export default function LeadsRegistro() {
                   <div className="space-y-4">
                     <button
                       onClick={() => router.push(referralCode ? `/gracias?ref=${referralCode}` : "/gracias")}
-                      className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97]"
+                      className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97]"
                     >
                       {getResultMessage().cta}
                     </button>
@@ -391,9 +403,8 @@ export default function LeadsRegistro() {
               )}
 
             </div>
-          )}
-
-        </div>
+          </div>
+        )}
 
       </div>
     </>
