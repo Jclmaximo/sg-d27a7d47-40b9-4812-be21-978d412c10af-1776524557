@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { leadsService } from "@/services/leadsService";
-import { Loader2, CheckCircle2, Gift } from "lucide-react";
+import { Loader2, CheckCircle2, Gift, Clock } from "lucide-react";
 
 type ProfileType = "explorador" | "ahorro" | "tiempo" | "potencial";
 
@@ -32,7 +31,6 @@ export default function LeadsRegistroPage() {
     nombre: "",
     whatsapp: "",
     email: "",
-    pais: "",
   });
 
   // Detect referral
@@ -79,6 +77,20 @@ export default function LeadsRegistroPage() {
     return "potencial";
   };
 
+  // Get dynamic loader text based on answers
+  const getLoaderText = (): string => {
+    if (answers.q3 === "dinero") {
+      return "Detectamos que quieres viajar más sin afectar tus finanzas";
+    }
+    if (answers.q3 === "tiempo") {
+      return "Detectamos que buscas optimizar tu tiempo para viajar más";
+    }
+    if (answers.q4 === "ingresos" || answers.q4 === "ambas") {
+      return "Detectamos que te interesa generar ingresos mientras viajas";
+    }
+    return "Detectamos que estás listo para viajar más por menos";
+  };
+
   // Handle answer selection (auto advance)
   const handleAnswer = (question: keyof Answers, answer: string) => {
     const newAnswers = { ...answers, [question]: answer };
@@ -111,7 +123,7 @@ export default function LeadsRegistroPage() {
         name: formData.nombre,
         email: formData.email,
         phone: formData.whatsapp,
-        country: formData.pais || "N/A",
+        country: "N/A",
         source: "funnel_interactivo",
         interest: profile,
         contact_method: "whatsapp",
@@ -139,19 +151,15 @@ export default function LeadsRegistroPage() {
   // Profile results
   const profileResults = {
     explorador: {
-      title: "Puedes viajar incluso sin pagar",
       cta: "VER CÓMO FUNCIONA"
     },
     ahorro: {
-      title: "Puedes viajar más gastando mucho menos",
       cta: "VER CÓMO FUNCIONA"
     },
     tiempo: {
-      title: "Puedes viajar mejor sin perder tiempo",
       cta: "VER CÓMO FUNCIONA"
     },
     potencial: {
-      title: "Estás más cerca de viajar más",
       cta: "VER CÓMO FUNCIONA"
     }
   };
@@ -176,7 +184,7 @@ export default function LeadsRegistroPage() {
             </div>
             <div className="h-1 bg-white/20 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-[#4FD1C5] transition-all duration-500 rounded-full"
+                className="h-full bg-[#4FD1C5] rounded-full transition-all duration-500 ease-in-out"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -191,17 +199,17 @@ export default function LeadsRegistroPage() {
             <div className="w-full text-center text-white space-y-8 animate-in fade-in duration-500">
               <div className="space-y-4">
                 <h1 className="text-[40px] leading-[1.2] font-bold">
-                  Viajar más... sin gastar más, es posible
+                  Descubre cómo viajar más… incluso GRATIS
                 </h1>
                 
                 <p className="text-lg text-white/70">
-                  Descubre en 30 segundos cómo viajar más pagando menos
+                  Accede a un sistema probado para viajar más pagando menos
                 </p>
               </div>
               
               <button
                 onClick={() => setStep(1)}
-                className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-all active:scale-[0.98]"
+                className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97]"
               >
                 QUIERO SABER CÓMO
               </button>
@@ -216,23 +224,23 @@ export default function LeadsRegistroPage() {
               <div className="space-y-3">
                 <button
                   onClick={() => handleAnswer("q1", "definitivamente")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Sí, definitivamente
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q1", "gustaria")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Me gustaría viajar más
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q1", "buscando")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
-                  Estoy buscando opciones
+                  Quiero mejores opciones para viajar
                 </button>
               </div>
             </div>
@@ -246,28 +254,28 @@ export default function LeadsRegistroPage() {
               <div className="space-y-3">
                 <button
                   onClick={() => handleAnswer("q2", "playa")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Playa y relax
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q2", "aventura")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Aventura y naturaleza
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q2", "ciudades")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Ciudades y cultura
                 </button>
 
                 <button
                   onClick={() => handleAnswer("q2", "todo")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Un poco de todo
                 </button>
@@ -283,28 +291,28 @@ export default function LeadsRegistroPage() {
               <div className="space-y-3">
                 <button
                   onClick={() => handleAnswer("q3", "dinero")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   El dinero
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q3", "tiempo")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Falta de tiempo
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q3", "planificar")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   No sé planificar
                 </button>
 
                 <button
                   onClick={() => handleAnswer("q3", "ninguno")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Ninguno
                 </button>
@@ -320,21 +328,21 @@ export default function LeadsRegistroPage() {
               <div className="space-y-3">
                 <button
                   onClick={() => handleAnswer("q4", "descuentos")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Descuentos y viajes gratis
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q4", "ingresos")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Tener ingresos extras
                 </button>
                 
                 <button
                   onClick={() => handleAnswer("q4", "ambas")}
-                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium transition-all active:scale-[0.98]"
+                  className="w-full h-14 px-6 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 rounded-2xl text-white font-medium shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   Ambas cosas
                 </button>
@@ -349,7 +357,7 @@ export default function LeadsRegistroPage() {
                 <div className="absolute inset-0 border-4 border-[#4FD1C5] border-t-transparent rounded-full animate-spin"></div>
               </div>
               <div className="space-y-2">
-                <h2 className="text-2xl font-bold">Generando tu perfil de viajero ideal...</h2>
+                <h2 className="text-2xl font-bold">{getLoaderText()}</h2>
                 <p className="text-white/60">Analizando tus respuestas</p>
               </div>
             </div>
@@ -364,7 +372,7 @@ export default function LeadsRegistroPage() {
                 </div>
                 
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold">Tu resultado está listo</h2>
+                  <h2 className="text-2xl font-bold">Estás a un paso de viajar más por menos</h2>
                   <p className="text-white/70 text-base">¿A dónde te enviamos tu acceso personalizado?</p>
                 </div>
               </div>
@@ -396,26 +404,10 @@ export default function LeadsRegistroPage() {
                   className="h-14 bg-white/10 border-white/20 text-white placeholder:text-white/50 text-base rounded-2xl focus:ring-2 focus:ring-[#4FD1C5] focus:border-transparent"
                 />
 
-                <Select value={formData.pais} onValueChange={(value) => setFormData({ ...formData, pais: value })}>
-                  <SelectTrigger className="h-14 bg-white/10 border-white/20 text-white text-base rounded-2xl focus:ring-2 focus:ring-[#4FD1C5]">
-                    <SelectValue placeholder="País (opcional)" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="mexico">México</SelectItem>
-                    <SelectItem value="colombia">Colombia</SelectItem>
-                    <SelectItem value="argentina">Argentina</SelectItem>
-                    <SelectItem value="chile">Chile</SelectItem>
-                    <SelectItem value="peru">Perú</SelectItem>
-                    <SelectItem value="espana">España</SelectItem>
-                    <SelectItem value="usa">Estados Unidos</SelectItem>
-                    <SelectItem value="otros">Otro</SelectItem>
-                  </SelectContent>
-                </Select>
-
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] disabled:bg-[#4FD1C5]/50 text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97] disabled:cursor-not-allowed"
+                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] disabled:bg-[#4FD1C5]/50 text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97] disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center gap-2">
@@ -424,6 +416,12 @@ export default function LeadsRegistroPage() {
                     </span>
                   ) : "VER MI ACCESO"}
                 </button>
+
+                {/* Urgency element */}
+                <div className="flex items-center justify-center gap-2 text-[#4FD1C5] text-sm">
+                  <Clock className="w-4 h-4" />
+                  <span>Acceso limitado por tiempo</span>
+                </div>
               </form>
             </div>
           )}
@@ -440,20 +438,26 @@ export default function LeadsRegistroPage() {
                   ¡Perfecto, {formData.nombre.split(' ')[0]}!
                 </h2>
                 <h1 className="text-[32px] leading-tight font-bold">
-                  {profileResults[profile].title}
+                  Este es el sistema que te permite viajar más por menos
                 </h1>
                 <p className="text-white/70 text-base px-4">
-                  Accede a beneficios exclusivos y oportunidades para viajar incluso sin costo
+                  Basado en tus respuestas, este acceso es ideal para ti
                 </p>
               </div>
               
               <div className="space-y-4">
                 <button
                   onClick={() => router.push(`/gracias?ref=${referralUsername || 'default'}`)}
-                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-out active:scale-[0.97]"
+                  className="w-full h-14 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-full shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97]"
                 >
                   {profileResults[profile].cta}
                 </button>
+
+                {/* Urgency element */}
+                <div className="flex items-center justify-center gap-2 text-[#4FD1C5] text-sm">
+                  <Clock className="w-4 h-4" />
+                  <span>Acceso limitado por tiempo</span>
+                </div>
 
                 <button 
                   onClick={() => router.push(`/gracias?ref=${referralUsername || 'default'}`)}
