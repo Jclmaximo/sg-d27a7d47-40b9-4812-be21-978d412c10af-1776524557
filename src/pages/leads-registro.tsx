@@ -196,11 +196,15 @@ export default function LeadsRegistroPage() {
           
           {/* STEP 0: HERO */}
           {step === 0 && (
-            <div className="w-full h-full relative">
-              {/* Background Image - Full Coverage */}
+            <div className="absolute inset-0">
+              {/* Background Image - Full Edge-to-Edge Coverage */}
               <div 
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{ backgroundImage: 'url(/10_Coastal_Boho_Bathroom_Ideas_to_Make_a_Splash_in_Your_Florida_Home.jpeg)' }}
+                className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
+                style={{ 
+                  backgroundImage: 'url(/10_Coastal_Boho_Bathroom_Ideas_to_Make_a_Splash_in_Your_Florida_Home.jpeg)',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center'
+                }}
               />
               
               {/* Gradient Overlay - transparent top to dark bottom */}
