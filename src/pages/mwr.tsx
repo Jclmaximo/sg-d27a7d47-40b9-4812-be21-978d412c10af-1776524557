@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp, MessageCircle } from "lucide-react";
+import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp, MessageCircle, CheckCircle } from "lucide-react";
 
 export default function MWRPage() {
   const [showCTA, setShowCTA] = useState(false);
@@ -19,8 +19,9 @@ export default function MWRPage() {
   const [step, setStep] = useState(1);
   const [selectedProblem, setSelectedProblem] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
+  const [selectedGoal, setSelectedGoal] = useState("");
 
-  const handleProblemSelect = (problem) => {
+  const handleProblemSelect = (problem: string) => {
     setSelectedProblem(problem);
     setTimeout(() => setFlowStep(2), 500);
   };
@@ -264,43 +265,117 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 2: Desire Selection */}
+                {/* STEP 2: Goal Selection */}
                 {flowStep === 2 && (
                   <div className="space-y-8 animate-in fade-in duration-700 text-center">
                     <div className="space-y-4">
-                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                        ¿Qué quieres <span className="text-[#4285f4]">lograr</span>?
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        ¿Qué quieres que <span className="text-primary">cambie</span> en tu negocio ahora mismo?
                       </h2>
-                      <p className="text-lg md:text-xl text-gray-600">
-                        Elige tu objetivo principal
-                      </p>
+                      <p className="text-gray-600">Elige lo que más impacto tendría para ti</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                      {desires.map((desire) => (
-                        <button
-                          key={desire.id}
-                          onClick={() => {
-                            setAnswers({ ...answers, desire: desire.id });
-                            setTimeout(() => setFlowStep(3), 300);
-                          }}
-                          className="group p-6 bg-white border-2 border-gray-200 rounded-2xl hover:border-[#4285f4] hover:shadow-xl transition-all text-left"
-                        >
-                          <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center group-hover:bg-[#4285f4] transition-colors shrink-0">
-                              <desire.icon className="w-6 h-6 text-[#4285f4] group-hover:text-white transition-colors" />
-                            </div>
-                            <div className="space-y-1">
-                              <h3 className="text-lg font-bold text-[#1a1a1a]">
-                                {desire.title}
-                              </h3>
-                              <p className="text-sm text-gray-600">
-                                {desire.desc}
-                              </p>
-                            </div>
-                          </div>
-                        </button>
-                      ))}
+                    <div className="space-y-4">
+                      {/* Automatizar - Recommended */}
+                      <button
+                        onClick={() => {
+                          setSelectedGoal("automatizar");
+                          setTimeout(() => setFlowStep(3), 500);
+                        }}
+                        className={`w-full flex items-start gap-4 p-6 border-2 rounded-xl transition-all text-left relative ${
+                          selectedGoal === "automatizar"
+                            ? "border-primary bg-primary/5 shadow-lg shadow-primary/20 scale-[1.02]"
+                            : "border-primary bg-primary/5 hover:shadow-md"
+                        }`}
+                      >
+                        <div className="absolute -top-3 left-4">
+                          <span className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                            Recomendado
+                          </span>
+                        </div>
+                        <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
+                          <Zap className="w-6 h-6 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1">Automatizar mi negocio</h3>
+                          <p className="text-sm text-gray-600">Que funcione incluso cuando no estás conectado</p>
+                          {selectedGoal === "automatizar" && (
+                            <p className="text-xs text-primary font-medium mt-2">✓ Esto es justo lo que vamos a optimizar por ti</p>
+                          )}
+                        </div>
+                      </button>
+
+                      {/* Escalar */}
+                      <button
+                        onClick={() => {
+                          setSelectedGoal("escalar");
+                          setTimeout(() => setFlowStep(3), 500);
+                        }}
+                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
+                          selectedGoal === "escalar"
+                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
+                            : "border-gray-200 hover:border-primary hover:shadow-md"
+                        }`}
+                      >
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <TrendingUp className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1">Escalar mis ventas</h3>
+                          <p className="text-sm text-gray-600">Generar más ventas sin tener que perseguir gente</p>
+                          {selectedGoal === "escalar" && (
+                            <p className="text-xs text-primary font-medium mt-2">✓ Esto es justo lo que vamos a optimizar por ti</p>
+                          )}
+                        </div>
+                      </button>
+
+                      {/* Organizar */}
+                      <button
+                        onClick={() => {
+                          setSelectedGoal("organizar");
+                          setTimeout(() => setFlowStep(3), 500);
+                        }}
+                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
+                          selectedGoal === "organizar"
+                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
+                            : "border-gray-200 hover:border-primary hover:shadow-md"
+                        }`}
+                      >
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <FileText className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1">Organizar mis leads</h3>
+                          <p className="text-sm text-gray-600">No perder oportunidades ni olvidar a nadie</p>
+                          {selectedGoal === "organizar" && (
+                            <p className="text-xs text-primary font-medium mt-2">✓ Esto es justo lo que vamos a optimizar por ti</p>
+                          )}
+                        </div>
+                      </button>
+
+                      {/* Simplificar */}
+                      <button
+                        onClick={() => {
+                          setSelectedGoal("simplificar");
+                          setTimeout(() => setFlowStep(3), 500);
+                        }}
+                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
+                          selectedGoal === "simplificar"
+                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
+                            : "border-gray-200 hover:border-primary hover:shadow-md"
+                        }`}
+                      >
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1">Simplificar el proceso</h3>
+                          <p className="text-sm text-gray-600">Tener un sistema claro que realmente funcione</p>
+                          {selectedGoal === "simplificar" && (
+                            <p className="text-xs text-primary font-medium mt-2">✓ Esto es justo lo que vamos a optimizar por ti</p>
+                          )}
+                        </div>
+                      </button>
                     </div>
                   </div>
                 )}
