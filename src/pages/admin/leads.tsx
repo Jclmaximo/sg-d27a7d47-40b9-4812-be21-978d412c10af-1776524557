@@ -37,7 +37,8 @@ import {
   Send,
   Copy,
   Check,
-  Sparkles
+  Sparkles,
+  ExternalLink
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 

@@ -523,11 +523,14 @@ export default function RecursosPage() {
   };
 
   const getReferralLink = (source?: string) => {
-    const baseUrl = `https://mwr.hubia.vip/ambassador/${username}`;
+    if (!profile?.username) return "";
+    const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
+    let link = `${baseUrl}/mwr?ref=${profile.username}`;
+    
     if (source) {
-      return `${baseUrl}?utm_source=${source}&utm_medium=referral`;
+      link += `&source=${source}`;
     }
-    return baseUrl;
+    return link;
   };
 
   const downloadImage = (url: string, filename: string) => {

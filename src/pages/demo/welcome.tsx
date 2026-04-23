@@ -82,7 +82,7 @@ export default function DemoWelcomePage() {
   ];
 
   const funnelLink = isMounted ? `${window.location.origin}/ambassador/${username}` : "";
-  const referralLink = isMounted ? `${window.location.origin}/pricing?ref=${username}` : "";
+  const referralLink = isMounted ? `${window.location.origin}/mwr?ref=${username}` : "";
 
   const copyFunnelLink = () => {
     if (typeof navigator !== "undefined") {

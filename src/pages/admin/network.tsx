@@ -80,10 +80,8 @@ export default function NetworkPage() {
   const copyReferralLink = () => {
     if (!username) return;
     
-    const referralUrl = `${window.location.origin}/pricing?ref=${username}`;
+    const referralUrl = `${window.location.origin}/mwr?ref=${username}`;
     navigator.clipboard.writeText(referralUrl);
-    setCopied(true);
-    
     toast({
       title: "¡Copiado!",
       description: "Link de referido copiado al portapapeles"
@@ -282,9 +280,10 @@ export default function NetworkPage() {
               <CardContent>
                 <div className="flex gap-2">
                   <Input
+                    id="referral-link"
                     readOnly
-                    value={`${window.location.origin}/pricing?ref=${username}`}
-                    className="font-mono"
+                    value={`${window.location.origin}/mwr?ref=${username}`}
+                    className="font-mono text-sm bg-gray-800 border-gray-700 text-gray-300"
                   />
                   <Button onClick={copyReferralLink} variant="secondary">
                     {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
