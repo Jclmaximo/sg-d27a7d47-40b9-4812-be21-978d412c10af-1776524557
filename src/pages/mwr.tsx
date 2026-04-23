@@ -466,7 +466,73 @@ export default function MWRPage() {
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                         Panel de control <span className="text-primary">centralizado</span>
                       </h2>
-                      <p className="text-gray-600">Todo en un solo lugar, sin perder oportunidades</p>
+                    </div>
+
+                    {/* Dashboard Mock Visual */}
+                    <div className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 rounded-2xl p-6 shadow-2xl border border-blue-500/20 animate-in slide-in-from-bottom duration-700">
+                      {/* Mini Metrics */}
+                      <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-blue-400/50 transition-all duration-300">
+                          <p className="text-xs text-blue-200 mb-1">Leads</p>
+                          <p className="text-3xl font-bold text-white animate-pulse">28</p>
+                        </div>
+                        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-green-400/50 transition-all duration-300">
+                          <p className="text-xs text-green-200 mb-1">Seguimiento</p>
+                          <p className="text-3xl font-bold text-white animate-pulse">12</p>
+                        </div>
+                        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-orange-400/50 transition-all duration-300">
+                          <p className="text-xs text-orange-200 mb-1">Activas</p>
+                          <p className="text-3xl font-bold text-white animate-pulse">6</p>
+                        </div>
+                      </div>
+
+                      {/* Leads List */}
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/10 hover:border-blue-400/50 transition-all duration-300 group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-blue-500/30">
+                              JP
+                            </div>
+                            <div>
+                              <p className="text-white font-medium">Juan Pérez</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
+                                Nuevo
+                              </span>
+                            </div>
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
+                        </div>
+
+                        <div className="flex items-center justify-between p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/10 hover:border-blue-400/50 transition-all duration-300 group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-purple-500/30">
+                              ML
+                            </div>
+                            <div>
+                              <p className="text-white font-medium">María López</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                                Contactado
+                              </span>
+                            </div>
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
+                        </div>
+
+                        <div className="flex items-center justify-between p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/10 hover:border-blue-400/50 transition-all duration-300 group">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-orange-500/30">
+                              CR
+                            </div>
+                            <div>
+                              <p className="text-white font-medium">Carlos Ruiz</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                                Seguimiento
+                              </span>
+                            </div>
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
+                        </div>
+                      </div>
                     </div>
 
                     <button
@@ -514,7 +580,7 @@ export default function MWRPage() {
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
                       {[
                         { title: "Mensaje inicial", desc: "Primer contacto automático" },
                         { title: "Seguimiento día 3", desc: "Recordatorio amigable" },
