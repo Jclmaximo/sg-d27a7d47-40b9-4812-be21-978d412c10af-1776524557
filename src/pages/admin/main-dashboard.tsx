@@ -75,6 +75,7 @@ interface UserProfile {
   usdt_wallet_address: string | null;
   role: string;
   ambassador_active: boolean;
+  mwr_link?: string | null;
 }
 
 interface MessageTemplate {
@@ -85,6 +86,15 @@ interface MessageTemplate {
 }
 
 export default function MainDashboard() {
+  const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showResourcesSidebar, setShowResourcesSidebar] = useState(false);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [profileForm, setProfileForm] = useState({
+    full_name: "",
+    username: "",
+    mwr_link: ""
+  });
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
@@ -260,7 +270,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Of Oferta válida: Últimos días
+⏰ Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -313,6 +323,11 @@ Puedo resolver dudas sobre:
       if (profileData) {
         setProfile(profileData);
         setWalletAddress(profileData.usdt_wallet_address || "");
+        setProfileForm({
+          full_name: profileData.full_name || "",
+          username: profileData.username || "",
+          mwr_link: profileData.mwr_link || ""
+        });
       }
 
       // Load leads
@@ -378,6 +393,69 @@ Puedo resolver dudas sobre:
   useEffect(() => {
     filterLeads();
   }, [filterLeads]);
+
+  useEffect(() => {
+    loadUser();
+  }, []);
+
+  const loadUser = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        router.push("/admin");
+        return;
+      }
+
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (profileData) {
+        setUser(profileData);
+        setProfileForm({
+          full_name: profileData.full_name || "",
+          username: profileData.username || "",
+          mwr_link: profileData.mwr_link || ""
+        });
+      }
+    } catch (error) {
+      console.error("Error loading user:", error);
+    }
+  };
+
+  const updateProfile = async () => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const { error } = await supabase
+        .from("profiles")
+        .update({
+          full_name: profileForm.full_name,
+          username: profileForm.username,
+          mwr_link: profileForm.mwr_link
+        })
+        .eq("id", session.user.id);
+
+      if (error) throw error;
+
+      await loadData();
+      setIsEditingProfile(false);
+      toast({
+        title: "✅ Perfil actualizado",
+        description: "Los cambios se guardaron correctamente"
+      });
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast({
+        title: "Error",
+        description: "Error al actualizar perfil",
+        variant: "destructive"
+      });
+    }
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -1131,80 +1209,103 @@ Puedo resolver dudas sobre:
 
               {/* TAB 5 - PERFIL */}
               <TabsContent value="profile" className="space-y-6">
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
-                  <CardHeader>
-                    <CardTitle>Información Personal</CardTitle>
-                    <CardDescription>
-                      Datos de tu cuenta y preferencias
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Nombre Completo</Label>
-                      <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
-                        {profile?.full_name || "No configurado"}
+                <div className="bg-white rounded-xl shadow-lg p-8">
+                  <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
+                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                        {(isEditingProfile ? profileForm.full_name : profile?.full_name)?.[0]?.toUpperCase() || "U"}
+                      </div>
+                      <div>
+                        {!isEditingProfile ? (
+                          <>
+                            <h2 className="text-2xl font-bold text-gray-900">{profile?.full_name || "Usuario"}</h2>
+                            <p className="text-gray-600">{profile?.email}</p>
+                            {profile?.username && (
+                              <p className="text-sm text-gray-500">@{profile.username}</p>
+                            )}
+                          </>
+                        ) : (
+                          <div className="space-y-2">
+                            <input
+                              type="text"
+                              value={profileForm.full_name}
+                              onChange={(e) => setProfileForm({ ...profileForm, full_name: e.target.value })}
+                              placeholder="Nombre completo"
+                              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            />
+                            <p className="text-gray-600 text-sm">{profile?.email}</p>
+                          </div>
+                        )}
                       </div>
                     </div>
-                    <div className="space-y-2">
-                      <Label>Email</Label>
-                      <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
-                        {profile?.email || "No configurado"}
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Username</Label>
-                      <div className="p-3 bg-background/60 rounded-lg border border-primary/20">
-                        @{profile?.username || "No configurado"}
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Billetera USDT (BSC)</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          placeholder="0x..."
-                          value={walletAddress}
-                          onChange={(e) => setWalletAddress(e.target.value)}
-                          className="flex-1 bg-background/60 border-primary/20 focus:border-primary/50"
+                    <button
+                      onClick={() => {
+                        if (isEditingProfile) {
+                          updateProfile();
+                        } else {
+                          setIsEditingProfile(true);
+                        }
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      {isEditingProfile ? "Guardar" : "Editar Perfil"}
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Nombre de Usuario
+                      </label>
+                      {!isEditingProfile ? (
+                        <p className="text-gray-900">{profile?.username || "No configurado"}</p>
+                      ) : (
+                        <input
+                          type="text"
+                          value={profileForm.username}
+                          onChange={(e) => setProfileForm({ ...profileForm, username: e.target.value })}
+                          placeholder="usuario123"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         />
-                        <Button
-                          onClick={async () => {
-                            setSavingWallet(true);
-                            const { error } = await supabase
-                              .from("profiles")
-                              .update({ usdt_wallet_address: walletAddress })
-                              .eq("id", profile?.id || "");
-                            
-                            if (error) {
-                              toast({
-                                title: "Error",
-                                description: "No se pudo guardar la billetera",
-                                variant: "destructive"
-                              });
-                            } else {
-                              toast({
-                                title: "✅ Guardado",
-                                description: "Dirección de billetera actualizada"
-                              });
-                              await loadData();
-                            }
-                            setSavingWallet(false);
-                          }}
-                          disabled={savingWallet}
-                          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
-                        >
-                          {savingWallet ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : (
-                            "Guardar"
-                          )}
-                        </Button>
-                      </div>
-                      <p className="text-xs text-muted-foreground">
-                        Necesaria para recibir tus comisiones en USDT
-                      </p>
+                      )}
                     </div>
-                  </CardContent>
-                </Card>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        MWR Link
+                      </label>
+                      {!isEditingProfile ? (
+                        <p className="text-gray-900">{profile?.mwr_link || "No configurado"}</p>
+                      ) : (
+                        <input
+                          type="text"
+                          value={profileForm.mwr_link}
+                          onChange={(e) => setProfileForm({ ...profileForm, mwr_link: e.target.value })}
+                          placeholder="https://mwr.hubia.vip/tu-link"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                      )}
+                    </div>
+                  </div>
+
+                  {isEditingProfile && (
+                    <div className="mt-4 flex gap-2">
+                      <button
+                        onClick={() => {
+                          setIsEditingProfile(false);
+                          setProfileForm({
+                            full_name: profile?.full_name || "",
+                            username: profile?.username || "",
+                            mwr_link: profile?.mwr_link || ""
+                          });
+                        }}
+                        className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  )}
+                </div>
               </TabsContent>
             </Tabs>
 
