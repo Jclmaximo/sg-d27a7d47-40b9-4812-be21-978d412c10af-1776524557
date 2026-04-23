@@ -712,76 +712,76 @@ export default function MWRPage() {
                       <p className="text-gray-600">Sabes quién sigue, en qué etapa está y qué hacer en cada momento</p>
                     </div>
 
-                    {/* Dashboard Visual Mock */}
-                    <div className="bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900 rounded-2xl p-6 shadow-2xl border border-blue-500/20">
+                    {/* Dashboard Visual Mock - Redesigned */}
+                    <div className="bg-gray-900 rounded-xl p-6 shadow-lg border border-gray-800">
                       {/* KPI Cards */}
                       <div className="grid grid-cols-3 gap-4 mb-6">
-                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 text-center">
-                          <p className="text-5xl font-bold text-white mb-1">28</p>
-                          <p className="text-xs text-blue-200 font-medium">Prospectos</p>
+                        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                          <p className="text-4xl font-bold text-white mb-1">28</p>
+                          <p className="text-xs text-gray-400 font-medium">Prospectos</p>
                         </div>
-                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 text-center">
-                          <p className="text-5xl font-bold text-white mb-1">12</p>
-                          <p className="text-xs text-blue-200 font-medium">En seguimiento</p>
+                        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                          <p className="text-4xl font-bold text-white mb-1">12</p>
+                          <p className="text-xs text-gray-400 font-medium">En seguimiento</p>
                         </div>
-                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 text-center">
-                          <p className="text-5xl font-bold text-white mb-1">6</p>
-                          <p className="text-xs text-blue-200 font-medium">Contactados</p>
+                        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
+                          <p className="text-4xl font-bold text-white mb-1">6</p>
+                          <p className="text-xs text-gray-400 font-medium">Contactados</p>
                         </div>
                       </div>
 
                       {/* Leads List with Action Buttons */}
                       <div className="space-y-3">
                         {/* Juan Pérez */}
-                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                        <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-sm">
                               JP
                             </div>
                             <div>
                               <p className="text-white font-semibold text-sm">Juan Pérez</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-400/30">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-900/50 text-green-300 border border-green-700">
                                 🟢 Nuevo
                               </span>
                             </div>
                           </div>
-                          <button className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg text-xs font-medium transition-colors backdrop-blur-sm">
+                          <button className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-600 rounded text-xs font-medium transition-colors">
                             Ver detalle
                           </button>
                         </div>
 
                         {/* María López */}
-                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                        <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                            <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold text-sm">
                               ML
                             </div>
                             <div>
                               <p className="text-white font-semibold text-sm">María López</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-900/50 text-blue-300 border border-blue-700">
                                 🔵 Hablando
                               </span>
                             </div>
                           </div>
-                          <button className="px-3 py-2 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg text-xs font-medium transition-colors backdrop-blur-sm">
+                          <button className="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-gray-200 border border-gray-600 rounded text-xs font-medium transition-colors">
                             Continuar
                           </button>
                         </div>
 
                         {/* Carlos Ruiz */}
-                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
+                        <div className="flex items-center justify-between p-4 bg-gray-800 rounded-lg border border-gray-700 hover:border-gray-600 transition-colors">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                            <div className="w-10 h-10 rounded-full bg-orange-600 flex items-center justify-center text-white font-semibold text-sm">
                               CR
                             </div>
                             <div>
                               <p className="text-white font-semibold text-sm">Carlos Ruiz</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-300 border border-orange-400/30">
+                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-900/50 text-orange-300 border border-orange-700">
                                 🟠 Por cerrar
                               </span>
                             </div>
                           </div>
-                          <button className="px-3 py-2 bg-green-600 hover:bg-green-700 text-white border border-green-500 rounded-lg text-xs font-semibold transition-colors shadow-md">
+                          <button className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white rounded text-xs font-semibold transition-colors">
                             Enviar mensaje
                           </button>
                         </div>
