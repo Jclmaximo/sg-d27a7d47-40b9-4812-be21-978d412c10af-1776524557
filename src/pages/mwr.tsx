@@ -484,51 +484,28 @@ export default function MWRPage() {
                       </h2>
                       <p className="text-gray-600">Todo en un solo lugar, sin perder oportunidades</p>
                     </div>
-                  </div>
-                )}
-
-                {/* STEP 8: Ready Templates */}
-                {flowStep === 8 && (
-                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                    <div className="space-y-4">
-                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                        Además, ya tienes <span className="text-[#4285f4]">plantillas listas</span>
-                      </h2>
-                      <p className="text-lg md:text-xl text-gray-600">
-                        Para dar seguimiento en cada etapa
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                      {[
-                        { title: "Mensaje inicial", desc: "Primer contacto automático" },
-                        { title: "Seguimiento día 3", desc: "Recordatorio amigable" },
-                        { title: "Mensaje de cierre", desc: "Para cerrar la venta" },
-                        { title: "Post-venta", desc: "Bienvenida después de comprar" }
-                      ].map((template, index) => (
-                        <div
-                          key={index}
-                          className="p-6 bg-white border-2 border-gray-200 rounded-2xl shadow-sm"
-                        >
-                          <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center shrink-0">
-                              <FileText className="w-6 h-6 text-[#4285f4]" />
-                            </div>
-                            <div className="text-left space-y-1">
-                              <h3 className="text-lg font-bold text-[#1a1a1a]">
-                                {template.title}
-                              </h3>
-                              <p className="text-sm text-gray-600">
-                                {template.desc}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
 
                     <button
                       onClick={() => setFlowStep(8)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
+                  </div>
+                )}
+
+                {/* STEP 8: Results/Timeline */}
+                {flowStep === 8 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        Panel de control <span className="text-primary">centralizado</span>
+                      </h2>
+                      <p className="text-gray-600">Todo en un solo lugar, sin perder oportunidades</p>
+                    </div>
+
+                    <button
+                      onClick={() => setFlowStep(9)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
                       Continuar →
@@ -724,8 +701,17 @@ export default function MWRPage() {
                         </div>
                       </CardContent>
                     </Card>
+
+                    <button
+                      onClick={() => setFlowStep(13)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
+
+                {/* STEP 13 */}
               </div>
             </div>
           </div>
