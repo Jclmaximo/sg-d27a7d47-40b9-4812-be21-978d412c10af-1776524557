@@ -1182,35 +1182,69 @@ Puedo resolver dudas sobre:
 
               {/* TAB 4 - LINKS */}
               <TabsContent value="links" className="space-y-6">
-                <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl p-6 border border-green-500/20">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="bg-green-500/10 p-3 rounded-lg">
-                      <Gift className="w-6 h-6 text-green-400" />
+                {activeTab === "links" && (
+                  <div className="space-y-6">
+                    <div className="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 rounded-xl p-6 border border-blue-500/20">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="bg-blue-500/10 p-3 rounded-lg">
+                          <Link2 className="w-6 h-6 text-blue-400" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-white">Tu Embudo de Ventas</h3>
+                          <p className="text-sm text-gray-400">Comparte este link para capturar leads</p>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700/50">
+                        <code className="text-sm text-blue-400 font-mono break-all">
+                          https://mwr.hubia.vip/ambassador/{profile?.username || "maximo"}
+                        </code>
+                      </div>
+                      
+                      <Button 
+                        onClick={() => {
+                          const link = `https://mwr.hubia.vip/ambassador/${profile?.username || "maximo"}`;
+                          navigator.clipboard.writeText(link);
+                          toast({ title: "¡Copiado!", description: "Link del embudo copiado" });
+                        }}
+                        className="w-full mt-4 bg-blue-500 hover:bg-blue-600"
+                      >
+                        <Copy className="w-4 h-4 mr-2" />
+                        Copiar Link
+                      </Button>
                     </div>
-                    <div>
-                      <h3 className="text-lg font-semibold text-white">Link de Referidos</h3>
-                      <p className="text-sm text-gray-400">Genera ingresos por cada persona que se una</p>
+
+                    <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl p-6 border border-green-500/20">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="bg-green-500/10 p-3 rounded-lg">
+                          <Gift className="w-6 h-6 text-green-400" />
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-semibold text-white">Link de Referidos</h3>
+                          <p className="text-sm text-gray-400">Genera ingresos por cada persona que se una</p>
+                        </div>
+                      </div>
+                      
+                      <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700/50">
+                        <code className="text-sm text-green-400 font-mono break-all">
+                          https://mwr.hubia.vip/mwr?ref={profile?.username || "maximo"}
+                        </code>
+                      </div>
+                      
+                      <Button 
+                        onClick={() => {
+                          const link = `https://mwr.hubia.vip/mwr?ref=${profile?.username || "maximo"}`;
+                          navigator.clipboard.writeText(link);
+                          toast({ title: "¡Copiado!", description: "Link de referidos copiado" });
+                        }}
+                        className="w-full mt-4 bg-green-500 hover:bg-green-600"
+                      >
+                        <Copy className="w-4 h-4 mr-2" />
+                        Copiar Link
+                      </Button>
                     </div>
                   </div>
-                  
-                  <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700/50">
-                    <code className="text-sm text-green-400 font-mono break-all">
-                      https://mwr.hubia.vip/mwr?ref={profile?.username || "maximo"}
-                    </code>
-                  </div>
-                  
-                  <Button 
-                    onClick={() => {
-                      const link = `https://mwr.hubia.vip/mwr?ref=${profile?.username || "maximo"}`;
-                      navigator.clipboard.writeText(link);
-                      toast({ title: "¡Copiado!", description: "Link de referidos copiado" });
-                    }}
-                    className="w-full mt-4 bg-green-500 hover:bg-green-600"
-                  >
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copiar Link
-                  </Button>
-                </div>
+                )}
               </TabsContent>
 
               {/* TAB 5 - PERFIL */}
