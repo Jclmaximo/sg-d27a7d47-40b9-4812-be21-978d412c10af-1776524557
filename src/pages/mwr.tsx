@@ -445,9 +445,9 @@ export default function MWRPage() {
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Todo el seguimiento es <span className="text-primary">automático</span>
+                        Todo el seguimiento ya está <span className="text-primary">listo para ti</span>
                       </h2>
-                      <p className="text-gray-600">Sin hacer nada tú, el sistema responde y da seguimiento automáticamente</p>
+                      <p className="text-gray-600">Mensajes preparados para que solo tengas que dar clic en enviar</p>
                     </div>
 
                     {/* WhatsApp Mock Visual */}
@@ -464,7 +464,7 @@ export default function MWRPage() {
                       </div>
 
                       {/* Messages */}
-                      <div className="space-y-3 mb-6">
+                      <div className="space-y-3 mb-4">
                         {/* Message 1 */}
                         <div className="flex justify-end animate-in slide-in-from-right duration-500">
                           <div className="max-w-[80%]">
@@ -498,10 +498,18 @@ export default function MWRPage() {
                         </div>
                       </div>
 
+                      {/* Send Button */}
+                      <div className="flex justify-center mb-4">
+                        <button className="flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-full font-medium text-sm shadow-md transition-colors">
+                          <MessageSquare className="w-4 h-4" />
+                          Enviar mensaje
+                        </button>
+                      </div>
+
                       {/* Automation Indicator */}
                       <div className="flex items-center justify-center gap-2 pt-4 border-t border-gray-200">
-                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                        <p className="text-xs text-gray-500 font-medium">Enviado automáticamente • Sin intervención</p>
+                        <div className="w-2 h-2 rounded-full bg-primary"></div>
+                        <p className="text-xs text-gray-500 font-medium">Listo para enviar • Solo 1 clic</p>
                       </div>
                     </div>
 
