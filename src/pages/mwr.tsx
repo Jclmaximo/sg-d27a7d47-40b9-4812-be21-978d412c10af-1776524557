@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp, MessageCircle, CheckCircle, Image, Calendar, Tag, Lock, DollarSign } from "lucide-react";
+import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp, MessageCircle, CheckCircle, Image, Calendar, Tag, Lock, DollarSign, Clock, Star } from "lucide-react";
 
 export default function MWRPage() {
   const [showCTA, setShowCTA] = useState(false);
@@ -803,45 +803,85 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 8: Ready Templates */}
+                {/* STEP 8: Message Templates */}
                 {flowStep === 8 && (
-                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                    <div className="space-y-4">
-                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                        Además, ya tienes <span className="text-[#4285f4]">plantillas listas</span>
+                  <div className="space-y-8 animate-in fade-in duration-700">
+                    <div className="text-center space-y-4">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        Ya no tienes que <span className="text-primary">pensar qué decir</span>
                       </h2>
-                      <p className="text-lg md:text-xl text-gray-600">
-                        Para dar seguimiento en cada etapa
+                      <p className="text-gray-600">Mensajes listos para cada momento, solo eliges y envías</p>
+                    </div>
+
+                    <div className="space-y-4">
+                      {/* Block 1: First Message + Preview */}
+                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-start gap-4 mb-4">
+                          <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                            <MessageSquare className="w-6 h-6 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-gray-900 mb-1">Primer mensaje listo</h3>
+                            <p className="text-sm text-gray-600">Rompe el hielo sin improvisar</p>
+                          </div>
+                        </div>
+                        
+                        {/* Message Preview */}
+                        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl rounded-tl-sm p-4 shadow-md">
+                          <p className="text-white text-sm leading-relaxed">
+                            Hola 👋 Vi que te interesa viajar más gastando menos.<br />
+                            ¿Te explico cómo funciona en 2 minutos?
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Block 2: Follow-up */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <Clock className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">Seguimiento estratégico</h3>
+                          <p className="text-sm text-gray-600">Para no perder el interés del prospecto</p>
+                        </div>
+                      </div>
+
+                      {/* Block 3: Closing */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">Mensaje de cierre</h3>
+                          <p className="text-sm text-gray-600">Cuando la persona ya está lista</p>
+                        </div>
+                      </div>
+
+                      {/* Block 4: Post-sale */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <Star className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">Post-venta</h3>
+                          <p className="text-sm text-gray-600">Para activar y dar bienvenida correctamente</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Microcopy */}
+                    <div className="text-center">
+                      <p className="text-sm text-gray-600 font-medium">
+                        Listo para usar. Solo das click y envías.
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
-                      {[
-                        { title: "Mensaje inicial", desc: "Primer contacto automático" },
-                        { title: "Seguimiento día 3", desc: "Recordatorio amigable" },
-                        { title: "Mensaje de cierre", desc: "Para cerrar la venta" },
-                        { title: "Post-venta", desc: "Bienvenida después de comprar" }
-                      ].map((template, index) => (
-                        <div
-                          key={index}
-                          className="p-6 bg-white border-2 border-gray-200 rounded-2xl shadow-sm"
-                        >
-                          <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center shrink-0">
-                              <FileText className="w-6 h-6 text-[#4285f4]" />
-                            </div>
-                            <div className="text-left space-y-1">
-                              <h3 className="text-lg font-bold text-[#1a1a1a]">
-                                {template.title}
-                              </h3>
-                              <p className="text-sm text-gray-600">
-                                {template.desc}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    <button
+                      onClick={() => setFlowStep(9)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
 
