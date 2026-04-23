@@ -412,6 +412,23 @@ export default function MWRPage() {
                         </div>
                       </div>
                     </div>
+
+                    <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl">
+                      <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <Image className="w-6 h-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-gray-900 mb-1">Contenido listo para publicar</h3>
+                        <p className="text-sm text-gray-600">Imágenes + copies diseñados para atraer prospectos</p>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setFlowStep(4)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
 
