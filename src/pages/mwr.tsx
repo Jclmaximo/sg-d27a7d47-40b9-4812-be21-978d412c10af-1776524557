@@ -164,13 +164,11 @@ export default function MWRPage() {
                         <div className="space-y-6 md:space-y-8">
                           <div className="space-y-4">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                              Convierte más prospectos en{" "}
-                              <span className="text-primary">clientes</span>
-                              <br />
-                              <span className="text-primary">sin perseguir a nadie</span>
+                              Deja de perder prospectos por{" "}
+                              <span className="text-primary">falta de seguimiento</span>
                             </h1>
                             <p className="text-lg md:text-xl text-gray-600 max-w-xl">
-                              Un sistema que organiza tus leads y te da mensajes listos para enviar
+                              El sistema te muestra a quién escribirle y cuándo hacerlo
                             </p>
                           </div>
 
@@ -180,7 +178,7 @@ export default function MWRPage() {
                               onClick={() => setFlowStep(2)}
                               className="w-full md:w-auto px-8 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-lg transition-colors shadow-lg"
                             >
-                              Probar el sistema ahora →
+                              Ver cómo funciona →
                             </button>
                             
                             {/* Microcopy */}
