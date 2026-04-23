@@ -47,9 +47,9 @@ interface Lead {
 
 interface Stats {
   total: number;
-  new: number;
-  contacted: number;
-  converted: number;
+  nuevos: number;
+  contactados: number;
+  convertidos: number;
 }
 
 interface Profile {
@@ -70,7 +70,7 @@ export default function WelcomePage() {
   const [loading, setLoading] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [recentLeads, setRecentLeads] = useState<Lead[]>([]);
-  const [stats, setStats] = useState<Stats>({ total: 0, new: 0, contacted: 0, converted: 0 });
+  const [stats, setStats] = useState<Stats>({ total: 0, nuevos: 0, contactados: 0, convertidos: 0 });
   const [username, setUsername] = useState("");
   const [profile, setProfile] = useState<Profile | null>(null);
   const [userEmail, setUserEmail] = useState("");
@@ -146,11 +146,12 @@ export default function WelcomePage() {
         .eq("user_id", userId);
 
       if (leads) {
+        // En la base de datos se guardan como "nuevo", "contactado", "convertido"
         setStats({
           total: leads.length,
-          nuevos: leads.filter(l => l.status === "nuevo" || !l.status).length,
-          contactados: leads.filter(l => l.status === "contactado").length,
-          convertidos: leads.filter(l => l.status === "convertido").length
+          new: leads.filter(l => l.status === "nuevo" || !l.status).length,
+          contacted: leads.filter(l => l.status === "contactado").length,
+          converted: leads.filter(l => l.status === "convertido").length
         });
       }
     } catch (err) {
@@ -307,7 +308,7 @@ export default function WelcomePage() {
                     <Clock className="w-5 h-5 text-accent" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-5xl font-black text-foreground mb-1">{stats.new}</div>
+                    <div className="text-5xl font-black text-foreground mb-1">{stats.nuevos}</div>
                     <p className="text-xs text-muted-foreground">Por contactar</p>
                   </CardContent>
                 </Card>
@@ -318,7 +319,7 @@ export default function WelcomePage() {
                     <MessageSquare className="w-5 h-5 text-primary" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-5xl font-black text-foreground mb-1">{stats.contacted}</div>
+                    <div className="text-5xl font-black text-foreground mb-1">{stats.contactados}</div>
                     <p className="text-xs text-muted-foreground">En seguimiento</p>
                   </CardContent>
                 </Card>
@@ -329,7 +330,7 @@ export default function WelcomePage() {
                     <CheckCircle2 className="w-5 h-5 text-secondary" />
                   </CardHeader>
                   <CardContent>
-                    <div className="text-5xl font-black text-foreground mb-1">{stats.converted}</div>
+                    <div className="text-5xl font-black text-foreground mb-1">{stats.convertidos}</div>
                     <p className="text-xs text-muted-foreground">Ventas cerradas</p>
                   </CardContent>
                 </Card>
