@@ -1169,73 +1169,44 @@ export default function MWRPage() {
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Empieza hoy con tu <span className="text-primary">sistema listo para usar</span>
+                        Empieza hoy con <span className="text-primary">todo listo</span>
                       </h2>
                       <p className="text-gray-600">No necesitas experiencia. Solo seguir el sistema y enviar los mensajes</p>
                     </div>
 
-                    {/* Pricing Cards */}
-                    <div className="space-y-4">
-                      {/* Annual Plan - Recommended */}
-                      <div className="bg-gradient-to-br from-primary to-blue-700 rounded-2xl p-6 shadow-2xl border-2 border-primary relative overflow-hidden">
-                        <div className="absolute top-4 right-4">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-400 text-gray-900">
-                            MÁS ELEGIDO 🔥
-                          </span>
+                    {/* Single Pricing Card */}
+                    <div className="bg-gradient-to-br from-primary to-blue-700 rounded-2xl p-8 shadow-2xl border-2 border-primary">
+                      <div className="text-white space-y-6">
+                        <div className="text-center">
+                          <div className="flex items-baseline justify-center gap-2 mb-2">
+                            <span className="text-5xl font-bold">$29</span>
+                            <span className="text-xl text-blue-100">USD primer mes</span>
+                          </div>
+                          <p className="text-blue-100 mb-1">Luego $9 USD / mes</p>
+                          <p className="text-sm text-white font-semibold mt-3">Acceso completo desde el primer día</p>
                         </div>
-                        
-                        <div className="text-white space-y-4">
-                          <div>
-                            <p className="text-sm font-medium text-blue-100 mb-1">PLAN ANUAL</p>
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-5xl font-bold">$99</span>
-                              <span className="text-xl text-blue-100">USD / año</span>
-                            </div>
-                            <p className="text-sm text-blue-100 mt-1">Equivalente a ~$8 USD/mes</p>
-                          </div>
 
-                          <div className="space-y-2 pt-2 border-t border-white/20">
-                            <p className="text-sm font-semibold">✓ Ahorra 2 meses vs mensual</p>
-                            <p className="text-sm font-semibold">✓ ≈ $0.27 USD al día</p>
-                            <p className="text-sm font-semibold">✓ Acceso inmediato + todo configurado para empezar hoy</p>
-                            <p className="text-sm font-bold text-yellow-300 mt-3">La opción más inteligente si vas en serio</p>
-                          </div>
-
-                          <button
-                            onClick={() => setFlowStep(13)}
-                            className="w-full bg-white hover:bg-gray-100 text-primary py-4 rounded-xl font-bold transition-colors shadow-lg text-lg"
-                          >
-                            Quiero empezar ahora →
-                          </button>
+                        {/* Value Anchor */}
+                        <div className="bg-white/10 rounded-xl p-4 border border-white/20">
+                          <p className="text-sm text-white leading-relaxed text-center">
+                            Lo que normalmente te tomaría semanas configurar por tu cuenta…<br />
+                            <span className="font-bold">aquí ya lo tienes listo desde el día 1</span>
+                          </p>
                         </div>
-                      </div>
 
-                      {/* Monthly Plan */}
-                      <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-gray-200 hover:border-primary/50 transition-all duration-200">
-                        <div className="space-y-4">
-                          <div>
-                            <p className="text-sm font-medium text-gray-500 mb-1">PLAN MENSUAL</p>
-                            <div className="flex items-baseline gap-2">
-                              <span className="text-4xl font-bold text-gray-900">$29</span>
-                              <span className="text-xl text-gray-600">USD primer mes</span>
-                            </div>
-                            <p className="text-sm text-gray-600 mt-1">Luego $9 USD/mes</p>
-                            <p className="text-sm text-gray-700 font-medium mt-2">Empieza hoy con todo listo</p>
-                          </div>
-
-                          <div className="space-y-2 pt-2 border-t border-gray-200">
-                            <p className="text-sm text-gray-700">✓ Mensajes listos para enviar</p>
-                            <p className="text-sm text-gray-700">✓ Tú decides cuándo enviarlos</p>
-                            <p className="text-sm text-gray-700">✓ Acceso inmediato a todo</p>
-                          </div>
-
-                          <button
-                            onClick={() => setFlowStep(13)}
-                            className="w-full bg-gray-100 hover:bg-gray-200 text-gray-900 py-4 rounded-xl font-semibold transition-colors border-2 border-gray-300"
-                          >
-                            Empezar ahora →
-                          </button>
+                        {/* Value Reinforcement */}
+                        <div className="space-y-2 pt-2 border-t border-white/20">
+                          <p className="text-sm font-semibold">✓ Sin herramientas extra</p>
+                          <p className="text-sm font-semibold">✓ Sin procesos complicados</p>
+                          <p className="text-sm font-semibold">✓ Sin tener que inventar qué decir</p>
                         </div>
+
+                        <button
+                          onClick={() => setFlowStep(13)}
+                          className="w-full bg-white hover:bg-gray-100 text-primary py-4 rounded-xl font-bold transition-colors shadow-lg text-lg"
+                        >
+                          Empezar ahora →
+                        </button>
                       </div>
                     </div>
 
@@ -1251,13 +1222,6 @@ export default function MWRPage() {
                       </div>
                       <p className="text-sm text-gray-500">
                         Sin riesgos. Puedes cancelar cuando quieras.
-                      </p>
-                    </div>
-
-                    {/* Final Reinforcement */}
-                    <div className="text-center">
-                      <p className="text-base text-gray-700 font-medium">
-                        No necesitas hacerlo perfecto. Solo empezar.
                       </p>
                     </div>
                   </div>
