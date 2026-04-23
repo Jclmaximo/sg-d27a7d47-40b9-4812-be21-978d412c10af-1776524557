@@ -846,7 +846,7 @@ export default function MWRPage() {
       )}
 
       {/* Fixed CTA Footer */}
-      {showCTA && !showGamifiedFlow && (
+      {showCTA && !showGamifiedFlow && showCoverImage && (
         <div className="fixed bottom-0 left-0 right-0 bg-[#1a1a1a] text-white py-3 px-4 md:p-6 shadow-2xl z-40 animate-in slide-in-from-bottom duration-500">
           <div className="max-w-2xl mx-auto text-center space-y-2 md:space-y-4">
             <h3 className="text-base md:text-xl font-bold">
