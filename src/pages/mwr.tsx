@@ -886,43 +886,84 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 9: Prospects View */}
+                {/* STEP 9: Objection Handling */}
                 {flowStep === 9 && (
-                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                    <div className="space-y-4">
-                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                        Y puedes ver todos tus <span className="text-[#4285f4]">prospectos</span>
+                  <div className="space-y-8 animate-in fade-in duration-700">
+                    <div className="text-center space-y-4">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        Seguramente te estás <span className="text-primary">preguntando esto</span>
                       </h2>
-                      <p className="text-lg md:text-xl text-gray-600">
-                        Organizados y listos para dar seguimiento
+                      <p className="text-gray-600">Esto es lo que necesitas saber antes de empezar</p>
+                    </div>
+
+                    {/* FAQ Blocks */}
+                    <div className="space-y-4">
+                      {/* Objection 1: Time */}
+                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <Clock className="w-5 h-5 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-gray-900 mb-2 text-lg">¿Y si no tengo tiempo?</h3>
+                            <p className="text-gray-600 leading-relaxed">No necesitas horas. Solo unos minutos al día para dar seguimiento con mensajes ya listos.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Objection 2: Sales Skills */}
+                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <MessageSquare className="w-5 h-5 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-gray-900 mb-2 text-lg">¿Y si no sé vender?</h3>
+                            <p className="text-gray-600 leading-relaxed">No tienes que saber vender. El sistema te dice exactamente qué enviar.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Objection 3: Effectiveness */}
+                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <CheckCircle className="w-5 h-5 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-gray-900 mb-2 text-lg">¿Esto realmente funciona?</h3>
+                            <p className="text-gray-600 leading-relaxed">Sí. Porque elimina la improvisación y enfoca tus acciones en lo que genera resultados.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Objection 4: Manual Work */}
+                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-start gap-4">
+                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
+                            <Zap className="w-5 h-5 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-gray-900 mb-2 text-lg">¿Tengo que hacer todo manual?</h3>
+                            <p className="text-gray-600 leading-relaxed">No. El sistema ya tiene los mensajes listos. Tú solo das click para enviarlos.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Microcopy */}
+                    <div className="text-center">
+                      <p className="text-sm text-gray-600 font-medium">
+                        Simple. Claro. Sin complicaciones.
                       </p>
                     </div>
 
-                    <div className="bg-gradient-to-br from-[#4285f4]/5 to-[#4285f4]/10 rounded-2xl p-6 max-w-2xl mx-auto border border-[#4285f4]/20">
-                      <div className="space-y-3">
-                        {[
-                          { name: userName, status: "Nuevo", color: "[#4285f4]" },
-                          { name: "María González", status: "Contactado", color: "green-500" },
-                          { name: "Carlos Ruiz", status: "Seguimiento", color: "yellow-500" }
-                        ].map((prospect, index) => (
-                          <div
-                            key={index}
-                            className="bg-white p-4 rounded-xl flex items-center justify-between shadow-sm"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                                <User className="w-5 h-5 text-gray-600" />
-                              </div>
-                              <div className="text-left">
-                                <p className="font-medium text-[#1a1a1a]">{prospect.name}</p>
-                                <p className={`text-xs text-${prospect.color}`}>{prospect.status}</p>
-                              </div>
-                            </div>
-                            <ArrowRight className="w-5 h-5 text-gray-400" />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <button
+                      onClick={() => setFlowStep(10)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
 
