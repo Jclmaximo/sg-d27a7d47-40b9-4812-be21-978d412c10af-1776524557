@@ -468,6 +468,13 @@ export default function MWRPage() {
                       </h2>
                       <p className="text-gray-600">Todo en un solo lugar, sin perder oportunidades</p>
                     </div>
+
+                    <button
+                      onClick={() => setFlowStep(6)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
 
