@@ -523,69 +523,69 @@ export default function MWRPage() {
                       </h2>
                     </div>
 
-                    {/* Dashboard Mock Visual */}
-                    <div className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900 rounded-2xl p-6 shadow-2xl border border-blue-500/20 animate-in slide-in-from-bottom duration-700">
-                      {/* Mini Metrics */}
-                      <div className="grid grid-cols-3 gap-4 mb-6">
-                        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-blue-400/50 transition-all duration-300">
-                          <p className="text-xs text-blue-200 mb-1">Leads</p>
-                          <p className="text-3xl font-bold text-white animate-pulse">28</p>
+                    {/* Dashboard Mock Visual - Clean Style */}
+                    <div className="bg-gray-50 rounded-2xl p-6 border-2 border-gray-200 shadow-sm">
+                      {/* Mini Metrics - Subtle */}
+                      <div className="grid grid-cols-3 gap-3 mb-6">
+                        <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                          <p className="text-xs text-gray-500 mb-1 font-medium">Leads</p>
+                          <p className="text-2xl font-bold text-primary">28</p>
                         </div>
-                        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-green-400/50 transition-all duration-300">
-                          <p className="text-xs text-green-200 mb-1">Seguimiento</p>
-                          <p className="text-3xl font-bold text-white animate-pulse">12</p>
+                        <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                          <p className="text-xs text-gray-500 mb-1 font-medium">Seguimiento</p>
+                          <p className="text-2xl font-bold text-primary">12</p>
                         </div>
-                        <div className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-orange-400/50 transition-all duration-300">
-                          <p className="text-xs text-orange-200 mb-1">Activas</p>
-                          <p className="text-3xl font-bold text-white animate-pulse">6</p>
+                        <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                          <p className="text-xs text-gray-500 mb-1 font-medium">Activas</p>
+                          <p className="text-2xl font-bold text-primary">6</p>
                         </div>
                       </div>
 
-                      {/* Leads List */}
+                      {/* Leads List - Clean and Spacious */}
                       <div className="space-y-3">
-                        <div className="flex items-center justify-between p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/10 hover:border-blue-400/50 transition-all duration-300 group">
+                        <div className="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/50 hover:shadow-sm transition-all duration-200">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-blue-500/30">
+                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-primary font-semibold text-sm">
                               JP
                             </div>
                             <div>
-                              <p className="text-white font-medium">Juan Pérez</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-500/30">
+                              <p className="text-gray-900 font-medium text-sm">Juan Pérez</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
                                 Nuevo
                               </span>
                             </div>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
+                          <ArrowRight className="w-4 h-4 text-gray-400" />
                         </div>
 
-                        <div className="flex items-center justify-between p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/10 hover:border-blue-400/50 transition-all duration-300 group">
+                        <div className="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/50 hover:shadow-sm transition-all duration-200">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-purple-500/30">
+                            <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold text-sm">
                               ML
                             </div>
                             <div>
-                              <p className="text-white font-medium">María López</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                              <p className="text-gray-900 font-medium text-sm">María López</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
                                 Contactado
                               </span>
                             </div>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
+                          <ArrowRight className="w-4 h-4 text-gray-400" />
                         </div>
 
-                        <div className="flex items-center justify-between p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 hover:bg-white/10 hover:border-blue-400/50 transition-all duration-300 group">
+                        <div className="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 hover:border-primary/50 hover:shadow-sm transition-all duration-200">
                           <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-semibold text-sm shadow-lg shadow-orange-500/30">
+                            <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-semibold text-sm">
                               CR
                             </div>
                             <div>
-                              <p className="text-white font-medium">Carlos Ruiz</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-300 border border-orange-500/30">
+                              <p className="text-gray-900 font-medium text-sm">Carlos Ruiz</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700 border border-orange-200">
                                 Seguimiento
                               </span>
                             </div>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-white/50 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" />
+                          <ArrowRight className="w-4 h-4 text-gray-400" />
                         </div>
                       </div>
                     </div>
