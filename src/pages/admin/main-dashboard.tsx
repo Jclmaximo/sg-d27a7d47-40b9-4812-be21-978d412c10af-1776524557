@@ -643,13 +643,30 @@ Puedo resolver dudas sobre:
               <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
                 <Hand className="w-6 h-6 text-primary" />
               </div>
-              <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                  Mi Dashboard
-                </h1>
-                <p className="text-gray-400">
-                  Bienvenido, {profile?.full_name || profile?.username || "Usuario"}
-                </p>
+              <div className="flex items-center gap-4">
+                {profile?.avatar_url ? (
+                  <img
+                    src={profile.avatar_url}
+                    alt={profile.full_name}
+                    className="w-14 h-14 rounded-full object-cover border-2 border-primary/30"
+                    onError={(e) => {
+                      console.error("Error loading avatar:", profile.avatar_url);
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                    {profile?.full_name?.[0]?.toUpperCase() || "U"}
+                  </div>
+                )}
+                <div>
+                  <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                    Mi Dashboard
+                  </h1>
+                  <p className="text-gray-400">
+                    Bienvenido, {profile?.full_name || profile?.username || "Usuario"}
+                  </p>
+                </div>
               </div>
             </div>
             <Button
@@ -1280,9 +1297,9 @@ Puedo resolver dudas sobre:
                           {!isEditingProfile ? (
                             <>
                               <CardTitle className="text-2xl">{profile?.full_name || "Usuario"}</CardTitle>
-                              <p className="text-muted-foreground">{profile?.email}</p>
+                              <p className="text-gray-400">{profile?.email}</p>
                               {profile?.username && (
-                                <p className="text-sm text-muted-foreground">@{profile.username}</p>
+                                <p className="text-sm text-gray-400">@{profile.username}</p>
                               )}
                             </>
                           ) : (
@@ -1294,7 +1311,7 @@ Puedo resolver dudas sobre:
                                 placeholder="Nombre completo"
                                 className="px-4 py-2 text-foreground placeholder:text-muted-foreground bg-background border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
                               />
-                              <p className="text-sm text-muted-foreground">{profile?.email}</p>
+                              <p className="text-sm text-gray-400">{profile?.email}</p>
                             </div>
                           )}
                         </div>
