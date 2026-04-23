@@ -139,22 +139,19 @@ export default function WelcomePage() {
 
   const loadDashboardData = async (userId: string) => {
     try {
-      const data = await leadsService.getLeads(userId);
-      
-      if (data) {
-        setLeads(data);
-        const newStats = {
-          total: data.length,
-          new: data.filter(l => l.status === "new").length,
-          contacted: data.filter(l => l.status === "contacted").length,
-          converted: data.filter(l => l.status === "converted").length,
-        };
-        setStats(newStats);
-        
-        const recent = data
-          .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-          .slice(0, 5);
-        setRecentLeads(recent);
+      // Get leads stats
+      const { data: leads } = await supabase
+        .from("leads")
+        .select("*")
+        .eq("referred_by", userId);
+
+      if (leads) {
+        setStats({
+          totalLeads: leads.length,
+          nuevos: leads.filter(l => !l.contacted).length,
+          contactados: leads.filter(l => l.contacted && l.status !== "convertido").length,
+          convertidos: leads.filter(l => l.status === "convertido").length
+        });
       }
     } catch (err) {
       const error = err as Error;
