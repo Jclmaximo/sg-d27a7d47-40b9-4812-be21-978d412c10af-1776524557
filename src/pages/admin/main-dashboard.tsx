@@ -1182,93 +1182,35 @@ Puedo resolver dudas sobre:
 
               {/* TAB 4 - LINKS */}
               <TabsContent value="links" className="space-y-6">
-                <Card className="bg-gradient-to-br from-primary/20 to-accent/10 backdrop-blur-sm border-primary/40 shadow-2xl shadow-primary/30">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
-                          <Link2 className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <CardTitle>Tu Embudo de Ventas</CardTitle>
-                          <CardDescription>Comparte este link para capturar leads</CardDescription>
-                        </div>
-                      </div>
-                      <Button
-                        size="sm"
-                        onClick={() => {
-                          navigator.clipboard.writeText(`${window.location.origin}/ambassador/${profile?.username || ""}`);
-                          setCopiedFunnel(true);
-                          setTimeout(() => setCopiedFunnel(false), 2000);
-                        }}
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/30"
-                      >
-                        {copiedFunnel ? (
-                          <>
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            Copiado
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-4 h-4 mr-2" />
-                            Copiar
-                          </>
-                        )}
-                      </Button>
+                <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl p-6 border border-green-500/20">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-green-500/10 p-3 rounded-lg">
+                      <Gift className="w-6 h-6 text-green-400" />
                     </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-primary/30 shadow-inner">
-                      <code className="text-sm text-primary font-mono break-all">
-                        {window.location.origin}/ambassador/{profile?.username || "tu-usuario"}
-                      </code>
+                    <div>
+                      <h3 className="text-lg font-semibold text-white">Link de Referidos</h3>
+                      <p className="text-sm text-gray-400">Genera ingresos por cada persona que se una</p>
                     </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-secondary/20 to-accent/10 backdrop-blur-sm border-secondary/40 shadow-2xl shadow-secondary/30">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-secondary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-secondary/30 shadow-lg shadow-secondary/20">
-                          <Gift className="w-6 h-6 text-secondary" />
-                        </div>
-                        <div>
-                          <CardTitle>Link de Referidos</CardTitle>
-                          <CardDescription>Genera ingresos por cada persona que se una</CardDescription>
-                        </div>
-                      </div>
-                      <Button
-                        size="sm"
-                        onClick={() => {
-                          navigator.clipboard.writeText(`${window.location.origin}/?ref=${profile?.username || ""}`);
-                          setCopiedReferral(true);
-                          setTimeout(() => setCopiedReferral(false), 2000);
-                        }}
-                        className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/30"
-                      >
-                        {copiedReferral ? (
-                          <>
-                            <CheckCircle className="w-4 h-4 mr-2" />
-                            Copiado
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-4 h-4 mr-2" />
-                            Copiar
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="bg-background/60 backdrop-blur-sm rounded-lg p-4 border border-secondary/30 shadow-inner">
-                      <code className="text-sm text-secondary font-mono break-all">
-                        {window.location.origin}/?ref={profile?.username || "tu-usuario"}
-                      </code>
-                    </div>
-                  </CardContent>
-                </Card>
+                  </div>
+                  
+                  <div className="bg-gray-900/50 rounded-lg p-4 border border-gray-700/50">
+                    <code className="text-sm text-green-400 font-mono break-all">
+                      https://mwr.hubia.vip/mwr?ref={profile?.username || "maximo"}
+                    </code>
+                  </div>
+                  
+                  <Button 
+                    onClick={() => {
+                      const link = `https://mwr.hubia.vip/mwr?ref=${profile?.username || "maximo"}`;
+                      navigator.clipboard.writeText(link);
+                      toast({ title: "¡Copiado!", description: "Link de referidos copiado" });
+                    }}
+                    className="w-full mt-4 bg-green-500 hover:bg-green-600"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copiar Link
+                  </Button>
+                </div>
               </TabsContent>
 
               {/* TAB 5 - PERFIL */}
