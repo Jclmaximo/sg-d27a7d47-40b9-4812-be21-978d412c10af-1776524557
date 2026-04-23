@@ -1154,15 +1154,28 @@ export default function MWRPage() {
                     </div>
 
                     {/* Single Pricing Card */}
-                    <div className="bg-gradient-to-br from-primary to-blue-700 rounded-2xl p-8 shadow-2xl border-2 border-primary">
+                    <div className="bg-gradient-to-br from-primary to-blue-700 rounded-2xl p-8 shadow-2xl border-2 border-primary relative overflow-hidden">
+                      {/* Active Offer Badge */}
+                      <div className="absolute top-4 right-4">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-400 text-gray-900">
+                          🔥 OFERTA ACTIVA
+                        </span>
+                      </div>
+
                       <div className="text-white space-y-6">
                         <div className="text-center">
                           <div className="flex items-baseline justify-center gap-2 mb-2">
                             <span className="text-5xl font-bold">$29</span>
-                            <span className="text-xl text-blue-100">USD primer mes</span>
+                            <span className="text-xl text-yellow-300 font-bold">USD primer mes</span>
                           </div>
                           <p className="text-blue-100 mb-1">Luego $9 USD / mes</p>
-                          <p className="text-sm text-white font-semibold mt-3">Acceso completo desde el primer día</p>
+                          <p className="text-sm text-white font-semibold mt-3">
+                            Acceso completo <span className="text-yellow-300">desde el día 1</span>
+                          </p>
+                          {/* Perceived Value Line */}
+                          <p className="text-xs text-yellow-200/80 mt-2 font-medium">
+                            Valor real: $500–$1000 USD
+                          </p>
                         </div>
 
                         {/* Value Anchor */}
