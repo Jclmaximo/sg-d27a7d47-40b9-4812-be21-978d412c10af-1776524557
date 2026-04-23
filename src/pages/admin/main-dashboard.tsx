@@ -394,37 +394,6 @@ Puedo resolver dudas sobre:
     filterLeads();
   }, [filterLeads]);
 
-  useEffect(() => {
-    loadUser();
-  }, []);
-
-  const loadUser = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        router.push("/admin");
-        return;
-      }
-
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("*")
-        .eq("id", session.user.id)
-        .single();
-
-      if (profileData) {
-        setUser(profileData);
-        setProfileForm({
-          full_name: profileData.full_name || "",
-          username: profileData.username || "",
-          mwr_link: profileData.mwr_link || ""
-        });
-      }
-    } catch (error) {
-      console.error("Error loading user:", error);
-    }
-  };
-
   const updateProfile = async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
