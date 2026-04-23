@@ -95,18 +95,33 @@ export default function WelcomePage() {
 
       setUserEmail(session.user?.email || "");
       
-      const { data: profile } = await supabase
+      const { data: profileData } = await supabase
         .from("profiles")
         .select("username, full_name")
         .eq("id", session.user.id)
         .single();
+
+      if (profileData) {
+        setProfile(profileData);
+      } else {
+        // If no profile, just use session data
+        setProfile({
+          id: session.user.id,
+          email: session.user.email || "",
+          username: session.user.user_metadata?.username || session.user.email?.split("@")[0] || "",
+          full_name: session.user.user_metadata?.full_name || "Usuario",
+          whatsapp_number: "",
+          usdt_wallet_address: null,
+          role: "user",
+          ambassador_active: false
+        } as Profile);
+      }
 
       if (!profile?.username) {
         router.push("/admin/onboarding");
         return;
       }
 
-      setProfile(profile);
       setUsername(profile.username);
       await loadDashboardData(session.user.id);
       
