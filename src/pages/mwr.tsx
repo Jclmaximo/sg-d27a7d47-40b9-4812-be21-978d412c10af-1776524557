@@ -242,7 +242,7 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 2: Problem Statement */}
+                {/* STEP 2: Problem Statement - Updated */}
                 {flowStep === 2 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
