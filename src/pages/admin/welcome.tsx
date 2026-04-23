@@ -53,8 +53,15 @@ interface Stats {
 }
 
 interface Profile {
+  id: string;
+  email: string;
   username: string;
   full_name: string;
+  whatsapp_number: string;
+  usdt_wallet_address: string | null;
+  role: string;
+  ambassador_active: boolean;
+  avatar_url?: string | null;
 }
 
 export default function WelcomePage() {
