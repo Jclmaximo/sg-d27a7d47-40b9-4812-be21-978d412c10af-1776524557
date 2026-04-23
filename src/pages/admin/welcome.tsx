@@ -139,24 +139,16 @@ export default function WelcomePage() {
 
   const loadDashboardData = async (userId: string) => {
     try {
-      console.log("Loading leads for user:", userId);
-      
       // Use the same service as main-dashboard
       const leadsResult = await leadsService.getLeads(userId);
-      
-      console.log("Leads loaded:", leadsResult?.length || 0);
-      console.log("Leads data:", leadsResult);
 
       if (leadsResult) {
-        const statsData = {
+        setStats({
           total: leadsResult.length,
           nuevos: leadsResult.filter(l => l.status === "nuevo" || l.status === "new").length,
           contactados: leadsResult.filter(l => l.status === "contactado" || l.status === "contacted").length,
           convertidos: leadsResult.filter(l => l.status === "convertido" || l.status === "converted").length
-        };
-        
-        console.log("Stats calculated:", statsData);
-        setStats(statsData);
+        });
       } else {
         setStats({
           total: 0,
