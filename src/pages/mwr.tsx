@@ -845,28 +845,23 @@ export default function MWRPage() {
         </div>
       )}
 
-      {/* Fixed CTA */}
-      {showCTA && (
-        <div className="fixed bottom-0 left-0 right-0 z-50 p-4 bg-card/95 backdrop-blur-xl border-t border-border/50 shadow-2xl animate-in slide-in-from-bottom duration-500">
-          <div className="container max-w-4xl mx-auto">
-            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-              <div className="text-center md:text-left">
-                <h3 className="text-lg md:text-2xl font-bold text-foreground mb-1 md:mb-2">
-                  Sistematiza Tu Negocio MLM Hoy
-                </h3>
-                <p className="text-xs md:text-base text-muted-foreground">
-                  Accede al sistema piloto por 30 días • Solo $29 USD
-                </p>
-              </div>
-              <Button 
-                size="lg"
-                onClick={() => router.push("/mwr/registro")}
-                className="whitespace-nowrap bg-primary hover:bg-primary/90 text-primary-foreground font-semibold shadow-lg shadow-primary/20 border border-primary/50"
-              >
-                Acceder al Sistema Piloto
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </div>
+      {/* Fixed CTA Footer */}
+      {showCTA && !showGamifiedFlow && (
+        <div className="fixed bottom-0 left-0 right-0 bg-[#1a1a1a] text-white py-3 px-4 md:p-6 shadow-2xl z-40 animate-in slide-in-from-bottom duration-500">
+          <div className="max-w-2xl mx-auto text-center space-y-2 md:space-y-4">
+            <h3 className="text-base md:text-xl font-bold">
+              Sistematiza Tu Negocio MLM Hoy
+            </h3>
+            <p className="text-xs md:text-sm text-gray-300">
+              Accede al sistema piloto por 30 días • Solo $29 USD
+            </p>
+            <button
+              onClick={() => setShowGamifiedFlow(true)}
+              className="w-full bg-[#4285f4] hover:bg-[#3367d6] text-white font-semibold py-3 md:py-4 px-4 md:px-6 rounded-xl transition-all flex items-center justify-center gap-2 text-sm md:text-base"
+            >
+              Acceder al Sistema Piloto
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
+            </button>
           </div>
         </div>
       )}
