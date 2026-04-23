@@ -249,7 +249,7 @@ export default function MWRPage() {
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                         Deja de perder prospectos por <span className="text-primary">falta de seguimiento</span>
                       </h2>
-                      <p className="text-gray-600">La mayoría no compra porque nadie les vuelve a escribir. Este sistema te dice exactamente a quién contactar y cuándo hacerlo.</p>
+                      <p className="text-gray-600">El problema no es que no estén interesados… es que nadie les da seguimiento. Este sistema te dice exactamente a quién escribir y en qué momento.</p>
                     </div>
                     <button
                       onClick={() => setFlowStep(3)}
