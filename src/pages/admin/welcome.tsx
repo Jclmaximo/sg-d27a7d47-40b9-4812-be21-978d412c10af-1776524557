@@ -141,28 +141,23 @@ export default function WelcomePage() {
     try {
       console.log("Loading leads for user:", userId);
       
-      // Query leads by user_id only (the field that exists in the schema)
-      const { data: leads, error } = await supabase
-        .from("leads")
-        .select("*")
-        .eq("user_id", userId);
+      // Use the same service as main-dashboard
+      const leadsResult = await leadsService.getLeads(userId);
       
-      console.log("Leads query error:", error);
-      console.log("Leads loaded:", leads?.length || 0);
-      console.log("Leads data:", leads);
+      console.log("Leads loaded:", leadsResult?.length || 0);
+      console.log("Leads data:", leadsResult);
 
-      if (leads) {
+      if (leadsResult) {
         const statsData = {
-          total: leads.length,
-          nuevos: leads.filter(l => l.status === "new" || l.status === "nuevo" || !l.status).length,
-          contactados: leads.filter(l => l.status === "contacted" || l.status === "contactado").length,
-          convertidos: leads.filter(l => l.status === "converted" || l.status === "convertido").length,
+          total: leadsResult.length,
+          nuevos: leadsResult.filter(l => l.status === "nuevo" || l.status === "new").length,
+          contactados: leadsResult.filter(l => l.status === "contactado" || l.status === "contacted").length,
+          convertidos: leadsResult.filter(l => l.status === "convertido" || l.status === "converted").length
         };
         
         console.log("Stats calculated:", statsData);
         setStats(statsData);
       } else {
-        // No leads found, set stats to zero
         setStats({
           total: 0,
           nuevos: 0,
