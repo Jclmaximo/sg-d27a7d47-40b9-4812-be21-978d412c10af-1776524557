@@ -450,6 +450,61 @@ export default function MWRPage() {
                       <p className="text-gray-600">Sin hacer nada tú, el sistema responde y da seguimiento automáticamente</p>
                     </div>
 
+                    {/* WhatsApp Mock Visual */}
+                    <div className="bg-gradient-to-b from-gray-50 to-white rounded-2xl p-6 border-2 border-gray-200 shadow-lg">
+                      {/* WhatsApp Header */}
+                      <div className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-200">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold">
+                          JC
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900">Juan Carlos</p>
+                          <p className="text-xs text-gray-500">en línea</p>
+                        </div>
+                      </div>
+
+                      {/* Messages */}
+                      <div className="space-y-3 mb-6">
+                        {/* Message 1 */}
+                        <div className="flex justify-end animate-in slide-in-from-right duration-500">
+                          <div className="max-w-[80%]">
+                            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl rounded-tr-sm px-4 py-3 shadow-md">
+                              <p className="text-white text-sm">Hola Juan Carlos 👋 Gracias por tu interés</p>
+                            </div>
+                            <div className="flex items-center justify-end gap-1 mt-1 pr-2">
+                              <p className="text-xs text-gray-400">10:30 AM</p>
+                              <div className="flex">
+                                <CheckCircle2 className="w-3 h-3 text-blue-500" />
+                                <CheckCircle2 className="w-3 h-3 text-blue-500 -ml-1" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Message 2 */}
+                        <div className="flex justify-end animate-in slide-in-from-right duration-500 delay-300">
+                          <div className="max-w-[80%]">
+                            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl rounded-tr-sm px-4 py-3 shadow-md">
+                              <p className="text-white text-sm">Te explico cómo funciona 👇</p>
+                            </div>
+                            <div className="flex items-center justify-end gap-1 mt-1 pr-2">
+                              <p className="text-xs text-gray-400">10:30 AM</p>
+                              <div className="flex">
+                                <CheckCircle2 className="w-3 h-3 text-blue-500" />
+                                <CheckCircle2 className="w-3 h-3 text-blue-500 -ml-1" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Automation Indicator */}
+                      <div className="flex items-center justify-center gap-2 pt-4 border-t border-gray-200">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                        <p className="text-xs text-gray-500 font-medium">Enviado automáticamente • Sin intervención</p>
+                      </div>
+                    </div>
+
                     <button
                       onClick={() => setFlowStep(5)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
