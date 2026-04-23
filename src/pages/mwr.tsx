@@ -45,13 +45,13 @@ export default function MWRPage() {
       id: "seguimiento", 
       icon: MessageSquare,
       title: "Dar seguimiento", 
-      desc: "Se te olvida o no tienes tiempo de contactarlos"
+      desc: "Se te enfrían los prospectos o no sabes qué decirles"
     },
     { 
       id: "cerrar", 
       icon: Target,
       title: "Cerrar ventas", 
-      desc: "Los prospectos no terminan comprando o entrando"
+      desc: "Hablas con personas… pero no terminan entrando"
     },
     { 
       id: "todo", 
@@ -616,9 +616,9 @@ export default function MWRPage() {
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Gestiona tus prospectos en <span className="text-primary">segundos</span>
+                        Responde a tus prospectos <span className="text-primary">sin pensar qué decir</span>
                       </h2>
-                      <p className="text-gray-600">Todo organizado y listo para dar seguimiento sin perder oportunidades</p>
+                      <p className="text-gray-600">Mensajes listos, tú decides cuándo enviarlos</p>
                     </div>
 
                     {/* Prospects List with Actions */}
@@ -637,17 +637,18 @@ export default function MWRPage() {
                               </span>
                             </div>
                           </div>
-                          <button className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium transition-colors">
+                          <button className="px-4 py-2 bg-white hover:bg-gray-50 text-primary border-2 border-primary rounded-lg text-sm font-medium transition-colors">
                             Responder
                           </button>
                         </div>
                         <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
                           <p className="text-sm text-gray-600 mb-2">💬 <span className="font-medium">Mensaje sugerido:</span></p>
                           <p className="text-sm text-gray-700 mb-3">"Hola Juan 👋 Vi que te interesa viajar más gastando menos. ¿Tienes 5 minutos para que te explique cómo funciona?"</p>
-                          <button className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                          <button className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-2 shadow-md">
                             <MessageSquare className="w-4 h-4" />
                             Enviar por WhatsApp
                           </button>
+                          <p className="text-xs text-green-700 font-medium mt-2 text-center">✔ Solo das click y el mensaje se envía por ti</p>
                         </div>
                       </div>
 
@@ -655,7 +656,7 @@ export default function MWRPage() {
                       <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold text-sm">
+                            <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
                               ML
                             </div>
                             <div>
@@ -675,7 +676,7 @@ export default function MWRPage() {
                       <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-semibold text-sm">
+                            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-semibold">
                               CR
                             </div>
                             <div>
@@ -706,9 +707,9 @@ export default function MWRPage() {
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Tu negocio <span className="text-primary">organizado en un solo lugar</span>
+                        Así se ve tu negocio cuando <span className="text-primary">todo está bajo control</span>
                       </h2>
-                      <p className="text-gray-600">Ve tus prospectos, su estado y qué hacer con cada uno</p>
+                      <p className="text-gray-600">Sabes quién sigue, en qué etapa está y qué hacer en cada momento</p>
                     </div>
 
                     {/* Dashboard Visual Mock */}
@@ -732,7 +733,7 @@ export default function MWRPage() {
                       {/* Leads List with Action Buttons */}
                       <div className="space-y-3">
                         {/* Juan Pérez */}
-                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-200">
+                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
                           <div className="flex items-center gap-3">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
                               JP
@@ -740,7 +741,7 @@ export default function MWRPage() {
                             <div>
                               <p className="text-white font-semibold text-sm">Juan Pérez</p>
                               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-400/30">
-                                Nuevo
+                                🟢 Nuevo
                               </span>
                             </div>
                           </div>
@@ -750,7 +751,7 @@ export default function MWRPage() {
                         </div>
 
                         {/* María López */}
-                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-200">
+                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
                           <div className="flex items-center gap-3">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
                               ML
@@ -758,17 +759,17 @@ export default function MWRPage() {
                             <div>
                               <p className="text-white font-semibold text-sm">María López</p>
                               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-400/30">
-                                Contactado
+                                🔵 Hablando
                               </span>
                             </div>
                           </div>
-                          <button className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg text-xs font-medium transition-colors backdrop-blur-sm">
+                          <button className="px-3 py-2 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg text-xs font-medium transition-colors backdrop-blur-sm">
                             Continuar
                           </button>
                         </div>
 
                         {/* Carlos Ruiz */}
-                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-200">
+                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
                           <div className="flex items-center gap-3">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
                               CR
@@ -776,11 +777,11 @@ export default function MWRPage() {
                             <div>
                               <p className="text-white font-semibold text-sm">Carlos Ruiz</p>
                               <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-300 border border-orange-400/30">
-                                Seguimiento
+                                🟠 Por cerrar
                               </span>
                             </div>
                           </div>
-                          <button className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg text-xs font-medium transition-colors backdrop-blur-sm">
+                          <button className="px-3 py-2 bg-green-600 hover:bg-green-700 text-white border border-green-500 rounded-lg text-xs font-semibold transition-colors shadow-md">
                             Enviar mensaje
                           </button>
                         </div>
@@ -790,7 +791,7 @@ export default function MWRPage() {
                     {/* Microcopy */}
                     <div className="text-center">
                       <p className="text-sm text-gray-600 font-medium">
-                        Sabes exactamente quién sigue y qué hacer en cada momento
+                        Todo claro. Sin perder oportunidades.
                       </p>
                     </div>
 
