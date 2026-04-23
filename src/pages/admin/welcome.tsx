@@ -141,11 +141,11 @@ export default function WelcomePage() {
     try {
       console.log("Loading leads for user:", userId);
       
-      // Query leads directly - ambassadors' leads are those referred_by them OR created through their funnel
+      // Query leads by user_id only (the field that exists in the schema)
       const { data: leads, error } = await supabase
         .from("leads")
         .select("*")
-        .or(`user_id.eq.${userId},referred_by.eq.${userId}`);
+        .eq("user_id", userId);
       
       console.log("Leads query error:", error);
       console.log("Leads loaded:", leads?.length || 0);
@@ -156,11 +156,19 @@ export default function WelcomePage() {
           total: leads.length,
           nuevos: leads.filter(l => l.status === "new" || l.status === "nuevo" || !l.status).length,
           contactados: leads.filter(l => l.status === "contacted" || l.status === "contactado").length,
-          convertidos: leads.filter(l => l.status === "converted" || l.status === "convertido").length
+          convertidos: leads.filter(l => l.status === "converted" || l.status === "convertido").length,
         };
         
         console.log("Stats calculated:", statsData);
         setStats(statsData);
+      } else {
+        // No leads found, set stats to zero
+        setStats({
+          total: 0,
+          nuevos: 0,
+          contactados: 0,
+          convertidos: 0
+        });
       }
     } catch (err) {
       const error = err as Error;
