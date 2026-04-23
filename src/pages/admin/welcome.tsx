@@ -139,17 +139,24 @@ export default function WelcomePage() {
 
   const loadDashboardData = async (userId: string) => {
     try {
+      console.log("Loading leads for user:", userId);
+      
       // Get leads stats using the correct service
       const leads = await leadsService.getLeads(userId);
+      
+      console.log("Leads loaded:", leads?.length || 0);
+      console.log("Leads data:", leads);
 
       if (leads) {
-        // En la base de datos los estados se guardan en inglés: "new", "contacted", "converted"
-        setStats({
+        const statsData = {
           total: leads.length,
           nuevos: leads.filter(l => l.status === "new" || !l.status).length,
           contactados: leads.filter(l => l.status === "contacted").length,
           convertidos: leads.filter(l => l.status === "converted").length
-        });
+        };
+        
+        console.log("Stats calculated:", statsData);
+        setStats(statsData);
       }
     } catch (err) {
       const error = err as Error;
