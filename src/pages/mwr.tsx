@@ -20,6 +20,11 @@ export default function MWRPage() {
   const [selectedProblem, setSelectedProblem] = useState("");
   const [selectedOption, setSelectedOption] = useState("");
 
+  const handleProblemSelect = (problem) => {
+    setSelectedProblem(problem);
+    setTimeout(() => setFlowStep(2), 500);
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowCTA(true);
