@@ -607,15 +607,93 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 6: Results/Timeline */}
+                {/* STEP 6: Prospect Management */}
                 {flowStep === 6 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Panel de control <span className="text-primary">centralizado</span>
+                        Gestiona tus prospectos en <span className="text-primary">segundos</span>
                       </h2>
-                      <p className="text-gray-600">Todo en un solo lugar, sin perder oportunidades</p>
+                      <p className="text-gray-600">Todo organizado y listo para dar seguimiento sin perder oportunidades</p>
                     </div>
+
+                    {/* Prospects List with Actions */}
+                    <div className="space-y-4">
+                      {/* Juan Pérez - Nuevo */}
+                      <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-center justify-between mb-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-primary font-semibold">
+                              JP
+                            </div>
+                            <div>
+                              <p className="text-gray-900 font-semibold">Juan Pérez</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
+                                Nuevo
+                              </span>
+                            </div>
+                          </div>
+                          <button className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-medium transition-colors">
+                            Responder
+                          </button>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+                          <p className="text-sm text-gray-600 mb-2">💬 <span className="font-medium">Mensaje sugerido:</span></p>
+                          <p className="text-sm text-gray-700 mb-3">"Hola Juan 👋 Vi que te interesa viajar más gastando menos. ¿Tienes 5 minutos para que te explique cómo funciona?"</p>
+                          <button className="w-full px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-medium transition-colors flex items-center justify-center gap-2">
+                            <MessageSquare className="w-4 h-4" />
+                            Enviar por WhatsApp
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* María López - Contactado */}
+                      <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
+                              ML
+                            </div>
+                            <div>
+                              <p className="text-gray-900 font-semibold">María López</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
+                                Contactado
+                              </span>
+                            </div>
+                          </div>
+                          <button className="px-4 py-2 bg-white hover:bg-gray-50 text-primary border-2 border-primary rounded-lg text-sm font-medium transition-colors">
+                            Ver mensaje
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Carlos Ruiz - Seguimiento */}
+                      <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-semibold">
+                              CR
+                            </div>
+                            <div>
+                              <p className="text-gray-900 font-semibold">Carlos Ruiz</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700 border border-orange-200">
+                                Seguimiento
+                              </span>
+                            </div>
+                          </div>
+                          <button className="px-4 py-2 bg-white hover:bg-gray-50 text-primary border-2 border-primary rounded-lg text-sm font-medium transition-colors">
+                            Enviar plantilla
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setFlowStep(7)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
 
