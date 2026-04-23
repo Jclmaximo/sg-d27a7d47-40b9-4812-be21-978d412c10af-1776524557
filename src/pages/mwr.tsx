@@ -20,7 +20,6 @@ import {
   MessageSquare,
   FileText
 } from "lucide-react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function MWRPage() {
   const router = useRouter();
@@ -28,10 +27,6 @@ export default function MWRPage() {
   const [showGamifiedFlow, setShowGamifiedFlow] = useState(false);
   const [flowStep, setFlowStep] = useState(1);
   const [userName, setUserName] = useState("");
-  const [showStatusModal, setShowStatusModal] = useState(false);
-  const [leadStatus, setLeadStatus] = useState("Nuevo");
-  const [statusChanged, setStatusChanged] = useState(false);
-  const [showHint, setShowHint] = useState(false);
   const [answers, setAnswers] = useState({
     challenge: "",
     desire: ""
@@ -511,41 +506,21 @@ export default function MWRPage() {
                       </p>
                     </div>
 
-                    <Card className="max-w-md mx-auto bg-card border-border/50 shadow-2xl relative">
+                    <Card className="max-w-md mx-auto bg-card border-border/50 shadow-2xl">
                       <CardContent className="p-6 space-y-4">
                         <div className="flex items-start justify-between">
-                          <div className="space-y-2">
+                          <div className="space-y-1">
                             <h3 className="text-xl font-bold text-foreground">{userName}</h3>
-                            <div className="relative">
-                              <Badge 
-                                className={`cursor-pointer hover:opacity-80 transition-all hover:scale-105 ${
-                                  leadStatus === "Nuevo" ? "bg-secondary/10 text-secondary border-secondary/30" :
-                                  leadStatus === "Contactado" ? "bg-blue-500/10 text-blue-500 border-blue-500/30" :
-                                  leadStatus === "Seguimiento" ? "bg-yellow-500/10 text-yellow-500 border-yellow-500/30" :
-                                  leadStatus === "Caliente" ? "bg-orange-500/10 text-orange-500 border-orange-500/30" :
-                                  leadStatus === "Cerrado - Ganado" ? "bg-green-500/10 text-green-500 border-green-500/30" :
-                                  "bg-red-500/10 text-red-500 border-red-500/30"
-                                }`}
-                                onClick={() => {
-                                  setShowStatusModal(true);
-                                  setShowHint(false);
-                                }}
-                              >
-                                {leadStatus} 👆
-                              </Badge>
-                              {!statusChanged && (
-                                <div className="absolute -bottom-6 left-0 text-xs text-secondary font-medium italic whitespace-nowrap animate-pulse">
-                                  👆 Haz clic aquí
-                                </div>
-                              )}
-                            </div>
+                            <Badge className="bg-secondary/10 text-secondary border-secondary/30">
+                              Nuevo
+                            </Badge>
                           </div>
                           <User className="w-12 h-12 text-muted-foreground" />
                         </div>
                         <div className="space-y-2 text-left">
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Estado:</span>
-                            <span className="text-foreground font-medium">{leadStatus}</span>
+                            <span className="text-foreground font-medium">Nuevo</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span className="text-muted-foreground">Origen:</span>
@@ -559,174 +534,14 @@ export default function MWRPage() {
                       Así es como empieza todo automáticamente
                     </p>
 
-                    {statusChanged && showHint && (
-                      <div className="animate-in fade-in duration-300 text-center space-y-2">
-                        <p className="text-lg text-secondary font-semibold animate-pulse">
-                          ¡Perfecto! Así de fácil actualizas el estado
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          Ahora continúa para ver más ⬇️
-                        </p>
-                      </div>
-                    )}
-
                     <Button
                       size="lg"
                       onClick={() => setFlowStep(6)}
-                      className={`h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold transition-all ${
-                        statusChanged ? "animate-pulse shadow-xl shadow-primary/30" : ""
-                      }`}
+                      className="h-14 px-8 bg-primary hover:bg-primary/90 text-primary-foreground text-lg font-semibold"
                     >
                       Continuar
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
-
-                    {/* Status Change Modal */}
-                    <Dialog open={showStatusModal} onOpenChange={setShowStatusModal}>
-                      <DialogContent className="sm:max-w-md bg-card">
-                        <DialogHeader>
-                          <DialogTitle className="text-foreground">Cambiar estado del lead</DialogTitle>
-                          <DialogDescription className="text-muted-foreground">
-                            Selecciona el nuevo estado para {userName}
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-3 py-4">
-                          <button
-                            onClick={() => {
-                              setLeadStatus("Nuevo");
-                              setStatusChanged(true);
-                              setShowStatusModal(false);
-                              setTimeout(() => setShowHint(true), 500);
-                            }}
-                            className={`w-full p-4 rounded-xl border-2 text-left transition-all hover:scale-105 ${
-                              leadStatus === "Nuevo"
-                                ? "border-secondary bg-secondary/10"
-                                : "border-border hover:border-primary/50"
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              {leadStatus === "Nuevo" && (
-                                <CheckCircle2 className="w-5 h-5 text-secondary" />
-                              )}
-                              <span className="font-medium text-foreground">🟢 Nuevo</span>
-                            </div>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              setLeadStatus("Contactado");
-                              setStatusChanged(true);
-                              setShowStatusModal(false);
-                              setTimeout(() => setShowHint(true), 500);
-                            }}
-                            className={`w-full p-4 rounded-xl border-2 text-left transition-all hover:scale-105 ${
-                              leadStatus === "Contactado"
-                                ? "border-blue-500 bg-blue-500/10"
-                                : "border-border hover:border-primary/50"
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              {leadStatus === "Contactado" && (
-                                <CheckCircle2 className="w-5 h-5 text-blue-500" />
-                              )}
-                              <span className="font-medium text-foreground">🔵 Contactado</span>
-                            </div>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              setLeadStatus("Seguimiento");
-                              setStatusChanged(true);
-                              setShowStatusModal(false);
-                              setTimeout(() => setShowHint(true), 500);
-                            }}
-                            className={`w-full p-4 rounded-xl border-2 text-left transition-all hover:scale-105 ${
-                              leadStatus === "Seguimiento"
-                                ? "border-yellow-500 bg-yellow-500/10"
-                                : "border-border hover:border-primary/50"
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              {leadStatus === "Seguimiento" && (
-                                <CheckCircle2 className="w-5 h-5 text-yellow-500" />
-                              )}
-                              <span className="font-medium text-foreground">🟡 Seguimiento</span>
-                            </div>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              setLeadStatus("Caliente");
-                              setStatusChanged(true);
-                              setShowStatusModal(false);
-                              setTimeout(() => setShowHint(true), 500);
-                            }}
-                            className={`w-full p-4 rounded-xl border-2 text-left transition-all hover:scale-105 ${
-                              leadStatus === "Caliente"
-                                ? "border-orange-500 bg-orange-500/10"
-                                : "border-border hover:border-primary/50"
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              {leadStatus === "Caliente" && (
-                                <CheckCircle2 className="w-5 h-5 text-orange-500" />
-                              )}
-                              <span className="font-medium text-foreground">🟠 Caliente</span>
-                            </div>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              setLeadStatus("Cerrado - Ganado");
-                              setStatusChanged(true);
-                              setShowStatusModal(false);
-                              setTimeout(() => setShowHint(true), 500);
-                            }}
-                            className={`w-full p-4 rounded-xl border-2 text-left transition-all hover:scale-105 ${
-                              leadStatus === "Cerrado - Ganado"
-                                ? "border-green-500 bg-green-500/10"
-                                : "border-border hover:border-primary/50"
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              {leadStatus === "Cerrado - Ganado" && (
-                                <CheckCircle2 className="w-5 h-5 text-green-500" />
-                              )}
-                              <span className="font-medium text-foreground">🟢 Cerrado - Ganado</span>
-                            </div>
-                          </button>
-
-                          <button
-                            onClick={() => {
-                              setLeadStatus("Cerrado - Perdido");
-                              setStatusChanged(true);
-                              setShowStatusModal(false);
-                              setTimeout(() => setShowHint(true), 500);
-                            }}
-                            className={`w-full p-4 rounded-xl border-2 text-left transition-all hover:scale-105 ${
-                              leadStatus === "Cerrado - Perdido"
-                                ? "border-red-500 bg-red-500/10"
-                                : "border-border hover:border-primary/50"
-                            }`}
-                          >
-                            <div className="flex items-center gap-3">
-                              {leadStatus === "Cerrado - Perdido" && (
-                                <CheckCircle2 className="w-5 h-5 text-red-500" />
-                              )}
-                              <span className="font-medium text-foreground">🔴 Cerrado - Perdido</span>
-                            </div>
-                          </button>
-                        </div>
-                        <DialogFooter>
-                          <Button
-                            variant="outline"
-                            onClick={() => setShowStatusModal(false)}
-                          >
-                            Cancelar
-                          </Button>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
                   </div>
                 )}
 
