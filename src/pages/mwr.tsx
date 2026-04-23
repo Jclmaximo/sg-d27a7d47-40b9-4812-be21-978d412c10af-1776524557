@@ -132,7 +132,7 @@ export default function MWRPage() {
         </div>
       )}
 
-      {/* GAMIFIED FLOW */}
+      {/* Gamified Flow */}
       {showGamifiedFlow && (
         <div className="min-h-screen flex items-center justify-center">
           <div className="max-w-4xl mx-auto px-4 py-12 w-full animate-in fade-in duration-500">
@@ -650,7 +650,6 @@ export default function MWRPage() {
             </div>
           </div>
         </div>
-      </div>
       )}
     </div>
   );
