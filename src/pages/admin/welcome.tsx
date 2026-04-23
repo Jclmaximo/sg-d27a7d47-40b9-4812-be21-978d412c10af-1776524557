@@ -213,20 +213,20 @@ export default function WelcomePage() {
           <div className="container mx-auto px-4 relative z-10">
             <div className="text-center max-w-3xl mx-auto">
               <div className="flex justify-center mb-6">
-                {user?.avatar_url ? (
+                {profile?.avatar_url ? (
                   <img
-                    src={user.avatar_url}
-                    alt={user.full_name}
+                    src={profile.avatar_url}
+                    alt={profile.full_name}
                     className="w-24 h-24 rounded-full object-cover border-4 border-white/30 shadow-xl"
                   />
                 ) : (
                   <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold border-4 border-white/30 shadow-xl">
-                    {user?.full_name?.[0]?.toUpperCase() || "U"}
+                    {profile?.full_name?.[0]?.toUpperCase() || "U"}
                   </div>
                 )}
               </div>
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                ¡Bienvenido de nuevo, {user?.full_name || user?.username || "Usuario"}!
+                ¡Bienvenido de nuevo, {profile?.full_name || profile?.username || "Usuario"}!
               </h1>
             </div>
           </div>

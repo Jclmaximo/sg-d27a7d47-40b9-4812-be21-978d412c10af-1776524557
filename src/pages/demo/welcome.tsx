@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -38,9 +38,14 @@ interface Lead {
 export default function DemoWelcomePage() {
   const router = useRouter();
   const { toast } = useToast();
+  const [isMounted, setIsMounted] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [copiedFunnel, setCopiedFunnel] = useState(false);
   const [copiedReferral, setCopiedReferral] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   // Demo data
   const profile = {
@@ -76,8 +81,8 @@ export default function DemoWelcomePage() {
     }
   ];
 
-  const funnelLink = typeof window !== "undefined" ? `${window.location.origin}/ambassador/${username}` : "";
-  const referralLink = typeof window !== "undefined" ? `${window.location.origin}/pricing?ref=${username}` : "";
+  const funnelLink = isMounted ? `${window.location.origin}/ambassador/${username}` : "";
+  const referralLink = isMounted ? `${window.location.origin}/pricing?ref=${username}` : "";
 
   const copyFunnelLink = () => {
     if (typeof navigator !== "undefined") {
@@ -291,7 +296,7 @@ export default function DemoWelcomePage() {
               <CardContent className="relative z-10">
                 <div className="bg-black/40 backdrop-blur-md rounded-xl p-5 border border-white/10 shadow-inner flex items-center justify-between group hover:border-primary/50 transition-colors">
                   <code className="text-lg text-white font-mono break-all font-medium tracking-wide">
-                    {funnelLink}
+                    {isMounted ? funnelLink : "Cargando link..."}
                   </code>
                 </div>
               </CardContent>
@@ -427,7 +432,7 @@ export default function DemoWelcomePage() {
                   <CardContent className="relative z-10">
                     <div className="bg-black/50 rounded-xl p-4 mb-4 border border-white/10 shadow-inner">
                       <code className="text-base text-secondary font-mono break-all font-bold">
-                        {referralLink}
+                        {isMounted ? referralLink : "Cargando link..."}
                       </code>
                     </div>
                     <Button

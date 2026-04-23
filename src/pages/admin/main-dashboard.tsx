@@ -273,7 +273,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Of Oferta válida: Últimos días
+⏰ Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
