@@ -19,6 +19,9 @@ export default function MWRCheckoutPage() {
     expiry: "",
     cvv: ""
   });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<"annual" | "monthly">("annual");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -292,6 +295,95 @@ export default function MWRCheckoutPage() {
                   </form>
                 </CardContent>
               </Card>
+
+              {/* Pricing Section */}
+              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                <div className="text-center mb-6">
+                  <div className="text-5xl font-bold text-gray-900 mb-2">$29 <span className="text-xl font-normal text-gray-500">USD inicio</span></div>
+                  <p className="text-lg font-medium text-gray-700 mt-4">Elige tu plan</p>
+                </div>
+
+                {/* Plan Cards */}
+                <div className="space-y-4 mb-6">
+                  {/* Annual Plan - Preselected */}
+                  <button
+                    onClick={() => setSelectedPlan("annual")}
+                    className={`w-full text-left p-6 rounded-xl border-2 transition-all ${
+                      selectedPlan === "annual"
+                        ? "border-primary bg-primary/5 shadow-md"
+                        : "border-gray-200 bg-white hover:border-gray-300"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs font-semibold px-2.5 py-1 bg-orange-500 text-white rounded-full">
+                            Más elegido 🔥
+                          </span>
+                        </div>
+                        <div className="text-2xl font-bold text-gray-900">$97 USD / año</div>
+                        <div className="text-sm text-gray-600 mt-1">Ahorra vs plan mensual</div>
+                        <div className="text-sm text-gray-500">≈ $0.27 USD al día</div>
+                      </div>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-1 ${
+                        selectedPlan === "annual" ? "border-primary bg-primary" : "border-gray-300"
+                      }`}>
+                        {selectedPlan === "annual" && (
+                          <div className="w-2 h-2 bg-white rounded-full" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-600 border-t border-gray-100 pt-3 mt-3">
+                      Pagas menos y te olvidas todo el año
+                    </div>
+                  </button>
+
+                  {/* Monthly Plan */}
+                  <button
+                    onClick={() => setSelectedPlan("monthly")}
+                    className={`w-full text-left p-6 rounded-xl border-2 transition-all ${
+                      selectedPlan === "monthly"
+                        ? "border-primary bg-primary/5 shadow-md"
+                        : "border-gray-200 bg-white hover:border-gray-300"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="text-2xl font-bold text-gray-900">$9 USD / mes</div>
+                        <div className="text-sm text-gray-500 mt-1">≈ Menos de $1 USD al día</div>
+                      </div>
+                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-1 ${
+                        selectedPlan === "monthly" ? "border-primary bg-primary" : "border-gray-300"
+                      }`}>
+                        {selectedPlan === "monthly" && (
+                          <div className="w-2 h-2 bg-white rounded-full" />
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-sm text-gray-600 border-t border-gray-100 pt-3 mt-3">
+                      Flexibilidad • Cancela cuando quieras
+                    </div>
+                  </button>
+                </div>
+
+                <Button 
+                  onClick={handleSubmit}
+                  disabled={isSubmitting}
+                  className="w-full bg-primary hover:bg-primary/90 text-white py-6 text-lg rounded-xl shadow-lg shadow-primary/20"
+                >
+                  {isSubmitting ? "Procesando..." : "Activar mi sistema ahora →"}
+                </Button>
+
+                <div className="flex items-center justify-center gap-2 mt-4 text-sm text-gray-600">
+                  <CheckCircle2 className="w-4 h-4 text-green-500" />
+                  <span>Acceso inmediato • Empieza hoy • Sin complicaciones</span>
+                </div>
+
+                <div className="text-center mt-6 text-sm text-gray-500">
+                  Sin riesgos. Cancela cuando quieras.<br />
+                  No hay contratos ni letras pequeñas.
+                </div>
+              </div>
 
               <div className="mt-6 text-center">
                 <p className="text-sm text-muted-foreground mb-4">Métodos de pago aceptados:</p>
