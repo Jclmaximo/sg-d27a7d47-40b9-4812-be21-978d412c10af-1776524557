@@ -141,18 +141,22 @@ export default function WelcomePage() {
     try {
       console.log("Loading leads for user:", userId);
       
-      // Get leads stats using the correct service
-      const leads = await leadsService.getLeads(userId);
+      // Query leads directly - ambassadors' leads are those referred_by them OR created through their funnel
+      const { data: leads, error } = await supabase
+        .from("leads")
+        .select("*")
+        .or(`user_id.eq.${userId},referred_by.eq.${userId}`);
       
+      console.log("Leads query error:", error);
       console.log("Leads loaded:", leads?.length || 0);
       console.log("Leads data:", leads);
 
       if (leads) {
         const statsData = {
           total: leads.length,
-          nuevos: leads.filter(l => l.status === "new" || !l.status).length,
-          contactados: leads.filter(l => l.status === "contacted").length,
-          convertidos: leads.filter(l => l.status === "converted").length
+          nuevos: leads.filter(l => l.status === "new" || l.status === "nuevo" || !l.status).length,
+          contactados: leads.filter(l => l.status === "contacted" || l.status === "contactado").length,
+          convertidos: leads.filter(l => l.status === "converted" || l.status === "convertido").length
         };
         
         console.log("Stats calculated:", statsData);
