@@ -134,520 +134,523 @@ export default function MWRPage() {
 
       {/* GAMIFIED FLOW */}
       {showGamifiedFlow && (
-        <div className="min-h-screen bg-white py-8 px-4">
-          <div className="max-w-3xl mx-auto">
-            {/* Progress Indicator */}
-            <div className="mb-8 text-center">
-              <p className="text-sm text-gray-500 font-medium">
-                Demo {flowStep}/11
-              </p>
-            </div>
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="max-w-4xl mx-auto px-4 py-12 w-full animate-in fade-in duration-500">
+            <div className="max-w-3xl mx-auto">
+              {/* Progress Indicator */}
+              <div className="mb-8 text-center">
+                <p className="text-sm text-gray-500 font-medium">
+                  Demo {flowStep}/11
+                </p>
+              </div>
 
-            <div className="space-y-8">
-              {/* STEP 1: Challenge Selection */}
-              {flowStep === 1 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      ¿Qué te cuesta <span className="text-[#4285f4]">más trabajo</span>?
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600">
-                      Selecciona tu mayor desafío en este momento
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                    {challenges.map((challenge) => (
-                      <button
-                        key={challenge.id}
-                        onClick={() => {
-                          setAnswers({ ...answers, challenge: challenge.id });
-                          setTimeout(() => setFlowStep(2), 300);
-                        }}
-                        className="group p-6 bg-white border-2 border-gray-200 rounded-2xl hover:border-[#4285f4] hover:shadow-xl transition-all text-left"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center group-hover:bg-[#4285f4] transition-colors shrink-0">
-                            <challenge.icon className="w-6 h-6 text-[#4285f4] group-hover:text-white transition-colors" />
-                          </div>
-                          <div className="space-y-1">
-                            <h3 className="text-lg font-bold text-[#1a1a1a]">
-                              {challenge.title}
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                              {challenge.desc}
-                            </p>
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 2: Desire Selection */}
-              {flowStep === 2 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      ¿Qué quieres <span className="text-[#4285f4]">lograr</span>?
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600">
-                      Elige tu objetivo principal
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                    {desires.map((desire) => (
-                      <button
-                        key={desire.id}
-                        onClick={() => {
-                          setAnswers({ ...answers, desire: desire.id });
-                          setTimeout(() => setFlowStep(3), 300);
-                        }}
-                        className="group p-6 bg-white border-2 border-gray-200 rounded-2xl hover:border-[#4285f4] hover:shadow-xl transition-all text-left"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center group-hover:bg-[#4285f4] transition-colors shrink-0">
-                            <desire.icon className="w-6 h-6 text-[#4285f4] group-hover:text-white transition-colors" />
-                          </div>
-                          <div className="space-y-1">
-                            <h3 className="text-lg font-bold text-[#1a1a1a]">
-                              {desire.title}
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                              {desire.desc}
-                            </p>
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* STEP 3: Personalized Summary */}
-              {flowStep === 3 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <div className="w-16 h-16 bg-[#4285f4]/10 rounded-full flex items-center justify-center mx-auto">
-                      <Sparkles className="w-8 h-8 text-[#4285f4]" />
+              <div className="space-y-8">
+                {/* STEP 1: Challenge Selection */}
+                {flowStep === 1 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        ¿Qué te cuesta <span className="text-[#4285f4]">más trabajo</span>?
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600">
+                        Selecciona tu mayor desafío en este momento
+                      </p>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      Perfecto, esto es para <span className="text-[#4285f4]">ti</span>
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-                      {answers.challenge === "conseguir" && "Te ayudaremos a conseguir más prospectos automáticamente"}
-                      {answers.challenge === "seguimiento" && "El sistema hará el seguimiento por ti"}
-                      {answers.challenge === "cerrar" && "Te damos las herramientas para cerrar más ventas"}
-                      {answers.challenge === "todo" && "Automatizaremos todo tu proceso de ventas"}
-                    </p>
-                  </div>
 
-                  <div className="bg-gradient-to-br from-[#4285f4]/5 to-[#4285f4]/10 rounded-2xl p-8 max-w-2xl mx-auto border border-[#4285f4]/20">
-                    <h3 className="text-xl font-bold text-[#1a1a1a] mb-4">
-                      El sistema incluye:
-                    </h3>
-                    <div className="space-y-3 text-left">
-                      {[
-                        "Páginas personalizadas para captar prospectos",
-                        "Seguimiento automático por WhatsApp",
-                        "Plantillas listas para usar",
-                        "Dashboard para gestionar tus leads"
-                      ].map((feature, index) => (
-                        <div key={index} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-[#4285f4] shrink-0 mt-0.5" />
-                          <p className="text-base text-gray-700">{feature}</p>
-                        </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                      {challenges.map((challenge) => (
+                        <button
+                          key={challenge.id}
+                          onClick={() => {
+                            setAnswers({ ...answers, challenge: challenge.id });
+                            setTimeout(() => setFlowStep(2), 300);
+                          }}
+                          className="group p-6 bg-white border-2 border-gray-200 rounded-2xl hover:border-[#4285f4] hover:shadow-xl transition-all text-left"
+                        >
+                          <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center group-hover:bg-[#4285f4] transition-colors shrink-0">
+                              <challenge.icon className="w-6 h-6 text-[#4285f4] group-hover:text-white transition-colors" />
+                            </div>
+                            <div className="space-y-1">
+                              <h3 className="text-lg font-bold text-[#1a1a1a]">
+                                {challenge.title}
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                {challenge.desc}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
                       ))}
                     </div>
                   </div>
+                )}
 
-                  <Button
-                    size="lg"
-                    onClick={() => setFlowStep(4)}
-                    className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                  >
-                    Continuar
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </div>
-              )}
+                {/* STEP 2: Desire Selection */}
+                {flowStep === 2 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        ¿Qué quieres <span className="text-[#4285f4]">lograr</span>?
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600">
+                        Elige tu objetivo principal
+                      </p>
+                    </div>
 
-              {/* STEP 4: Name Capture */}
-              {flowStep === 4 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      ¿Cómo te <span className="text-[#4285f4]">llamas</span>?
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600">
-                      Para personalizar tu experiencia
-                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
+                      {desires.map((desire) => (
+                        <button
+                          key={desire.id}
+                          onClick={() => {
+                            setAnswers({ ...answers, desire: desire.id });
+                            setTimeout(() => setFlowStep(3), 300);
+                          }}
+                          className="group p-6 bg-white border-2 border-gray-200 rounded-2xl hover:border-[#4285f4] hover:shadow-xl transition-all text-left"
+                        >
+                          <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center group-hover:bg-[#4285f4] transition-colors shrink-0">
+                              <desire.icon className="w-6 h-6 text-[#4285f4] group-hover:text-white transition-colors" />
+                            </div>
+                            <div className="space-y-1">
+                              <h3 className="text-lg font-bold text-[#1a1a1a]">
+                                {desire.title}
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                {desire.desc}
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
+                )}
 
-                  <div className="max-w-md mx-auto space-y-6">
-                    <Input
-                      type="text"
-                      placeholder="Tu nombre"
-                      value={userName}
-                      onChange={(e) => setUserName(e.target.value)}
-                      className="h-14 text-lg px-6 border-2 border-gray-200 rounded-xl focus:border-[#4285f4]"
-                    />
+                {/* STEP 3: Personalized Summary */}
+                {flowStep === 3 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <div className="w-16 h-16 bg-[#4285f4]/10 rounded-full flex items-center justify-center mx-auto">
+                        <Sparkles className="w-8 h-8 text-[#4285f4]" />
+                      </div>
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        Perfecto, esto es para <span className="text-[#4285f4]">ti</span>
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+                        {answers.challenge === "conseguir" && "Te ayudaremos a conseguir más prospectos automáticamente"}
+                        {answers.challenge === "seguimiento" && "El sistema hará el seguimiento por ti"}
+                        {answers.challenge === "cerrar" && "Te damos las herramientas para cerrar más ventas"}
+                        {answers.challenge === "todo" && "Automatizaremos todo tu proceso de ventas"}
+                      </p>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-[#4285f4]/5 to-[#4285f4]/10 rounded-2xl p-8 max-w-2xl mx-auto border border-[#4285f4]/20">
+                      <h3 className="text-xl font-bold text-[#1a1a1a] mb-4">
+                        El sistema incluye:
+                      </h3>
+                      <div className="space-y-3 text-left">
+                        {[
+                          "Páginas personalizadas para captar prospectos",
+                          "Seguimiento automático por WhatsApp",
+                          "Plantillas listas para usar",
+                          "Dashboard para gestionar tus leads"
+                        ].map((feature, index) => (
+                          <div key={index} className="flex items-start gap-3">
+                            <CheckCircle2 className="w-5 h-5 text-[#4285f4] shrink-0 mt-0.5" />
+                            <p className="text-base text-gray-700">{feature}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
                     <Button
                       size="lg"
-                      onClick={() => userName.trim() && setFlowStep(5)}
-                      disabled={!userName.trim()}
-                      className="w-full h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                      onClick={() => setFlowStep(4)}
+                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
                     >
-                      Ver cómo funciona
+                      Continuar
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* STEP 5: Demo - Momento WOW */}
-              {flowStep === 5 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      Listo. Esto acaba de <span className="text-[#4285f4]">pasar</span>
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600">
-                      Acabas de entrar como prospecto dentro del sistema
-                    </p>
+                {/* STEP 4: Name Capture */}
+                {flowStep === 4 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        ¿Cómo te <span className="text-[#4285f4]">llamas</span>?
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600">
+                        Para personalizar tu experiencia
+                      </p>
+                    </div>
+
+                    <div className="max-w-md mx-auto space-y-6">
+                      <input
+                        type="text"
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
+                        placeholder="Juan Carlos"
+                        className="w-full px-6 py-4 text-lg text-[#1a1a1a] placeholder:text-gray-400 border-2 border-gray-300 rounded-xl focus:border-[#4285f4] focus:ring-0 focus:outline-none transition-colors"
+                      />
+
+                      <Button
+                        size="lg"
+                        onClick={() => userName.trim() && setFlowStep(5)}
+                        disabled={!userName.trim()}
+                        className="w-full h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Ver cómo funciona
+                        <ArrowRight className="ml-2 h-5 w-5" />
+                      </Button>
+                    </div>
                   </div>
+                )}
 
-                  <Card className="max-w-md mx-auto bg-white border-2 border-gray-200 shadow-xl rounded-2xl">
-                    <CardContent className="p-6 space-y-4">
-                      <div className="flex items-start justify-between">
-                        <div className="space-y-1">
-                          <h3 className="text-xl font-bold text-[#1a1a1a]">{userName}</h3>
-                          <Badge className="bg-[#4285f4]/10 text-[#4285f4] border-[#4285f4]/30">
-                            Nuevo
-                          </Badge>
-                        </div>
-                        <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
-                          <User className="w-6 h-6 text-gray-600" />
-                        </div>
-                      </div>
-                      <div className="space-y-2 text-left">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Estado:</span>
-                          <span className="text-[#1a1a1a] font-medium">Nuevo</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Origen:</span>
-                          <span className="text-[#1a1a1a] font-medium">Landing</span>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                {/* STEP 5: Demo - Momento WOW */}
+                {flowStep === 5 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        Listo. Esto acaba de <span className="text-[#4285f4]">pasar</span>
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600">
+                        Acabas de entrar como prospecto dentro del sistema
+                      </p>
+                    </div>
 
-                  <p className="text-lg text-gray-600 italic">
-                    Así es como empieza todo automáticamente
-                  </p>
+                    <Card className="max-w-md mx-auto bg-white border-2 border-gray-200 shadow-xl rounded-2xl">
+                      <CardContent className="p-6 space-y-4">
+                        <div className="flex items-start justify-between">
+                          <div className="space-y-1">
+                            <h3 className="text-xl font-bold text-[#1a1a1a]">{userName}</h3>
+                            <Badge className="bg-[#4285f4]/10 text-[#4285f4] border-[#4285f4]/30">
+                              Nuevo
+                            </Badge>
+                          </div>
+                          <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center">
+                            <User className="w-6 h-6 text-gray-600" />
+                          </div>
+                        </div>
+                        <div className="space-y-2 text-left">
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-600">Estado:</span>
+                            <span className="text-[#1a1a1a] font-medium">Nuevo</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span className="text-gray-600">Origen:</span>
+                            <span className="text-[#1a1a1a] font-medium">Landing</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
 
-                  <Button
-                    size="lg"
-                    onClick={() => setFlowStep(6)}
-                    className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                  >
-                    Continuar
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </div>
-              )}
-
-              {/* STEP 6: Auto WhatsApp Message */}
-              {flowStep === 6 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      Y esto también <span className="text-[#4285f4]">pasó</span>
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600">
-                      Se envió un mensaje automático por WhatsApp
+                    <p className="text-lg text-gray-600 italic">
+                      Así es como empieza todo automáticamente
                     </p>
-                  </div>
 
-                  <div className="max-w-md mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200">
-                    <div className="flex items-start gap-3 mb-4">
-                      <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shrink-0">
-                        <MessageSquare className="w-5 h-5 text-white" />
-                      </div>
-                      <div className="flex-1 text-left">
-                        <p className="text-sm font-medium text-gray-600 mb-1">WhatsApp</p>
-                        <div className="bg-white rounded-xl p-4 shadow-sm">
-                          <p className="text-sm text-gray-800">
-                            ¡Hola {userName}! 👋<br/><br/>
-                            Gracias por tu interés. Te contactaremos pronto para mostrarte cómo funciona el sistema.
-                          </p>
-                          <p className="text-xs text-gray-500 mt-2">10:30 AM ✓✓</p>
+                    <Button
+                      size="lg"
+                      onClick={() => setFlowStep(6)}
+                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
+                    >
+                      Continuar
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </div>
+                )}
+
+                {/* STEP 6: Auto WhatsApp Message */}
+                {flowStep === 6 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        Y esto también <span className="text-[#4285f4]">pasó</span>
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600">
+                        Se envió un mensaje automático por WhatsApp
+                      </p>
+                    </div>
+
+                    <div className="max-w-md mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 border-2 border-green-200">
+                      <div className="flex items-start gap-3 mb-4">
+                        <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shrink-0">
+                          <MessageSquare className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="flex-1 text-left">
+                          <p className="text-sm font-medium text-gray-600 mb-1">WhatsApp</p>
+                          <div className="bg-white rounded-xl p-4 shadow-sm">
+                            <p className="text-sm text-gray-800">
+                              ¡Hola {userName}! 👋<br/><br/>
+                              Gracias por tu interés. Te contactaremos pronto para mostrarte cómo funciona el sistema.
+                            </p>
+                            <p className="text-xs text-gray-500 mt-2">10:30 AM ✓✓</p>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
 
-                  <p className="text-lg text-gray-600 italic">
-                    Sin hacer nada tú, el sistema ya está trabajando
-                  </p>
-
-                  <Button
-                    size="lg"
-                    onClick={() => setFlowStep(7)}
-                    className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                  >
-                    Continuar
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </div>
-              )}
-
-              {/* STEP 7: Ready Templates */}
-              {flowStep === 7 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      Además, ya tienes <span className="text-[#4285f4]">plantillas listas</span>
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600">
-                      Para dar seguimiento en cada etapa
+                    <p className="text-lg text-gray-600 italic">
+                      Sin hacer nada tú, el sistema ya está trabajando
                     </p>
+
+                    <Button
+                      size="lg"
+                      onClick={() => setFlowStep(7)}
+                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
+                    >
+                      Continuar
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
                   </div>
+                )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                    {[
-                      { title: "Mensaje inicial", desc: "Primer contacto automático" },
-                      { title: "Seguimiento día 3", desc: "Recordatorio amigable" },
-                      { title: "Mensaje de cierre", desc: "Para cerrar la venta" },
-                      { title: "Post-venta", desc: "Bienvenida después de comprar" }
-                    ].map((template, index) => (
-                      <div
-                        key={index}
-                        className="p-6 bg-white border-2 border-gray-200 rounded-2xl shadow-sm"
-                      >
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center shrink-0">
-                            <FileText className="w-6 h-6 text-[#4285f4]" />
-                          </div>
-                          <div className="text-left space-y-1">
-                            <h3 className="text-lg font-bold text-[#1a1a1a]">
-                              {template.title}
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                              {template.desc}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                {/* STEP 7: Ready Templates */}
+                {flowStep === 7 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        Además, ya tienes <span className="text-[#4285f4]">plantillas listas</span>
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600">
+                        Para dar seguimiento en cada etapa
+                      </p>
+                    </div>
 
-                  <Button
-                    size="lg"
-                    onClick={() => setFlowStep(8)}
-                    className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                  >
-                    Continuar
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </div>
-              )}
-
-              {/* STEP 8: Prospects View */}
-              {flowStep === 8 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      Y puedes ver todos tus <span className="text-[#4285f4]">prospectos</span>
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600">
-                      Organizados y listos para dar seguimiento
-                    </p>
-                  </div>
-
-                  <div className="bg-gradient-to-br from-[#4285f4]/5 to-[#4285f4]/10 rounded-2xl p-6 max-w-2xl mx-auto border border-[#4285f4]/20">
-                    <div className="space-y-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
                       {[
-                        { name: userName, status: "Nuevo", color: "[#4285f4]" },
-                        { name: "María González", status: "Contactado", color: "green-500" },
-                        { name: "Carlos Ruiz", status: "Seguimiento", color: "yellow-500" }
-                      ].map((prospect, index) => (
+                        { title: "Mensaje inicial", desc: "Primer contacto automático" },
+                        { title: "Seguimiento día 3", desc: "Recordatorio amigable" },
+                        { title: "Mensaje de cierre", desc: "Para cerrar la venta" },
+                        { title: "Post-venta", desc: "Bienvenida después de comprar" }
+                      ].map((template, index) => (
                         <div
                           key={index}
-                          className="bg-white p-4 rounded-xl flex items-center justify-between shadow-sm"
+                          className="p-6 bg-white border-2 border-gray-200 rounded-2xl shadow-sm"
                         >
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                              <User className="w-5 h-5 text-gray-600" />
+                          <div className="flex items-start gap-4">
+                            <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center shrink-0">
+                              <FileText className="w-6 h-6 text-[#4285f4]" />
                             </div>
-                            <div className="text-left">
-                              <p className="font-medium text-[#1a1a1a]">{prospect.name}</p>
-                              <p className={`text-xs text-${prospect.color}`}>{prospect.status}</p>
+                            <div className="text-left space-y-1">
+                              <h3 className="text-lg font-bold text-[#1a1a1a]">
+                                {template.title}
+                              </h3>
+                              <p className="text-sm text-gray-600">
+                                {template.desc}
+                              </p>
                             </div>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-gray-400" />
                         </div>
                       ))}
                     </div>
+
+                    <Button
+                      size="lg"
+                      onClick={() => setFlowStep(8)}
+                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
+                    >
+                      Continuar
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
                   </div>
+                )}
 
-                  <Button
-                    size="lg"
-                    onClick={() => setFlowStep(9)}
-                    className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                  >
-                    Continuar
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </div>
-              )}
-
-              {/* STEP 9: What You Need */}
-              {flowStep === 9 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      ¿Qué <span className="text-[#4285f4]">necesitas</span>?
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600">
-                      Solo esto para empezar
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                    {[
-                      { icon: MessageSquare, title: "WhatsApp", desc: "Para comunicarte" },
-                      { icon: Users, title: "Ganas de crecer", desc: "Actitud positiva" },
-                      { icon: Zap, title: "30 min al día", desc: "Para revisar leads" }
-                    ].map((item, index) => (
-                      <div
-                        key={index}
-                        className="p-6 bg-white border-2 border-gray-200 rounded-2xl text-center"
-                      >
-                        <div className="w-16 h-16 bg-[#4285f4]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                          <item.icon className="w-8 h-8 text-[#4285f4]" />
-                        </div>
-                        <h3 className="text-lg font-bold text-[#1a1a1a] mb-2">
-                          {item.title}
-                        </h3>
-                        <p className="text-sm text-gray-600">
-                          {item.desc}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Button
-                    size="lg"
-                    onClick={() => setFlowStep(10)}
-                    className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                  >
-                    Continuar
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </div>
-              )}
-
-              {/* STEP 10: Ready to Start */}
-              {flowStep === 10 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto">
-                      <CheckCircle2 className="w-8 h-8 text-green-500" />
+                {/* STEP 8: Prospects View */}
+                {flowStep === 8 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        Y puedes ver todos tus <span className="text-[#4285f4]">prospectos</span>
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600">
+                        Organizados y listos para dar seguimiento
+                      </p>
                     </div>
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      {userName}, ya estás <span className="text-[#4285f4]">listo</span>
-                    </h2>
-                    <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-                      El sistema está configurado y esperando por ti
-                    </p>
-                  </div>
 
-                  <div className="bg-gradient-to-br from-[#4285f4]/5 to-[#4285f4]/10 rounded-2xl p-8 max-w-2xl mx-auto border border-[#4285f4]/20">
-                    <h3 className="text-xl font-bold text-[#1a1a1a] mb-4">
-                      Esto es lo que obtienes:
-                    </h3>
-                    <div className="space-y-3 text-left">
+                    <div className="bg-gradient-to-br from-[#4285f4]/5 to-[#4285f4]/10 rounded-2xl p-6 max-w-2xl mx-auto border border-[#4285f4]/20">
+                      <div className="space-y-3">
+                        {[
+                          { name: userName, status: "Nuevo", color: "[#4285f4]" },
+                          { name: "María González", status: "Contactado", color: "green-500" },
+                          { name: "Carlos Ruiz", status: "Seguimiento", color: "yellow-500" }
+                        ].map((prospect, index) => (
+                          <div
+                            key={index}
+                            className="bg-white p-4 rounded-xl flex items-center justify-between shadow-sm"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                                <User className="w-5 h-5 text-gray-600" />
+                              </div>
+                              <div className="text-left">
+                                <p className="font-medium text-[#1a1a1a]">{prospect.name}</p>
+                                <p className={`text-xs text-${prospect.color}`}>{prospect.status}</p>
+                              </div>
+                            </div>
+                            <ArrowRight className="w-5 h-5 text-gray-400" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Button
+                      size="lg"
+                      onClick={() => setFlowStep(9)}
+                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
+                    >
+                      Continuar
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </div>
+                )}
+
+                {/* STEP 9: What You Need */}
+                {flowStep === 9 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        ¿Qué <span className="text-[#4285f4]">necesitas</span>?
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600">
+                        Solo esto para empezar
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
                       {[
-                        "Tu página personalizada para captar leads",
-                        "Sistema de seguimiento automático",
-                        "Plantillas de mensajes listas",
-                        "Dashboard para gestionar prospectos",
-                        "Soporte en español"
-                      ].map((feature, index) => (
-                        <div key={index} className="flex items-start gap-3">
-                          <CheckCircle2 className="w-5 h-5 text-[#4285f4] shrink-0 mt-0.5" />
-                          <p className="text-base text-gray-700">{feature}</p>
+                        { icon: MessageSquare, title: "WhatsApp", desc: "Para comunicarte" },
+                        { icon: Users, title: "Ganas de crecer", desc: "Actitud positiva" },
+                        { icon: Zap, title: "30 min al día", desc: "Para revisar leads" }
+                      ].map((item, index) => (
+                        <div
+                          key={index}
+                          className="p-6 bg-white border-2 border-gray-200 rounded-2xl text-center"
+                        >
+                          <div className="w-16 h-16 bg-[#4285f4]/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <item.icon className="w-8 h-8 text-[#4285f4]" />
+                          </div>
+                          <h3 className="text-lg font-bold text-[#1a1a1a] mb-2">
+                            {item.title}
+                          </h3>
+                          <p className="text-sm text-gray-600">
+                            {item.desc}
+                          </p>
                         </div>
                       ))}
                     </div>
+
+                    <Button
+                      size="lg"
+                      onClick={() => setFlowStep(10)}
+                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
+                    >
+                      Continuar
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
                   </div>
+                )}
 
-                  <Button
-                    size="lg"
-                    onClick={() => setFlowStep(11)}
-                    className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                  >
-                    Ver oferta
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Button>
-                </div>
-              )}
+                {/* STEP 10: Ready to Start */}
+                {flowStep === 10 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto">
+                        <CheckCircle2 className="w-8 h-8 text-green-500" />
+                      </div>
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        {userName}, ya estás <span className="text-[#4285f4]">listo</span>
+                      </h2>
+                      <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+                        El sistema está configurado y esperando por ti
+                      </p>
+                    </div>
 
-              {/* STEP 11: Offer - Activación */}
-              {flowStep === 11 && (
-                <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                  <div className="space-y-4">
-                    <Badge className="mb-4 bg-[#4285f4]/10 text-[#4285f4] border-[#4285f4]/30 text-base px-4 py-2">
-                      Listo para ti
-                    </Badge>
-                    
-                    <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                      Este sistema es <span className="text-[#4285f4]">para ti</span>
-                    </h2>
-                    
-                    <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-                      Te ayuda a conseguir prospectos, dar seguimiento automático y avanzar más rápido sin complicarte
-                    </p>
+                    <div className="bg-gradient-to-br from-[#4285f4]/5 to-[#4285f4]/10 rounded-2xl p-8 max-w-2xl mx-auto border border-[#4285f4]/20">
+                      <h3 className="text-xl font-bold text-[#1a1a1a] mb-4">
+                        Esto es lo que obtienes:
+                      </h3>
+                      <div className="space-y-3 text-left">
+                        {[
+                          "Tu página personalizada para captar leads",
+                          "Sistema de seguimiento automático",
+                          "Plantillas de mensajes listas",
+                          "Dashboard para gestionar prospectos",
+                          "Soporte en español"
+                        ].map((feature, index) => (
+                          <div key={index} className="flex items-start gap-3">
+                            <CheckCircle2 className="w-5 h-5 text-[#4285f4] shrink-0 mt-0.5" />
+                            <p className="text-base text-gray-700">{feature}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <Button
+                      size="lg"
+                      onClick={() => setFlowStep(11)}
+                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
+                    >
+                      Ver oferta
+                      <ArrowRight className="ml-2 h-5 w-5" />
+                    </Button>
                   </div>
+                )}
 
-                  <Card className="max-w-md mx-auto bg-white border-2 border-gray-200 shadow-2xl rounded-2xl">
-                    <CardContent className="p-8 space-y-6">
-                      <div className="text-center space-y-2">
-                        <div className="flex items-baseline justify-center gap-2">
-                          <span className="text-5xl font-bold text-[#1a1a1a]">$29</span>
-                          <span className="text-xl text-gray-600">USD inicio</span>
+                {/* STEP 11: Offer - Activación */}
+                {flowStep === 11 && (
+                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
+                    <div className="space-y-4">
+                      <Badge className="mb-4 bg-[#4285f4]/10 text-[#4285f4] border-[#4285f4]/30 text-base px-4 py-2">
+                        Listo para ti
+                      </Badge>
+                      
+                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
+                        Este sistema es <span className="text-[#4285f4]">para ti</span>
+                      </h2>
+                      
+                      <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+                        Te ayuda a conseguir prospectos, dar seguimiento automático y avanzar más rápido sin complicarte
+                      </p>
+                    </div>
+
+                    <Card className="max-w-md mx-auto bg-white border-2 border-gray-200 shadow-2xl rounded-2xl">
+                      <CardContent className="p-8 space-y-6">
+                        <div className="text-center space-y-2">
+                          <div className="flex items-baseline justify-center gap-2">
+                            <span className="text-5xl font-bold text-[#1a1a1a]">$29</span>
+                            <span className="text-xl text-gray-600">USD inicio</span>
+                          </div>
+                          <p className="text-lg text-center text-gray-600">
+                            Luego $9 USD/mes
+                          </p>
                         </div>
-                        <p className="text-lg text-center text-gray-600">
-                          Luego $9 USD/mes
-                        </p>
-                      </div>
 
-                      <button
-                        onClick={() => window.location.href = "/mwr/checkout"}
-                        className="w-full bg-[#4285f4] hover:bg-[#3367d6] text-white font-semibold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 text-lg"
-                      >
-                        Activar mi sistema ahora
-                        <ArrowRight className="w-5 h-5" />
-                      </button>
+                        <button
+                          onClick={() => window.location.href = "/mwr/checkout"}
+                          className="w-full bg-[#4285f4] hover:bg-[#3367d6] text-white font-semibold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 text-lg"
+                        >
+                          Activar mi sistema ahora
+                          <ArrowRight className="w-5 h-5" />
+                        </button>
 
-                      <div className="space-y-2 text-sm text-gray-600">
-                        <p className="flex items-center justify-center gap-2">
-                          <CheckCircle2 className="w-4 h-4 text-green-500" />
-                          Acceso inmediato • Empieza hoy
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              )}
+                        <div className="space-y-2 text-sm text-gray-600">
+                          <p className="flex items-center justify-center gap-2">
+                            <CheckCircle2 className="w-4 h-4 text-green-500" />
+                            Acceso inmediato • Empieza hoy
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
+      </div>
       )}
     </div>
   );
