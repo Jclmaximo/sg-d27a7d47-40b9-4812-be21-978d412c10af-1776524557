@@ -1219,7 +1219,7 @@ export default function MWRPage() {
                               <span className="text-4xl font-bold text-gray-900">$29</span>
                               <span className="text-xl text-gray-600">USD primer mes</span>
                             </div>
-                            <p className="text-sm text-gray-600 mt-1">Luego $9 USD / mes</p>
+                            <p className="text-sm text-gray-600 mt-1">Luego $9 USD/mes</p>
                             <p className="text-sm text-gray-700 font-medium mt-2">Empieza hoy con todo listo</p>
                           </div>
 
@@ -1256,51 +1256,84 @@ export default function MWRPage() {
 
                     {/* Final Reinforcement */}
                     <div className="text-center">
-                      <p className="text-base text-primary font-bold">
-                        Más simple de lo que parece. Más poderoso de lo que esperas.
+                      <p className="text-base text-gray-700 font-medium">
+                        No necesitas hacerlo perfecto. Solo empezar.
                       </p>
                     </div>
                   </div>
                 )}
 
-                {/* STEP 13: Final CTA */}
+                {/* STEP 13: Final Close */}
                 {flowStep === 13 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Listo para usar tu sistema <span className="text-primary">MLM</span>
+                        Todo está <span className="text-primary">listo para que empieces</span>
                       </h2>
-                      <p className="text-gray-600">Todo está listo. Solo tienes que activarlo</p>
+                      <p className="text-gray-600">No necesitas aprender nada nuevo. Solo seguir el sistema y avanzar paso a paso</p>
                     </div>
 
-                    <Card className="max-w-md mx-auto bg-white border-2 border-gray-200 shadow-2xl rounded-2xl">
-                      <CardContent className="p-8 space-y-6">
-                        <div className="text-center space-y-2">
-                          <div className="flex items-baseline justify-center gap-2">
-                            <span className="text-5xl font-bold text-[#1a1a1a]">$29</span>
-                            <span className="text-xl text-gray-600">USD inicio</span>
+                    {/* Main Reinforcement Block */}
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 text-white" />
                           </div>
-                          <p className="text-lg text-center text-gray-600">
-                            Luego $9 USD/mes
-                          </p>
+                          <p className="text-gray-900 font-semibold">Ya tienes las herramientas</p>
                         </div>
-
-                        <button
-                          onClick={() => window.location.href = "/mwr/checkout"}
-                          className="w-full bg-[#4285f4] hover:bg-[#3367d6] text-white font-semibold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-2 text-lg"
-                        >
-                          Activar mi sistema ahora
-                          <ArrowRight className="w-5 h-5" />
-                        </button>
-
-                        <div className="space-y-2 text-sm text-gray-600">
-                          <p className="flex items-center justify-center gap-2">
-                            <CheckCircle2 className="w-4 h-4 text-green-500" />
-                            Acceso inmediato • Empieza hoy
-                          </p>
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 text-white" />
+                          </div>
+                          <p className="text-gray-900 font-semibold">Ya tienes los mensajes</p>
                         </div>
-                      </CardContent>
-                    </Card>
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 text-white" />
+                          </div>
+                          <p className="text-gray-900 font-semibold">Ya sabes qué hacer</p>
+                        </div>
+                      </div>
+                      <p className="text-primary font-bold text-center mt-4 text-lg">Solo falta que empieces</p>
+                    </div>
+
+                    {/* Model Clarity */}
+                    <div className="bg-white rounded-xl p-5 border-2 border-gray-200 text-center">
+                      <p className="text-gray-700 font-medium">
+                        Tú decides cuándo enviar cada mensaje. Nada complicado.
+                      </p>
+                    </div>
+
+                    {/* Main CTA */}
+                    <button
+                      onClick={() => window.location.href = '/registro'}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-5 rounded-xl font-bold transition-colors text-lg shadow-lg"
+                    >
+                      Quiero empezar ahora →
+                    </button>
+
+                    {/* Security Microcopy */}
+                    <div className="text-center space-y-2">
+                      <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                        <span>Acceso inmediato</span>
+                        <span>•</span>
+                        <span>Empieza hoy</span>
+                        <span>•</span>
+                        <span>Sin complicaciones</span>
+                      </div>
+                      <p className="text-sm text-gray-500">
+                        Sin riesgos. Puedes cancelar cuando quieras.
+                      </p>
+                    </div>
+
+                    {/* Final Reinforcement */}
+                    <div className="text-center">
+                      <p className="text-base text-gray-700 font-medium">
+                        No necesitas hacerlo perfecto. Solo empezar.
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
