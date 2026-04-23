@@ -655,7 +655,7 @@ export default function MWRPage() {
                       <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
+                            <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold text-sm">
                               ML
                             </div>
                             <div>
@@ -675,7 +675,7 @@ export default function MWRPage() {
                       <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-semibold">
+                            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-semibold text-sm">
                               CR
                             </div>
                             <div>
@@ -701,15 +701,92 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 7: Dashboard */}
+                {/* STEP 7: Control Panel */}
                 {flowStep === 7 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Panel de control <span className="text-primary">centralizado</span>
+                        Tu negocio <span className="text-primary">organizado en un solo lugar</span>
                       </h2>
-                      <p className="text-gray-600">Todo en un solo lugar, sin perder oportunidades</p>
+                      <p className="text-gray-600">Ve tus prospectos, da seguimiento y avanza sin perder oportunidades</p>
                     </div>
+
+                    {/* Dashboard Visual Mock */}
+                    <div className="bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900 rounded-2xl p-6 shadow-2xl border border-blue-500/20">
+                      {/* KPI Cards */}
+                      <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                          <p className="text-xs text-blue-200 font-medium mb-1">Prospectos</p>
+                          <p className="text-4xl font-bold text-white">28</p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                          <p className="text-xs text-blue-200 font-medium mb-1">En seguimiento</p>
+                          <p className="text-4xl font-bold text-white">12</p>
+                        </div>
+                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
+                          <p className="text-xs text-blue-200 font-medium mb-1">Contactados</p>
+                          <p className="text-4xl font-bold text-white">6</p>
+                        </div>
+                      </div>
+
+                      {/* Leads List */}
+                      <div className="space-y-3">
+                        {/* Juan Pérez */}
+                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-200">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                              JP
+                            </div>
+                            <div>
+                              <p className="text-white font-semibold text-sm">Juan Pérez</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-500/20 text-green-300 border border-green-400/30">
+                                Nuevo
+                              </span>
+                            </div>
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-white/60" />
+                        </div>
+
+                        {/* María López */}
+                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-200">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                              ML
+                            </div>
+                            <div>
+                              <p className="text-white font-semibold text-sm">María López</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                                Contactado
+                              </span>
+                            </div>
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-white/60" />
+                        </div>
+
+                        {/* Carlos Ruiz */}
+                        <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-200">
+                          <div className="flex items-center gap-3">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                              CR
+                            </div>
+                            <div>
+                              <p className="text-white font-semibold text-sm">Carlos Ruiz</p>
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-500/20 text-orange-300 border border-orange-400/30">
+                                Seguimiento
+                              </span>
+                            </div>
+                          </div>
+                          <ArrowRight className="w-5 h-5 text-white/60" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setFlowStep(8)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
 
