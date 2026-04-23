@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp } from "lucide-react";
+import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp, MessageCircle } from "lucide-react";
 
 export default function MWRPage() {
   const [showCTA, setShowCTA] = useState(false);
@@ -16,6 +16,9 @@ export default function MWRPage() {
     challenge: "",
     desire: ""
   });
+  const [step, setStep] = useState(1);
+  const [selectedProblem, setSelectedProblem] = useState("");
+  const [selectedOption, setSelectedOption] = useState("");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -149,39 +152,109 @@ export default function MWRPage() {
                 {flowStep === 1 && (
                   <div className="space-y-8 animate-in fade-in duration-700 text-center">
                     <div className="space-y-4">
-                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                        ¿Qué te cuesta <span className="text-[#4285f4]">más trabajo</span>?
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                        ¿Qué es lo que más <span className="text-primary">te está frenando</span> ahora mismo?
                       </h2>
-                      <p className="text-lg md:text-xl text-gray-600">
-                        Selecciona tu mayor desafío en este momento
-                      </p>
+                      <p className="text-gray-600 mb-8">Selecciona tu mayor desafío en este momento</p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto">
-                      {challenges.map((challenge) => (
-                        <button
-                          key={challenge.id}
-                          onClick={() => {
-                            setAnswers({ ...answers, challenge: challenge.id });
-                            setTimeout(() => setFlowStep(2), 300);
-                          }}
-                          className="group p-6 bg-white border-2 border-gray-200 rounded-2xl hover:border-[#4285f4] hover:shadow-xl transition-all text-left"
-                        >
-                          <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-[#4285f4]/10 rounded-xl flex items-center justify-center group-hover:bg-[#4285f4] transition-colors shrink-0">
-                              <challenge.icon className="w-6 h-6 text-[#4285f4] group-hover:text-white transition-colors" />
-                            </div>
-                            <div className="space-y-1">
-                              <h3 className="text-lg font-bold text-[#1a1a1a]">
-                                {challenge.title}
-                              </h3>
-                              <p className="text-sm text-gray-600">
-                                {challenge.desc}
-                              </p>
-                            </div>
-                          </div>
-                        </button>
-                      ))}
+                    <div className="space-y-4">
+                      <button
+                        onClick={() => {
+                          setSelectedOption("prospectos");
+                          handleProblemSelect("prospectos");
+                        }}
+                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
+                          selectedOption === "prospectos"
+                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
+                            : "border-gray-200 hover:border-primary hover:shadow-md"
+                        }`}
+                      >
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <Users className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1">Conseguir prospectos</h3>
+                          <p className="text-sm text-gray-600">No sabes cómo hacer que la gente llegue a ti</p>
+                          {selectedOption === "prospectos" && (
+                            <p className="text-xs text-primary font-medium mt-2">✓ Esto lo resolvemos por ti</p>
+                          )}
+                        </div>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setSelectedOption("seguimiento");
+                          handleProblemSelect("seguimiento");
+                        }}
+                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
+                          selectedOption === "seguimiento"
+                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
+                            : "border-gray-200 hover:border-primary hover:shadow-md"
+                        }`}
+                      >
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <MessageCircle className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1">Dar seguimiento</h3>
+                          <p className="text-sm text-gray-600">Se te enfrían los prospectos o no sabes qué decirles</p>
+                          {selectedOption === "seguimiento" && (
+                            <p className="text-xs text-primary font-medium mt-2">✓ Esto lo resolvemos por ti</p>
+                          )}
+                        </div>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setSelectedOption("cerrar");
+                          handleProblemSelect("cerrar");
+                        }}
+                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
+                          selectedOption === "cerrar"
+                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
+                            : "border-gray-200 hover:border-primary hover:shadow-md"
+                        }`}
+                      >
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <Target className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1">Cerrar ventas</h3>
+                          <p className="text-sm text-gray-600">Hablas con personas… pero no terminan entrando</p>
+                          {selectedOption === "cerrar" && (
+                            <p className="text-xs text-primary font-medium mt-2">✓ Esto lo resolvemos por ti</p>
+                          )}
+                        </div>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          setSelectedOption("todo");
+                          handleProblemSelect("todo");
+                        }}
+                        className={`w-full flex items-start gap-4 p-6 border-2 rounded-xl transition-all text-left relative ${
+                          selectedOption === "todo"
+                            ? "border-primary bg-primary/5 shadow-lg shadow-primary/20 scale-[1.02]"
+                            : "border-primary bg-primary/5 hover:shadow-md"
+                        }`}
+                      >
+                        <div className="absolute -top-3 left-4">
+                          <span className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                            Recomendado
+                          </span>
+                        </div>
+                        <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
+                          <Zap className="w-6 h-6 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1">Todo lo anterior</h3>
+                          <p className="text-sm text-gray-600">Quiero que todo funcione sin estar encima todo el tiempo</p>
+                          {selectedOption === "todo" && (
+                            <p className="text-xs text-primary font-medium mt-2">✓ Esto lo resolvemos por ti</p>
+                          )}
+                        </div>
+                      </button>
                     </div>
                   </div>
                 )}
