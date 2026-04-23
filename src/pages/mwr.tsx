@@ -967,40 +967,102 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 10: What You Need */}
+                {/* STEP 10: Social Proof */}
                 {flowStep === 10 && (
-                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                    <div className="space-y-4">
-                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                        ¿Qué <span className="text-[#4285f4]">necesitas</span>?
+                  <div className="space-y-8 animate-in fade-in duration-700">
+                    <div className="text-center space-y-4">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        Personas normales ya están <span className="text-primary">viendo resultados</span>
                       </h2>
-                      <p className="text-lg md:text-xl text-gray-600">
-                        Solo esto para empezar
+                      <p className="text-gray-600">Sin experiencia, sin complicarse y siguiendo el sistema</p>
+                    </div>
+
+                    {/* Testimonials */}
+                    <div className="space-y-4">
+                      {/* Testimonial 1 */}
+                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                            LC
+                          </div>
+                          <div>
+                            <p className="text-gray-700 leading-relaxed italic mb-2">
+                              "Pensé que sería complicado, pero literal solo seguí los pasos y empecé a tener respuestas el mismo día."
+                            </p>
+                            <p className="text-sm text-gray-500 font-medium">— Laura C.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Testimonial 2 */}
+                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                            MR
+                          </div>
+                          <div>
+                            <p className="text-gray-700 leading-relaxed italic mb-2">
+                              "Antes no sabía qué decirle a la gente. Ahora solo uso los mensajes y listo."
+                            </p>
+                            <p className="text-sm text-gray-500 font-medium">— Miguel R.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Testimonial 3 */}
+                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
+                        <div className="flex items-start gap-4">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                            AS
+                          </div>
+                          <div>
+                            <p className="text-gray-700 leading-relaxed italic mb-2">
+                              "Lo mejor es que no tienes que inventar nada, todo ya está hecho."
+                            </p>
+                            <p className="text-sm text-gray-500 font-medium">— Ana S.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Concrete Results */}
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
+                      <h3 className="font-bold text-gray-900 mb-4 text-center">Resultados reales:</h3>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 text-white" />
+                          </div>
+                          <p className="text-gray-700 font-medium">Primeros contactos en menos de 24 horas</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 text-white" />
+                          </div>
+                          <p className="text-gray-700 font-medium">Más conversaciones sin esfuerzo</p>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 text-white" />
+                          </div>
+                          <p className="text-gray-700 font-medium">Seguimiento constante sin olvidar prospectos</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Microcopy */}
+                    <div className="text-center">
+                      <p className="text-sm text-gray-600 font-medium">
+                        No es teoría. Es lo que ya está funcionando.
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-                      {[
-                        { icon: MessageSquare, title: "WhatsApp", desc: "Para comunicarte" },
-                        { icon: Users, title: "Ganas de crecer", desc: "Actitud positiva" },
-                        { icon: Zap, title: "30 min al día", desc: "Para revisar leads" }
-                      ].map((item, index) => (
-                        <div
-                          key={index}
-                          className="p-6 bg-white border-2 border-gray-200 rounded-2xl text-center"
-                        >
-                          <div className="w-16 h-16 bg-[#4285f4]/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <item.icon className="w-8 h-8 text-[#4285f4]" />
-                          </div>
-                          <h3 className="text-lg font-bold text-[#1a1a1a] mb-2">
-                            {item.title}
-                          </h3>
-                          <p className="text-sm text-gray-600">
-                            {item.desc}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
+                    <button
+                      onClick={() => setFlowStep(11)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
 
