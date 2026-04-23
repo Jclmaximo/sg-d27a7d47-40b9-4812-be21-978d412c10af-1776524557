@@ -244,118 +244,21 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 2: Goal Selection */}
+                {/* STEP 2: Problem Statement */}
                 {flowStep === 2 && (
-                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                    <div className="space-y-4">
+                  <div className="space-y-8 animate-in fade-in duration-700">
+                    <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        ¿Qué quieres que <span className="text-primary">cambie</span> en tu negocio ahora mismo?
+                        Deja de perder prospectos por <span className="text-primary">falta de seguimiento</span>
                       </h2>
-                      <p className="text-gray-600">Elige lo que más impacto tendría para ti</p>
+                      <p className="text-gray-600">El sistema te muestra a quién escribirle y cuándo hacerlo</p>
                     </div>
-
-                    <div className="space-y-4">
-                      {/* Automatizar - Recommended */}
-                      <button
-                        onClick={() => {
-                          setSelectedGoal("automatizar");
-                          setTimeout(() => setFlowStep(3), 500);
-                        }}
-                        className={`w-full flex items-start gap-4 p-6 border-2 rounded-xl transition-all text-left relative ${
-                          selectedGoal === "automatizar"
-                            ? "border-primary bg-primary/5 shadow-lg shadow-primary/20 scale-[1.02]"
-                            : "border-primary bg-primary/5 hover:shadow-md"
-                        }`}
-                      >
-                        <div className="absolute -top-3 left-4">
-                          <span className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                            Recomendado
-                          </span>
-                        </div>
-                        <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
-                          <Zap className="w-6 h-6 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">Automatizar mi negocio</h3>
-                          <p className="text-sm text-gray-600">Que funcione incluso cuando no estás conectado</p>
-                          {selectedGoal === "automatizar" && (
-                            <p className="text-xs text-primary font-medium mt-2">✓ Esto es justo lo que vamos a optimizar por ti</p>
-                          )}
-                        </div>
-                      </button>
-
-                      {/* Escalar */}
-                      <button
-                        onClick={() => {
-                          setSelectedGoal("escalar");
-                          setTimeout(() => setFlowStep(3), 500);
-                        }}
-                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
-                          selectedGoal === "escalar"
-                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
-                            : "border-gray-200 hover:border-primary hover:shadow-md"
-                        }`}
-                      >
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <TrendingUp className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">Escalar mis ventas</h3>
-                          <p className="text-sm text-gray-600">Generar más ventas sin tener que perseguir gente</p>
-                          {selectedGoal === "escalar" && (
-                            <p className="text-xs text-primary font-medium mt-2">✓ Esto es justo lo que vamos a optimizar por ti</p>
-                          )}
-                        </div>
-                      </button>
-
-                      {/* Organizar */}
-                      <button
-                        onClick={() => {
-                          setSelectedGoal("organizar");
-                          setTimeout(() => setFlowStep(3), 500);
-                        }}
-                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
-                          selectedGoal === "organizar"
-                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
-                            : "border-gray-200 hover:border-primary hover:shadow-md"
-                        }`}
-                      >
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <FileText className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">Organizar mis leads</h3>
-                          <p className="text-sm text-gray-600">No perder oportunidades ni olvidar a nadie</p>
-                          {selectedGoal === "organizar" && (
-                            <p className="text-xs text-primary font-medium mt-2">✓ Esto es justo lo que vamos a optimizar por ti</p>
-                          )}
-                        </div>
-                      </button>
-
-                      {/* Simplificar */}
-                      <button
-                        onClick={() => {
-                          setSelectedGoal("simplificar");
-                          setTimeout(() => setFlowStep(3), 500);
-                        }}
-                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
-                          selectedGoal === "simplificar"
-                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
-                            : "border-gray-200 hover:border-primary hover:shadow-md"
-                        }`}
-                      >
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <CheckCircle className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">Simplificar el proceso</h3>
-                          <p className="text-sm text-gray-600">Tener un sistema claro que realmente funcione</p>
-                          {selectedGoal === "simplificar" && (
-                            <p className="text-xs text-primary font-medium mt-2">✓ Esto es justo lo que vamos a optimizar por ti</p>
-                          )}
-                        </div>
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => setFlowStep(3)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Ver cómo funciona →
+                    </button>
                   </div>
                 )}
 
