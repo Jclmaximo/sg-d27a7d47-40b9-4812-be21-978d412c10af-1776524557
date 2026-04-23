@@ -146,12 +146,12 @@ export default function WelcomePage() {
         .eq("user_id", userId);
 
       if (leads) {
-        // En la base de datos se guardan como "nuevo", "contactado", "convertido"
+        // En la base de datos los estados se guardan en inglés: "new", "contacted", "converted"
         setStats({
           total: leads.length,
-          new: leads.filter(l => l.status === "nuevo" || !l.status).length,
-          contacted: leads.filter(l => l.status === "contactado").length,
-          converted: leads.filter(l => l.status === "convertido").length
+          nuevos: leads.filter(l => l.status === "new" || !l.status).length,
+          contactados: leads.filter(l => l.status === "contacted").length,
+          convertidos: leads.filter(l => l.status === "converted").length
         });
       }
     } catch (err) {
