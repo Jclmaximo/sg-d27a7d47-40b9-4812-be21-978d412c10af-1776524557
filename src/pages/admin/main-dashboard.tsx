@@ -647,7 +647,9 @@ Puedo resolver dudas sobre:
                 <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
                   Mi Dashboard
                 </h1>
-                <p className="text-gray-400">Bienvenido, Usuario</p>
+                <p className="text-gray-400">
+                  Bienvenido, {profile?.full_name || profile?.username || "Usuario"}
+                </p>
               </div>
             </div>
             <Button
