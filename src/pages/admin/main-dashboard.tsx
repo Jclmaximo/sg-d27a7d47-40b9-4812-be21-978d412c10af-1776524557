@@ -617,6 +617,17 @@ Puedo resolver dudas sobre:
     }
   };
 
+  const copyReferralLink = async () => {
+    if (!profile?.username) return;
+    
+    const link = `${window.location.origin}/mwr?ref=${profile.username}`;
+    await navigator.clipboard.writeText(link);
+    toast({
+      title: "¡Copiado!",
+      description: "Link de referidos copiado al portapapeles",
+    });
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -931,6 +942,14 @@ Puedo resolver dudas sobre:
                       </div>
                     ) : (
                       <div className="space-y-4">
+                        <div>
+                          <Label className="text-sm font-medium text-gray-300 mb-2 block">Tu Link de Referidos</Label>
+                          <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+                            <code className="text-sm text-primary font-mono break-all">
+                              {typeof window !== "undefined" ? `${window.location.origin}/mwr?ref=${profile?.username || ""}` : "Cargando..."}
+                            </code>
+                          </div>
+                        </div>
                         {leads.map((lead) => (
                           <div
                             key={lead.id}

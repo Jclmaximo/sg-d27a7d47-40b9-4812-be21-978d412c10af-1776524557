@@ -78,7 +78,7 @@ export default function WelcomePage() {
   const [copiedReferral, setCopiedReferral] = useState(false);
 
   const funnelLink = username ? `${typeof window !== "undefined" ? window.location.origin : ""}/ambassador/${username}` : "";
-  const referralLink = username ? `${typeof window !== "undefined" ? window.location.origin : ""}/registro?ref=${username}` : "";
+  const referralLink = isMounted ? `${window.location.origin}/mwr?ref=${username}` : "";
 
   useEffect(() => {
     checkAuth();
