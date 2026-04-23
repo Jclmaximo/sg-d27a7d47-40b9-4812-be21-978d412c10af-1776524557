@@ -139,11 +139,8 @@ export default function WelcomePage() {
 
   const loadDashboardData = async (userId: string) => {
     try {
-      // Get leads stats
-      const { data: leads } = await supabase
-        .from("leads")
-        .select("*")
-        .eq("user_id", userId);
+      // Get leads stats using the correct service
+      const leads = await leadsService.getLeads(userId);
 
       if (leads) {
         // En la base de datos los estados se guardan en inglés: "new", "contacted", "converted"
