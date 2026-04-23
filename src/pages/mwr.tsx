@@ -385,48 +385,52 @@ export default function MWRPage() {
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        El sistema <span className="text-primary">incluye</span>:
+                        Todo lo que necesitas para <span className="text-primary">conseguir y cerrar prospectos</span>
                       </h2>
                     </div>
 
                     <div className="space-y-4">
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl">
+                      {/* Block 1: Landing Pages */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
                         <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <FileText className="w-6 h-6 text-blue-600" />
+                          <FileText className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900 mb-1">Páginas personalizadas para captar prospectos</h3>
-                          <p className="text-sm text-gray-600">Con tu nombre y link único</p>
+                          <h3 className="font-bold text-gray-900 mb-1">Atrae prospectos todos los días</h3>
+                          <p className="text-sm text-gray-600">Con tu propia página lista para compartir</p>
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl">
+                      {/* Block 2: Lead Management */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
                         <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Users className="w-6 h-6 text-blue-600" />
+                          <Users className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900 mb-1">Gestión automatizada de leads</h3>
-                          <p className="text-sm text-gray-600">Todos organizados en tu panel</p>
+                          <h3 className="font-bold text-gray-900 mb-1">Organiza tus contactos sin perder oportunidades</h3>
+                          <p className="text-sm text-gray-600">Todo claro y ordenado en un solo lugar</p>
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <MessageSquare className="w-6 h-6 text-blue-600" />
+                      {/* Block 3: Semi-automated Messages - HIGHLIGHTED */}
+                      <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-primary/10 to-blue-50 border-2 border-primary rounded-xl shadow-md">
+                        <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 shadow-lg">
+                          <MessageSquare className="w-6 h-6 text-white" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900 mb-1">Seguimiento automático vía WhatsApp</h3>
-                          <p className="text-sm text-gray-600">El sistema responde y da seguimiento por ti</p>
+                          <h3 className="font-bold text-gray-900 mb-1">Responde más rápido sin pensar qué decir</h3>
+                          <p className="text-sm text-primary font-medium">Mensajes listos, solo das click y se envían</p>
                         </div>
                       </div>
 
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl">
+                      {/* Block 4: Content */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
                         <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Image className="w-6 h-6 text-blue-600" />
+                          <Image className="w-6 h-6 text-primary" />
                         </div>
                         <div>
-                          <h3 className="font-semibold text-gray-900 mb-1">Contenido listo para publicar</h3>
-                          <p className="text-sm text-gray-600">Imágenes + copies diseñados para atraer prospectos</p>
+                          <h3 className="font-bold text-gray-900 mb-1">Publica sin complicarte</h3>
+                          <p className="text-sm text-gray-600">Contenido listo para atraer personas todos los días</p>
                         </div>
                       </div>
                     </div>
