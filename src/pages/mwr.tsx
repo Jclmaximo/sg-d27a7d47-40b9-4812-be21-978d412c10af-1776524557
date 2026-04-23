@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp, MessageCircle, CheckCircle } from "lucide-react";
+import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp, MessageCircle, CheckCircle, Image, Calendar, Tag, Lock, DollarSign } from "lucide-react";
 
 export default function MWRPage() {
   const [showCTA, setShowCTA] = useState(false);
@@ -149,7 +149,7 @@ export default function MWRPage() {
               {/* Progress Indicator */}
               <div className="mb-8 text-center">
                 <p className="text-sm text-gray-500 font-medium">
-                  Demo {flowStep}/11
+                  Demo {flowStep}/13
                 </p>
               </div>
 
@@ -399,7 +399,10 @@ export default function MWRPage() {
                             "Páginas personalizadas para captar prospectos",
                             "Seguimiento automático por WhatsApp",
                             "Plantillas listas para usar",
-                            "Dashboard para gestionar tus leads"
+                            "Dashboard para gestionar tus leads",
+                            "Contenido listo para publicar",
+                            "Plantillas de mensajes listas",
+                            "Soporte en español"
                           ].map((feature, index) => (
                             <div key={index} className="flex items-start gap-3">
                               <CheckCircle2 className="w-5 h-5 text-[#4285f4] shrink-0 mt-0.5" />
@@ -629,6 +632,8 @@ export default function MWRPage() {
                           "Sistema de seguimiento automático",
                           "Plantillas de mensajes listas",
                           "Dashboard para gestionar prospectos",
+                          "Contenido listo para publicar",
+                          "Plantillas de mensajes listas",
                           "Soporte en español"
                         ].map((feature, index) => (
                           <div key={index} className="flex items-start gap-3">
