@@ -143,13 +143,13 @@ export default function WelcomePage() {
       const { data: leads } = await supabase
         .from("leads")
         .select("*")
-        .eq("referred_by", userId);
+        .eq("user_id", userId);
 
       if (leads) {
         setStats({
-          totalLeads: leads.length,
-          nuevos: leads.filter(l => !l.contacted).length,
-          contactados: leads.filter(l => l.contacted && l.status !== "convertido").length,
+          total: leads.length,
+          nuevos: leads.filter(l => l.status === "nuevo" || !l.status).length,
+          contactados: leads.filter(l => l.status === "contactado").length,
           convertidos: leads.filter(l => l.status === "convertido").length
         });
       }
