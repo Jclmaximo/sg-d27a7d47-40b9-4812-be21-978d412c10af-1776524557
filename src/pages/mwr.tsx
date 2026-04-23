@@ -708,28 +708,28 @@ export default function MWRPage() {
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                         Tu negocio <span className="text-primary">organizado en un solo lugar</span>
                       </h2>
-                      <p className="text-gray-600">Ve tus prospectos, da seguimiento y avanza sin perder oportunidades</p>
+                      <p className="text-gray-600">Ve tus prospectos, su estado y qué hacer con cada uno</p>
                     </div>
 
                     {/* Dashboard Visual Mock */}
                     <div className="bg-gradient-to-br from-slate-800 via-blue-900 to-slate-900 rounded-2xl p-6 shadow-2xl border border-blue-500/20">
                       {/* KPI Cards */}
                       <div className="grid grid-cols-3 gap-4 mb-6">
-                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-                          <p className="text-xs text-blue-200 font-medium mb-1">Prospectos</p>
-                          <p className="text-4xl font-bold text-white">28</p>
+                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 text-center">
+                          <p className="text-5xl font-bold text-white mb-1">28</p>
+                          <p className="text-xs text-blue-200 font-medium">Prospectos</p>
                         </div>
-                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-                          <p className="text-xs text-blue-200 font-medium mb-1">En seguimiento</p>
-                          <p className="text-4xl font-bold text-white">12</p>
+                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 text-center">
+                          <p className="text-5xl font-bold text-white mb-1">12</p>
+                          <p className="text-xs text-blue-200 font-medium">En seguimiento</p>
                         </div>
-                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20">
-                          <p className="text-xs text-blue-200 font-medium mb-1">Contactados</p>
-                          <p className="text-4xl font-bold text-white">6</p>
+                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 text-center">
+                          <p className="text-5xl font-bold text-white mb-1">6</p>
+                          <p className="text-xs text-blue-200 font-medium">Contactados</p>
                         </div>
                       </div>
 
-                      {/* Leads List */}
+                      {/* Leads List with Action Buttons */}
                       <div className="space-y-3">
                         {/* Juan Pérez */}
                         <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-md rounded-xl border border-white/20 hover:bg-white/15 transition-all duration-200">
@@ -744,7 +744,9 @@ export default function MWRPage() {
                               </span>
                             </div>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-white/60" />
+                          <button className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg text-xs font-medium transition-colors backdrop-blur-sm">
+                            Ver detalle
+                          </button>
                         </div>
 
                         {/* María López */}
@@ -760,7 +762,9 @@ export default function MWRPage() {
                               </span>
                             </div>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-white/60" />
+                          <button className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg text-xs font-medium transition-colors backdrop-blur-sm">
+                            Continuar
+                          </button>
                         </div>
 
                         {/* Carlos Ruiz */}
@@ -776,9 +780,18 @@ export default function MWRPage() {
                               </span>
                             </div>
                           </div>
-                          <ArrowRight className="w-5 h-5 text-white/60" />
+                          <button className="px-4 py-2 bg-white/20 hover:bg-white/30 text-white border border-white/30 rounded-lg text-xs font-medium transition-colors backdrop-blur-sm">
+                            Enviar mensaje
+                          </button>
                         </div>
                       </div>
+                    </div>
+
+                    {/* Microcopy */}
+                    <div className="text-center">
+                      <p className="text-sm text-gray-600 font-medium">
+                        Sabes exactamente quién sigue y qué hacer en cada momento
+                      </p>
                     </div>
 
                     <button
