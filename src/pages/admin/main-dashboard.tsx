@@ -273,7 +273,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Of Oferta válida: Últimos días
+⏰ Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -442,19 +442,21 @@ Puedo resolver dudas sobre:
 
       // Upload to Supabase Storage
       const fileExt = file.name.split(".").pop();
-      const fileName = `${session.user.id}-${Date.now()}.${fileExt}`;
-      const filePath = `avatars/${fileName}`;
+      const fileName = `${session.user.id}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
         .from("profiles")
-        .upload(filePath, file, { upsert: true });
+        .upload(fileName, file, { upsert: true });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error("Upload error:", uploadError);
+        throw uploadError;
+      }
 
       // Get public URL
       const { data: { publicUrl } } = supabase.storage
         .from("profiles")
-        .getPublicUrl(filePath);
+        .getPublicUrl(fileName);
 
       // Update profile form
       setProfileForm({ ...profileForm, avatar_url: publicUrl });
