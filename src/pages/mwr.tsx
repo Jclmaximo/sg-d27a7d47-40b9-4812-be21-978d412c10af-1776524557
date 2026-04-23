@@ -1188,10 +1188,10 @@ export default function MWRPage() {
                           <div>
                             <p className="text-sm font-medium text-blue-100 mb-1">PLAN ANUAL</p>
                             <div className="flex items-baseline gap-2">
-                              <span className="text-5xl font-bold">$29</span>
-                              <span className="text-xl text-blue-100">USD</span>
+                              <span className="text-5xl font-bold">$99</span>
+                              <span className="text-xl text-blue-100">USD / año</span>
                             </div>
-                            <p className="text-sm text-blue-100 mt-1">Pago único por el año completo</p>
+                            <p className="text-sm text-blue-100 mt-1">Equivalente a ~$8 USD/mes</p>
                           </div>
 
                           <div className="space-y-2 pt-2 border-t border-white/20">
@@ -1216,10 +1216,11 @@ export default function MWRPage() {
                           <div>
                             <p className="text-sm font-medium text-gray-500 mb-1">PLAN MENSUAL</p>
                             <div className="flex items-baseline gap-2">
-                              <span className="text-4xl font-bold text-gray-900">$9</span>
-                              <span className="text-xl text-gray-600">USD / mes</span>
+                              <span className="text-4xl font-bold text-gray-900">$29</span>
+                              <span className="text-xl text-gray-600">USD primer mes</span>
                             </div>
-                            <p className="text-sm text-gray-600 mt-1">Empieza flexible, sin compromiso</p>
+                            <p className="text-sm text-gray-600 mt-1">Luego $9 USD / mes</p>
+                            <p className="text-sm text-gray-700 font-medium mt-2">Empieza hoy con todo listo</p>
                           </div>
 
                           <div className="space-y-2 pt-2 border-t border-gray-200">
