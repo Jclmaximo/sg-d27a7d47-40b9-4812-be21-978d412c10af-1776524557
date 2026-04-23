@@ -1178,103 +1178,105 @@ Puedo resolver dudas sobre:
 
               {/* TAB 5 - PERFIL */}
               <TabsContent value="profile" className="space-y-6">
-                <div className="bg-white rounded-xl shadow-lg p-8">
-                  <div className="flex items-center justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                        {(isEditingProfile ? profileForm.full_name : profile?.full_name)?.[0]?.toUpperCase() || "U"}
+                <Card>
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                          {(isEditingProfile ? profileForm.full_name : profile?.full_name)?.[0]?.toUpperCase() || "U"}
+                        </div>
+                        <div>
+                          {!isEditingProfile ? (
+                            <>
+                              <CardTitle className="text-2xl">{profile?.full_name || "Usuario"}</CardTitle>
+                              <p className="text-muted-foreground">{profile?.email}</p>
+                              {profile?.username && (
+                                <p className="text-sm text-muted-foreground">@{profile.username}</p>
+                              )}
+                            </>
+                          ) : (
+                            <div className="space-y-2">
+                              <input
+                                type="text"
+                                value={profileForm.full_name}
+                                onChange={(e) => setProfileForm({ ...profileForm, full_name: e.target.value })}
+                                placeholder="Nombre completo"
+                                className="px-4 py-2 text-foreground placeholder:text-muted-foreground bg-background border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                              />
+                              <p className="text-sm text-muted-foreground">{profile?.email}</p>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div>
+                      <Button
+                        onClick={() => {
+                          if (isEditingProfile) {
+                            updateProfile();
+                          } else {
+                            setIsEditingProfile(true);
+                          }
+                        }}
+                      >
+                        {isEditingProfile ? "Guardar" : "Editar Perfil"}
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                          Nombre de Usuario
+                        </label>
                         {!isEditingProfile ? (
-                          <>
-                            <h2 className="text-2xl font-bold text-gray-900">{profile?.full_name || "Usuario"}</h2>
-                            <p className="text-gray-600">{profile?.email}</p>
-                            {profile?.username && (
-                              <p className="text-sm text-gray-500">@{profile.username}</p>
-                            )}
-                          </>
+                          <p className="text-foreground font-medium">{profile?.username || "No configurado"}</p>
                         ) : (
-                          <div className="space-y-2">
-                            <input
-                              type="text"
-                              value={profileForm.full_name}
-                              onChange={(e) => setProfileForm({ ...profileForm, full_name: e.target.value })}
-                              placeholder="Nombre completo"
-                              className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            />
-                            <p className="text-gray-600 text-sm">{profile?.email}</p>
-                          </div>
+                          <input
+                            type="text"
+                            value={profileForm.username}
+                            onChange={(e) => setProfileForm({ ...profileForm, username: e.target.value })}
+                            placeholder="usuario123"
+                            className="w-full px-4 py-2 text-foreground placeholder:text-muted-foreground bg-background border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                          />
+                        )}
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">
+                          MWR Link
+                        </label>
+                        {!isEditingProfile ? (
+                          <p className="text-foreground font-medium">{profile?.mwr_link || "No configurado"}</p>
+                        ) : (
+                          <input
+                            type="text"
+                            value={profileForm.mwr_link}
+                            onChange={(e) => setProfileForm({ ...profileForm, mwr_link: e.target.value })}
+                            placeholder="https://mwr.hubia.vip/tu-link"
+                            className="w-full px-4 py-2 text-foreground placeholder:text-muted-foreground bg-background border border-input rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
+                          />
                         )}
                       </div>
                     </div>
-                    <button
-                      onClick={() => {
-                        if (isEditingProfile) {
-                          updateProfile();
-                        } else {
-                          setIsEditingProfile(true);
-                        }
-                      }}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      {isEditingProfile ? "Guardar" : "Editar Perfil"}
-                    </button>
-                  </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Nombre de Usuario
-                      </label>
-                      {!isEditingProfile ? (
-                        <p className="text-gray-900">{profile?.username || "No configurado"}</p>
-                      ) : (
-                        <input
-                          type="text"
-                          value={profileForm.username}
-                          onChange={(e) => setProfileForm({ ...profileForm, username: e.target.value })}
-                          placeholder="usuario123"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      )}
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        MWR Link
-                      </label>
-                      {!isEditingProfile ? (
-                        <p className="text-gray-900">{profile?.mwr_link || "No configurado"}</p>
-                      ) : (
-                        <input
-                          type="text"
-                          value={profileForm.mwr_link}
-                          onChange={(e) => setProfileForm({ ...profileForm, mwr_link: e.target.value })}
-                          placeholder="https://mwr.hubia.vip/tu-link"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        />
-                      )}
-                    </div>
-                  </div>
-
-                  {isEditingProfile && (
-                    <div className="mt-4 flex gap-2">
-                      <button
-                        onClick={() => {
-                          setIsEditingProfile(false);
-                          setProfileForm({
-                            full_name: profile?.full_name || "",
-                            username: profile?.username || "",
-                            mwr_link: profile?.mwr_link || ""
-                          });
-                        }}
-                        className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  )}
-                </div>
+                    {isEditingProfile && (
+                      <div className="mt-6 flex gap-2">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            setIsEditingProfile(false);
+                            setProfileForm({
+                              full_name: profile?.full_name || "",
+                              username: profile?.username || "",
+                              mwr_link: profile?.mwr_link || ""
+                            });
+                          }}
+                        >
+                          Cancelar
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
               </TabsContent>
             </Tabs>
 
