@@ -154,113 +154,92 @@ export default function MWRPage() {
               </div>
 
               <div className="space-y-8">
-                {/* STEP 1: Challenge Selection */}
+                {/* STEP 1: Hero */}
                 {flowStep === 1 && (
-                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                    <div className="space-y-4">
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                        ¿Qué es lo que más <span className="text-primary">te está frenando</span> ahora mismo?
-                      </h2>
-                      <p className="text-gray-600 mb-8">Selecciona tu mayor desafío en este momento</p>
+                  <div className="relative">
+                    {/* Hero Content - 2 Columns Desktop */}
+                    <div className="max-w-6xl mx-auto px-4 py-12 md:py-16">
+                      <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                        {/* Left Column - Text & CTA */}
+                        <div className="space-y-6 md:space-y-8">
+                          <div className="space-y-4">
+                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                              Convierte más prospectos en{" "}
+                              <span className="text-primary">clientes</span>
+                              <br />
+                              <span className="text-primary">sin perseguir a nadie</span>
+                            </h1>
+                            <p className="text-lg md:text-xl text-gray-600 max-w-xl">
+                              Un sistema que organiza tus leads y te da mensajes listos para enviar
+                            </p>
+                          </div>
+
+                          {/* CTA */}
+                          <div className="space-y-4">
+                            <button
+                              onClick={() => setFlowStep(2)}
+                              className="w-full md:w-auto px-8 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-lg transition-colors shadow-lg"
+                            >
+                              Probar el sistema ahora →
+                            </button>
+                            
+                            {/* Microcopy */}
+                            <div className="flex items-center gap-2 text-sm text-gray-600">
+                              <CheckCircle className="w-4 h-4 text-green-600" />
+                              <span>Acceso inmediato</span>
+                              <span>•</span>
+                              <span>Sin experiencia</span>
+                              <span>•</span>
+                              <span>Empieza hoy</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Right Column - Image */}
+                        <div className="relative md:block hidden">
+                          <div className="relative">
+                            <img 
+                              src="/happy-travelers.jpg" 
+                              alt="Sistema de gestión de leads" 
+                              className="rounded-2xl shadow-xl w-full max-w-md mx-auto"
+                            />
+                            {/* WhatsApp Bubble Overlay */}
+                            <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-2xl p-4 max-w-xs">
+                              <div className="flex items-start gap-3">
+                                <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                                  <MessageSquare className="w-5 h-5 text-white" />
+                                </div>
+                                <div>
+                                  <p className="text-xs font-semibold text-gray-900 mb-1">Nuevo prospecto</p>
+                                  <p className="text-xs text-gray-600">María López acaba de registrarse</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="space-y-4">
-                      <button
-                        onClick={() => {
-                          setSelectedOption("prospectos");
-                          handleProblemSelect("prospectos");
-                        }}
-                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
-                          selectedOption === "prospectos"
-                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
-                            : "border-gray-200 hover:border-primary hover:shadow-md"
-                        }`}
-                      >
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Users className="w-6 h-6 text-blue-600" />
+                    {/* Mobile Image - Below text on mobile */}
+                    <div className="md:hidden px-4 pb-8">
+                      <div className="relative">
+                        <img 
+                          src="/happy-travelers.jpg" 
+                          alt="Sistema de gestión de leads" 
+                          className="rounded-2xl shadow-xl w-full"
+                        />
+                        <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-2xl p-4 max-w-xs">
+                          <div className="flex items-start gap-3">
+                            <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
+                              <MessageSquare className="w-5 h-5 text-white" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-semibold text-gray-900 mb-1">Nuevo prospecto</p>
+                              <p className="text-xs text-gray-600">María López acaba de registrarse</p>
+                            </div>
+                          </div>
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">Conseguir prospectos</h3>
-                          <p className="text-sm text-gray-600">No sabes cómo hacer que la gente llegue a ti</p>
-                          {selectedOption === "prospectos" && (
-                            <p className="text-xs text-primary font-medium mt-2">✓ Esto lo resolvemos por ti</p>
-                          )}
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setSelectedOption("seguimiento");
-                          handleProblemSelect("seguimiento");
-                        }}
-                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
-                          selectedOption === "seguimiento"
-                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
-                            : "border-gray-200 hover:border-primary hover:shadow-md"
-                        }`}
-                      >
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <MessageCircle className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">Dar seguimiento</h3>
-                          <p className="text-sm text-gray-600">Se te enfrían los prospectos o no sabes qué decirles</p>
-                          {selectedOption === "seguimiento" && (
-                            <p className="text-xs text-primary font-medium mt-2">✓ Esto lo resolvemos por ti</p>
-                          )}
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setSelectedOption("cerrar");
-                          handleProblemSelect("cerrar");
-                        }}
-                        className={`w-full flex items-start gap-4 p-6 bg-white border-2 rounded-xl transition-all text-left ${
-                          selectedOption === "cerrar"
-                            ? "border-primary shadow-lg shadow-primary/20 scale-[1.02]"
-                            : "border-gray-200 hover:border-primary hover:shadow-md"
-                        }`}
-                      >
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Target className="w-6 h-6 text-blue-600" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">Cerrar ventas</h3>
-                          <p className="text-sm text-gray-600">Hablas con personas… pero no terminan entrando</p>
-                          {selectedOption === "cerrar" && (
-                            <p className="text-xs text-primary font-medium mt-2">✓ Esto lo resolvemos por ti</p>
-                          )}
-                        </div>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          setSelectedOption("todo");
-                          handleProblemSelect("todo");
-                        }}
-                        className={`w-full flex items-start gap-4 p-6 border-2 rounded-xl transition-all text-left relative ${
-                          selectedOption === "todo"
-                            ? "border-primary bg-primary/5 shadow-lg shadow-primary/20 scale-[1.02]"
-                            : "border-primary bg-primary/5 hover:shadow-md"
-                        }`}
-                      >
-                        <div className="absolute -top-3 left-4">
-                          <span className="bg-orange-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                            Recomendado
-                          </span>
-                        </div>
-                        <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center flex-shrink-0">
-                          <Zap className="w-6 h-6 text-primary" />
-                        </div>
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1">Todo lo anterior</h3>
-                          <p className="text-sm text-gray-600">Quiero que todo funcione sin estar encima todo el tiempo</p>
-                          {selectedOption === "todo" && (
-                            <p className="text-xs text-primary font-medium mt-2">✓ Esto lo resolvemos por ti</p>
-                          )}
-                        </div>
-                      </button>
+                      </div>
                     </div>
                   </div>
                 )}
