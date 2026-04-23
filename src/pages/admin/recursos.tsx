@@ -523,9 +523,9 @@ export default function RecursosPage() {
   };
 
   const getReferralLink = (source?: string) => {
-    if (!profile?.username) return "";
+    if (!username) return "";
     const baseUrl = typeof window !== 'undefined' ? window.location.origin : '';
-    let link = `${baseUrl}/mwr?ref=${profile.username}`;
+    let link = `${baseUrl}/mwr?ref=${username}`;
     
     if (source) {
       link += `&source=${source}`;
