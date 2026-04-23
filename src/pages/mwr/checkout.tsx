@@ -12,12 +12,6 @@ export default function MWRCheckout() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<"annual" | "monthly">("annual");
 
-  useEffect(() => {
-    if (!ref) {
-      router.push("/mwr");
-    }
-  }, [ref, router]);
-
   const handleSubmit = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
