@@ -527,13 +527,6 @@ export default function MWRPage() {
                         </div>
                       ))}
                     </div>
-
-                    <button
-                      onClick={() => setFlowStep(8)}
-                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
-                    >
-                      Continuar →
-                    </button>
                   </div>
                 )}
 
@@ -574,15 +567,6 @@ export default function MWRPage() {
                         ))}
                       </div>
                     </div>
-
-                    <Button
-                      size="lg"
-                      onClick={() => setFlowStep(10)}
-                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                    >
-                      Continuar
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
                   </div>
                 )}
 
@@ -620,15 +604,6 @@ export default function MWRPage() {
                         </div>
                       ))}
                     </div>
-
-                    <Button
-                      size="lg"
-                      onClick={() => setFlowStep(11)}
-                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                    >
-                      Continuar
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
                   </div>
                 )}
 
@@ -668,15 +643,6 @@ export default function MWRPage() {
                         ))}
                       </div>
                     </div>
-
-                    <Button
-                      size="lg"
-                      onClick={() => setFlowStep(12)}
-                      className="h-14 px-8 bg-[#4285f4] hover:bg-[#3367d6] text-white text-lg font-semibold rounded-xl"
-                    >
-                      Ver oferta
-                      <ArrowRight className="ml-2 h-5 w-5" />
-                    </Button>
                   </div>
                 )}
 
