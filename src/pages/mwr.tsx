@@ -449,6 +449,13 @@ export default function MWRPage() {
                       </h2>
                       <p className="text-gray-600">Sin hacer nada tú, el sistema responde y da seguimiento automáticamente</p>
                     </div>
+
+                    <button
+                      onClick={() => setFlowStep(5)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
 
