@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp, MessageCircle, CheckCircle, Image, Calendar, Tag, Lock, DollarSign, Clock, Star } from "lucide-react";
+import { Sparkles, ArrowRight, CheckCircle2, User, MessageSquare, FileText, Users, Zap, Target, TrendingUp, MessageCircle, CheckCircle, Image, Calendar, Tag, Lock, DollarSign, Clock, Star, Globe, Heart, BarChart3 } from "lucide-react";
 
 export default function MWRPage() {
   const [showCTA, setShowCTA] = useState(false);
@@ -1066,42 +1066,101 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 11: Ready to Start */}
+                {/* STEP 11: Value Presentation */}
                 {flowStep === 11 && (
-                  <div className="space-y-8 animate-in fade-in duration-700 text-center">
-                    <div className="space-y-4">
-                      <div className="w-16 h-16 bg-green-500/10 rounded-full flex items-center justify-center mx-auto">
-                        <CheckCircle2 className="w-8 h-8 text-green-500" />
-                      </div>
-                      <h2 className="text-3xl md:text-5xl font-bold text-[#1a1a1a]">
-                        {userName}, ya estás <span className="text-[#4285f4]">listo</span>
+                  <div className="space-y-8 animate-in fade-in duration-700">
+                    <div className="text-center space-y-4">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        Esto es todo lo que tienes <span className="text-primary">listo desde el día 1</span>
                       </h2>
-                      <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-                        El sistema está configurado y esperando por ti
+                      <p className="text-gray-600">Sin configurar, sin complicarte, solo empezar a usarlo</p>
+                    </div>
+
+                    {/* Value Blocks */}
+                    <div className="space-y-4">
+                      {/* Block 1: Landing Page */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <Globe className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">Tu propia página para captar prospectos</h3>
+                          <p className="text-sm text-gray-600">Lista para compartir y empezar a recibir interesados</p>
+                        </div>
+                      </div>
+
+                      {/* Block 2: Contact Organization */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <Users className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">Sistema para organizar tus contactos</h3>
+                          <p className="text-sm text-gray-600">Todo claro, sin perder oportunidades</p>
+                        </div>
+                      </div>
+
+                      {/* Block 3: Ready Messages - HIGHLIGHTED */}
+                      <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-primary/10 to-blue-50 border-2 border-primary rounded-xl shadow-md">
+                        <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 shadow-lg">
+                          <MessageSquare className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">Mensajes listos para cada etapa</h3>
+                          <p className="text-sm text-primary font-medium">No tienes que pensar qué decir, solo dar clic y enviar</p>
+                        </div>
+                      </div>
+
+                      {/* Block 4: Content */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <Image className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">Contenido listo para publicar</h3>
+                          <p className="text-sm text-gray-600">Imágenes y textos para atraer personas todos los días</p>
+                        </div>
+                      </div>
+
+                      {/* Block 5: Dashboard */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <BarChart3 className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">Panel de control para tu negocio</h3>
+                          <p className="text-sm text-gray-600">Sabes qué está pasando en todo momento</p>
+                        </div>
+                      </div>
+
+                      {/* Block 6: Support */}
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
+                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <Heart className="w-6 h-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-gray-900 mb-1">Soporte y acompañamiento</h3>
+                          <p className="text-sm text-gray-600">Para que no avances solo</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Microcopy */}
+                    <div className="text-center space-y-2">
+                      <p className="text-sm text-gray-600 font-medium">
+                        Todo ya está listo. Solo tienes que usarlo.
+                      </p>
+                      <p className="text-base text-primary font-bold">
+                        Lo que normalmente te tomaría semanas… aquí ya lo tienes listo
                       </p>
                     </div>
 
-                    <div className="bg-gradient-to-br from-[#4285f4]/5 to-[#4285f4]/10 rounded-2xl p-8 max-w-2xl mx-auto border border-[#4285f4]/20">
-                      <h3 className="text-xl font-bold text-[#1a1a1a] mb-4">
-                        Esto es lo que obtienes:
-                      </h3>
-                      <div className="space-y-3 text-left">
-                        {[
-                          "Tu página personalizada para captar leads",
-                          "Sistema de seguimiento automático",
-                          "Plantillas de mensajes listas",
-                          "Dashboard para gestionar prospectos",
-                          "Contenido listo para publicar",
-                          "Plantillas de mensajes listas",
-                          "Soporte en español"
-                        ].map((feature, index) => (
-                          <div key={index} className="flex items-start gap-3">
-                            <CheckCircle2 className="w-5 h-5 text-[#4285f4] shrink-0 mt-0.5" />
-                            <p className="text-base text-gray-700">{feature}</p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
+                    <button
+                      onClick={() => setFlowStep(12)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
                   </div>
                 )}
 
