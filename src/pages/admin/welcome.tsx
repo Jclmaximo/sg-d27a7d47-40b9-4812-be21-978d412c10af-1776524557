@@ -207,42 +207,30 @@ export default function WelcomePage() {
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
 
-        {/* Header */}
-        <header className="border-b border-border/50 bg-card/30 backdrop-blur-sm sticky top-0 z-50">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            {/* Top row: Logo + Email/Logout */}
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center shadow-lg">
-                  <Plane className="w-6 h-6 text-primary-foreground" />
-                </div>
-                <div>
-                  <h1 className="text-xl font-bold text-foreground">Viaja Ligero</h1>
-                  <p className="text-sm text-muted-foreground">Dashboard</p>
-                </div>
+        {/* Hero Section */}
+        <section className="relative overflow-hidden py-20">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20" />
+          <div className="container mx-auto px-4 relative z-10">
+            <div className="text-center max-w-3xl mx-auto">
+              <div className="flex justify-center mb-6">
+                {user?.avatar_url ? (
+                  <img
+                    src={user.avatar_url}
+                    alt={user.full_name}
+                    className="w-24 h-24 rounded-full object-cover border-4 border-white/30 shadow-xl"
+                  />
+                ) : (
+                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold border-4 border-white/30 shadow-xl">
+                    {user?.full_name?.[0]?.toUpperCase() || "U"}
+                  </div>
+                )}
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs md:text-sm text-muted-foreground hidden sm:inline truncate max-w-[120px] md:max-w-none">
-                  {userEmail}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleLogout}
-                  className="border-primary/30 hover:border-primary/50 hover:bg-primary/10 text-xs md:text-sm px-2 md:px-3"
-                >
-                  <LogOut className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />
-                  <span className="hidden md:inline">Salir</span>
-                </Button>
-              </div>
-            </div>
-            
-            {/* Welcome message */}
-            <div className="text-2xl md:text-3xl font-bold text-foreground">
-              ¡Bienvenido, {profile?.full_name || "Usuario"}! 👋
+              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
+                ¡Bienvenido de nuevo, {user?.full_name || user?.username || "Usuario"}!
+              </h1>
             </div>
           </div>
-        </header>
+        </section>
 
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 py-8">

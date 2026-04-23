@@ -273,7 +273,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -640,9 +640,6 @@ Puedo resolver dudas sobre:
         <header className="bg-background border-b border-border/30 sticky top-0 z-50 w-full">
           <div className="w-full px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-primary/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-primary/30 shadow-lg shadow-primary/20">
-                <Hand className="w-6 h-6 text-primary" />
-              </div>
               <div className="flex items-center gap-4">
                 {profile?.avatar_url ? (
                   <img
