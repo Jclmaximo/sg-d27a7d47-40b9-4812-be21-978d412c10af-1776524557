@@ -76,6 +76,7 @@ interface UserProfile {
   role: string;
   ambassador_active: boolean;
   mwr_link?: string | null;
+  avatar_url?: string | null;
 }
 
 interface MessageTemplate {
@@ -90,10 +91,12 @@ export default function MainDashboard() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showResourcesSidebar, setShowResourcesSidebar] = useState(false);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [profileForm, setProfileForm] = useState({
     full_name: "",
     username: "",
-    mwr_link: ""
+    mwr_link: "",
+    avatar_url: ""
   });
   const router = useRouter();
   const { toast } = useToast();
@@ -270,7 +273,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -326,7 +329,8 @@ Puedo resolver dudas sobre:
         setProfileForm({
           full_name: profileData.full_name || "",
           username: profileData.username || "",
-          mwr_link: profileData.mwr_link || ""
+          mwr_link: profileData.mwr_link || "",
+          avatar_url: profileData.avatar_url || ""
         });
       }
 
@@ -404,7 +408,8 @@ Puedo resolver dudas sobre:
         .update({
           full_name: profileForm.full_name,
           username: profileForm.username,
-          mwr_link: profileForm.mwr_link
+          mwr_link: profileForm.mwr_link,
+          avatar_url: profileForm.avatar_url
         })
         .eq("id", session.user.id);
 
@@ -423,6 +428,59 @@ Puedo resolver dudas sobre:
         description: "Error al actualizar perfil",
         variant: "destructive"
       });
+    }
+  };
+
+  const uploadAvatar = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    try {
+      setUploadingAvatar(true);
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      // Upload to Supabase Storage
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${session.user.id}-${Date.now()}.${fileExt}`;
+      const filePath = `avatars/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("profiles")
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from("profiles")
+        .getPublicUrl(filePath);
+
+      // Update profile form
+      setProfileForm({ ...profileForm, avatar_url: publicUrl });
+
+      // Save to database
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({ avatar_url: publicUrl })
+        .eq("id", session.user.id);
+
+      if (updateError) throw updateError;
+
+      await loadData();
+      toast({
+        title: "✅ Foto actualizada",
+        description: "Tu foto de perfil se actualizó correctamente"
+      });
+    } catch (error) {
+      console.error("Error uploading avatar:", error);
+      toast({
+        title: "Error",
+        description: "Error al subir la foto",
+        variant: "destructive"
+      });
+    } finally {
+      setUploadingAvatar(false);
     }
   };
 
@@ -584,10 +642,10 @@ Puedo resolver dudas sobre:
                 <Hand className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-foreground">Mi Dashboard</h1>
-                <p className="text-sm text-muted-foreground">
-                  Bienvenido, {profile?.full_name || "Usuario"}
-                </p>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                  Mi Dashboard
+                </h1>
+                <p className="text-gray-400">Bienvenido, Usuario</p>
               </div>
             </div>
             <Button
@@ -1182,8 +1240,37 @@ Puedo resolver dudas sobre:
                   <CardHeader>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                          {(isEditingProfile ? profileForm.full_name : profile?.full_name)?.[0]?.toUpperCase() || "U"}
+                        <div className="relative">
+                          {profile?.avatar_url || profileForm.avatar_url ? (
+                            <img
+                              src={profile?.avatar_url || profileForm.avatar_url}
+                              alt={profile?.full_name}
+                              className="w-16 h-16 rounded-full object-cover border-2 border-primary/30"
+                            />
+                          ) : (
+                            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                              {(isEditingProfile ? profileForm.full_name : profile?.full_name)?.[0]?.toUpperCase() || "U"}
+                            </div>
+                          )}
+                          {isEditingProfile && (
+                            <label className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary rounded-full flex items-center justify-center cursor-pointer hover:bg-primary/80 transition-colors">
+                              <input
+                                type="file"
+                                accept="image/*"
+                                onChange={uploadAvatar}
+                                className="hidden"
+                                disabled={uploadingAvatar}
+                              />
+                              {uploadingAvatar ? (
+                                <span className="text-xs text-white">...</span>
+                              ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+                                  <circle cx="12" cy="13" r="4" />
+                                </svg>
+                              )}
+                            </label>
+                          )}
                         </div>
                         <div>
                           {!isEditingProfile ? (
@@ -1267,7 +1354,8 @@ Puedo resolver dudas sobre:
                             setProfileForm({
                               full_name: profile?.full_name || "",
                               username: profile?.username || "",
-                              mwr_link: profile?.mwr_link || ""
+                              mwr_link: profile?.mwr_link || "",
+                              avatar_url: profile?.avatar_url || ""
                             });
                           }}
                         >
