@@ -67,18 +67,9 @@ export default function MWRCheckout() {
         <div className="max-w-2xl w-full">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-medium mb-4">
-              Demo 11/11
+            <div className="inline-block bg-primary/10 text-primary px-6 py-3 rounded-full text-sm font-semibold mb-6">
+              Listo para ti
             </div>
-            <div className="inline-block px-6 py-3 bg-primary/10 border-2 border-primary rounded-2xl mb-6">
-              <span className="text-primary font-semibold text-lg">Listo para ti</span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Este sistema es <span className="text-primary">para ti</span>
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Te ayuda a conseguir prospectos, dar seguimiento automático y avanzar más rápido sin complicarte
-            </p>
           </div>
 
           {/* Pricing Section */}
