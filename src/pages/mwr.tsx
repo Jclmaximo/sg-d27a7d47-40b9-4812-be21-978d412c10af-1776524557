@@ -244,20 +244,20 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 2: Problem Statement */}
+                {/* STEP 2: Introduction/Transition */}
                 {flowStep === 2 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Deja de perder prospectos por <span className="text-primary">falta de seguimiento</span>
+                        Imagina tener un <span className="text-primary">sistema que trabaja por ti</span>
                       </h2>
-                      <p className="text-gray-600">El sistema te muestra a quién escribirle y cuándo hacerlo</p>
+                      <p className="text-gray-600">Mientras tú te enfocas en cerrar ventas, el sistema organiza todo automáticamente</p>
                     </div>
                     <button
                       onClick={() => setFlowStep(3)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
-                      Ver cómo funciona →
+                      Continuar →
                     </button>
                   </div>
                 )}
