@@ -97,7 +97,7 @@ export default function WelcomePage() {
       
       const { data: profileData } = await supabase
         .from("profiles")
-        .select("username, full_name")
+        .select("*")
         .eq("id", session.user.id)
         .single();
 
