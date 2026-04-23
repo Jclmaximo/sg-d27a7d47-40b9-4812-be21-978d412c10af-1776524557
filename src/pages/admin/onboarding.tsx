@@ -28,13 +28,14 @@ export default function OnboardingPage() {
     }
     
     try {
-      const { data: profile } = await supabase
+      const { data: profile, error } = await supabase
         .from("profiles")
         .select("username")
         .eq("id", session.user.id)
         .single();
 
-      if (profile?.username) {
+      // Only redirect if we have a username that's not empty
+      if (!error && profile && profile.username && profile.username.trim() !== "") {
         router.push("/admin/welcome");
       }
     } catch (error) {

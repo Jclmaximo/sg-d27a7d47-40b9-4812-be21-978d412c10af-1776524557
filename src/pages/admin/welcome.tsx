@@ -103,8 +103,17 @@ export default function WelcomePage() {
 
       if (profileData) {
         setProfile(profileData);
+        
+        // Check if username is missing AFTER we have profile data
+        if (!profileData.username) {
+          router.push("/admin/onboarding");
+          return;
+        }
+        
+        setUsername(profileData.username);
+        await loadDashboardData(session.user.id);
       } else {
-        // If no profile, just use session data
+        // If no profile exists at all, create temporary one and redirect to onboarding
         setProfile({
           id: session.user.id,
           email: session.user.email || "",
@@ -115,15 +124,10 @@ export default function WelcomePage() {
           role: "user",
           ambassador_active: false
         } as Profile);
-      }
-
-      if (!profile?.username) {
+        
         router.push("/admin/onboarding");
         return;
       }
-
-      setUsername(profile.username);
-      await loadDashboardData(session.user.id);
       
     } catch (error) {
       console.error("Error checking auth:", error);
