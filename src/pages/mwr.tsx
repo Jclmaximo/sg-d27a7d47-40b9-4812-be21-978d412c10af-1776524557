@@ -20,8 +20,14 @@ import {
   DollarSign,
   Smartphone,
   Lock,
-  ChevronRight
+  ChevronRight,
+  ArrowRight,
+  CheckCircle2,
+  Star,
+  Globe,
+  Heart
 } from "lucide-react";
+import Image from "next/image";
 
 export default function MWRPage() {
   const [showCTA, setShowCTA] = useState(false);
@@ -330,7 +336,7 @@ export default function MWRPage() {
                         className="cursor-pointer group"
                       >
                         <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                          <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
                             <CheckCircle className="w-7 h-7 text-primary" />
                           </div>
                           <div className="flex-1 pt-1">
