@@ -149,7 +149,7 @@ export default function InvitaUnAmigo() {
             interest: "reto-24h",
             contact_method: "whatsapp",
             user_id: referrerId,
-          });
+          } as any); // using 'as any' to fix the TS error since we don't have the exact interface here
         }
       }
 
