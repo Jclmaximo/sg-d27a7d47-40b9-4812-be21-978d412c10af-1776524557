@@ -34,7 +34,11 @@ import {
   PlayCircle,
   DollarSign,
   Target,
-  Hand
+  Hand,
+  Search,
+  Bell,
+  Avatar,
+  AvatarFallback
 } from "lucide-react";
 
 interface Lead {
@@ -89,6 +93,16 @@ export default function WelcomePage() {
   useEffect(() => {
     loadData();
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await authService.signOut();
+      localStorage.clear(); // Limpiar datos de sesión
+      router.push("/admin");
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
+  };
 
   // Verificar si el usuario ha iniciado el reto para desbloquear dashboard
   useEffect(() => {
@@ -175,11 +189,6 @@ export default function WelcomePage() {
       const error = err as Error;
       console.error("Error loading data:", error);
     }
-  };
-
-  const handleLogout = async () => {
-    await authService.signOut();
-    router.push("/admin");
   };
 
   const copyFunnelLink = () => {
