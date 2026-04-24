@@ -35,29 +35,83 @@ export default function InvitaUnAmigo() {
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [checkingUsername, setCheckingUsername] = useState(false);
 
+  // Función para formatear nombre del referente
+  const formatReferrerName = (name: string): string => {
+    if (!name) return "";
+    
+    // Reemplazar guiones bajos y guiones con espacios
+    let cleaned = name.replace(/[_-]/g, " ");
+    
+    // Capitalizar cada palabra
+    cleaned = cleaned
+      .toLowerCase()
+      .split(" ")
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+    
+    return cleaned;
+  };
+
   // Cargar nombre del referente
   useEffect(() => {
-    if (ref && typeof ref === "string") {
-      loadReferrer(ref);
-    }
+    const fetchReferrer = async () => {
+      if (ref) {
+        // Primero intentar cargar desde localStorage
+        const savedName = localStorage.getItem("referrer_name");
+        const savedId = localStorage.getItem("referrer_id");
+        
+        if (savedName && savedId) {
+          setReferrerName(savedName);
+          setReferrerId(savedId);
+          return;
+        }
+
+        // Si no está en localStorage, buscar en la base de datos
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("id, full_name, username")
+          .eq("username", ref)
+          .single();
+
+        if (data) {
+          // Usar full_name si existe, sino formatear el username
+          const displayName = data.full_name 
+            ? formatReferrerName(data.full_name)
+            : formatReferrerName(data.username);
+          
+          setReferrerName(displayName);
+          setReferrerId(data.id);
+          
+          // Guardar en localStorage para persistencia
+          localStorage.setItem("referrer_name", displayName);
+          localStorage.setItem("referrer_id", data.id);
+        } else {
+          // Si no se encuentra, intentar formatear el parámetro ref directamente
+          const formattedRef = formatReferrerName(ref as string);
+          setReferrerName(formattedRef);
+          localStorage.setItem("referrer_name", formattedRef);
+        }
+      } else {
+        // Sin parámetro ref, verificar localStorage
+        const savedName = localStorage.getItem("referrer_name");
+        if (savedName) {
+          setReferrerName(savedName);
+          const savedId = localStorage.getItem("referrer_id");
+          if (savedId) setReferrerId(savedId);
+        }
+      }
+    };
+
+    fetchReferrer();
   }, [ref]);
 
-  const loadReferrer = async (username: string) => {
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("id, username, full_name")
-        .eq("username", username)
-        .single();
-
-      if (data && !error) {
-        setReferrerName(data.full_name || username);
-        setReferrerId(data.id);
-      }
-    } catch (error) {
-      console.error("Error loading referrer:", error);
-    }
-  };
+  // Limpiar datos de referente al salir (opcional - solo si quieres sesiones frescas)
+  // useEffect(() => {
+  //   return () => {
+  //     localStorage.removeItem("referrer_name");
+  //     localStorage.removeItem("referrer_id");
+  //   };
+  // }, []);
 
   // NUEVO - Verificar disponibilidad de username
   const checkUsernameAvailability = async (username: string) => {
