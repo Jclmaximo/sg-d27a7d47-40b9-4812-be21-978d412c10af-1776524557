@@ -302,3 +302,11 @@ export async function getTopTeamMembers(): Promise<TeamMemberStats[]> {
   const allStats = await getTeamProductivityStats();
   return allStats.slice(0, 5);
 }
+
+export const productivityService = {
+  getTodayProductivity,
+  saveDailyActivity,
+  getProductivityStats,
+  getTeamProductivityStats,
+  getTopTeamMembers
+};

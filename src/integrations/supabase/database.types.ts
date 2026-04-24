@@ -455,7 +455,7 @@ export type Database = {
       user_productivity: {
         Row: {
           attended_training: boolean | null
-          contacted_prospects: number | null
+          contacted_prospects: boolean | null
           contacted_prospects_count: number | null
           created_at: string | null
           date: string
@@ -469,7 +469,7 @@ export type Database = {
         }
         Insert: {
           attended_training?: boolean | null
-          contacted_prospects?: number | null
+          contacted_prospects?: boolean | null
           contacted_prospects_count?: number | null
           created_at?: string | null
           date?: string
@@ -483,7 +483,7 @@ export type Database = {
         }
         Update: {
           attended_training?: boolean | null
-          contacted_prospects?: number | null
+          contacted_prospects?: boolean | null
           contacted_prospects_count?: number | null
           created_at?: string | null
           date?: string
