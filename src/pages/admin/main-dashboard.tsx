@@ -792,41 +792,41 @@ Puedo resolver dudas sobre:
           <div className="max-w-7xl mx-auto w-full">
             {/* Navigation Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-6">
-                <TabsTrigger value="overview">
-                  <LayoutDashboard className="w-4 h-4 mr-2" />
+              <TabsList className="w-full inline-flex h-auto flex-nowrap overflow-x-auto overflow-y-hidden gap-2 bg-background/50 p-1">
+                <TabsTrigger value="overview" className="flex-shrink-0">
+                  <LayoutDashboard className="w-4 h-4 sm:mr-2" />
                   <span className="hidden sm:inline">Resumen</span>
                 </TabsTrigger>
-                <TabsTrigger value="leads">
-                  <Users className="w-4 h-4 mr-2" />
-                  Leads
+                <TabsTrigger value="leads" className="flex-shrink-0">
+                  <Users className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Leads</span>
                 </TabsTrigger>
-                <TabsTrigger value="network">
-                  <Users className="w-4 h-4 mr-2" />
+                <TabsTrigger value="network" className="flex-shrink-0">
+                  <Users className="w-4 h-4 sm:mr-2" />
                   <span className="hidden sm:inline">Mi Red</span>
                 </TabsTrigger>
-                <TabsTrigger value="productividad">
-                  <CheckCircle className="w-4 h-4 mr-2" />
+                <TabsTrigger value="productividad" className="flex-shrink-0">
+                  <CheckCircle className="w-4 h-4 sm:mr-2" />
                   <span className="hidden sm:inline">Productividad</span>
                 </TabsTrigger>
-                <TabsTrigger value="links">
-                  <Link2 className="w-4 h-4 mr-2" />
-                  Links
+                <TabsTrigger value="links" className="flex-shrink-0">
+                  <Link2 className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Links</span>
                 </TabsTrigger>
-                <TabsTrigger value="profile">
-                  <User className="w-4 h-4 mr-2" />
-                  Perfil
+                <TabsTrigger value="profile" className="flex-shrink-0">
+                  <User className="w-4 h-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Perfil</span>
                 </TabsTrigger>
                 <TabsTrigger value="recursos" onClick={(e) => {
                   e.preventDefault();
                   router.push("/admin/recursos");
-                }}>
-                  <Gift className="w-4 h-4 mr-2" />
+                }} className="flex-shrink-0">
+                  <Gift className="w-4 h-4 sm:mr-2" />
                   <span className="hidden sm:inline">Recursos</span>
                 </TabsTrigger>
                 {profile?.role === "admin" && (
-                  <TabsTrigger value="equipo">
-                    <Users className="w-4 h-4 mr-2" />
+                  <TabsTrigger value="equipo" className="flex-shrink-0">
+                    <Users className="w-4 h-4 sm:mr-2" />
                     <span className="hidden sm:inline">Equipo</span>
                   </TabsTrigger>
                 )}
