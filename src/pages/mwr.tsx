@@ -272,7 +272,7 @@ export default function MWRPage() {
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                         ¿Qué quieres que <span className="text-primary">cambie</span> en tu negocio ahora mismo?
                       </h2>
-                      <p className="text-gray-600">Selecciona lo que más impacto tendría para ti</p>
+                      <p className="text-gray-600">Elige lo que más impacto tendría para ti</p>
                     </div>
 
                     {/* Options Grid */}
@@ -349,92 +349,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 3: Challenge/Pain Point Quiz - NEW */}
+                {/* STEP 3: Value Demo */}
                 {flowStep === 3 && (
-                  <div className="space-y-8 animate-in fade-in duration-700">
-                    <div className="text-center space-y-4">
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        ¿Qué es lo que más <span className="text-primary">te está frenando</span> ahora mismo?
-                      </h2>
-                      <p className="text-gray-600">Selecciona tu mayor desafío en este momento</p>
-                    </div>
-
-                    {/* Options Grid */}
-                    <div className="space-y-4 max-w-3xl mx-auto">
-                      {/* Option 1: Conseguir prospectos */}
-                      <div 
-                        onClick={() => setFlowStep(4)}
-                        className="cursor-pointer group"
-                      >
-                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <Users className="w-7 h-7 text-primary" />
-                          </div>
-                          <div className="flex-1 pt-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Conseguir prospectos</h3>
-                            <p className="text-sm text-gray-600">No sabes cómo hacer que la gente llegue a ti</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Option 2: Dar seguimiento */}
-                      <div 
-                        onClick={() => setFlowStep(4)}
-                        className="cursor-pointer group"
-                      >
-                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <MessageSquare className="w-7 h-7 text-primary" />
-                          </div>
-                          <div className="flex-1 pt-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Dar seguimiento</h3>
-                            <p className="text-sm text-gray-600">Se te enfrían los prospectos o no sabes qué decirles</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Option 3: Cerrar ventas */}
-                      <div 
-                        onClick={() => setFlowStep(4)}
-                        className="cursor-pointer group"
-                      >
-                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <Target className="w-7 h-7 text-primary" />
-                          </div>
-                          <div className="flex-1 pt-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Cerrar ventas</h3>
-                            <p className="text-sm text-gray-600">Hablas con personas... pero no terminan entrando</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Option 4: Todo lo anterior (Recommended) */}
-                      <div 
-                        onClick={() => setFlowStep(4)}
-                        className="relative cursor-pointer group"
-                      >
-                        <div className="absolute -top-3 left-6 z-10">
-                          <span className="bg-orange-500 text-white px-4 py-1 rounded-full text-xs font-semibold">
-                            Recomendado
-                          </span>
-                        </div>
-                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-primary rounded-xl hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <Zap className="w-7 h-7 text-primary" />
-                          </div>
-                          <div className="flex-1 pt-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Todo lo anterior</h3>
-                            <p className="text-sm text-gray-600">Quiero que todo funcione sin estar encima todo el tiempo</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* STEP 4: Value Demo */}
-                {flowStep === 4 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -469,7 +385,7 @@ export default function MWRPage() {
                     </div>
 
                     <button
-                      onClick={() => setFlowStep(5)}
+                      onClick={() => setFlowStep(4)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
                       Continuar →
@@ -477,8 +393,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 5: Problem Agitation */}
-                {flowStep === 5 && (
+                {/* STEP 4: Problem Agitation */}
+                {flowStep === 4 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -505,7 +421,7 @@ export default function MWRPage() {
                     <div className="text-center">
                       <p className="text-gray-700 font-medium mb-6">Esto es exactamente lo que este sistema resuelve</p>
                       <button
-                        onClick={() => setFlowStep(6)}
+                        onClick={() => setFlowStep(5)}
                         className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                       >
                         Ver cómo lo resuelve →
@@ -514,8 +430,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 6: Solution Overview */}
-                {flowStep === 6 && (
+                {/* STEP 5: Solution Overview */}
+                {flowStep === 5 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -551,13 +467,13 @@ export default function MWRPage() {
                         </div>
                         <div>
                           <h3 className="text-lg font-bold text-gray-900 mb-2">Te da mensajes listos para enviar</h3>
-                          <p className="text-gray-600">No tienes que pensar qué decir, solo copias y envías</p>
+                          <p className="text-gray-600">No tienes que pensar qué escribir, solo copias y envías</p>
                         </div>
                       </div>
                     </div>
 
                     <button
-                      onClick={() => setFlowStep(7)}
+                      onClick={() => setFlowStep(6)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
                       Continuar →
@@ -565,8 +481,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 7: Control Panel */}
-                {flowStep === 7 && (
+                {/* STEP 6: Control Panel */}
+                {flowStep === 6 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -642,7 +558,7 @@ export default function MWRPage() {
                     </div>
 
                     <button
-                      onClick={() => setFlowStep(8)}
+                      onClick={() => setFlowStep(7)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
                       Continuar →
@@ -650,8 +566,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 8: Time Freedom */}
-                {flowStep === 8 && (
+                {/* STEP 7: Time Freedom */}
+                {flowStep === 7 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -684,7 +600,7 @@ export default function MWRPage() {
                     </div>
 
                     <button
-                      onClick={() => setFlowStep(9)}
+                      onClick={() => setFlowStep(8)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
                       Continuar →
@@ -692,8 +608,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 9: Social Proof */}
-                {flowStep === 9 && (
+                {/* STEP 8: Social Proof */}
+                {flowStep === 8 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -731,7 +647,7 @@ export default function MWRPage() {
                     </div>
 
                     <button
-                      onClick={() => setFlowStep(10)}
+                      onClick={() => setFlowStep(9)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
                       Continuar →
@@ -739,8 +655,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 10: Objection Handler */}
-                {flowStep === 10 && (
+                {/* STEP 9: Objection Handler */}
+                {flowStep === 9 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -771,7 +687,7 @@ export default function MWRPage() {
                     </div>
 
                     <button
-                      onClick={() => setFlowStep(11)}
+                      onClick={() => setFlowStep(10)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
                       Continuar →
@@ -779,8 +695,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 11: CTA Pre-frame */}
-                {flowStep === 11 && (
+                {/* STEP 10: CTA Pre-frame */}
+                {flowStep === 10 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -806,7 +722,7 @@ export default function MWRPage() {
                     </div>
 
                     <button
-                      onClick={() => setFlowStep(12)}
+                      onClick={() => setFlowStep(11)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
                       Sí, quiero verlo →
@@ -814,8 +730,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 12: Urgency */}
-                {flowStep === 12 && (
+                {/* STEP 11: Urgency */}
+                {flowStep === 11 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -836,7 +752,7 @@ export default function MWRPage() {
                     </div>
 
                     <button
-                      onClick={() => setFlowStep(13)}
+                      onClick={() => setFlowStep(12)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
                       Registrarme ahora →
@@ -844,8 +760,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 13: Form */}
-                {flowStep === 13 && (
+                {/* STEP 12: Form */}
+                {flowStep === 12 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -924,7 +840,7 @@ export default function MWRPage() {
                       </div>
 
                       <button
-                        onClick={() => setFlowStep(14)}
+                        onClick={() => setFlowStep(13)}
                         className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                       >
                         Finalizar →
@@ -933,8 +849,8 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 14: Final Close */}
-                {flowStep === 14 && (
+                {/* STEP 13: Final Close */}
+                {flowStep === 13 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
