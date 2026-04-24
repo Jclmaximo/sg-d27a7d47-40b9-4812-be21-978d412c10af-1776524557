@@ -312,6 +312,22 @@ export default function ZenCommandCenter() {
               <div className="text-7xl font-extralight text-[#1D1D1F] tracking-tighter mb-6">
                 {formatTime(timeRemaining)}
               </div>
+              <Button
+                onClick={() => setChallengeActive(!challengeActive)}
+                className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-8 py-3 rounded-xl font-light"
+              >
+                {!challengeActive ? (
+                  <>
+                    <Play className="w-5 h-5 mr-2" />
+                    Iniciar Reto
+                  </>
+                ) : (
+                  <>
+                    <Pause className="w-5 h-5 mr-2" />
+                    Pausar
+                  </>
+                )}
+              </Button>
             </div>
           </div>
 
