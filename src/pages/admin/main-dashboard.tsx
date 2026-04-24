@@ -1,6 +1,12 @@
-import { useEffect, useState, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
+import { 
+  Users, Clock, MessageSquare, CheckCircle2, 
+  Download, LogOut, Mail, Phone, Calendar, Target, Plus, Eye,
+  LayoutGrid, Share2, Copy, Check, Info, BookOpen, Network, DollarSign, Gift,
+  TrendingUp, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -29,33 +35,6 @@ import { supabase } from "@/integrations/supabase/client";
 import type { NetworkStats } from "@/services/referralService";
 import type { ProductivityStats, TeamMemberStats, DailyActivity } from "@/services/productivityService";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Users,
-  Clock,
-  MessageSquare,
-  CheckCircle2,
-  Download,
-  LogOut,
-  Eye,
-  LayoutGrid,
-  Share2,
-  Copy,
-  Check,
-  Info,
-  BookOpen,
-  Network,
-  DollarSign,
-  Gift,
-  TrendingUp,
-  Shield,
-  Link2,
-  ExternalLink,
-  Loader2,
-  CheckCircle,
-  User,
-  Search,
-  Hand
-} from "lucide-react";
 
 interface Lead {
   id: string;
