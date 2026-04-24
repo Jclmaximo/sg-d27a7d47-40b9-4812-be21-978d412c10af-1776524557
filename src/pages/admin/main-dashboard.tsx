@@ -49,7 +49,12 @@ import {
   TrendingUp,
   Shield,
   Link2,
-  ExternalLink
+  ExternalLink,
+  Loader2,
+  CheckCircle,
+  User,
+  Search,
+  Hand
 } from "lucide-react";
 
 interface Lead {
