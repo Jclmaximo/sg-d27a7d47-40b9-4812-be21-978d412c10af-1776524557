@@ -61,31 +61,40 @@ export default function ZenCommandCenter() {
   useEffect(() => {
     if (!profile?.id) return;
 
-    const setupRealtimeLeads = async () => {
-      const channel = supabase
-        .channel("leads-realtime")
-        .on(
-          "postgres_changes",
-          {
-            event: "*",
-            schema: "public",
-            table: "leads",
-            filter: `referred_by=eq.${profile.id}`,
-          },
-          (payload) => {
-            console.log("Lead realtime update:", payload);
-            // Recargar leads del día
-            loadTodayLeads();
+    const channel = supabase.channel(`leads-realtime-${profile.id}`);
+    
+    channel
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "leads",
+          filter: `referred_by=eq.${profile.id}`,
+        },
+        async (payload) => {
+          console.log("Lead realtime update:", payload);
+          // Recargar leads
+          try {
+            const leads = await leadsService.getLeads(profile.id);
+            setLeadsCount(leads.length);
+            
+            // Micro-animación en el tracker
+            const tracker = document.getElementById("lead-tracker");
+            if (tracker) {
+              tracker.classList.add("scale-110", "text-primary");
+              setTimeout(() => tracker.classList.remove("scale-110", "text-primary"), 500);
+            }
+          } catch (error) {
+            console.error("Error reloading leads:", error);
           }
-        )
-        .subscribe();
+        }
+      )
+      .subscribe();
 
-      return () => {
-        supabase.removeChannel(channel);
-      };
+    return () => {
+      supabase.removeChannel(channel);
     };
-
-    setupRealtimeLeads();
   }, [profile?.id]);
 
   const loadData = async () => {
