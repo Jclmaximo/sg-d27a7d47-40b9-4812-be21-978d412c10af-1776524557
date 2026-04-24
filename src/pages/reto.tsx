@@ -11,6 +11,12 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { 
+  Clock, Link2, Copy, Check, TrendingUp, Zap, Users, BookOpen, Lock,
+  Share2, Instagram
+} from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
   id: string;
@@ -28,6 +34,7 @@ interface DailyProtocol {
 
 export default function ZenCommandCenter() {
   const router = useRouter();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [leadsCount, setLeadsCount] = useState(0);
@@ -44,8 +51,29 @@ export default function ZenCommandCenter() {
     { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
   ]);
 
+  // NUEVOS ESTADOS - Sistema de Desbloqueo
+  const [navigationVisible, setNavigationVisible] = useState(false);
+  const [shareCount, setShareCount] = useState(0);
+  const [leadsUnlocked, setLeadsUnlocked] = useState(false);
+  const [resourcesUnlocked, setResourcesUnlocked] = useState(false);
+  const [previousLeadsCount, setPreviousLeadsCount] = useState(0);
+
+  const startChallenge = () => {
+    const now = new Date();
+    const end = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+    
+    setEndTime(end.toISOString());
+    setChallengeActive(false); // Desbloquear contenido
+    setNavigationVisible(true); // Mostrar navegación
+    
+    localStorage.setItem("reto_end_time", end.toISOString());
+    localStorage.setItem("reto_active", "false");
+  };
+
   useEffect(() => {
     loadData();
+    loadChallengeState();
+    loadShareCount();
   }, []);
 
   useEffect(() => {
@@ -56,6 +84,19 @@ export default function ZenCommandCenter() {
       return () => clearInterval(interval);
     }
   }, [challengeActive, timeRemaining]);
+
+  // NUEVO - Detectar primer lead y desbloquear
+  useEffect(() => {
+    if (leadsCount > 0 && previousLeadsCount === 0 && !leadsUnlocked) {
+      setLeadsUnlocked(true);
+      toast({
+        title: "Primer contacto detectado",
+        description: "Módulo de Gestión Activado",
+        duration: 5000,
+      });
+    }
+    setPreviousLeadsCount(leadsCount);
+  }, [leadsCount]);
 
   // Supabase Realtime para leads
   useEffect(() => {
@@ -96,6 +137,34 @@ export default function ZenCommandCenter() {
       supabase.removeChannel(channel);
     };
   }, [profile?.id]);
+
+  // NUEVO - Cargar contador de shares
+  const loadShareCount = () => {
+    const saved = localStorage.getItem("reto_share_count");
+    if (saved) {
+      const count = parseInt(saved, 10);
+      setShareCount(count);
+      if (count >= 5) {
+        setResourcesUnlocked(true);
+      }
+    }
+  };
+
+  // NUEVO - Incrementar shares y verificar unlock
+  const incrementShareCount = () => {
+    const newCount = shareCount + 1;
+    setShareCount(newCount);
+    localStorage.setItem("reto_share_count", newCount.toString());
+
+    if (newCount >= 5 && !resourcesUnlocked) {
+      setResourcesUnlocked(true);
+      toast({
+        title: "Meta alcanzada",
+        description: "Recursos de Marketing desbloqueados",
+        duration: 5000,
+      });
+    }
+  };
 
   const loadData = async () => {
     try {
@@ -168,18 +237,22 @@ export default function ZenCommandCenter() {
     setTimeout(() => setCopiedLink(false), 2000);
   };
 
-  const shareFunnelLink = (platform: "whatsapp" | "instagram") => {
-    const link = `${window.location.origin}/mwr?ref=${profile?.username || ""}`;
-    const text = "✨ Descubre cómo viajar con descuentos exclusivos y ganar dinero recomendando: ";
-    
-    if (platform === "whatsapp") {
-      window.open(`https://wa.me/?text=${encodeURIComponent(text + link)}`, "_blank");
-    } else {
-      // Instagram no permite compartir links directamente, copiamos al portapapeles
-      navigator.clipboard.writeText(text + link);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2000);
-    }
+  const shareToWhatsApp = () => {
+    const funnelUrl = `${window.location.origin}/mwr?ref=${profile?.username || ""}`;
+    const message = encodeURIComponent(`¡Descubre cómo viajar más por menos! ${funnelUrl}`);
+    window.open(`https://wa.me/?text=${message}`, "_blank");
+    incrementShareCount();
+  };
+
+  const shareToInstagram = () => {
+    const funnelUrl = `${window.location.origin}/mwr?ref=${profile?.username || ""}`;
+    navigator.clipboard.writeText(funnelUrl);
+    toast({
+      title: "Link copiado",
+      description: "Pégalo en tu historia de Instagram",
+      duration: 3000,
+    });
+    incrementShareCount();
   };
 
   const formatTime = (seconds: number) => {
@@ -205,11 +278,28 @@ export default function ZenCommandCenter() {
   return (
     <>
       <SEO
-        title="Reto 24H - Zen Command Center"
-        description="Tu centro de comando minimalista para productividad y crecimiento"
+        title="Reto 24 Horas - Zen Command Center"
+        description="Tu centro de comando minimalista para hacer crecer tu negocio en 24 horas"
       />
-      
-      <div className="min-h-screen bg-white">
+
+      <style jsx global>{`
+        @keyframes unlock-pulse {
+          0%, 100% { 
+            transform: scale(1);
+            opacity: 1;
+          }
+          50% { 
+            transform: scale(1.15);
+            opacity: 0.8;
+          }
+        }
+        
+        .unlock-animation {
+          animation: unlock-pulse 0.6s ease-out;
+        }
+      `}</style>
+
+      <div className="min-h-screen bg-white relative overflow-hidden">
         {/* Header minimalista */}
         <header className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
@@ -300,20 +390,18 @@ export default function ZenCommandCenter() {
                     )}
                   </Button>
                 </div>
-                <div className="flex gap-3 mt-3">
+                <div className="flex gap-4 justify-center">
                   <button
-                    onClick={() => shareFunnelLink("whatsapp")}
-                    className="flex-1 h-12 rounded-full border border-gray-200 hover:border-[#25D366] hover:bg-[#25D366]/5 transition-all flex items-center justify-center gap-2 text-sm font-light text-[#1D1D1F]"
+                    onClick={shareToWhatsApp}
+                    className="w-14 h-14 rounded-full bg-[#25D366]/10 hover:bg-[#25D366]/20 flex items-center justify-center transition-all hover:scale-110"
                   >
-                    <Share2 className="w-4 h-4" />
-                    WhatsApp
+                    <Share2 className="w-6 h-6 text-[#25D366] stroke-[1.5]" />
                   </button>
                   <button
-                    onClick={() => shareFunnelLink("instagram")}
-                    className="flex-1 h-12 rounded-full border border-gray-200 hover:border-[#E4405F] hover:bg-[#E4405F]/5 transition-all flex items-center justify-center gap-2 text-sm font-light text-[#1D1D1F]"
+                    onClick={shareToInstagram}
+                    className="w-14 h-14 rounded-full bg-gradient-to-br from-[#833AB4]/10 via-[#E1306C]/10 to-[#F77737]/10 hover:from-[#833AB4]/20 hover:via-[#E1306C]/20 hover:to-[#F77737]/20 flex items-center justify-center transition-all hover:scale-110"
                   >
-                    <Share2 className="w-4 h-4" />
-                    Instagram
+                    <Instagram className="w-6 h-6 text-[#E1306C] stroke-[1.5]" />
                   </button>
                 </div>
               </Card>
@@ -446,6 +534,99 @@ export default function ZenCommandCenter() {
             </div>
           </div>
         )}
+
+      {/* Navigation Dock - Invisible hasta iniciar reto */}
+      <div
+        className={`
+          fixed bottom-8 left-1/2 -translate-x-1/2 z-50
+          transition-all duration-700 ease-out
+          ${navigationVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"}
+        `}
+      >
+        <div className="backdrop-blur-xl bg-white/80 border border-gray-100/20 rounded-2xl shadow-2xl px-4 py-3">
+          <div className="flex items-center gap-2">
+            {/* Centro de Comando - Siempre activo */}
+            <button
+              onClick={() => router.push("/reto")}
+              className="group relative p-4 rounded-xl hover:bg-white/50 transition-all"
+            >
+              <Zap className="w-6 h-6 text-[#2563EB] stroke-[1.5]" />
+              <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                Centro de Comando
+              </span>
+            </button>
+
+            {/* Divisor */}
+            <div className="w-px h-8 bg-gray-200/50" />
+
+            {/* Gestión de Leads - Bloqueado hasta primer lead */}
+            <button
+              onClick={() => {
+                if (leadsUnlocked) {
+                  router.push("/admin/main-dashboard?tab=leads");
+                }
+              }}
+              disabled={!leadsUnlocked}
+              className={`
+                group relative p-4 rounded-xl transition-all
+                ${leadsUnlocked 
+                  ? "hover:bg-white/50 cursor-pointer" 
+                  : "opacity-30 cursor-not-allowed"
+                }
+              `}
+            >
+              {!leadsUnlocked && (
+                <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400" />
+              )}
+              <Users className={`w-6 h-6 stroke-[1.5] ${leadsUnlocked ? "text-[#2563EB]" : "text-gray-400"}`} />
+              {leadsUnlocked && (
+                <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                  Gestión de Leads
+                </span>
+              )}
+              {!leadsUnlocked && (
+                <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
+                  Bloqueado<br/>Necesitas 1 lead
+                </span>
+              )}
+            </button>
+
+            {/* Divisor */}
+            <div className="w-px h-8 bg-gray-200/50" />
+
+            {/* Bóveda de Recursos - Bloqueado hasta 5 shares */}
+            <button
+              onClick={() => {
+                if (resourcesUnlocked) {
+                  router.push("/admin/recursos");
+                }
+              }}
+              disabled={!resourcesUnlocked}
+              className={`
+                group relative p-4 rounded-xl transition-all
+                ${resourcesUnlocked 
+                  ? "hover:bg-white/50 cursor-pointer" 
+                  : "opacity-30 cursor-not-allowed"
+                }
+              `}
+            >
+              {!resourcesUnlocked && (
+                <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400" />
+              )}
+              <BookOpen className={`w-6 h-6 stroke-[1.5] ${resourcesUnlocked ? "text-[#2563EB]" : "text-gray-400"}`} />
+              {resourcesUnlocked && (
+                <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                  Bóveda de Recursos
+                </span>
+              )}
+              {!resourcesUnlocked && (
+                <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
+                  Bloqueado<br/>{shareCount}/5 compartidos
+                </span>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
     </>
   );
