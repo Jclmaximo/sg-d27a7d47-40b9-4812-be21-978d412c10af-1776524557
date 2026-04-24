@@ -143,7 +143,7 @@ export default function ZenCommandCenter() {
     if (profile?.id) {
       const protocol = protocols.find((p) => p.id === id);
       if (protocol) {
-        await productivityService.saveActivity(profile.id, {
+        await productivityService.saveDailyActivity(profile.id, {
           contacted_prospects: protocol.id === "1",
           posted_content: protocol.id === "2",
           did_followup: protocol.id === "3",
