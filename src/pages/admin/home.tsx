@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
+import { supabase } from "@/integrations/supabase/client";
 import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
 import { referralService } from "@/services/referralService";
@@ -70,12 +71,18 @@ export default function AdminHome() {
         return;
       }
 
-      const profileData = await authService.getUserProfile(session.user.id);
-      if (!profileData) {
+      // Fetch user profile directly via supabase since getUserProfile is not in authService
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (profileError || !profileData) {
         router.push("/admin");
         return;
       }
-      setProfile(profileData);
+      setProfile(profileData as UserProfile);
 
       // Load dashboard stats
       await loadDashboardStats(session.user.id);
@@ -92,7 +99,7 @@ export default function AdminHome() {
   const loadDashboardStats = async (userId: string) => {
     try {
       // Leads today
-      const leads = await leadsService.getLeadsByUserId(userId);
+      const leads = await leadsService.getLeads(userId);
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const leadsToday = leads.filter(lead => {
@@ -101,9 +108,9 @@ export default function AdminHome() {
         return leadDate.getTime() === today.getTime();
       }).length;
 
-      // Commissions this month
+      // Commissions this month (sum of amount_usd)
       const commissions = await referralService.getUserCommissions(userId);
-      const commissionsMonth = commissions?.pending_amount || 0;
+      const commissionsMonth = commissions?.reduce((sum, c) => sum + Number(c.amount_usd), 0) || 0;
 
       // Active prospects (leads with status != converted)
       const activeProspects = leads.filter(
@@ -122,7 +129,7 @@ export default function AdminHome() {
 
   const loadTodayActivities = async (userId: string) => {
     try {
-      const leads = await leadsService.getLeadsByUserId(userId);
+      const leads = await leadsService.getLeads(userId);
       const todayActivities: TodayActivity[] = [];
 
       // New leads to contact
