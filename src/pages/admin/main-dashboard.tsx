@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
 import { 
@@ -1856,7 +1856,7 @@ Puedo resolver dudas sobre:
                                   >
                                     <td className="py-3 px-4">
                                       <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
                                           {member.full_name?.charAt(0) || "U"}
                                         </div>
                                         <span className="font-medium text-[#0F172A]">
