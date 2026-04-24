@@ -269,7 +269,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Of Oferta válida: Últimos días
+⏰ Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -1664,7 +1664,7 @@ Puedo resolver dudas sobre:
               </TabsContent>
 
               {/* TAB 6 - PERFIL */}
-              <TabsContent value="profile" className="space-y-6">
+              <TabsContent value="perfil" className="space-y-6">
                 <Card className="bg-white border border-[#E5E7EB] shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-lg font-semibold text-[#0F172A]">Información Personal</CardTitle>
@@ -1737,7 +1737,7 @@ Puedo resolver dudas sobre:
                             onClick={() => {
                               navigator.clipboard.writeText(profile?.username || "");
                             }}
-                            className="border-[#E2E8F0] hover:border-primary hover:bg-[#F8FAFC]"
+                            className="border-[#E2E8F0] hover:border-primary hover:bg-[#F1F5F9] transition-all"
                           >
                             <Copy className="w-4 h-4" />
                           </Button>
@@ -1767,8 +1767,41 @@ Puedo resolver dudas sobre:
                 </Card>
               </TabsContent>
 
-              {/* TAB 7 - EQUIPO (SOLO ADMIN) */}
-              <TabsContent value="team" className="space-y-6">
+              {/* TAB 7 - RECURSOS */}
+              <TabsContent value="recursos" className="space-y-6">
+                <Card className="bg-white border border-[#E5E7EB] shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="text-lg font-semibold text-[#0F172A] flex items-center gap-2">
+                      <Gift className="w-5 h-5 text-primary" />
+                      Recursos de Marketing
+                    </CardTitle>
+                    <CardDescription className="text-[#64748B]">
+                      Materiales para promocionar Travel Advantage
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center py-12">
+                      <Gift className="w-16 h-16 text-primary mx-auto mb-4 opacity-50" />
+                      <h3 className="text-lg font-semibold text-[#0F172A] mb-2">
+                        Próximamente
+                      </h3>
+                      <p className="text-[#475569] mb-6 max-w-md mx-auto">
+                        Esta sección contendrá imágenes, copys y materiales de marketing para compartir en redes sociales.
+                      </p>
+                      <Button
+                        onClick={() => router.push("/admin/recursos")}
+                        className="bg-primary hover:bg-primary/90 text-white shadow-sm"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Ver página completa de recursos
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* TAB 8 - EQUIPO */}
+              <TabsContent value="equipo" className="space-y-6">
                 {profile?.role === "admin" ? (
                   <>
                     <Card className="bg-white border border-[#E5E7EB] shadow-sm">
