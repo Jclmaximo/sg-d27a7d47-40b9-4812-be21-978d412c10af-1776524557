@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/integrations/supabase/client";
 import { SEO } from "@/components/SEO";
-import { CheckCircle, Copy, Check } from "lucide-react";
+import { CheckCircle, Copy, Check, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { disruptiveService } from "@/services/disruptiveService";
 
 export default function Checkout() {
   const router = useRouter();
@@ -14,12 +15,19 @@ export default function Checkout() {
   const [discountApplied, setDiscountApplied] = useState(false);
   const [finalPrice, setFinalPrice] = useState(29);
   const [copied, setCopied] = useState(false);
-
-  const CRYPTO_WALLET = "TQVu3v9PLL2KckXRJDW1fKJ7PHoNmi8rSr";
+  const [paymentAddress, setPaymentAddress] = useState("");
+  const [paymentQR, setPaymentQR] = useState("");
+  const [creatingPayment, setCreatingPayment] = useState(false);
 
   useEffect(() => {
     checkUser();
   }, []);
+
+  useEffect(() => {
+    if (user && !paymentAddress) {
+      createDisruptivePayment();
+    }
+  }, [user]);
 
   const checkUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -31,12 +39,65 @@ export default function Checkout() {
     setLoading(false);
   };
 
+  const createDisruptivePayment = async () => {
+    if (creatingPayment) return;
+    
+    setCreatingPayment(true);
+    
+    try {
+      const payment = await disruptiveService.createPayment({
+        amount: finalPrice,
+        currency: "USDT",
+        network: "BSC",
+        orderId: `order_${Date.now()}`,
+        customerEmail: user.email,
+        description: "Sistema MWR - Primer mes",
+        metadata: {
+          userId: user.id,
+          discountCode: discountApplied ? discountCode : null
+        }
+      });
+
+      console.log("✅ Disruptive payment created:", payment);
+      
+      setPaymentAddress(payment.address || "");
+      setPaymentQR(payment.qrCode || "");
+
+      // Save payment record
+      await disruptiveService.savePaymentRecord({
+        userId: user.id,
+        paymentId: payment.paymentId,
+        amount: finalPrice,
+        currency: "USDT",
+        network: "BSC",
+        status: "pending",
+        discountCode: discountApplied ? discountCode : undefined
+      });
+
+      toast({
+        title: "✅ Pago creado",
+        description: "Dirección de pago generada exitosamente"
+      });
+    } catch (error) {
+      console.error("❌ Error creating Disruptive payment:", error);
+      toast({
+        title: "❌ Error",
+        description: "No se pudo generar la dirección de pago. Intenta de nuevo.",
+        variant: "destructive"
+      });
+    } finally {
+      setCreatingPayment(false);
+    }
+  };
+
   const handleCopyWallet = () => {
-    navigator.clipboard.writeText(CRYPTO_WALLET);
+    if (!paymentAddress) return;
+    
+    navigator.clipboard.writeText(paymentAddress);
     setCopied(true);
     toast({
       title: "✅ Dirección copiada",
-      description: "La dirección de la wallet ha sido copiada al portapapeles"
+      description: "La dirección de pago ha sido copiada al portapapeles"
     });
     setTimeout(() => setCopied(false), 2000);
   };
@@ -49,6 +110,11 @@ export default function Checkout() {
         title: "✅ Descuento aplicado",
         description: "¡Has ahorrado $10 USD!"
       });
+      // Recreate payment with new price
+      if (user) {
+        setPaymentAddress("");
+        createDisruptivePayment();
+      }
     } else {
       toast({
         title: "❌ Código inválido",
@@ -170,67 +236,109 @@ export default function Checkout() {
             {/* Crypto Payment */}
             <div className="space-y-4 pt-4 border-t border-gray-100">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-xl">₮</span>
+                <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xl font-bold">₮</span>
                 </div>
                 <div>
-                  <p className="font-semibold text-gray-900">Pago con USDT (TRC20)</p>
-                  <p className="text-sm text-gray-600">Transferencia rápida y segura</p>
+                  <p className="font-semibold text-gray-900">Pago con USDT (BSC/BEP20)</p>
+                  <p className="text-sm text-gray-600">Binance Smart Chain</p>
                 </div>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-4 space-y-3">
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-2">
-                    Dirección de la wallet
-                  </label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={CRYPTO_WALLET}
-                      readOnly
-                      className="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-mono text-gray-900"
-                    />
+                {creatingPayment ? (
+                  <div className="text-center py-8">
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-primary mb-3" />
+                    <p className="text-sm text-gray-600">Generando dirección de pago...</p>
+                  </div>
+                ) : paymentAddress ? (
+                  <>
+                    {paymentQR && (
+                      <div className="text-center">
+                        <img src={paymentQR} alt="QR Code" className="mx-auto w-48 h-48" />
+                      </div>
+                    )}
+                    
+                    <div>
+                      <label className="block text-xs font-medium text-gray-600 mb-2">
+                        Dirección de pago (BSC/BEP20)
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={paymentAddress}
+                          readOnly
+                          className="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-mono text-gray-900"
+                        />
+                        <button
+                          onClick={handleCopyWallet}
+                          className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors flex items-center gap-2"
+                        >
+                          {copied ? (
+                            <>
+                              <Check className="w-4 h-4" />
+                              <span className="text-sm hidden sm:inline">Copiado</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-4 h-4" />
+                              <span className="text-sm hidden sm:inline">Copiar</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                      <p className="text-xs text-yellow-800">
+                        <span className="font-semibold">Importante:</span> Envía exactamente ${finalPrice}.00 USDT (BSC/BEP20) a esta dirección. Tu cuenta se activará automáticamente al confirmar el pago.
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-sm text-gray-600">Error al generar dirección de pago</p>
                     <button
-                      onClick={handleCopyWallet}
-                      className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors flex items-center gap-2"
+                      onClick={createDisruptivePayment}
+                      className="mt-3 text-primary hover:text-primary/80 text-sm font-medium"
                     >
-                      {copied ? (
-                        <>
-                          <Check className="w-4 h-4" />
-                          <span className="text-sm hidden sm:inline">Copiado</span>
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-4 h-4" />
-                          <span className="text-sm hidden sm:inline">Copiar</span>
-                        </>
-                      )}
+                      Reintentar
                     </button>
                   </div>
-                </div>
-
-                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                  <p className="text-xs text-yellow-800">
-                    <span className="font-semibold">Importante:</span> Envía exactamente ${finalPrice}.00 USDT a esta dirección. Tu cuenta se activará automáticamente al confirmar el pago.
-                  </p>
-                </div>
+                )}
               </div>
             </div>
 
             {/* CTA Button */}
             <button
               onClick={() => {
+                if (!paymentAddress) {
+                  toast({
+                    title: "⚠️ Esperando dirección de pago",
+                    description: "Por favor espera mientras generamos tu dirección de pago"
+                  });
+                  return;
+                }
+                
                 toast({
-                  title: "✅ Sistema activado",
-                  description: "Tu cuenta ha sido activada exitosamente"
+                  title: "⏳ Esperando confirmación de pago",
+                  description: "Envía el pago y tu cuenta se activará automáticamente"
                 });
-                setTimeout(() => router.push("/admin/main-dashboard"), 1500);
               }}
-              className="w-full bg-primary hover:bg-primary/90 text-white py-5 rounded-xl font-semibold text-lg transition-colors shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              disabled={creatingPayment || !paymentAddress}
+              className="w-full bg-primary hover:bg-primary/90 text-white py-5 rounded-xl font-semibold text-lg transition-colors shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
-              Activar mi sistema ahora
-              <span>→</span>
+              {creatingPayment ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Generando pago...
+                </>
+              ) : (
+                <>
+                  Confirmar pago
+                  <span>→</span>
+                </>
+              )}
             </button>
 
             {/* Trust Elements */}
