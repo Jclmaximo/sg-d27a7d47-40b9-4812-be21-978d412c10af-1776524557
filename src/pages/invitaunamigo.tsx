@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { leadsService } from "@/services/leadsService";
 import { SEO } from "@/components/SEO";
 import { ArrowRight } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Profile {
   id: string;
@@ -22,6 +23,7 @@ export default function InvitaUnAmigo() {
   const [referrerId, setReferrerId] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   // NUEVOS ESTADOS - Registro por pasos
   const [fullName, setFullName] = useState("");
@@ -73,33 +75,7 @@ export default function InvitaUnAmigo() {
     }
   }, [step]);
 
-  // PASO 4: Cronómetro countdown
-  useEffect(() => {
-    if (step === 4) {
-      const endTime = new Date(Date.now() + 24 * 60 * 60 * 1000);
-      
-      const interval = setInterval(() => {
-        const now = new Date().getTime();
-        const distance = endTime.getTime() - now;
-
-        if (distance < 0) {
-          clearInterval(interval);
-          setTimeRemaining("00:00:00");
-          return;
-        }
-
-        const hours = Math.floor(distance / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        setTimeRemaining(
-          `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
-        );
-      }, 1000);
-
-      return () => clearInterval(interval);
-    }
-  }, [step]);
+  // PASO 4: Cronómetro countdown (Eliminado, usamos visual estático en paso 7)
 
   const handleAcceptChallenge = () => {
     setStep(3);
