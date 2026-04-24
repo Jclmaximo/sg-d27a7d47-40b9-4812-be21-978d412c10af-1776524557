@@ -50,8 +50,8 @@ export default function AdminPage() {
         return;
       }
 
-      // Redirect to home dashboard after successful login
-      router.push("/admin/home");
+      // Redirect to welcome page after successful login
+      router.push("/admin/welcome");
     } catch (err) {
       console.error("Login error:", err);
       setError("Error al iniciar sesión");
