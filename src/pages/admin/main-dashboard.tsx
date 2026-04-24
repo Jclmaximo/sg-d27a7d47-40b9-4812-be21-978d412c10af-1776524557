@@ -1053,9 +1053,9 @@ Puedo resolver dudas sobre:
 
                               {/* Info Grid */}
                               <div className="grid sm:grid-cols-2 gap-3 text-sm">
-                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB]">
+                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB] min-w-0">
                                   <Mail className="w-4 h-4 text-primary shrink-0" />
-                                  <span className="text-[#0F172A] truncate font-medium">{lead.email}</span>
+                                  <span className="text-[#0F172A] truncate font-medium min-w-0">{lead.email}</span>
                                 </div>
                                 <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB]">
                                   <Phone className="w-4 h-4 text-primary shrink-0" />
