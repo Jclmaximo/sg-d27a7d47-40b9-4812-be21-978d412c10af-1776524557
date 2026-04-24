@@ -296,7 +296,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Of válida: Últimos días
+⏰ Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -1023,14 +1023,6 @@ Puedo resolver dudas sobre:
                       </div>
                     ) : (
                       <div className="space-y-4">
-                        <div>
-                          <Label className="text-sm font-semibold text-[#0F172A] mb-2 block">Tu Link de Referidos</Label>
-                          <div className="bg-white rounded-lg p-4 border border-[#E5E7EB]">
-                            <code className="text-sm text-primary font-mono break-all">
-                              {typeof window !== "undefined" ? `${window.location.origin}/mwr?ref=${profile?.username || ""}` : "Cargando..."}
-                            </code>
-                          </div>
-                        </div>
                         {leads.map((lead) => (
                           <div
                             key={lead.id}
@@ -1205,7 +1197,9 @@ Puedo resolver dudas sobre:
                     {networkMembers.length === 0 ? (
                       <div className="text-center py-12 bg-[#F8FAFC] rounded-lg border border-[#E5E7EB]">
                         <Network className="w-12 h-12 text-[#64748B] mx-auto mb-3" />
-                        <p className="text-[#64748B] mb-6">Aún no tienes referidos en tu red</p>
+                        <p className="text-[#64748B]">
+                          Aún no tienes referidos en tu red
+                        </p>
                         <Button 
                           onClick={() => setActiveTab("links")}
                           className="bg-primary hover:bg-primary/90 text-white shadow-sm"
