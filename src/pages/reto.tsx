@@ -46,7 +46,6 @@ export default function ZenCommandCenter() {
 
   useEffect(() => {
     loadData();
-    setupRealtimeLeads();
   }, []);
 
   useEffect(() => {
@@ -57,6 +56,37 @@ export default function ZenCommandCenter() {
       return () => clearInterval(interval);
     }
   }, [challengeActive, timeRemaining]);
+
+  // Supabase Realtime para leads
+  useEffect(() => {
+    if (!profile?.id) return;
+
+    const setupRealtimeLeads = async () => {
+      const channel = supabase
+        .channel("leads-realtime")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "leads",
+            filter: `referred_by=eq.${profile.id}`,
+          },
+          (payload) => {
+            console.log("Lead realtime update:", payload);
+            // Recargar leads del día
+            loadTodayLeads();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    };
+
+    setupRealtimeLeads();
+  }, [profile?.id]);
 
   const loadData = async () => {
     try {
@@ -88,39 +118,6 @@ export default function ZenCommandCenter() {
       console.error("Error loading data:", error);
       setLoading(false);
     }
-  };
-
-  const setupRealtimeLeads = async () => {
-    const session = await authService.getCurrentSession();
-    if (!session) return;
-
-    const channel = supabase
-      .channel("leads-realtime")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "leads",
-          filter: `referred_by=eq.${session.user.id}`,
-        },
-        async () => {
-          const leads = await leadsService.getLeads(session.user.id);
-          setLeadsCount(leads.length);
-          
-          // Micro-animación al recibir nuevo lead
-          const tracker = document.getElementById("lead-tracker");
-          if (tracker) {
-            tracker.classList.add("animate-pulse");
-            setTimeout(() => tracker.classList.remove("animate-pulse"), 1000);
-          }
-        }
-      )
-      .subscribe();
-
-    return () => {
-      supabase.removeChannel(channel);
-    };
   };
 
   const toggleProtocol = async (id: string) => {
