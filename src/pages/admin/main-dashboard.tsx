@@ -50,7 +50,8 @@ import {
   Plus,
   Gift,
   CheckCircle,
-  Hand
+  Hand,
+  ArrowRight
 } from "lucide-react";
 
 interface Lead {
@@ -721,6 +722,10 @@ Puedo resolver dudas sobre:
                   <Users className="w-4 h-4 mr-2" />
                   <span className="hidden sm:inline">Mi Red</span>
                 </TabsTrigger>
+                <TabsTrigger value="productividad">
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  <span className="hidden sm:inline">Productividad</span>
+                </TabsTrigger>
                 <TabsTrigger value="links">
                   <Link2 className="w-4 h-4 mr-2" />
                   Links
@@ -736,6 +741,12 @@ Puedo resolver dudas sobre:
                   <Gift className="w-4 h-4 mr-2" />
                   <span className="hidden sm:inline">Recursos</span>
                 </TabsTrigger>
+                {profile?.role === "admin" && (
+                  <TabsTrigger value="equipo">
+                    <Users className="w-4 h-4 mr-2" />
+                    <span className="hidden sm:inline">Equipo</span>
+                  </TabsTrigger>
+                )}
               </TabsList>
 
               {/* TAB 1 - RESUMEN */}
@@ -757,32 +768,26 @@ Puedo resolver dudas sobre:
                   </Card>
 
                   <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/30 shadow-xl shadow-secondary/20 hover:shadow-2xl hover:shadow-secondary/30 hover:border-secondary/50 transition-all">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                        <TrendingUp className="w-5 h-5 text-secondary" />
-                        Disponible para Retiro
-                      </CardTitle>
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Nuevos</CardTitle>
+                      <Clock className="w-5 h-5 text-accent" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-1">
-                        ${(stats?.available_balance ?? 0).toFixed(2)}
+                      <div className="text-4xl font-bold text-foreground">
+                        {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
                       </div>
-                      <p className="text-xs text-muted-foreground">Listo para retirar</p>
                     </CardContent>
                   </Card>
 
                   <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/30 shadow-xl shadow-accent/20 hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/50 transition-all">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
-                        <Users className="w-5 h-5 text-accent" />
-                        Referidos Activos
-                      </CardTitle>
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground">Contactados</CardTitle>
+                      <MessageSquare className="w-5 h-5 text-primary" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-1">
-                        {stats?.total_referrals ?? 0}
+                      <div className="text-4xl font-bold text-foreground">
+                        {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
                       </div>
-                      <p className="text-xs text-muted-foreground">En tu red</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -1379,6 +1384,291 @@ Puedo resolver dudas sobre:
                   </CardContent>
                 </Card>
               </TabsContent>
+
+              {/* TAB 6 - PRODUCTIVIDAD */}
+              <TabsContent value="productividad" className="space-y-6">
+                <div className="space-y-2">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400 bg-clip-text text-transparent">
+                    Productividad
+                  </h2>
+                  <p className="text-muted-foreground">Mide tu actividad diaria y tu crecimiento</p>
+                </div>
+
+                <div className="grid gap-6 lg:grid-cols-2">
+                  {/* MI DÍA - Card Principal */}
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <CheckCircle className="w-5 h-5 text-primary" />
+                        Mi Día
+                      </CardTitle>
+                      <CardDescription>Registra tu actividad diaria</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {[
+                        { label: "Contacté prospectos", points: 3 },
+                        { label: "Hice seguimiento", points: 2 },
+                        { label: "Presenté el negocio", points: 5 },
+                        { label: "Publiqué contenido", points: 3 },
+                        { label: "Me conecté a entrenamiento", points: 2 }
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-background/50 border border-border/30 hover:border-primary/30 transition-colors">
+                          <input
+                            type="checkbox"
+                            className="w-5 h-5 rounded border-primary/50 text-primary focus:ring-2 focus:ring-primary/50 cursor-pointer"
+                          />
+                          <span className="flex-1 text-sm font-medium">{item.label}</span>
+                          <input
+                            type="number"
+                            min="0"
+                            placeholder="0"
+                            className="w-16 px-2 py-1 text-sm text-center bg-background border border-border/30 rounded-md focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                          />
+                          <span className="text-xs text-muted-foreground">+{item.points}pts</span>
+                        </div>
+                      ))}
+
+                      <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg shadow-blue-500/20">
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        Guardar Actividad
+                      </Button>
+                    </CardContent>
+                  </Card>
+
+                  {/* PUNTOS Y RACHA */}
+                  <div className="space-y-6">
+                    {/* Puntos del Día */}
+                    <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/30 shadow-xl shadow-secondary/20">
+                      <CardHeader>
+                        <CardTitle className="text-sm font-medium text-muted-foreground">Puntos de hoy</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
+                          9 <span className="text-2xl text-muted-foreground">/ 15</span>
+                        </div>
+                        
+                        {/* Barra de Progreso */}
+                        <div className="space-y-2">
+                          <div className="h-3 bg-background/50 rounded-full overflow-hidden">
+                            <div 
+                              className="h-full bg-gradient-to-r from-blue-500 via-cyan-500 to-green-500 rounded-full transition-all duration-500"
+                              style={{ width: "60%" }}
+                            ></div>
+                          </div>
+                          <div className="flex justify-between text-xs text-muted-foreground">
+                            <span>Bajo</span>
+                            <span className="font-semibold text-cyan-400">En ritmo</span>
+                            <span>Alto rendimiento</span>
+                          </div>
+                        </div>
+
+                        {/* Estado Badge */}
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/20 border border-cyan-500/30 shadow-lg shadow-cyan-500/10">
+                          <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
+                          <span className="text-sm font-semibold text-cyan-400">En ritmo</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    {/* Racha */}
+                    <Card className="bg-gradient-to-br from-orange-900/20 to-red-900/20 backdrop-blur-sm border-orange-500/30 shadow-xl shadow-orange-500/10">
+                      <CardContent className="pt-6">
+                        <div className="flex items-center gap-3">
+                          <div className="text-4xl">🔥</div>
+                          <div>
+                            <div className="text-3xl font-bold text-orange-400">3 días</div>
+                            <p className="text-sm text-orange-300/70">seguidos activo</p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                {/* RESUMEN SEMANAL */}
+                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/30 shadow-xl shadow-accent/20">
+                  <CardHeader>
+                    <CardTitle>Resumen Semanal</CardTitle>
+                    <CardDescription>Tu actividad de los últimos 7 días</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                      <div className="p-4 rounded-lg bg-background/50 border border-border/30">
+                        <p className="text-sm text-muted-foreground">Días activos</p>
+                        <p className="text-2xl font-bold text-green-400">4/7</p>
+                      </div>
+                      <div className="p-4 rounded-lg bg-background/50 border border-border/30">
+                        <p className="text-sm text-muted-foreground">Total acciones</p>
+                        <p className="text-2xl font-bold">28</p>
+                      </div>
+                      <div className="p-4 rounded-lg bg-background/50 border border-border/30">
+                        <p className="text-sm text-muted-foreground">Promedio diario</p>
+                        <p className="text-2xl font-bold text-cyan-400">7</p>
+                      </div>
+                      <div className="p-4 rounded-lg bg-background/50 border border-border/30">
+                        <p className="text-sm text-muted-foreground">Mejor día</p>
+                        <p className="text-2xl font-bold text-purple-400">12</p>
+                      </div>
+                    </div>
+
+                    {/* Gráfica de Barras */}
+                    <div className="flex items-end justify-between gap-2 h-40 p-4 rounded-lg bg-background/30">
+                      {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day, idx) => {
+                        const heights = [60, 80, 40, 90, 70, 0, 0];
+                        const colors = ["bg-green-500", "bg-green-500", "bg-blue-500", "bg-green-500", "bg-blue-500", "bg-gray-600", "bg-gray-600"];
+                        return (
+                          <div key={idx} className="flex-1 flex flex-col items-center gap-2">
+                            <div 
+                              className={`w-full rounded-t ${colors[idx]} transition-all duration-500 hover:opacity-80`}
+                              style={{ height: `${heights[idx]}%` }}
+                            ></div>
+                            <span className="text-xs text-muted-foreground">{day}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* ACCIÓN RÁPIDA */}
+                <Card className="bg-gradient-to-br from-primary/10 to-accent/10 border-primary/30">
+                  <CardContent className="pt-6">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                      <div>
+                        <h3 className="text-lg font-semibold mb-1">Mantén el momentum</h3>
+                        <p className="text-sm text-muted-foreground">
+                          Registra tu actividad diaria y mantente en crecimiento constante
+                        </p>
+                      </div>
+                      <Button size="lg" className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg shadow-blue-500/20">
+                        Registrar hoy
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* TAB 7 - EQUIPO (SOLO ADMIN) */}
+              {profile?.role === "admin" && (
+                <TabsContent value="equipo" className="space-y-6">
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400 bg-clip-text text-transparent">
+                      Productividad del Equipo
+                    </h2>
+                    <p className="text-muted-foreground">Monitorea el desempeño de tu equipo</p>
+                  </div>
+
+                  {/* TOP DEL EQUIPO */}
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        🔥 Top del Equipo
+                      </CardTitle>
+                      <CardDescription>Los más activos esta semana</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {[
+                          { name: "Carlos Martínez", percent: 98, days: 7, isUser: false },
+                          { name: "Ana López", percent: 87, days: 6, isUser: false },
+                          { name: "Pedro Sánchez", percent: 75, days: 5, isUser: false },
+                          { name: profile?.full_name || "Tú", percent: 60, days: 4, isUser: true },
+                          { name: "María García", percent: 45, days: 3, isUser: false }
+                        ].map((member, idx) => (
+                          <div
+                            key={idx}
+                            className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
+                              member.isUser
+                                ? "bg-primary/10 border-2 border-primary/50 shadow-lg shadow-primary/20"
+                                : "bg-background/50 border border-border/30 hover:border-primary/30"
+                            }`}
+                          >
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                              idx === 0 ? "bg-yellow-500 text-yellow-900" :
+                              idx === 1 ? "bg-gray-400 text-gray-900" :
+                              idx === 2 ? "bg-orange-600 text-orange-100" :
+                              "bg-gray-700 text-gray-300"
+                            }`}>
+                              {idx + 1}
+                            </div>
+                            <div className="flex-1">
+                              <p className="font-semibold">{member.name}</p>
+                              <p className="text-sm text-muted-foreground">{member.days} días activos</p>
+                            </div>
+                            <div className="text-right">
+                              <p className={`text-2xl font-bold ${
+                                member.percent >= 80 ? "text-green-400" :
+                                member.percent >= 50 ? "text-yellow-400" :
+                                "text-red-400"
+                              }`}>
+                                {member.percent}%
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  {/* TABLA DE PRODUCTIVIDAD */}
+                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-border/30">
+                    <CardHeader>
+                      <CardTitle>Equipo Completo</CardTitle>
+                      <CardDescription>Vista detallada de todos los miembros</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="overflow-x-auto">
+                        <table className="w-full">
+                          <thead>
+                            <tr className="border-b border-border/30">
+                              <th className="text-left p-3 text-sm font-medium text-muted-foreground">Nombre</th>
+                              <th className="text-center p-3 text-sm font-medium text-muted-foreground">% Cumplimiento</th>
+                              <th className="text-center p-3 text-sm font-medium text-muted-foreground">Días Activos</th>
+                              <th className="text-center p-3 text-sm font-medium text-muted-foreground">Puntos</th>
+                              <th className="text-left p-3 text-sm font-medium text-muted-foreground">Última Actividad</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {[
+                              { name: "Carlos Martínez", percent: 98, days: 7, points: 142, lastActive: "Hace 2 horas", status: "active" },
+                              { name: "Ana López", percent: 87, days: 6, points: 128, lastActive: "Hace 5 horas", status: "active" },
+                              { name: "Pedro Sánchez", percent: 75, days: 5, points: 95, lastActive: "Hace 1 día", status: "medium" },
+                              { name: "María García", percent: 45, days: 3, points: 67, lastActive: "Hace 2 días", status: "low" },
+                              { name: "Juan Pérez", percent: 30, days: 2, points: 42, lastActive: "Hace 3 días", status: "inactive" }
+                            ].map((member, idx) => (
+                              <tr key={idx} className="border-b border-border/20 hover:bg-background/50 transition-colors cursor-pointer">
+                                <td className="p-3">
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-2 h-2 rounded-full ${
+                                      member.status === "active" ? "bg-green-500" :
+                                      member.status === "medium" ? "bg-yellow-500" :
+                                      "bg-red-500"
+                                    }`}></div>
+                                    <span className="font-medium">{member.name}</span>
+                                  </div>
+                                </td>
+                                <td className="p-3 text-center">
+                                  <span className={`font-bold ${
+                                    member.percent >= 80 ? "text-green-400" :
+                                    member.percent >= 50 ? "text-yellow-400" :
+                                    "text-red-400"
+                                  }`}>
+                                    {member.percent}%
+                                  </span>
+                                </td>
+                                <td className="p-3 text-center">{member.days}/7</td>
+                                <td className="p-3 text-center font-semibold">{member.points}</td>
+                                <td className="p-3 text-sm text-muted-foreground">{member.lastActive}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              )}
             </Tabs>
 
             {/* Dialog para agregar nota */}
