@@ -1,285 +1,70 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { SEO } from "@/components/SEO";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Loader2, CheckCircle2, Shield, Lock, Zap, Copy, ExternalLink, AlertCircle } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { disruptiveService } from "@/services/disruptiveService";
-import { subscriptionService } from "@/services/subscriptionService";
-import { referralService } from "@/services/referralService";
-import { discountService } from "@/services/discountService";
-import type { Database } from "@/integrations/supabase/types";
+import { SEO } from "@/components/SEO";
+import { CheckCircle, Copy, Check } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
-type MWRLead = Database["public"]["Tables"]["mwr_leads"]["Row"];
-
-export default function CheckoutPage() {
+export default function Checkout() {
   const router = useRouter();
   const { toast } = useToast();
-  const { lead_id } = router.query;
-  
-  const [loading, setLoading] = useState(false);
-  const [paymentCreated, setPaymentCreated] = useState(false);
-  const [checkingPayment, setCheckingPayment] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [discountCode, setDiscountCode] = useState("");
-  const [discountApplied, setDiscountApplied] = useState<{ percentage: number; code: string } | null>(null);
-  const [leadData, setLeadData] = useState<MWRLead | null>(null);
-  const [loadingLead, setLoadingLead] = useState(true);
-  
-  const [paymentData, setPaymentData] = useState<{
-    paymentId: string;
-    address: string;
-    amount: number;
-    qrCode?: string;
-  } | null>(null);
+  const [discountApplied, setDiscountApplied] = useState(false);
+  const [finalPrice, setFinalPrice] = useState(29);
+  const [copied, setCopied] = useState(false);
 
-  const INITIAL_PRICE = 29.00;
-  const finalPrice = discountApplied 
-    ? disruptiveService.calculateDiscountedPrice(INITIAL_PRICE, discountApplied.percentage)
-    : INITIAL_PRICE;
+  const CRYPTO_WALLET = "TQVu3v9PLL2KckXRJDW1fKJ7PHoNmi8rSr";
 
-  // Fetch lead data from mwr_leads table
   useEffect(() => {
-    const fetchLead = async () => {
-      if (!lead_id || typeof lead_id !== 'string') {
-        setLoadingLead(false);
-        return;
-      }
+    checkUser();
+  }, []);
 
-      try {
-        const { data, error } = await supabase
-          .from("mwr_leads")
-          .select("*")
-          .eq("id", lead_id)
-          .single();
-
-        if (error) {
-          console.error("Error fetching lead:", error);
-          toast({
-            title: "Error",
-            description: "No se pudo cargar la información del registro",
-            variant: "destructive"
-          });
-        } else {
-          setLeadData(data);
-        }
-      } catch (err) {
-        console.error("Error fetching lead:", err);
-      } finally {
-        setLoadingLead(false);
-      }
-    };
-
-    fetchLead();
-  }, [lead_id]);
-
-  const applyDiscount = async () => {
-    if (!discountCode.trim()) {
-      toast({
-        title: "Error",
-        description: "Por favor ingresa un código de descuento",
-        variant: "destructive"
-      });
+  const checkUser = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      router.push("/registro");
       return;
     }
+    setUser(user);
+    setLoading(false);
+  };
 
-    try {
-      const discount = await discountService.validateDiscountCode(discountCode.trim());
-      
-      if (discount.valid && discount.discount) {
-        setDiscountApplied({
-          percentage: discount.discount.discount_percentage,
-          code: discountCode.trim()
-        });
-        toast({
-          title: "¡Código aplicado!",
-          description: `Descuento del ${discount.discount.discount_percentage}% aplicado`,
-        });
-      } else {
-        toast({
-          title: "Código inválido",
-          description: discount.error || "El código no existe o ya expiró",
-          variant: "destructive"
-        });
-      }
-    } catch (error) {
+  const handleCopyWallet = () => {
+    navigator.clipboard.writeText(CRYPTO_WALLET);
+    setCopied(true);
+    toast({
+      title: "✅ Dirección copiada",
+      description: "La dirección de la wallet ha sido copiada al portapapeles"
+    });
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleApplyDiscount = () => {
+    if (discountCode.toLowerCase() === "vl2024") {
+      setFinalPrice(19);
+      setDiscountApplied(true);
       toast({
-        title: "Error",
-        description: "No se pudo validar el código",
+        title: "✅ Descuento aplicado",
+        description: "¡Has ahorrado $10 USD!"
+      });
+    } else {
+      toast({
+        title: "❌ Código inválido",
+        description: "El código ingresado no es válido",
         variant: "destructive"
       });
     }
   };
 
-  const createPayment = async () => {
-    if (!leadData) {
-      toast({
-        title: "Error",
-        description: "No se encontró información del registro",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const payment = await disruptiveService.createPayment({
-        amount: finalPrice,
-        currency: "USDT",
-        network: "BSC",
-        description: "Sistema Piloto MWR - Membresía Inicial (30 días)",
-        metadata: {
-          leadId: leadData.id,
-          email: leadData.email,
-          type: "mwr_subscription",
-          discountCode: discountApplied?.code
-        }
-      });
-
-      setPaymentData({
-        paymentId: payment.paymentId,
-        address: payment.address!,
-        amount: finalPrice,
-        qrCode: payment.qrCode
-      });
-      setPaymentCreated(true);
-
-      toast({
-        title: "Pago creado",
-        description: "Envía USDT a la dirección mostrada",
-      });
-
-    } catch (error: any) {
-      console.error("Error creating payment:", error);
-      toast({
-        title: "Error",
-        description: error.message || "No se pudo crear el pago",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const checkPaymentStatus = async () => {
-    if (!paymentData || !leadData) return;
-
-    setCheckingPayment(true);
-    try {
-      const status = await disruptiveService.getPaymentStatus(paymentData.address);
-      
-      if (status.fundStatus === "Complete" || status.amountCaptured >= paymentData.amount) {
-        // Payment confirmed - create Supabase Auth account
-        try {
-          // 1. Create Supabase Auth account
-          const { data: authData, error: authError } = await supabase.auth.signUp({
-            email: leadData.email,
-            password: Math.random().toString(36).slice(-12) + "Aa1!", // Generate random password
-            options: {
-              data: {
-                full_name: leadData.nombre,
-                whatsapp: leadData.whatsapp,
-              }
-            }
-          });
-
-          if (authError) throw authError;
-          if (!authData.user) throw new Error("No user created");
-
-          const userId = authData.user.id;
-
-          // 2. Create subscription
-          const subscription = await subscriptionService.createInitialSubscription(
-            userId,
-            paymentData.paymentId,
-            discountApplied?.code,
-            discountApplied?.percentage,
-            INITIAL_PRICE,
-            finalPrice
-          );
-
-          console.log("Subscription created:", subscription);
-
-          // 3. Update MWR lead with user_id
-          await supabase
-            .from("mwr_leads")
-            .update({ 
-              user_id: userId,
-              estado: "cerrado"
-            })
-            .eq("id", leadData.id);
-
-          toast({
-            title: "¡Pago confirmado!",
-            description: "Tu cuenta ha sido creada. Redirigiendo...",
-          });
-
-          // 4. Redirect to welcome dashboard
-          setTimeout(() => {
-            router.push("/admin/welcome");
-          }, 2000);
-
-        } catch (accountError: any) {
-          console.error("Error creating account:", accountError);
-          toast({
-            title: "Error",
-            description: "El pago fue confirmado pero hubo un error al crear la cuenta. Contacta soporte.",
-            variant: "destructive"
-          });
-        }
-      } else {
-        toast({
-          title: "Pago pendiente",
-          description: `Recibido: $${status.amountCaptured} de $${paymentData.amount}`,
-        });
-      }
-    } catch (error) {
-      console.error("Error checking payment:", error);
-      toast({
-        title: "Error",
-        description: "No se pudo verificar el pago",
-        variant: "destructive"
-      });
-    } finally {
-      setCheckingPayment(false);
-    }
-  };
-
-  const copyAddress = () => {
-    if (paymentData?.address) {
-      navigator.clipboard.writeText(paymentData.address);
-      toast({
-        title: "Copiado",
-        description: "Dirección copiada al portapapeles",
-      });
-    }
-  };
-
-  if (loadingLead) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-      </div>
-    );
-  }
-
-  if (!leadData && lead_id) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <Card className="max-w-md">
-          <CardHeader>
-            <CardTitle>Error</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground mb-4">No se encontró el registro. Por favor completa el formulario nuevamente.</p>
-            <Button onClick={() => router.push("/mwr/registro")}>Volver al registro</Button>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-blue-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-4 text-gray-600">Cargando...</p>
+        </div>
       </div>
     );
   }
@@ -287,223 +72,173 @@ export default function CheckoutPage() {
   return (
     <>
       <SEO 
-        title="Checkout - Sistema Piloto MWR"
-        description="Completa tu pago y accede al sistema piloto"
+        title="Checkout - Activar Sistema"
+        description="Completa tu pago y activa tu sistema de ventas"
       />
 
-      <div className="min-h-screen bg-background text-foreground py-12 px-4 relative">
-        <div className="fixed inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-primary/20 rounded-full blur-3xl animate-float" />
-          <div className="absolute bottom-20 right-10 w-96 h-96 bg-accent/20 rounded-full blur-3xl animate-float-delayed" />
-        </div>
-
-        <div className="max-w-4xl mx-auto relative z-10">
-          <div className="text-center mb-12">
-            <Badge className="mb-4 bg-accent/20 text-accent border border-accent/30 text-sm px-4 py-1">
-              🎉 Último Paso
-            </Badge>
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-heading bg-clip-text text-transparent">
-              Completa Tu Membresía
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-blue-50 py-8 sm:py-12 px-4">
+        <div className="max-w-2xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-8 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">
+              Último paso
             </h1>
-            <p className="text-xl text-muted-foreground">
-              Únete a miles de viajeros inteligentes
+            <p className="text-gray-600">
+              Activa tu sistema y comienza a generar ventas hoy
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+          {/* Main Card */}
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-6">
+            
             {/* Order Summary */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border/50">
-              <CardHeader>
-                <CardTitle>Resumen del Pedido</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-3">
-                  <div className="flex justify-between items-start pb-3 border-b border-border/50">
-                    <div>
-                      <h3 className="font-semibold text-lg">Membresía Viaja Ligero</h3>
-                      <p className="text-sm text-muted-foreground">Acceso completo 30 días</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="text-2xl font-bold text-primary">${INITIAL_PRICE}</div>
-                    </div>
+            <div className="space-y-4">
+              <p className="text-sm text-gray-500 uppercase tracking-wide">Resumen del pedido</p>
+              
+              <div className="space-y-3">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h2 className="text-xl font-bold text-gray-900">Sistema MWR</h2>
+                    <p className="text-sm text-gray-600 mt-1">Acceso completo por 30 días</p>
                   </div>
-
-                  <div className="space-y-2 text-sm text-muted-foreground">
-                    <p className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-primary" />
-                      Acceso inmediato al sistema completo
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-primary" />
-                      Solo $9 USD/mes para mantener tu membresía activa
-                    </p>
-                    <p className="flex items-center gap-2">
-                      <CheckCircle2 className="w-4 h-4 text-primary" />
-                      Cancela cuando quieras, sin compromisos
-                    </p>
-                  </div>
+                  <p className="text-3xl font-bold text-primary">${finalPrice}</p>
                 </div>
 
-                {!discountApplied && (
-                  <div className="pt-4 space-y-2">
-                    <Label htmlFor="discount">Código de Descuento</Label>
-                    <div className="flex gap-2">
-                      <Input
-                        id="discount"
-                        placeholder="CODIGO"
-                        value={discountCode}
-                        onChange={(e) => setDiscountCode(e.target.value.toUpperCase())}
-                        className="bg-background/50"
-                      />
-                      <Button onClick={applyDiscount} variant="outline">
-                        Aplicar
-                      </Button>
-                    </div>
+                {discountApplied && (
+                  <div className="flex items-center gap-2 text-sm text-green-600 bg-green-50 px-3 py-2 rounded-lg">
+                    <CheckCircle className="w-4 h-4" />
+                    <span>Descuento aplicado: -$10 USD</span>
                   </div>
                 )}
+              </div>
 
-                <div className="pt-4 border-t border-border/50">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-muted-foreground">Subtotal</span>
-                    <span className="font-semibold">${INITIAL_PRICE.toFixed(2)}</span>
+              {/* Benefits */}
+              <div className="pt-4 border-t border-gray-100 space-y-2">
+                {[
+                  "Dashboard completo de gestión",
+                  "Sistema de seguimiento automático",
+                  "Plantillas de mensajes probadas",
+                  "Soporte prioritario 24/7"
+                ].map((benefit, i) => (
+                  <div key={i} className="flex items-center gap-2 text-sm text-gray-700">
+                    <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                    <span>{benefit}</span>
                   </div>
-                  {discountApplied && (
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-muted-foreground">Descuento ({discountApplied.percentage}%)</span>
-                      <span className="text-accent font-semibold">-${(INITIAL_PRICE - finalPrice).toFixed(2)}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between items-center text-xl font-bold pt-4 border-t border-border/50">
-                    <span>Total</span>
-                    <span className="text-primary">${finalPrice.toFixed(2)} USDT</span>
-                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Discount Code */}
+            {!discountApplied && (
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700">
+                  Código de descuento
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={discountCode}
+                    onChange={(e) => setDiscountCode(e.target.value)}
+                    placeholder="Ingresa tu código"
+                    className="flex-1 px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent text-sm"
+                  />
+                  <button
+                    onClick={handleApplyDiscount}
+                    className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors text-sm"
+                  >
+                    Aplicar
+                  </button>
                 </div>
+              </div>
+            )}
 
-                <div className="bg-muted/30 rounded-lg p-4">
-                  <div className="flex items-start gap-3">
-                    <Zap className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
-                    <div className="text-sm">
-                      <p className="font-semibold mb-1">Después de 30 días</p>
-                      <p className="text-muted-foreground">
-                        Solo $9 USD/mes para mantener tu membresía activa
-                      </p>
-                    </div>
-                  </div>
+            {/* Total */}
+            <div className="bg-blue-50 rounded-xl p-4 border border-blue-100">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-700 font-medium">Total a pagar</span>
+                <span className="text-2xl font-bold text-primary">${finalPrice}.00 USDT</span>
+              </div>
+            </div>
+
+            {/* After 30 Days */}
+            <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+              <p className="text-sm text-gray-600">
+                <span className="font-semibold text-gray-900">Después de 30 días:</span> Solo $9 USD/mes. Cancela cuando quieras sin compromisos.
+              </p>
+            </div>
+
+            {/* Crypto Payment */}
+            <div className="space-y-4 pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-xl">₮</span>
                 </div>
-              </CardContent>
-            </Card>
+                <div>
+                  <p className="font-semibold text-gray-900">Pago con USDT (TRC20)</p>
+                  <p className="text-sm text-gray-600">Transferencia rápida y segura</p>
+                </div>
+              </div>
 
-            {/* Payment Section */}
-            <Card className="bg-card/50 backdrop-blur-sm border-border/50">
-              <CardHeader>
-                <CardTitle>Pago con Crypto</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {!paymentCreated ? (
-                  <div className="space-y-6">
-                    <Alert className="bg-primary/10 border-primary/20">
-                      <Shield className="w-4 h-4 text-primary" />
-                      <AlertDescription className="text-sm">
-                        Pago seguro con USDT en Binance Smart Chain (BSC)
-                      </AlertDescription>
-                    </Alert>
-
-                    <Button 
-                      onClick={createPayment}
-                      disabled={loading}
-                      size="lg"
-                      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+              <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-2">
+                    Dirección de la wallet
+                  </label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={CRYPTO_WALLET}
+                      readOnly
+                      className="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-mono text-gray-900"
+                    />
+                    <button
+                      onClick={handleCopyWallet}
+                      className="px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-colors flex items-center gap-2"
                     >
-                      {loading ? (
+                      {copied ? (
                         <>
-                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                          Generando pago...
+                          <Check className="w-4 h-4" />
+                          <span className="text-sm hidden sm:inline">Copiado</span>
                         </>
                       ) : (
                         <>
-                          <Lock className="mr-2 h-5 w-5" />
-                          Pagar ${finalPrice.toFixed(2)} USDT
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="space-y-6">
-                    <Alert className="bg-accent/10 border-accent/20">
-                      <AlertCircle className="w-4 h-4 text-accent" />
-                      <AlertDescription className="text-sm">
-                        Envía exactamente <strong>${paymentData?.amount} USDT</strong> a la dirección mostrada
-                      </AlertDescription>
-                    </Alert>
-
-                    {paymentData?.qrCode && (
-                      <div className="flex justify-center">
-                        <img src={paymentData.qrCode} alt="QR Code" className="w-48 h-48 rounded-lg border border-border" />
-                      </div>
-                    )}
-
-                    <div className="space-y-2">
-                      <Label>Dirección de Pago (BSC)</Label>
-                      <div className="flex gap-2">
-                        <Input
-                          value={paymentData?.address || ""}
-                          readOnly
-                          className="bg-background/50 font-mono text-xs"
-                        />
-                        <Button onClick={copyAddress} variant="outline" size="icon">
                           <Copy className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label>Monto</Label>
-                      <Input
-                        value={`${paymentData?.amount} USDT`}
-                        readOnly
-                        className="bg-background/50 font-semibold"
-                      />
-                    </div>
-
-                    <Alert className="bg-muted/30">
-                      <AlertCircle className="w-4 h-4" />
-                      <AlertDescription className="text-xs">
-                        Importante: Envía USDT en la red <strong>BSC (BEP20)</strong>. Otros tokens o redes no serán reconocidos.
-                      </AlertDescription>
-                    </Alert>
-
-                    <Button 
-                      onClick={checkPaymentStatus}
-                      disabled={checkingPayment}
-                      size="lg"
-                      variant="outline"
-                      className="w-full"
-                    >
-                      {checkingPayment ? (
-                        <>
-                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                          Verificando pago...
+                          <span className="text-sm hidden sm:inline">Copiar</span>
                         </>
-                      ) : (
-                        "Ya pagué - Verificar"
                       )}
-                    </Button>
-
-                    <div className="text-center">
-                      <a 
-                        href="https://www.binance.com/es/buy-sell-crypto" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-sm text-primary hover:underline inline-flex items-center gap-1"
-                      >
-                        ¿No tienes USDT? Comprar aquí
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                    </div>
+                    </button>
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </div>
+
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                  <p className="text-xs text-yellow-800">
+                    <span className="font-semibold">Importante:</span> Envía exactamente ${finalPrice}.00 USDT a esta dirección. Tu cuenta se activará automáticamente al confirmar el pago.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* CTA Button */}
+            <button
+              onClick={() => {
+                toast({
+                  title: "✅ Sistema activado",
+                  description: "Tu cuenta ha sido activada exitosamente"
+                });
+                setTimeout(() => router.push("/admin/main-dashboard"), 1500);
+              }}
+              className="w-full bg-primary hover:bg-primary/90 text-white py-5 rounded-xl font-semibold text-lg transition-colors shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+            >
+              Activar mi sistema ahora
+              <span>→</span>
+            </button>
+
+            {/* Trust Elements */}
+            <div className="text-center pt-4">
+              <p className="text-xs text-gray-500">
+                🔒 Pago seguro • ⚡ Activación inmediata • 📱 Sin permanencia
+              </p>
+            </div>
           </div>
         </div>
       </div>
