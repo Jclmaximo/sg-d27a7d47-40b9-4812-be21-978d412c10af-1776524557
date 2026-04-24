@@ -161,19 +161,27 @@ export default function ZenCommandCenter() {
         .single();
 
       if (error || !profileData) {
+        console.error("Profile load error:", error);
         router.push("/admin");
         return;
       }
 
       setProfile(profileData as UserProfile);
 
-      const leads = await leadsService.getLeads(session.user.id);
-      setLeadsCount(leads.length);
+      // Load leads with error handling
+      try {
+        const leads = await leadsService.getLeads(session.user.id);
+        setLeadsCount(leads?.length || 0);
+      } catch (leadError) {
+        console.error("Error loading leads:", leadError);
+        setLeadsCount(0);
+      }
 
       setLoading(false);
     } catch (error) {
       console.error("Error loading data:", error);
       setLoading(false);
+      // Don't redirect on error, just show empty state
     }
   };
 
