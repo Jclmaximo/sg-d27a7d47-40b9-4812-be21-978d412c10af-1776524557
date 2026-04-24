@@ -12,13 +12,15 @@ import type { NextRequest } from "next/server";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Redirigir /mwr?ref=username a /invitaunamigo?ref=username
+  // CRÍTICO: Redirigir /mwr?ref=username a /invitaunamigo?ref=username
+  // Esta regla debe ejecutarse PRIMERO, antes de cualquier otra lógica
   if (pathname === "/mwr") {
     const ref = request.nextUrl.searchParams.get("ref");
     if (ref) {
       const url = new URL("/invitaunamigo", request.url);
       url.searchParams.set("ref", ref);
-      return NextResponse.redirect(url);
+      console.log("🔀 MIDDLEWARE: Redirecting /mwr?ref=" + ref + " to /invitaunamigo?ref=" + ref);
+      return NextResponse.redirect(url, 307);
     }
   }
 
