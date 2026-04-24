@@ -174,7 +174,7 @@ export default function InvitaUnAmigo() {
           .update({
             full_name: fullName,
             username: username,
-            phone: whatsapp,
+            whatsapp_number: whatsapp, // Corrección: la columna real en DB es whatsapp_number, no phone
             referred_by: referrerId || null,
           })
           .eq("id", authData.user.id);
