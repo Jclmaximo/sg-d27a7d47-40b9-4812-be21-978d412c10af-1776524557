@@ -696,91 +696,81 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 12: Form */}
+                {/* STEP 12: Pricing/Offer */}
                 {flowStep === 12 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Regístrate y te mostramos cómo funciona
+                        Empieza hoy con tu <span className="text-primary">sistema listo para usar</span>
                       </h2>
-                      <p className="text-gray-600">Completa el formulario para acceder al sistema piloto</p>
+                      <p className="text-gray-600">
+                        No necesitas experiencia. Solo seguir el sistema y enviar los mensajes
+                      </p>
                     </div>
 
-                    <div className="max-w-2xl mx-auto space-y-6">
-                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Nombre completo *
-                        </label>
-                        <Input
-                          type="text"
-                          placeholder="Tu nombre completo"
-                          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
-                        />
-                      </div>
+                    {/* Pricing Card */}
+                    <div className="max-w-xl mx-auto">
+                      <div className="relative bg-primary rounded-2xl p-8 text-white">
+                        {/* Badge */}
+                        <div className="absolute -top-3 right-8">
+                          <span className="bg-yellow-400 text-gray-900 px-4 py-1.5 rounded-full text-sm font-bold inline-flex items-center gap-1">
+                            MÁS ELEGIDO 🔥
+                          </span>
+                        </div>
 
-                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Correo electrónico *
-                        </label>
-                        <Input
-                          type="email"
-                          placeholder="tu@email.com"
-                          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
-                        />
-                      </div>
+                        {/* Plan Type */}
+                        <p className="text-blue-100 text-sm font-semibold uppercase tracking-wide mb-2">
+                          PLAN MENSUAL
+                        </p>
 
-                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Teléfono *
-                        </label>
-                        <Input
-                          type="tel"
-                          placeholder="+57 1 234 5678"
-                          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
-                        />
-                      </div>
+                        {/* Price */}
+                        <div className="mb-4">
+                          <div className="flex items-baseline gap-2">
+                            <span className="text-6xl font-bold">$29</span>
+                            <span className="text-2xl text-blue-100">USD</span>
+                          </div>
+                          <p className="text-blue-100 text-sm mt-1">Primer mes (incluye configuración)</p>
+                          <p className="text-white font-semibold mt-2">Luego solo $9 USD/mes</p>
+                        </div>
 
-                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          País *
-                        </label>
-                        <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary pr-8">
-                          <option value="">Selecciona tu país</option>
-                          <option value="Colombia">Colombia</option>
-                          <option value="México">México</option>
-                          <option value="EE.UU.">EE.UU.</option>
-                        </select>
-                      </div>
+                        {/* Divider */}
+                        <div className="h-px bg-blue-400 my-6"></div>
 
-                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          ¿Cómo te enteraste de nosotros?
-                        </label>
-                        <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary pr-8">
-                          <option value="">Selecciona una opción</option>
-                          <option value="Recomendación">Recomendación</option>
-                          <option value="Redes sociales">Redes sociales</option>
-                          <option value="Sitio web">Sitio web</option>
-                          <option value="Otro">Otro</option>
-                        </select>
-                      </div>
+                        {/* Benefits */}
+                        <div className="space-y-3 mb-6">
+                          <div className="flex items-start gap-2">
+                            <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Primer mes incluye configuración completa</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Luego solo $9/mes (≈ $0.30 USD al día)</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <CheckCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                            <span className="text-sm">Acceso inmediato + todo configurado para empezar hoy</span>
+                          </div>
+                        </div>
 
-                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          ¿Por qué elegirías este sistema?
-                        </label>
-                        <textarea
-                          placeholder="Escribe tu respuesta..."
-                          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary min-h-[120px]"
-                        />
-                      </div>
+                        {/* Value Prop */}
+                        <p className="text-yellow-300 font-semibold text-center mb-6">
+                          La opción más inteligente si vas en serio
+                        </p>
 
-                      <button
-                        onClick={() => setFlowStep(13)}
-                        className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
-                      >
-                        Finalizar →
-                      </button>
+                        {/* CTA Button */}
+                        <button
+                          onClick={() => setFlowStep(13)}
+                          className="w-full bg-white text-primary py-4 rounded-xl font-bold text-lg hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                        >
+                          Quiero empezar ahora
+                          <ArrowRight className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Trust Elements */}
+                    <div className="text-center">
+                      <p className="text-sm text-gray-500">🔒 Pago seguro • ⚡ Acceso inmediato • 📱 Sin permanencia</p>
                     </div>
                   </div>
                 )}
