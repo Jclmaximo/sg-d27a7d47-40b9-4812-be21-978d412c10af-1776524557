@@ -87,7 +87,8 @@ export default function InvitaUnAmigo() {
           localStorage.setItem("referrer_id", data.id);
         } else {
           // Si no se encuentra, intentar formatear el parámetro ref directamente
-          const formattedRef = formatReferrerName(ref as string);
+          const refString = Array.isArray(ref) ? ref[0] : ref;
+          const formattedRef = formatReferrerName(refString as string);
           setReferrerName(formattedRef);
           localStorage.setItem("referrer_name", formattedRef);
         }
