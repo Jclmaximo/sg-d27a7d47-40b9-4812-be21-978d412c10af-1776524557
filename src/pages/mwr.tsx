@@ -249,21 +249,106 @@ export default function MWRPage() {
 
                 {/* STEP 2: Value Proposition */}
                 {flowStep === 2 && (
-                  <div className="space-y-8 animate-in fade-in duration-700">
-                    <div className="text-center space-y-4">
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Convierte prospectos en clientes sin perseguir a nadie
-                      </h2>
-                      <p className="text-gray-600">
-                        Un sistema que organiza tus contactos y te dice exactamente qué hacer para cerrar más ventas
-                      </p>
+                  <div className="relative min-h-screen flex items-end pb-8 sm:pb-16 animate-in fade-in duration-700">
+                    {/* Hero Image Background */}
+                    <div className="absolute inset-0 z-0">
+                      <img
+                        src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&h=1600&fit=crop&crop=faces,center"
+                        alt="Two women having a conversation over coffee"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent"></div>
                     </div>
-                    <button
-                      onClick={() => setFlowStep(3)}
-                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
-                    >
-                      Ver cómo funciona →
-                    </button>
+
+                    {/* Floating Metric Cards */}
+                    <div className="absolute top-32 sm:top-40 left-0 right-0 z-10 px-4">
+                      <div className="max-w-2xl mx-auto relative">
+                        {/* Prospectos Card - Left */}
+                        <div className="absolute left-4 sm:left-8 top-0 animate-in slide-in-from-left duration-700">
+                          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 sm:p-5 w-[160px] sm:w-[200px]">
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                                <Users className="w-5 h-5 text-primary" />
+                              </div>
+                              <p className="text-sm text-gray-600 font-medium">Prospectos</p>
+                            </div>
+                            <div className="flex items-end gap-2">
+                              <p className="text-3xl sm:text-4xl font-bold text-gray-900">248</p>
+                              <p className="text-green-600 font-semibold text-sm mb-1 flex items-center gap-1">
+                                <TrendingUp className="w-4 h-4" />
+                                31%
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Ventas Card - Right */}
+                        <div className="absolute right-4 sm:right-8 top-12 sm:top-20 animate-in slide-in-from-right duration-700 delay-150">
+                          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 sm:p-5 w-[180px] sm:w-[220px]">
+                            <div className="flex items-center gap-3 mb-2">
+                              <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+                                <TrendingUp className="w-5 h-5 text-green-600" />
+                              </div>
+                              <p className="text-sm text-gray-600 font-medium">Ventas cerradas</p>
+                            </div>
+                            <div className="flex items-end gap-2">
+                              <p className="text-3xl sm:text-4xl font-bold text-gray-900">23</p>
+                              <p className="text-green-600 font-semibold text-sm mb-1 flex items-center gap-1">
+                                <TrendingUp className="w-4 h-4" />
+                                27%
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Connection Line */}
+                        <svg className="absolute top-8 left-1/2 -translate-x-1/2 w-full h-32 opacity-40 hidden sm:block" viewBox="0 0 400 100">
+                          <path
+                            d="M 50 20 Q 200 50 350 80"
+                            stroke="#3B82F6"
+                            strokeWidth="3"
+                            fill="none"
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* Content Below */}
+                    <div className="relative z-10 w-full space-y-6 sm:space-y-8 pt-64 sm:pt-80">
+                      <div className="text-center space-y-3 sm:space-y-4">
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight">
+                          Convierte prospectos<br />en clientes <span className="text-primary">sin perseguir<br />a nadie</span>
+                        </h1>
+                        <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto">
+                          Un sistema que organiza tus contactos y te dice exactamente qué hacer para cerrar más ventas
+                        </p>
+                      </div>
+
+                      {/* CTA Button */}
+                      <button
+                        onClick={() => setFlowStep(3)}
+                        className="w-full bg-primary hover:bg-primary/90 text-white py-5 sm:py-6 rounded-xl font-semibold text-base sm:text-lg transition-colors shadow-lg hover:shadow-xl"
+                      >
+                        Ver cómo funciona →
+                      </button>
+
+                      {/* Trust Elements */}
+                      <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-sm sm:text-base text-gray-700">
+                        <div className="flex items-center gap-2">
+                          <Zap className="w-5 h-5 text-green-600" />
+                          <span>Acceso inmediato</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-5 h-5 text-blue-600" />
+                          <span>Sin experiencia</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="w-5 h-5 text-purple-600" />
+                          <span>Empieza hoy</span>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 
