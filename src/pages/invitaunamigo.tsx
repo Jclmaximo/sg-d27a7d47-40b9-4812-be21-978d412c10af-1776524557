@@ -235,7 +235,7 @@ export default function InvitaUnAmigo() {
       {(step === 3 || step === 4 || step === 5) && (
         <div className="fixed top-0 left-0 right-0 h-[1px] bg-gray-100 z-50">
           <div
-            className="h-full bg-[#1D1D1F] transition-all duration-500 ease-out"
+            className="h-full bg-[#4285F4] transition-all duration-500 ease-out"
             style={{ width: `${registrationProgress}%` }}
           />
         </div>
@@ -285,9 +285,10 @@ export default function InvitaUnAmigo() {
 
           <button
             onClick={handleAcceptChallenge}
-            className="px-12 py-4 bg-[#1D1D1F] text-white rounded-full text-[15px] font-light tracking-wide hover:bg-[#2D2D2F] transition-all duration-300 shadow-sm"
+            className="px-12 py-4 bg-[#4285F4] text-white rounded-full text-[15px] font-light tracking-wide hover:bg-[#3367D6] transition-all duration-300 shadow-sm flex items-center gap-2"
           >
             Aceptar Desafío
+            <ArrowRight className="w-4 h-4 stroke-[1.5]" />
           </button>
         </div>
 
@@ -344,16 +345,18 @@ export default function InvitaUnAmigo() {
             disabled={!fullName.trim() || !username.trim() || usernameAvailable !== true}
             className={`
               mt-12 px-12 py-4 
-              bg-[#1D1D1F] text-white 
+              bg-[#4285F4] text-white 
               rounded-full text-[15px] font-light tracking-wide
               transition-all duration-300 shadow-sm
+              flex items-center gap-2
               ${!fullName.trim() || !username.trim() || usernameAvailable !== true
                 ? "opacity-30 cursor-not-allowed" 
-                : "hover:bg-[#2D2D2F] opacity-100"
+                : "hover:bg-[#3367D6] opacity-100"
               }
             `}
           >
             Siguiente
+            <ArrowRight className="w-4 h-4 stroke-[1.5]" />
           </button>
         </div>
 
@@ -399,16 +402,18 @@ export default function InvitaUnAmigo() {
             disabled={!email.trim() || !email.includes("@") || !whatsapp.trim()}
             className={`
               mt-12 px-12 py-4 
-              bg-[#1D1D1F] text-white 
+              bg-[#4285F4] text-white 
               rounded-full text-[15px] font-light tracking-wide
               transition-all duration-300 shadow-sm
+              flex items-center gap-2
               ${!email.trim() || !email.includes("@") || !whatsapp.trim()
                 ? "opacity-30 cursor-not-allowed" 
-                : "hover:bg-[#2D2D2F] opacity-100"
+                : "hover:bg-[#3367D6] opacity-100"
               }
             `}
           >
             Siguiente
+            <ArrowRight className="w-4 h-4 stroke-[1.5]" />
           </button>
         </div>
 
@@ -451,16 +456,18 @@ export default function InvitaUnAmigo() {
             disabled={!password || password.length < 6 || loading}
             className={`
               mt-12 px-12 py-4 
-              bg-[#1D1D1F] text-white 
+              bg-[#4285F4] text-white 
               rounded-full text-[15px] font-light tracking-wide
               transition-all duration-300 shadow-sm
+              flex items-center gap-2
               ${!password || password.length < 6 || loading
                 ? "opacity-30 cursor-not-allowed" 
-                : "hover:bg-[#2D2D2F] opacity-100"
+                : "hover:bg-[#3367D6] opacity-100"
               }
             `}
           >
             {loading ? "Procesando..." : "Finalizar Registro"}
+            {!loading && <ArrowRight className="w-4 h-4 stroke-[1.5]" />}
           </button>
         </div>
 
@@ -476,8 +483,8 @@ export default function InvitaUnAmigo() {
             Sincronizando datos...
           </h1>
 
-          <div className="w-full max-w-xs h-[1px] bg-gray-200 overflow-hidden">
-            <div className="h-full bg-[#1D1D1F] animate-progress" />
+          <div className="w-full max-w-xs h-[1px] bg-gray-100 overflow-hidden rounded-full">
+            <div className="h-full bg-[#4285F4] animate-progress" />
           </div>
         </div>
 
@@ -510,9 +517,10 @@ export default function InvitaUnAmigo() {
 
           <button
             onClick={() => router.push("/admin/welcome")}
-            className="px-12 py-4 bg-[#1D1D1F] text-white rounded-full text-[15px] font-light tracking-wide hover:bg-[#2D2D2F] transition-all duration-300 shadow-sm"
+            className="px-12 py-4 bg-[#4285F4] text-white rounded-full text-[15px] font-light tracking-wide hover:bg-[#3367D6] transition-all duration-300 shadow-sm flex items-center gap-2"
           >
             Entrar al Dashboard
+            <ArrowRight className="w-4 h-4 stroke-[1.5]" />
           </button>
         </div>
       </div>
@@ -537,6 +545,22 @@ export default function InvitaUnAmigo() {
         body {
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
           font-weight: 300;
+        }
+
+        @keyframes progress {
+          0% { 
+            width: 0%; 
+          }
+          80% {
+            width: 80%;
+          }
+          100% { 
+            width: 100%;
+          }
+        }
+
+        .animate-progress {
+          animation: progress 1.5s cubic-bezier(0.4, 0, 1, 1) forwards;
         }
       `}</style>
     </>
