@@ -11,16 +11,28 @@ import type { NextRequest } from "next/server";
  */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  
+  // DEBUG: Log every request to see if middleware is running
+  console.log("🔍 MIDDLEWARE HIT:", {
+    pathname,
+    search: request.nextUrl.search,
+    fullUrl: request.url
+  });
 
   // CRÍTICO: Redirigir /mwr?ref=username a /invitaunamigo?ref=username
   // Esta regla debe ejecutarse PRIMERO, antes de cualquier otra lógica
   if (pathname === "/mwr") {
+    console.log("✅ MATCHED /mwr pathname");
     const ref = request.nextUrl.searchParams.get("ref");
+    console.log("📍 REF PARAM:", ref);
+    
     if (ref) {
       const url = new URL("/invitaunamigo", request.url);
       url.searchParams.set("ref", ref);
-      console.log("🔀 MIDDLEWARE: Redirecting /mwr?ref=" + ref + " to /invitaunamigo?ref=" + ref);
+      console.log("🔀 REDIRECTING TO:", url.toString());
       return NextResponse.redirect(url, 307);
+    } else {
+      console.log("⚠️ NO REF PARAM - Not redirecting");
     }
   }
 
