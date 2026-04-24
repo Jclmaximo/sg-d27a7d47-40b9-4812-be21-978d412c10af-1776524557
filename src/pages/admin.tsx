@@ -43,7 +43,7 @@ export default function AdminPage() {
     setLoading(true);
 
     try {
-      const { data, error } = await authService.signIn(email, password);
+      const { user, error } = await authService.signIn(email, password);
 
       if (error) {
         setError(error.message);
