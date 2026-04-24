@@ -230,8 +230,12 @@ export default function MWRPage() {
                     <div className="absolute top-16 sm:top-24 right-4 sm:right-8 z-20 animate-in slide-in-from-right duration-700">
                       <div className="bg-white rounded-lg shadow-xl border border-gray-200 p-2.5 sm:p-4 max-w-[200px] sm:max-w-xs">
                         <div className="flex items-start gap-2 sm:gap-3">
-                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0 overflow-hidden">
+                            <img 
+                              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" 
+                              alt="María R."
+                              className="w-full h-full object-cover"
+                            />
                           </div>
                           <div>
                             <p className="text-xs sm:text-sm font-semibold text-gray-900">Nueva venta</p>
