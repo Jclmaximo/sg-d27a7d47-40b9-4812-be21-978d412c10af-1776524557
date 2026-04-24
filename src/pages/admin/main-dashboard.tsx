@@ -713,46 +713,20 @@ Puedo resolver dudas sobre:
       />
       <div className="min-h-screen bg-[#F8FAFC]">
         {/* Header */}
-        <header className="bg-white border-b border-[#E2E8F0] sticky top-0 z-50 shadow-sm">
-          <div className="w-full px-6 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-4">
-                {profile?.avatar_url ? (
-                  <img
-                    src={profile.avatar_url}
-                    alt={profile.full_name}
-                    className="w-12 h-12 rounded-full object-cover border-2 border-[#E2E8F0]"
-                    onError={(e) => {
-                      console.error("Error loading avatar:", profile.avatar_url);
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
-                ) : (
-                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-lg font-semibold">
-                    {profile?.full_name?.[0]?.toUpperCase() || "U"}
-                  </div>
-                )}
-                <div>
-                  <h1 className="text-2xl font-semibold text-[#0F172A]">
-                    Mi Dashboard
-                  </h1>
-                  <p className="text-sm text-[#475569]">
-                    Bienvenido, {profile?.full_name || profile?.username || "Usuario"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleLogout}
-              className="border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-[#CBD5E1] text-[#475569] hover:text-[#0F172A]"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Salir
-            </Button>
+        <div className="flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-semibold text-[#0F172A] mb-1">
+              Command Center
+            </h1>
+            <p className="text-sm text-[#64748B]">{profile?.full_name || profile?.username}</p>
           </div>
-        </header>
+          <Button
+            onClick={() => router.push("/admin/welcome")}
+            className="bg-[#4285F4] hover:bg-[#3367D6] text-white"
+          >
+            Ir a Mi Dashboard →
+          </Button>
+        </div>
 
         <main className="w-full px-6 py-8">
           <div className="max-w-7xl mx-auto w-full">
