@@ -79,6 +79,7 @@ export default function WelcomePage() {
   const [userEmail, setUserEmail] = useState("");
   const [copiedFunnel, setCopiedFunnel] = useState(false);
   const [copiedReferral, setCopiedReferral] = useState(false);
+  const recentActivity: any[] = [];
 
   // Demo data (in a real app, this would come from the database)
   const funnelLink = typeof window !== "undefined" ? `${window.location.origin}/ambassador/${username}` : "";
@@ -235,56 +236,48 @@ export default function WelcomePage() {
       
       <div className="min-h-screen bg-background relative overflow-hidden">
         {/* Background Orbs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-50 animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl opacity-50 animate-pulse" style={{ animationDelay: "1s" }} />
 
         {/* Hero Section */}
-        <div className="relative bg-gradient-to-br from-primary via-primary/90 to-primary/80 overflow-hidden">
-          {/* Overlay oscuro para mejor contraste */}
-          <div className="absolute inset-0 bg-black/25" />
+        <div className="relative bg-white overflow-hidden border-b border-[#E2E8F0]">
+          <div className="absolute inset-0 bg-gradient-to-b from-[#F8FAFC] to-white pointer-events-none" />
           
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2" />
-          </div>
-
-          <div className="relative px-6 py-12 sm:py-16">
-            <div className="max-w-2xl mx-auto text-center space-y-6">
+          <div className="relative px-6 py-10 sm:py-12">
+            <div className="max-w-xl mx-auto text-center flex flex-col items-center">
               {/* Avatar */}
               {profile?.avatar_url ? (
                 <img
                   src={profile.avatar_url}
                   alt={profile.full_name}
-                  className="w-20 h-20 rounded-full object-cover mx-auto border-3 border-white shadow-lg"
+                  className="w-16 h-16 rounded-full object-cover mx-auto border-[3px] border-white shadow-[0_4px_10px_rgba(0,0,0,0.15)] mb-5"
                   onError={(e) => {
-                    console.error("Error loading avatar:", profile.avatar_url);
                     e.currentTarget.style.display = 'none';
                   }}
                 />
               ) : (
-                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-2xl font-semibold mx-auto border-3 border-white shadow-lg">
+                <div className="w-16 h-16 bg-[#F1F5F9] text-[#2563EB] rounded-full flex items-center justify-center text-xl font-semibold mx-auto border-[3px] border-white shadow-[0_4px_10px_rgba(0,0,0,0.15)] mb-5">
                   {profile?.full_name?.[0]?.toUpperCase() || "U"}
                 </div>
               )}
 
-              {/* Headline - reducido y más limpio */}
-              <h1 className="text-3xl sm:text-4xl font-semibold text-white leading-tight">
+              {/* Headline - Reducido y más limpio */}
+              <h1 className="text-2xl sm:text-3xl font-semibold text-[#0F172A] leading-tight mb-3">
                 Bienvenido, {profile?.full_name?.split(' ')[0] || profile?.username || "Usuario"}
               </h1>
 
               {/* Descripción */}
-              <p className="text-lg text-white/90 max-w-lg mx-auto">
+              <p className="text-[15px] text-[#475569] max-w-sm mx-auto mb-8">
                 Tu centro de comando para hacer crecer tu negocio
               </p>
 
-              {/* CTA Principal - más prominente */}
+              {/* CTA Principal */}
               <Button
-                size="lg"
                 onClick={() => router.push("/admin/main-dashboard")}
-                className="bg-white text-primary hover:bg-white/90 font-semibold h-14 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all text-base"
+                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-medium h-[52px] px-10 rounded-xl shadow-[0_4px_12px_rgba(37,99,235,0.25)] hover:shadow-[0_6px_16px_rgba(37,99,235,0.35)] transition-all text-[15px]"
               >
                 Ir a Mi Dashboard
-                <TrendingUp className="ml-2 h-5 w-5" />
+                <TrendingUp className="ml-2 h-[18px] w-[18px]" />
               </Button>
             </div>
           </div>
@@ -330,45 +323,45 @@ export default function WelcomePage() {
                     <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
-                          <DollarSign className="w-5 h-5 text-primary" />
-                          Total Ganado
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="text-4xl font-semibold text-[#0F172A] mb-1">
-                          ${(stats?.total_earned ?? 0).toFixed(2)}
-                        </div>
-                        <p className="text-sm text-[#475569]">Acumulado total</p>
-                      </CardContent>
-                    </Card>
-
-                    <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
                           <Users className="w-5 h-5 text-primary" />
-                          Red Activa
+                          Total Leads
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="text-4xl font-semibold text-[#0F172A] mb-1">
-                          {stats?.network_size ?? 0}
+                          {stats.total}
                         </div>
-                        <p className="text-sm text-[#475569]">Miembros en tu equipo</p>
+                        <p className="text-sm text-[#475569]">Prospectos capturados</p>
                       </CardContent>
                     </Card>
 
                     <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
-                          <TrendingUp className="w-5 h-5 text-primary" />
-                          Leads del Mes
+                          <Target className="w-5 h-5 text-primary" />
+                          Nuevos Leads
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="text-4xl font-semibold text-[#0F172A] mb-1">
-                          {stats?.leads_count ?? 0}
+                          {stats.nuevos}
                         </div>
-                        <p className="text-sm text-[#475569]">Nuevos prospectos</p>
+                        <p className="text-sm text-[#475569]">Sin contactar</p>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                          <MessageSquare className="w-5 h-5 text-primary" />
+                          Contactados
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-4xl font-semibold text-[#0F172A] mb-1">
+                          {stats.contactados}
+                        </div>
+                        <p className="text-sm text-[#475569]">En seguimiento</p>
                       </CardContent>
                     </Card>
                   </div>
@@ -575,7 +568,7 @@ export default function WelcomePage() {
                     <div className="text-center">
                       <div className="font-semibold text-[#0F172A] mb-1">Gestionar Leads</div>
                       <div className="text-sm text-[#64748B]">
-                        {stats?.leads_count ?? 0} prospectos activos
+                        {stats.total} prospectos activos
                       </div>
                     </div>
                   </Button>
