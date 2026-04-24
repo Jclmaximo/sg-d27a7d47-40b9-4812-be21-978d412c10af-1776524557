@@ -1,4 +1,4 @@
- 
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 export type Json =
   | string
   | number
@@ -451,6 +451,59 @@ export type Database = {
           wallet_address?: string | null
         }
         Relationships: []
+      }
+      user_productivity: {
+        Row: {
+          attended_training: boolean | null
+          contacted_prospects: number | null
+          contacted_prospects_count: number | null
+          created_at: string | null
+          date: string
+          did_followup: boolean | null
+          id: string
+          posted_content: boolean | null
+          presented_business: boolean | null
+          total_points: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          attended_training?: boolean | null
+          contacted_prospects?: number | null
+          contacted_prospects_count?: number | null
+          created_at?: string | null
+          date?: string
+          did_followup?: boolean | null
+          id?: string
+          posted_content?: boolean | null
+          presented_business?: boolean | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          attended_training?: boolean | null
+          contacted_prospects?: number | null
+          contacted_prospects_count?: number | null
+          created_at?: string | null
+          date?: string
+          did_followup?: boolean | null
+          id?: string
+          posted_content?: boolean | null
+          presented_business?: boolean | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_productivity_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       withdrawal_requests: {
         Row: {
