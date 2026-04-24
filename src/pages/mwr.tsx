@@ -179,85 +179,64 @@ export default function MWRPage() {
               <div className="space-y-8">
                 {/* STEP 1: Hero */}
                 {flowStep === 1 && (
-                  <div className="relative">
-                    {/* Hero Content - 2 Columns Desktop */}
-                    <div className="max-w-6xl mx-auto px-4 py-12 md:py-16">
-                      <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-                        {/* Left Column - Text & CTA */}
-                        <div className="space-y-6 md:space-y-8">
-                          <div className="space-y-4">
-                            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
-                              Deja de perder prospectos por{" "}
-                              <span className="text-primary">falta de seguimiento</span>
-                            </h1>
-                            <p className="text-lg md:text-xl text-gray-600 max-w-xl">
-                              El sistema te muestra a quién escribirle y cuándo hacerlo
-                            </p>
-                          </div>
+                  <div className="relative min-h-screen flex items-center py-8 sm:py-16">
+                    {/* Hero Content */}
+                    <div className="relative z-10 w-full space-y-4 sm:space-y-8">
+                      <div className="text-center space-y-3 sm:space-y-6">
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight sm:leading-[1.2]">
+                          El sistema que <span className="text-primary">cierra ventas</span> mientras duermes
+                        </h1>
+                        <p className="text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed sm:leading-normal line-clamp-2 sm:line-clamp-none">
+                          Automatiza tu seguimiento, organiza tus prospectos y convierte más sin perseguir a nadie
+                        </p>
+                      </div>
 
-                          {/* CTA */}
-                          <div className="space-y-4">
-                            <button
-                              onClick={() => setFlowStep(2)}
-                              className="w-full md:w-auto px-8 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-lg transition-colors shadow-lg"
-                            >
-                              Ver cómo funciona →
-                            </button>
-                            
-                            {/* Microcopy */}
-                            <div className="flex items-center gap-2 text-sm text-gray-600">
-                              <CheckCircle className="w-4 h-4 text-green-600" />
-                              <span>Acceso inmediato</span>
-                              <span>•</span>
-                              <span>Sin experiencia</span>
-                              <span>•</span>
-                              <span>Empieza hoy</span>
-                            </div>
-                          </div>
+                      {/* CTA Button */}
+                      <button
+                        onClick={() => setFlowStep(2)}
+                        className="w-full bg-primary hover:bg-primary/90 text-white py-4 sm:py-6 rounded-xl font-semibold text-base sm:text-lg transition-colors shadow-lg hover:shadow-xl"
+                      >
+                        Ver cómo funciona →
+                      </button>
+
+                      {/* Trust Elements */}
+                      <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-600">
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <Zap className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-green-600" />
+                          <span>Acceso inmediato</span>
                         </div>
-
-                        {/* Right Column - Image */}
-                        <div className="relative md:block hidden">
-                          <div className="relative">
-                            <img 
-                              src="/happy-travelers.jpg" 
-                              alt="Sistema de gestión de leads" 
-                              className="rounded-2xl shadow-xl w-full max-w-md mx-auto"
-                            />
-                            {/* WhatsApp Bubble Overlay */}
-                            <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-2xl p-4 max-w-xs">
-                              <div className="flex items-start gap-3">
-                                <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
-                                  <MessageSquare className="w-5 h-5 text-white" />
-                                </div>
-                                <div>
-                                  <p className="text-xs font-semibold text-gray-900 mb-1">Nuevo prospecto</p>
-                                  <p className="text-xs text-gray-600">María López acaba de registrarse</p>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <CheckCircle className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-blue-600" />
+                          <span>Sin experiencia</span>
+                        </div>
+                        <div className="flex items-center gap-1.5 sm:gap-2">
+                          <TrendingUp className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-purple-600" />
+                          <span>Empieza hoy</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Mobile Image - Below text on mobile */}
-                    <div className="md:hidden px-4 pb-8">
-                      <div className="relative">
-                        <img 
-                          src="/happy-travelers.jpg" 
-                          alt="Sistema de gestión de leads" 
-                          className="rounded-2xl shadow-xl w-full"
-                        />
-                        <div className="absolute -bottom-4 -left-4 bg-white rounded-2xl shadow-2xl p-4 max-w-xs">
-                          <div className="flex items-start gap-3">
-                            <div className="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
-                              <MessageSquare className="w-5 h-5 text-white" />
-                            </div>
-                            <div>
-                              <p className="text-xs font-semibold text-gray-900 mb-1">Nuevo prospecto</p>
-                              <p className="text-xs text-gray-600">María López acaba de registrarse</p>
-                            </div>
+                    {/* Bottom Image */}
+                    <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-64 overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent z-10"></div>
+                      <img
+                        src="/dashboard-banner-clean.jpg"
+                        alt="Dashboard preview"
+                        className="w-full h-full object-cover object-top opacity-20"
+                      />
+                    </div>
+
+                    {/* Floating Notification */}
+                    <div className="absolute top-16 sm:top-24 right-4 sm:right-8 z-20 animate-in slide-in-from-right duration-700">
+                      <div className="bg-white rounded-lg shadow-xl border border-gray-200 p-2.5 sm:p-4 max-w-[200px] sm:max-w-xs">
+                        <div className="flex items-start gap-2 sm:gap-3">
+                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                            <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="text-xs sm:text-sm font-semibold text-gray-900">Nueva venta</p>
+                            <p className="text-[10px] sm:text-xs text-gray-600">María R. desde Colombia</p>
+                            <p className="text-[10px] sm:text-xs text-gray-500">Hace 3 minutos</p>
                           </div>
                         </div>
                       </div>
