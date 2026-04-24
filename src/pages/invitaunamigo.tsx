@@ -311,27 +311,21 @@ export default function InvitaUnAmigo() {
       )}
 
       <div className="min-h-screen bg-white relative overflow-hidden">
-        {/* PASO 1: Validación de Acceso */}
-        {step === 1 && (
-          <div className="w-full max-w-md text-center animate-fadeIn">
-            <h1 className="text-2xl font-light text-[#1D1D1F] mb-12 tracking-wide">
-              Sincronizando invitación de<br />
-              <span className="font-normal">{referrerName}</span>
-            </h1>
-
-            {/* Barra de progreso */}
-            <div className="w-full h-[1px] bg-[#E5E7EB] rounded-full overflow-hidden">
-              <div
-                className="h-full bg-[#2563EB] transition-all duration-100 ease-linear"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-
-            <p className="text-sm text-[#6B7280] mt-8 font-light">
-              {Math.round(progress)}%
+        {/* PASO 1: Pre-loader con mensaje personalizado */}
+        <div
+          className={`
+            absolute inset-0 flex flex-col items-center justify-center px-6
+            transition-opacity duration-700 ease-out
+            ${step === 1 ? "opacity-100" : "opacity-0 pointer-events-none"}
+          `}
+        >
+          <div className="flex flex-col items-center gap-6">
+            <div className="w-12 h-12 border-3 border-gray-200 border-t-[#4285F4] rounded-full animate-spin" />
+            <p className="text-lg text-[#1D1D1F] font-light">
+              Sincronizando invitación de {referrerName || "tu mentor"}...
             </p>
           </div>
-        )}
+        </div>
 
         {/* PASO 2: El Desafío */}
         <div
