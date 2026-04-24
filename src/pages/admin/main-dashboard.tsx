@@ -1024,8 +1024,8 @@ Puedo resolver dudas sobre:
                     ) : (
                       <div className="space-y-4">
                         <div>
-                          <Label className="text-sm font-medium text-gray-300 mb-2 block">Tu Link de Referidos</Label>
-                          <div className="bg-gray-800/50 rounded-lg p-4 border border-gray-700">
+                          <Label className="text-sm font-semibold text-[#0F172A] mb-2 block">Tu Link de Referidos</Label>
+                          <div className="bg-white rounded-lg p-4 border border-[#E5E7EB]">
                             <code className="text-sm text-primary font-mono break-all">
                               {typeof window !== "undefined" ? `${window.location.origin}/mwr?ref=${profile?.username || ""}` : "Cargando..."}
                             </code>
