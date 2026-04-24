@@ -253,7 +253,7 @@ export default function MWRPage() {
                     {/* Hero Image Background */}
                     <div className="absolute inset-0 z-0">
                       <img
-                        src="/uploads/image_d4cd8748-a14e-48a8-8f8f-779446dd7720.jpg"
+                        src="/paso2-hero.jpg"
                         alt="Two women having a conversation over coffee"
                         className="w-full h-full object-cover"
                       />
