@@ -5,6 +5,7 @@ import { leadsService } from "@/services/leadsService";
 import { SEO } from "@/components/SEO";
 import { ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 interface Profile {
   id: string;
@@ -21,6 +22,7 @@ export default function InvitaUnAmigo() {
   const [step, setStep] = useState(1);
   const [referrerName, setReferrerName] = useState("");
   const [referrerId, setReferrerId] = useState("");
+  const [referrerAvatar, setReferrerAvatar] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -59,10 +61,12 @@ export default function InvitaUnAmigo() {
         // Primero intentar cargar desde localStorage
         const savedName = localStorage.getItem("referrer_name");
         const savedId = localStorage.getItem("referrer_id");
+        const savedAvatar = localStorage.getItem("referrer_avatar");
         
         if (savedName && savedId) {
           setReferrerName(savedName);
           setReferrerId(savedId);
+          if (savedAvatar) setReferrerAvatar(savedAvatar);
           return;
         }
 
@@ -71,7 +75,7 @@ export default function InvitaUnAmigo() {
         
         const { data, error } = await supabase
           .from("profiles")
-          .select("id, full_name, username")
+          .select("id, full_name, username, avatar_url")
           .eq("username", refString)
           .single();
 
@@ -83,6 +87,12 @@ export default function InvitaUnAmigo() {
           
           setReferrerName(displayName);
           setReferrerId(data.id);
+          
+          // Guardar avatar si existe
+          if (data.avatar_url) {
+            setReferrerAvatar(data.avatar_url);
+            localStorage.setItem("referrer_avatar", data.avatar_url);
+          }
           
           // Guardar en localStorage para persistencia
           localStorage.setItem("referrer_name", displayName);
@@ -97,8 +107,10 @@ export default function InvitaUnAmigo() {
       } else {
         // Sin parámetro ref, verificar localStorage
         const savedName = localStorage.getItem("referrer_name");
+        const savedAvatar = localStorage.getItem("referrer_avatar");
         if (savedName) {
           setReferrerName(savedName);
+          if (savedAvatar) setReferrerAvatar(savedAvatar);
           const savedId = localStorage.getItem("referrer_id");
           if (savedId) setReferrerId(savedId);
         }
@@ -329,6 +341,21 @@ export default function InvitaUnAmigo() {
             ${step === 2 ? "opacity-100" : "opacity-0 pointer-events-none"}
           `}
         >
+          {/* Avatar del Referente */}
+          <Avatar className="w-24 h-24 border-2 border-gray-100 shadow-sm mb-8">
+            {referrerAvatar ? (
+              <AvatarImage 
+                src={referrerAvatar} 
+                alt={referrerName || "Mentor"}
+                className="object-cover"
+              />
+            ) : (
+              <AvatarFallback className="bg-gray-50 text-[#1D1D1F] text-2xl font-light">
+                {(referrerName || "M").charAt(0).toUpperCase()}
+              </AvatarFallback>
+            )}
+          </Avatar>
+
           <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] font-light text-center max-w-2xl mb-6 leading-relaxed">
             Has sido seleccionado por{" "}
             <span className="font-normal">{referrerName || "un mentor"}</span>
