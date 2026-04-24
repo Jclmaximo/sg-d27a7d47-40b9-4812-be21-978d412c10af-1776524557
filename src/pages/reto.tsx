@@ -145,6 +145,7 @@ export default function ZenCommandCenter() {
       if (protocol) {
         await productivityService.saveDailyActivity(profile.id, {
           contacted_prospects: protocol.id === "1",
+          contacted_prospects_count: protocol.id === "1" ? 3 : 0,
           posted_content: protocol.id === "2",
           did_followup: protocol.id === "3",
           presented_business: protocol.id === "4",
