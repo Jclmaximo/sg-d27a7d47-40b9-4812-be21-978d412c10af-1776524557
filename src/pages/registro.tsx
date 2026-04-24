@@ -34,7 +34,7 @@ export default function Registro() {
         options: {
           data: {
             full_name: `${formData.nombre} ${formData.apellido}`,
-            phone: formData.telefono,
+            whatsapp_number: formData.telefono,
             country: formData.pais,
             mwr_link: formData.mwrLink
           }
@@ -48,8 +48,7 @@ export default function Registro() {
           .from("profiles")
           .update({
             full_name: `${formData.nombre} ${formData.apellido}`,
-            phone: formData.telefono,
-            country: formData.pais,
+            whatsapp_number: formData.telefono,
             mwr_link: formData.mwrLink
           })
           .eq("id", authData.user.id);
