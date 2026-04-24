@@ -218,88 +218,130 @@ export async function getProductivityStats(userId: string): Promise<Productivity
 }
 
 /**
- * Obtener estadísticas del equipo (solo para admins)
+ * Obtener estadísticas de productividad del equipo (solo referidos del usuario)
  */
-export async function getTeamProductivityStats(): Promise<TeamMemberStats[]> {
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  const startDate = sevenDaysAgo.toISOString().split("T")[0];
+export async function getTeamProductivityStats(userId: string): Promise<TeamMemberStats[]> {
+  try {
+    // Primero obtener todos los IDs del equipo del usuario (referidos directos e indirectos)
+    const { data: teamMembers, error: teamError } = await supabase.rpc('get_team_members', {
+      p_user_id: userId
+    });
 
-  // Obtener todos los usuarios con su productividad
-  const { data: profiles, error: profilesError } = await supabase
-    .from("profiles")
-    .select("id, full_name, avatar_url");
-
-  if (profilesError || !profiles) {
-    console.error("Error fetching profiles:", profilesError);
-    return [];
-  }
-
-  // Obtener productividad de todos los usuarios
-  const { data: productivity, error: prodError } = await supabase
-    .from("user_productivity")
-    .select("*")
-    .gte("date", startDate);
-
-  if (prodError) {
-    console.error("Error fetching team productivity:", prodError);
-    return [];
-  }
-
-  // Agrupar por usuario y calcular stats
-  const userStats: TeamMemberStats[] = profiles.map(profile => {
-    const userRecords = productivity?.filter(p => p.user_id === profile.id) || [];
-    
-    const days_active = userRecords.length;
-    const total_points = userRecords.reduce((sum, r) => sum + (r.total_points || 0), 0);
-    const percentage = Math.round((days_active / 7) * 100);
-    
-    // Encontrar última actividad
-    const sortedRecords = [...userRecords].sort((a, b) => 
-      new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-    
-    let last_activity = "Sin actividad";
-    if (sortedRecords.length > 0) {
-      const lastDate = new Date(sortedRecords[0].date);
-      const today = new Date();
-      const diffTime = today.getTime() - lastDate.getTime();
-      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    if (teamError) {
+      console.error("Error getting team members:", teamError);
+      // Si la función no existe, crear una consulta recursiva manual
+      const { data: directReferrals } = await supabase
+        .from("profiles")
+        .select("id")
+        .eq("referred_by", userId);
       
-      if (diffDays === 0) last_activity = "Hoy";
-      else if (diffDays === 1) last_activity = "Ayer";
-      else if (diffDays < 7) last_activity = `Hace ${diffDays} días`;
-      else last_activity = "Hace más de 1 semana";
+      if (!directReferrals || directReferrals.length === 0) {
+        return [];
+      }
+
+      const teamIds = directReferrals.map(r => r.id);
+      
+      // Para mantenerlo simple, solo nivel 1 por ahora
+      return getProductivityStatsForUsers(teamIds);
     }
-    
-    // Determinar estado
-    let status: TeamMemberStats["status"];
-    if (percentage >= 80) status = "active";
-    else if (percentage >= 50) status = "medium";
-    else if (percentage >= 20) status = "low";
-    else status = "inactive";
-    
-    return {
-      user_id: profile.id,
-      full_name: profile.full_name || "Usuario",
-      avatar_url: profile.avatar_url,
-      percentage,
-      days_active,
+
+    const teamIds = teamMembers?.map((m: any) => m.id) || [];
+    if (teamIds.length === 0) {
+      return [];
+    }
+
+    return getProductivityStatsForUsers(teamIds);
+  } catch (error) {
+    console.error("Error in getTeamProductivityStats:", error);
+    return [];
+  }
+}
+
+/**
+ * Obtener estadísticas de productividad para una lista de usuarios
+ */
+async function getProductivityStatsForUsers(userIds: string[]): Promise<TeamMemberStats[]> {
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - 6);
+
+  const { data, error } = await supabase
+    .from("user_productivity")
+    .select(`
+      user_id,
+      date,
       total_points,
-      last_activity,
-      status
-    };
+      profiles!user_productivity_user_id_fkey(full_name)
+    `)
+    .in("user_id", userIds)
+    .gte("date", startDate.toISOString().split("T")[0])
+    .lte("date", endDate.toISOString().split("T")[0]);
+
+  if (error) {
+    console.error("Error fetching team productivity:", error);
+    return [];
+  }
+
+  const userStats = new Map<string, TeamMemberStats>();
+
+  userIds.forEach(userId => {
+    userStats.set(userId, {
+      user_id: userId,
+      full_name: "Usuario",
+      total_points: 0,
+      days_active: 0,
+      percentage: 0,
+      last_activity: "Sin actividad",
+      status: "inactive"
+    });
   });
 
-  // Ordenar por porcentaje descendente
-  return userStats.sort((a, b) => b.percentage - a.percentage);
+  data?.forEach((record: any) => {
+    const userId = record.user_id;
+    const stats = userStats.get(userId);
+    
+    if (stats) {
+      stats.full_name = record.profiles?.full_name || "Usuario";
+      stats.total_points += record.total_points || 0;
+      if (record.total_points > 0) {
+        stats.days_active += 1;
+      }
+    }
+  });
+
+  const statsArray = Array.from(userStats.values());
+
+  statsArray.forEach(stats => {
+    stats.percentage = Math.round((stats.days_active / 7) * 100);
+    
+    if (stats.percentage >= 80) {
+      stats.status = "active";
+    } else if (stats.percentage >= 50) {
+      stats.status = "medium";
+    } else {
+      stats.status = "inactive";
+    }
+
+    if (stats.days_active > 0) {
+      const daysSince = 7 - stats.days_active;
+      if (daysSince === 0) {
+        stats.last_activity = "Hoy";
+      } else if (daysSince === 1) {
+        stats.last_activity = "Hace 1 día";
+      } else {
+        stats.last_activity = `Hace ${daysSince} días`;
+      }
+    }
+  });
+
+  return statsArray.sort((a, b) => b.percentage - a.percentage);
 }
 
 /**
  * Obtener top 5 del equipo
  */
-export async function getTopTeamMembers(): Promise<TeamMemberStats[]> {
-  const allStats = await getTeamProductivityStats();
+export async function getTopTeamMembers(userId: string): Promise<TeamMemberStats[]> {
+  const allStats = await getTeamProductivityStats(userId);
   return allStats.slice(0, 5);
 }
 

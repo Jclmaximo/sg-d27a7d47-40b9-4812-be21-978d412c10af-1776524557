@@ -289,7 +289,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -660,7 +660,7 @@ Puedo resolver dudas sobre:
 
       // Cargar estadísticas del equipo (solo admin)
       if (profile?.role === "admin") {
-        const team = await productivityService.getTeamProductivityStats();
+        const team = await productivityService.getTeamProductivityStats(session.user.id);
         setTeamStats(team);
       }
     } catch (error) {
