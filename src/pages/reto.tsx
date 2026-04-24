@@ -7,15 +7,11 @@ import { productivityService } from "@/services/productivityService";
 import { SEO } from "@/components/SEO";
 import { 
   Play, Pause, Copy, Check, Share2, Focus, 
-  Circle, CheckCircle2, Maximize2, Minimize2
+  Circle, CheckCircle2, Maximize2, Minimize2,
+  Zap, Users, BookOpen, Lock, Instagram
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { 
-  Clock, Link2, Copy, Check, TrendingUp, Zap, Users, BookOpen, Lock,
-  Share2, Instagram
-} from "lucide-react";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
@@ -58,21 +54,8 @@ export default function ZenCommandCenter() {
   const [resourcesUnlocked, setResourcesUnlocked] = useState(false);
   const [previousLeadsCount, setPreviousLeadsCount] = useState(0);
 
-  const startChallenge = () => {
-    const now = new Date();
-    const end = new Date(now.getTime() + 24 * 60 * 60 * 1000);
-    
-    setEndTime(end.toISOString());
-    setChallengeActive(false); // Desbloquear contenido
-    setNavigationVisible(true); // Mostrar navegación
-    
-    localStorage.setItem("reto_end_time", end.toISOString());
-    localStorage.setItem("reto_active", "false");
-  };
-
   useEffect(() => {
     loadData();
-    loadChallengeState();
     loadShareCount();
   }, []);
 
@@ -96,7 +79,7 @@ export default function ZenCommandCenter() {
       });
     }
     setPreviousLeadsCount(leadsCount);
-  }, [leadsCount]);
+  }, [leadsCount, previousLeadsCount, leadsUnlocked, toast]);
 
   // Supabase Realtime para leads
   useEffect(() => {
@@ -115,12 +98,10 @@ export default function ZenCommandCenter() {
         },
         async (payload) => {
           console.log("Lead realtime update:", payload);
-          // Recargar leads
           try {
             const leads = await leadsService.getLeads(profile.id);
             setLeadsCount(leads.length);
             
-            // Micro-animación en el tracker
             const tracker = document.getElementById("lead-tracker");
             if (tracker) {
               tracker.classList.add("scale-110", "text-primary");
@@ -138,7 +119,6 @@ export default function ZenCommandCenter() {
     };
   }, [profile?.id]);
 
-  // NUEVO - Cargar contador de shares
   const loadShareCount = () => {
     const saved = localStorage.getItem("reto_share_count");
     if (saved) {
@@ -150,13 +130,12 @@ export default function ZenCommandCenter() {
     }
   };
 
-  // NUEVO - Incrementar shares y verificar unlock
   const incrementShareCount = () => {
     const newCount = shareCount + 1;
     setShareCount(newCount);
     localStorage.setItem("reto_share_count", newCount.toString());
 
-    if (newCount >= 5 && !resourcesUnlocked) {
+    if (newCount === 5 && !resourcesUnlocked) {
       setResourcesUnlocked(true);
       toast({
         title: "Meta alcanzada",
@@ -187,7 +166,6 @@ export default function ZenCommandCenter() {
 
       setProfile(profileData as UserProfile);
 
-      // Load leads count
       const leads = await leadsService.getLeads(session.user.id);
       setLeadsCount(leads.length);
 
@@ -202,7 +180,6 @@ export default function ZenCommandCenter() {
     setProtocols((prev) =>
       prev.map((p) => {
         if (p.id === id) {
-          // Micro-animación
           const element = document.getElementById(`protocol-${id}`);
           if (element) {
             element.classList.add("scale-105");
@@ -214,7 +191,6 @@ export default function ZenCommandCenter() {
       })
     );
 
-    // Guardar en base de datos
     if (profile?.id) {
       const protocol = protocols.find((p) => p.id === id);
       if (protocol) {
@@ -287,19 +263,21 @@ export default function ZenCommandCenter() {
           0%, 100% { 
             transform: scale(1);
             opacity: 1;
+            box-shadow: 0 0 0 rgba(37, 99, 235, 0);
           }
           50% { 
-            transform: scale(1.15);
-            opacity: 0.8;
+            transform: scale(1.05);
+            opacity: 0.9;
+            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
           }
         }
         
         .unlock-animation {
-          animation: unlock-pulse 0.6s ease-out;
+          animation: unlock-pulse 0.8s ease-out;
         }
       `}</style>
 
-      <div className="min-h-screen bg-white relative overflow-hidden">
+      <div className="min-h-screen bg-white relative overflow-hidden pb-24">
         {/* Header minimalista */}
         <header className="border-b border-gray-100">
           <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
@@ -333,8 +311,11 @@ export default function ZenCommandCenter() {
               </div>
               <Button
                 onClick={() => {
-                  setChallengeActive(!challengeActive);
-                  if (!challengeActive) {
+                  const newActive = !challengeActive;
+                  setChallengeActive(newActive);
+                  if (newActive) {
+                    setNavigationVisible(true);
+                  } else {
                     setTimeRemaining(86400); // Reset a 24h
                   }
                 }}
@@ -372,7 +353,7 @@ export default function ZenCommandCenter() {
                 <div className="bg-gray-50 rounded-2xl p-4 mb-6 font-mono text-sm text-[#1D1D1F] break-all">
                   {`${typeof window !== "undefined" ? window.location.origin : ""}/mwr?ref=${profile?.username || ""}`}
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 mb-6">
                   <Button
                     onClick={copyFunnelLink}
                     className="flex-1 bg-[#1D1D1F] hover:bg-gray-800 text-white rounded-xl font-light"
@@ -413,7 +394,7 @@ export default function ZenCommandCenter() {
                 </p>
                 <div
                   id="lead-tracker"
-                  className="text-8xl font-extralight text-[#1D1D1F] mb-4 transition-transform"
+                  className="text-8xl font-extralight text-[#1D1D1F] mb-4 transition-transform duration-300"
                 >
                   {leadsCount}
                 </div>
@@ -425,7 +406,7 @@ export default function ZenCommandCenter() {
           </div>
 
           {/* C. ESTADO DE FLUJO - Checklist */}
-          <div>
+          <div className={`transition-all duration-500 ${challengeActive ? "" : "opacity-30 blur-sm pointer-events-none"}`}>
             <div className="flex items-center justify-between mb-8">
               <div>
                 <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-2">
@@ -535,96 +516,97 @@ export default function ZenCommandCenter() {
           </div>
         )}
 
-      {/* Navigation Dock - Invisible hasta iniciar reto */}
-      <div
-        className={`
-          fixed bottom-8 left-1/2 -translate-x-1/2 z-50
-          transition-all duration-700 ease-out
-          ${navigationVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"}
-        `}
-      >
-        <div className="backdrop-blur-xl bg-white/80 border border-gray-100/20 rounded-2xl shadow-2xl px-4 py-3">
-          <div className="flex items-center gap-2">
-            {/* Centro de Comando - Siempre activo */}
-            <button
-              onClick={() => router.push("/reto")}
-              className="group relative p-4 rounded-xl hover:bg-white/50 transition-all"
-            >
-              <Zap className="w-6 h-6 text-[#2563EB] stroke-[1.5]" />
-              <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                Centro de Comando
-              </span>
-            </button>
-
-            {/* Divisor */}
-            <div className="w-px h-8 bg-gray-200/50" />
-
-            {/* Gestión de Leads - Bloqueado hasta primer lead */}
-            <button
-              onClick={() => {
-                if (leadsUnlocked) {
-                  router.push("/admin/main-dashboard?tab=leads");
-                }
-              }}
-              disabled={!leadsUnlocked}
-              className={`
-                group relative p-4 rounded-xl transition-all
-                ${leadsUnlocked 
-                  ? "hover:bg-white/50 cursor-pointer" 
-                  : "opacity-30 cursor-not-allowed"
-                }
-              `}
-            >
-              {!leadsUnlocked && (
-                <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400" />
-              )}
-              <Users className={`w-6 h-6 stroke-[1.5] ${leadsUnlocked ? "text-[#2563EB]" : "text-gray-400"}`} />
-              {leadsUnlocked && (
+        {/* Navigation Dock - Invisible hasta iniciar reto */}
+        <div
+          className={`
+            fixed bottom-8 left-1/2 -translate-x-1/2 z-50
+            transition-all duration-700 ease-out
+            ${navigationVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"}
+          `}
+        >
+          <div className="backdrop-blur-xl bg-white/80 border border-gray-100/20 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 py-3">
+            <div className="flex items-center gap-2">
+              {/* Centro de Comando - Siempre activo */}
+              <button
+                onClick={() => router.push("/reto")}
+                className="group relative p-4 rounded-xl bg-white/50 hover:bg-white/80 transition-all shadow-sm"
+              >
+                <Zap className="w-6 h-6 text-[#2563EB] stroke-[1.5]" />
                 <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                  Gestión de Leads
+                  Centro de Comando
                 </span>
-              )}
-              {!leadsUnlocked && (
-                <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
-                  Bloqueado<br/>Necesitas 1 lead
-                </span>
-              )}
-            </button>
+              </button>
 
-            {/* Divisor */}
-            <div className="w-px h-8 bg-gray-200/50" />
+              {/* Divisor */}
+              <div className="w-px h-8 bg-gray-200/50" />
 
-            {/* Bóveda de Recursos - Bloqueado hasta 5 shares */}
-            <button
-              onClick={() => {
-                if (resourcesUnlocked) {
-                  router.push("/admin/recursos");
-                }
-              }}
-              disabled={!resourcesUnlocked}
-              className={`
-                group relative p-4 rounded-xl transition-all
-                ${resourcesUnlocked 
-                  ? "hover:bg-white/50 cursor-pointer" 
-                  : "opacity-30 cursor-not-allowed"
-                }
-              `}
-            >
-              {!resourcesUnlocked && (
-                <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400" />
-              )}
-              <BookOpen className={`w-6 h-6 stroke-[1.5] ${resourcesUnlocked ? "text-[#2563EB]" : "text-gray-400"}`} />
-              {resourcesUnlocked && (
-                <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                  Bóveda de Recursos
-                </span>
-              )}
-              {!resourcesUnlocked && (
-                <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
-                  Bloqueado<br/>{shareCount}/5 compartidos
-                </span>
-              )}
-            </button>
+              {/* Gestión de Leads - Bloqueado hasta primer lead */}
+              <button
+                onClick={() => {
+                  if (leadsUnlocked) {
+                    router.push("/admin/main-dashboard?tab=leads");
+                  }
+                }}
+                disabled={!leadsUnlocked}
+                className={`
+                  group relative p-4 rounded-xl transition-all
+                  ${leadsUnlocked 
+                    ? "hover:bg-white/80 cursor-pointer shadow-sm unlock-animation" 
+                    : "opacity-40 cursor-not-allowed hover:bg-gray-50/50"
+                  }
+                `}
+              >
+                {!leadsUnlocked && (
+                  <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400 group-hover:text-red-400 transition-colors" />
+                )}
+                <Users className={`w-6 h-6 stroke-[1.5] ${leadsUnlocked ? "text-[#2563EB]" : "text-gray-400"}`} />
+                {leadsUnlocked && (
+                  <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    Gestión de Leads
+                  </span>
+                )}
+                {!leadsUnlocked && (
+                  <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
+                    Bloqueado<br/>Necesitas 1 lead
+                  </span>
+                )}
+              </button>
+
+              {/* Divisor */}
+              <div className="w-px h-8 bg-gray-200/50" />
+
+              {/* Bóveda de Recursos - Bloqueado hasta 5 shares */}
+              <button
+                onClick={() => {
+                  if (resourcesUnlocked) {
+                    router.push("/admin/recursos");
+                  }
+                }}
+                disabled={!resourcesUnlocked}
+                className={`
+                  group relative p-4 rounded-xl transition-all
+                  ${resourcesUnlocked 
+                    ? "hover:bg-white/80 cursor-pointer shadow-sm unlock-animation" 
+                    : "opacity-40 cursor-not-allowed hover:bg-gray-50/50"
+                  }
+                `}
+              >
+                {!resourcesUnlocked && (
+                  <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400 group-hover:text-red-400 transition-colors" />
+                )}
+                <BookOpen className={`w-6 h-6 stroke-[1.5] ${resourcesUnlocked ? "text-[#2563EB]" : "text-gray-400"}`} />
+                {resourcesUnlocked && (
+                  <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    Bóveda de Recursos
+                  </span>
+                )}
+                {!resourcesUnlocked && (
+                  <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
+                    Bloqueado<br/>{shareCount}/5 compartidos
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </div>
