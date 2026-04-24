@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    /* Modern SaaS palette - Light mode */
+    /* Modern SaaS palette - Light mode - IMPROVED CONTRAST */
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
@@ -22,8 +22,8 @@
     --secondary: 214 32% 91%;
     --secondary-foreground: 222 47% 11%;
 
-    --muted: 220 13% 91%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 35%;
 
     --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
@@ -37,8 +37,8 @@
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
     --ring: 217 91% 60%;
 
     --radius: 0.5rem;

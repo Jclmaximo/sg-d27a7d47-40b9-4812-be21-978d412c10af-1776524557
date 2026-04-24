@@ -713,7 +713,7 @@ Puedo resolver dudas sobre:
       />
       <div className="min-h-screen bg-[#F8FAFC]">
         {/* Header */}
-        <header className="bg-white border-b border-[#E5E7EB] sticky top-0 z-50">
+        <header className="bg-white border-b border-[#E2E8F0] sticky top-0 z-50 shadow-sm">
           <div className="w-full px-6 py-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-4">
@@ -721,7 +721,7 @@ Puedo resolver dudas sobre:
                   <img
                     src={profile.avatar_url}
                     alt={profile.full_name}
-                    className="w-12 h-12 rounded-full object-cover border-2 border-[#E5E7EB]"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-[#E2E8F0]"
                     onError={(e) => {
                       console.error("Error loading avatar:", profile.avatar_url);
                       e.currentTarget.style.display = 'none';
@@ -736,7 +736,7 @@ Puedo resolver dudas sobre:
                   <h1 className="text-2xl font-semibold text-[#0F172A]">
                     Mi Dashboard
                   </h1>
-                  <p className="text-sm text-[#64748B]">
+                  <p className="text-sm text-[#475569]">
                     Bienvenido, {profile?.full_name || profile?.username || "Usuario"}
                   </p>
                 </div>
@@ -746,7 +746,7 @@ Puedo resolver dudas sobre:
               variant="outline"
               size="sm"
               onClick={handleLogout}
-              className="border-[#E5E7EB] hover:bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A]"
+              className="border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-[#CBD5E1] text-[#475569] hover:text-[#0F172A]"
             >
               <LogOut className="w-4 h-4 mr-2" />
               Salir
@@ -758,10 +758,10 @@ Puedo resolver dudas sobre:
           <div className="max-w-7xl mx-auto w-full">
             {/* Navigation Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="w-full inline-flex h-auto flex-nowrap overflow-x-auto overflow-y-hidden gap-2 bg-white border border-[#E5E7EB] p-1 rounded-lg">
+              <TabsList className="w-full inline-flex h-auto flex-nowrap overflow-x-auto overflow-y-hidden gap-2 bg-white border border-[#E2E8F0] p-1 rounded-lg shadow-sm">
                 <TabsTrigger 
                   value="resumen" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
                   onClick={() => router.push("/admin/welcome")}
                 >
                   <LayoutGrid className="w-4 h-4 mr-2" />
@@ -769,46 +769,59 @@ Puedo resolver dudas sobre:
                 </TabsTrigger>
                 <TabsTrigger 
                   value="leads"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
                 >
                   <Users className="w-4 h-4 mr-2" />
                   Leads
                 </TabsTrigger>
-                <TabsTrigger value="network" className="flex-shrink-0">
-                  <Users className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Mi Red</span>
+                <TabsTrigger 
+                  value="network"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
+                >
+                  <Network className="w-4 h-4 mr-2" />
+                  Mi Red
                 </TabsTrigger>
-                <TabsTrigger value="productividad" className="flex-shrink-0">
-                  <CheckCircle className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Productividad</span>
+                <TabsTrigger 
+                  value="productividad"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
+                >
+                  <CheckCircle className="w-4 h-4 mr-2" />
+                  Productividad
                 </TabsTrigger>
-                <TabsTrigger value="links" className="flex-shrink-0">
-                  <Link2 className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Links</span>
+                <TabsTrigger 
+                  value="links"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
+                >
+                  <Link2 className="w-4 h-4 mr-2" />
+                  Links
                 </TabsTrigger>
-                <TabsTrigger value="profile" className="flex-shrink-0">
-                  <User className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Perfil</span>
+                <TabsTrigger 
+                  value="profile"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Perfil
                 </TabsTrigger>
-                <TabsTrigger value="recursos" onClick={(e) => {
-                  e.preventDefault();
-                  router.push("/admin/recursos");
-                }} className="flex-shrink-0">
-                  <Gift className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Recursos</span>
+                <TabsTrigger 
+                  value="recursos"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
+                >
+                  <Gift className="w-4 h-4 mr-2" />
+                  Recursos
                 </TabsTrigger>
-                {profile?.role === "admin" && (
-                  <TabsTrigger value="equipo" className="flex-shrink-0">
-                    <Users className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">Equipo</span>
-                  </TabsTrigger>
-                )}
+                <TabsTrigger 
+                  value="equipo"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
+                >
+                  <Shield className="w-4 h-4 mr-2" />
+                  Equipo
+                </TabsTrigger>
               </TabsList>
 
               {/* TAB 1 - RESUMEN */}
               <TabsContent value="resumen" className="space-y-6">
                 <div className="grid gap-6 md:grid-cols-3 mb-6">
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                     <CardHeader>
                       <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
                         <DollarSign className="w-5 h-5 text-primary" />
@@ -819,11 +832,11 @@ Puedo resolver dudas sobre:
                       <div className="text-4xl font-semibold text-[#0F172A] mb-1">
                         ${(stats?.total_earned ?? 0).toFixed(2)}
                       </div>
-                      <p className="text-sm text-[#64748B]">Acumulado total</p>
+                      <p className="text-sm text-[#475569]">Acumulado total</p>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-sm font-medium text-[#64748B]">Nuevos</CardTitle>
                       <Clock className="w-5 h-5 text-primary" />
@@ -835,7 +848,7 @@ Puedo resolver dudas sobre:
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-sm font-medium text-[#64748B]">Contactados</CardTitle>
                       <MessageSquare className="w-5 h-5 text-primary" />
@@ -849,23 +862,23 @@ Puedo resolver dudas sobre:
                 </div>
 
                 {/* Quick Actions */}
-                <Card className="bg-white border border-[#E5E7EB] shadow-sm">
+                <Card className="bg-white border border-[#E2E8F0] shadow-sm">
                   <CardHeader>
                     <CardTitle className="text-lg font-semibold text-[#0F172A]">Acciones Rápidas</CardTitle>
-                    <CardDescription className="text-[#64748B]">
+                    <CardDescription className="text-[#475569]">
                       Herramientas para hacer crecer tu negocio
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="grid gap-4 md:grid-cols-3">
                     <Button
                       variant="outline"
-                      className="h-auto py-6 flex-col gap-3 border-[#E5E7EB] hover:bg-[#F8FAFC] hover:border-primary"
+                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
                       onClick={() => setActiveTab("links")}
                     >
                       <Link2 className="h-6 w-6 text-primary" />
                       <div className="text-center">
                         <div className="font-semibold text-[#0F172A]">Compartir Embudo</div>
-                        <div className="text-sm text-[#64748B]">
+                        <div className="text-sm text-[#475569]">
                           Copia tu link personalizado
                         </div>
                       </div>
@@ -873,13 +886,13 @@ Puedo resolver dudas sobre:
 
                     <Button
                       variant="outline"
-                      className="h-auto py-6 flex-col gap-3 border-[#E5E7EB] hover:bg-[#F8FAFC] hover:border-primary"
+                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
                       onClick={() => setActiveTab("leads")}
                     >
                       <Users className="h-6 w-6 text-primary" />
                       <div className="text-center">
                         <div className="font-semibold text-[#0F172A]">Ver Leads</div>
-                        <div className="text-sm text-[#64748B]">
+                        <div className="text-sm text-[#475569]">
                           {allLeads.length} prospectos capturados
                         </div>
                       </div>
@@ -887,13 +900,13 @@ Puedo resolver dudas sobre:
 
                     <Button
                       variant="outline"
-                      className="h-auto py-6 flex-col gap-3 border-[#E5E7EB] hover:bg-[#F8FAFC] hover:border-primary"
+                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F8FAFC] hover:border-primary transition-all"
                       onClick={() => router.push("/admin/recursos")}
                     >
                       <Gift className="h-6 w-6 text-primary" />
                       <div className="text-center">
                         <div className="font-semibold text-[#0F172A]">Recursos de Marketing</div>
-                        <div className="text-sm text-[#64748B]">
+                        <div className="text-sm text-[#475569]">
                           Imágenes, copys y enlaces
                         </div>
                       </div>
@@ -968,11 +981,11 @@ Puedo resolver dudas sobre:
                             placeholder="Buscar leads..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 bg-white border-[#E5E7EB] focus:border-primary"
+                            className="pl-10 bg-white border-[#E2E8F0] hover:border-[#CBD5E1] focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                           />
                         </div>
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
-                          <SelectTrigger className="w-full sm:w-[180px] bg-white border-[#E5E7EB] hover:border-primary">
+                          <SelectTrigger className="w-full sm:w-[180px] bg-white border-[#E2E8F0] hover:border-[#CBD5E1] focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -1006,7 +1019,7 @@ Puedo resolver dudas sobre:
                         {leads.map((lead) => (
                           <div
                             key={lead.id}
-                            className="p-4 rounded-lg bg-white border border-[#E5E7EB] hover:border-primary hover:shadow-sm transition-all"
+                            className="p-4 rounded-lg bg-white border border-[#E2E8F0] hover:border-primary hover:shadow-md transition-all"
                           >
                             {/* Mobile & Desktop Layout */}
                             <div className="flex flex-col gap-4">
@@ -1022,7 +1035,7 @@ Puedo resolver dudas sobre:
                                     size="sm"
                                     variant="outline"
                                     onClick={() => loadLeadNotes(lead)}
-                                    className="border-[#E5E7EB] hover:border-primary hover:bg-[#F8FAFC]"
+                                    className="border-[#E2E8F0] hover:border-primary hover:bg-[#F1F5F9] transition-all"
                                   >
                                     <Eye className="w-4 h-4" />
                                   </Button>
@@ -1033,7 +1046,7 @@ Puedo resolver dudas sobre:
                                       setSelectedLead(lead);
                                       setShowNoteDialog(true);
                                     }}
-                                    className="border-[#E5E7EB] hover:border-primary hover:bg-[#F8FAFC]"
+                                    className="border-[#E2E8F0] hover:border-primary hover:bg-[#F1F5F9] transition-all"
                                   >
                                     <Plus className="w-4 h-4" />
                                   </Button>
@@ -1053,24 +1066,24 @@ Puedo resolver dudas sobre:
 
                               {/* Info Grid */}
                               <div className="grid sm:grid-cols-2 gap-3 text-sm">
-                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB] min-w-0">
-                                  <Mail className="w-4 h-4 text-primary shrink-0" />
+                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E2E8F0] min-w-0">
+                                  <Mail className="w-4 h-4 text-[#64748B] shrink-0" />
                                   <span className="text-[#0F172A] truncate font-medium min-w-0">{lead.email}</span>
                                 </div>
-                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB]">
-                                  <Phone className="w-4 h-4 text-primary shrink-0" />
+                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E2E8F0]">
+                                  <Phone className="w-4 h-4 text-[#64748B] shrink-0" />
                                   <span className="text-[#0F172A] font-medium">{lead.phone}</span>
                                 </div>
-                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB]">
+                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E2E8F0]">
                                   <Calendar className="w-4 h-4 text-[#64748B] shrink-0" />
                                   <span className="text-[#0F172A]">{formatDate(lead.created_at)}</span>
                                 </div>
-                                <div className="bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB]">
+                                <div className="bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E2E8F0]">
                                   <Select
                                     value={lead.status}
                                     onValueChange={(value) => updateLeadStatus(lead.id, value)}
                                   >
-                                    <SelectTrigger className="h-8 border-primary/20 bg-background/80">
+                                    <SelectTrigger className="h-8 border-[#E2E8F0] bg-white hover:border-[#CBD5E1] focus:border-primary focus:ring-2 focus:ring-primary/20">
                                       <SelectValue>
                                         <Badge className={getStatusBadgeColor(lead.status)}>
                                           {getStatusText(lead.status)}
@@ -1124,7 +1137,7 @@ Puedo resolver dudas sobre:
               {/* TAB 3 - MI RED */}
               <TabsContent value="network" className="space-y-6">
                 <div className="grid gap-6 md:grid-cols-3 mb-6">
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-sm font-medium text-[#64748B]">Total Referidos</CardTitle>
                       <Network className="w-5 h-5 text-primary" />
@@ -1133,11 +1146,11 @@ Puedo resolver dudas sobre:
                       <div className="text-4xl font-semibold text-[#0F172A] mb-1">
                         {networkMembers.length}
                       </div>
-                      <p className="text-sm text-[#64748B]">Personas en tu red</p>
+                      <p className="text-sm text-[#475569]">Personas en tu red</p>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-sm font-medium text-[#64748B]">Total Comisiones</CardTitle>
                       <DollarSign className="w-5 h-5 text-success" />
@@ -1146,11 +1159,11 @@ Puedo resolver dudas sobre:
                       <div className="text-4xl font-semibold text-[#0F172A] mb-1">
                         ${commissions.reduce((sum, c) => sum + Number(c.amount_usd), 0).toFixed(2)}
                       </div>
-                      <p className="text-sm text-[#64748B]">Ganadas en total</p>
+                      <p className="text-sm text-[#475569]">Ganadas en total</p>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                       <CardTitle className="text-sm font-medium text-[#64748B]">Tasa de Conversión</CardTitle>
                       <TrendingUp className="w-5 h-5 text-success" />
@@ -1161,7 +1174,7 @@ Puedo resolver dudas sobre:
                           ? ((networkMembers.length / allLeads.length) * 100).toFixed(1)
                           : "0.0"}%
                       </div>
-                      <p className="text-sm text-[#64748B]">De leads a referidos</p>
+                      <p className="text-sm text-[#475569]">De leads a referidos</p>
                     </CardContent>
                   </Card>
                 </div>
@@ -1433,13 +1446,13 @@ Puedo resolver dudas sobre:
                         <Input
                           readOnly
                           value={funnelUrl}
-                          className="flex-1 bg-white border-[#E5E7EB] font-mono text-sm text-primary"
+                          className="flex-1 bg-white border-[#E2E8F0] font-mono text-sm text-primary hover:border-[#CBD5E1] focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                         />
                         <Button
                           onClick={copyReferralLink}
                           className="bg-primary hover:bg-primary/90 text-white shadow-sm"
                         >
-                          {copiedReferral ? (
+                          {copiedFunnel ? (
                             <>
                               <Check className="w-4 h-4 mr-2" />
                               Copiado
@@ -1545,7 +1558,7 @@ Puedo resolver dudas sobre:
                         <Input
                           readOnly
                           value={`${typeof window !== "undefined" ? window.location.origin : ""}/ambassador/${profile?.username || ""}`}
-                          className="flex-1 bg-white border-[#E5E7EB] font-mono text-sm text-primary"
+                          className="flex-1 bg-white border-[#E2E8F0] font-mono text-sm text-primary hover:border-[#CBD5E1] focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"
                         />
                         <Button
                           onClick={() => {
@@ -1695,7 +1708,7 @@ Puedo resolver dudas sobre:
                         <Input
                           value={profile?.full_name || ""}
                           readOnly
-                          className="bg-[#F8FAFC] border-[#E5E7EB]"
+                          className="bg-white border-[#E2E8F0] text-[#475569]"
                         />
                       </div>
                       <div className="space-y-2">
@@ -1705,7 +1718,7 @@ Puedo resolver dudas sobre:
                         <Input
                           value={profile?.email || ""}
                           readOnly
-                          className="bg-[#F8FAFC] border-[#E5E7EB]"
+                          className="bg-white border-[#E2E8F0] text-[#475569]"
                         />
                       </div>
                       <div className="space-y-2">
@@ -1716,7 +1729,7 @@ Puedo resolver dudas sobre:
                           <Input
                             value={profile?.username || ""}
                             readOnly
-                            className="bg-[#F8FAFC] border-[#E5E7EB] font-mono"
+                            className="bg-white border-[#E2E8F0] font-mono text-[#475569]"
                           />
                           <Button
                             variant="outline"
@@ -1724,7 +1737,7 @@ Puedo resolver dudas sobre:
                             onClick={() => {
                               navigator.clipboard.writeText(profile?.username || "");
                             }}
-                            className="border-[#E5E7EB] hover:border-primary hover:bg-[#F8FAFC]"
+                            className="border-[#E2E8F0] hover:border-primary hover:bg-[#F8FAFC]"
                           >
                             <Copy className="w-4 h-4" />
                           </Button>
@@ -1737,7 +1750,7 @@ Puedo resolver dudas sobre:
                         <Input
                           value={profile?.role || ""}
                           readOnly
-                          className="bg-[#F8FAFC] border-[#E5E7EB] capitalize"
+                          className="bg-white border-[#E2E8F0] capitalize text-[#475569]"
                         />
                       </div>
                     </div>
@@ -1824,7 +1837,9 @@ Puedo resolver dudas sobre:
                         {teamStats.length === 0 ? (
                           <div className="text-center py-12 bg-[#F8FAFC] rounded-lg border border-[#E5E7EB]">
                             <Users className="w-12 h-12 text-[#64748B] mx-auto mb-3" />
-                            <p className="text-[#64748B]">No hay datos de equipo disponibles</p>
+                            <p className="text-[#64748B]">
+                              No hay datos de equipo disponibles
+                            </p>
                           </div>
                         ) : (
                           <div className="overflow-x-auto">
@@ -1970,7 +1985,7 @@ Puedo resolver dudas sobre:
                       <div className={`absolute inset-0 bg-gradient-to-br ${template.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
                       <div className="p-5 relative z-10">
                         <div className="flex items-start gap-3 mb-3">
-                          <div className={`text-3xl bg-gradient-to-br ${template.color} bg-clip-text`}>
+                          <div className="text-3xl bg-gradient-to-br ${template.color} bg-clip-text">
                             {template.emoji}
                           </div>
                           <div className="flex-1">
