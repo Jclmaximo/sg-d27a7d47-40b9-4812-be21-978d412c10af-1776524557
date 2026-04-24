@@ -728,36 +728,32 @@ Puedo resolver dudas sobre:
         title="Dashboard Principal - Viaja Ligero"
         description="Panel de control principal para gestionar leads y comisiones"
       />
-      <div className="min-h-screen bg-background relative w-full overflow-x-hidden">
-        {/* Background Orbs */}
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-20 animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
-
+      <div className="min-h-screen bg-[#F8FAFC]">
         {/* Header */}
-        <header className="bg-background border-b border-border/30 sticky top-0 z-50 w-full">
-          <div className="w-full px-4 py-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
+        <header className="bg-white border-b border-[#E5E7EB] sticky top-0 z-50">
+          <div className="w-full px-6 py-4 flex items-center justify-between">
+            <div className="flex items-center gap-4">
               <div className="flex items-center gap-4">
                 {profile?.avatar_url ? (
                   <img
                     src={profile.avatar_url}
                     alt={profile.full_name}
-                    className="w-14 h-14 rounded-full object-cover border-2 border-primary/30"
+                    className="w-12 h-12 rounded-full object-cover border-2 border-[#E5E7EB]"
                     onError={(e) => {
                       console.error("Error loading avatar:", profile.avatar_url);
                       e.currentTarget.style.display = 'none';
                     }}
                   />
                 ) : (
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                  <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white text-lg font-semibold">
                     {profile?.full_name?.[0]?.toUpperCase() || "U"}
                   </div>
                 )}
                 <div>
-                  <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                  <h1 className="text-2xl font-semibold text-[#0F172A]">
                     Mi Dashboard
                   </h1>
-                  <p className="text-gray-400">
+                  <p className="text-sm text-[#64748B]">
                     Bienvenido, {profile?.full_name || profile?.username || "Usuario"}
                   </p>
                 </div>
@@ -767,34 +763,19 @@ Puedo resolver dudas sobre:
               variant="outline"
               size="sm"
               onClick={handleLogout}
-              className="border-border/50 hover:border-primary/50 hover:bg-primary/10 text-xs md:text-sm px-2 md:px-3"
+              className="border-[#E5E7EB] hover:bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A]"
             >
-              <LogOut className="w-3 h-3 md:w-4 md:h-4 md:mr-2" />
-              <span className="hidden md:inline">Salir</span>
+              <LogOut className="w-4 h-4 mr-2" />
+              Salir
             </Button>
           </div>
         </header>
 
-        {/* Hero Message */}
-        <div className="w-full py-8 md:py-12 lg:py-16 bg-gradient-to-b from-background via-primary/5 to-background">
-          <div className="w-full px-4">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center leading-tight break-words">
-              <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
-                Gestiona Tu Red de Referidos
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-cyan-400 via-blue-400 to-primary bg-clip-text text-transparent">
-                con un Sistema Automático
-              </span>
-            </h2>
-          </div>
-        </div>
-
-        <main className="w-full px-4 py-6 md:py-8 relative z-10">
+        <main className="w-full px-6 py-8">
           <div className="max-w-7xl mx-auto w-full">
             {/* Navigation Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="w-full inline-flex h-auto flex-nowrap overflow-x-auto overflow-y-hidden gap-2 bg-background/50 p-1">
+              <TabsList className="w-full inline-flex h-auto flex-nowrap overflow-x-auto overflow-y-hidden gap-2 bg-white border border-[#E5E7EB] p-1 rounded-lg">
                 <TabsTrigger value="overview" className="flex-shrink-0">
                   <LayoutDashboard className="w-4 h-4 sm:mr-2" />
                   <span className="hidden sm:inline">Resumen</span>
@@ -836,41 +817,41 @@ Puedo resolver dudas sobre:
 
               {/* TAB 1 - RESUMEN */}
               <TabsContent value="resumen" className="space-y-6">
-                <div className="grid gap-4 md:grid-cols-3 mb-6">
-                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
+                <div className="grid gap-6 md:grid-cols-3 mb-6">
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader>
-                      <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
                         <DollarSign className="w-5 h-5 text-primary" />
                         Total Ganado
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent mb-1">
+                      <div className="text-4xl font-semibold text-[#0F172A] mb-1">
                         ${(stats?.total_earned ?? 0).toFixed(2)}
                       </div>
-                      <p className="text-xs text-muted-foreground">Acumulado total</p>
+                      <p className="text-sm text-[#64748B]">Acumulado total</p>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/30 shadow-xl shadow-secondary/20 hover:shadow-2xl hover:shadow-secondary/30 hover:border-secondary/50 transition-all">
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Nuevos</CardTitle>
-                      <Clock className="w-5 h-5 text-accent" />
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Nuevos</CardTitle>
+                      <Clock className="w-5 h-5 text-primary" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-bold text-foreground">
+                      <div className="text-4xl font-semibold text-[#0F172A]">
                         {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/30 shadow-xl shadow-accent/20 hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/50 transition-all">
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Contactados</CardTitle>
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Contactados</CardTitle>
                       <MessageSquare className="w-5 h-5 text-primary" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-bold text-foreground">
+                      <div className="text-4xl font-semibold text-[#0F172A]">
                         {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
                       </div>
                     </CardContent>
@@ -878,23 +859,23 @@ Puedo resolver dudas sobre:
                 </div>
 
                 {/* Quick Actions */}
-                <Card>
+                <Card className="bg-white border border-[#E5E7EB] shadow-sm">
                   <CardHeader>
-                    <CardTitle>Acciones Rápidas</CardTitle>
-                    <CardDescription>
+                    <CardTitle className="text-lg font-semibold text-[#0F172A]">Acciones Rápidas</CardTitle>
+                    <CardDescription className="text-[#64748B]">
                       Herramientas para hacer crecer tu negocio
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="grid gap-4 md:grid-cols-3">
                     <Button
                       variant="outline"
-                      className="h-auto py-4 flex-col gap-2"
+                      className="h-auto py-6 flex-col gap-3 border-[#E5E7EB] hover:bg-[#F8FAFC] hover:border-primary"
                       onClick={() => setActiveTab("links")}
                     >
-                      <Link2 className="h-6 w-6" />
+                      <Link2 className="h-6 w-6 text-primary" />
                       <div className="text-center">
-                        <div className="font-semibold">Compartir Embudo</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="font-semibold text-[#0F172A]">Compartir Embudo</div>
+                        <div className="text-sm text-[#64748B]">
                           Copia tu link personalizado
                         </div>
                       </div>
@@ -902,13 +883,13 @@ Puedo resolver dudas sobre:
 
                     <Button
                       variant="outline"
-                      className="h-auto py-4 flex-col gap-2"
+                      className="h-auto py-6 flex-col gap-3 border-[#E5E7EB] hover:bg-[#F8FAFC] hover:border-primary"
                       onClick={() => setActiveTab("leads")}
                     >
-                      <Users className="h-6 w-6" />
+                      <Users className="h-6 w-6 text-primary" />
                       <div className="text-center">
-                        <div className="font-semibold">Ver Leads</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="font-semibold text-[#0F172A]">Ver Leads</div>
+                        <div className="text-sm text-[#64748B]">
                           {allLeads.length} prospectos capturados
                         </div>
                       </div>
@@ -916,13 +897,13 @@ Puedo resolver dudas sobre:
 
                     <Button
                       variant="outline"
-                      className="h-auto py-4 flex-col gap-2"
+                      className="h-auto py-6 flex-col gap-3 border-[#E5E7EB] hover:bg-[#F8FAFC] hover:border-primary"
                       onClick={() => router.push("/admin/recursos")}
                     >
-                      <Gift className="h-6 w-6" />
+                      <Gift className="h-6 w-6 text-primary" />
                       <div className="text-center">
-                        <div className="font-semibold">Recursos de Marketing</div>
-                        <div className="text-xs text-muted-foreground">
+                        <div className="font-semibold text-[#0F172A]">Recursos de Marketing</div>
+                        <div className="text-sm text-[#64748B]">
                           Imágenes, copys y enlaces
                         </div>
                       </div>
@@ -933,75 +914,75 @@ Puedo resolver dudas sobre:
 
               {/* TAB 2 - LEADS */}
               <TabsContent value="leads" className="space-y-6">
-                <div className="grid gap-4 md:grid-cols-4 mb-6">
-                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
+                <div className="grid gap-6 md:grid-cols-4 mb-6">
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Total Leads</CardTitle>
                       <Users className="w-5 h-5 text-primary" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-bold text-foreground">{allLeads.length}</div>
+                      <div className="text-3xl font-semibold text-[#0F172A]">{allLeads.length}</div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/30 shadow-xl shadow-accent/20 hover:shadow-2xl hover:shadow-accent/30 hover:border-accent/50 transition-all">
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Nuevos</CardTitle>
-                      <Clock className="w-5 h-5 text-accent" />
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Nuevos</CardTitle>
+                      <Clock className="w-5 h-5 text-primary" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-bold text-foreground">
+                      <div className="text-3xl font-semibold text-[#0F172A]">
                         {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 hover:shadow-2xl hover:shadow-primary/30 hover:border-primary/50 transition-all">
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Contactados</CardTitle>
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Contactados</CardTitle>
                       <MessageSquare className="w-5 h-5 text-primary" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-bold text-foreground">
+                      <div className="text-3xl font-semibold text-[#0F172A]">
                         {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/30 shadow-xl shadow-secondary/20 hover:shadow-2xl hover:shadow-secondary/30 hover:border-secondary/50 transition-all">
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-muted-foreground">Convertidos</CardTitle>
-                      <CheckCircle2 className="w-5 h-5 text-secondary" />
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Convertidos</CardTitle>
+                      <CheckCircle2 className="w-5 h-5 text-success" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-4xl font-bold text-foreground">
+                      <div className="text-3xl font-semibold text-[#0F172A]">
                         {allLeads.filter(l => l.status === "convertido" || l.status === "converted").length}
                       </div>
                     </CardContent>
                   </Card>
                 </div>
 
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
+                <Card className="bg-white border border-[#E5E7EB] shadow-sm">
                   <CardHeader>
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                       <div>
-                        <CardTitle>Gestión de Leads</CardTitle>
-                        <CardDescription>
+                        <CardTitle className="text-lg font-semibold text-[#0F172A]">Gestión de Leads</CardTitle>
+                        <CardDescription className="text-[#64748B]">
                           Administra y da seguimiento a tus prospectos
                         </CardDescription>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         <div className="relative flex-1 md:flex-initial md:w-64">
-                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#64748B]" />
                           <Input
                             placeholder="Buscar leads..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="pl-10 bg-background/60 border-primary/20 focus:border-primary/50"
+                            className="pl-10 bg-white border-[#E5E7EB] focus:border-primary"
                           />
                         </div>
                         <Select value={statusFilter} onValueChange={setStatusFilter}>
-                          <SelectTrigger className="w-full sm:w-[180px] bg-background/60 border-primary/30 hover:border-primary/50">
+                          <SelectTrigger className="w-full sm:w-[180px] bg-white border-[#E5E7EB] hover:border-primary">
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
@@ -1016,7 +997,7 @@ Puedo resolver dudas sobre:
                         <Button 
                           onClick={exportToCSV}
                           variant="outline"
-                          className="bg-background/60 border-primary/30 hover:border-primary/50 hover:bg-primary/10"
+                          className="bg-white border-[#E5E7EB] hover:bg-[#F8FAFC] hover:border-primary"
                         >
                           <Download className="w-4 h-4 mr-2" />
                           Exportar
@@ -1043,14 +1024,14 @@ Puedo resolver dudas sobre:
                         {leads.map((lead) => (
                           <div
                             key={lead.id}
-                            className="p-4 rounded-lg bg-card/90 backdrop-blur-sm border border-border/50 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all"
+                            className="p-4 rounded-lg bg-white border border-[#E5E7EB] hover:border-primary hover:shadow-sm transition-all"
                           >
                             {/* Mobile & Desktop Layout */}
                             <div className="flex flex-col gap-4">
                               {/* Header Row */}
                               <div className="flex items-start justify-between gap-3">
                                 <div className="flex-1 min-w-0">
-                                  <h3 className="text-lg font-bold text-foreground mb-1 truncate">
+                                  <h3 className="text-base font-semibold text-[#0F172A] mb-1 truncate">
                                     {lead.name}
                                   </h3>
                                 </div>
@@ -1059,7 +1040,7 @@ Puedo resolver dudas sobre:
                                     size="sm"
                                     variant="outline"
                                     onClick={() => loadLeadNotes(lead)}
-                                    className="border-primary/30 hover:border-primary/50 hover:bg-primary/10"
+                                    className="border-[#E5E7EB] hover:border-primary hover:bg-[#F8FAFC]"
                                   >
                                     <Eye className="w-4 h-4" />
                                   </Button>
@@ -1070,7 +1051,7 @@ Puedo resolver dudas sobre:
                                       setSelectedLead(lead);
                                       setShowNoteDialog(true);
                                     }}
-                                    className="border-accent/30 hover:border-accent/50 hover:bg-accent/10"
+                                    className="border-[#E5E7EB] hover:border-primary hover:bg-[#F8FAFC]"
                                   >
                                     <Plus className="w-4 h-4" />
                                   </Button>
@@ -1080,7 +1061,7 @@ Puedo resolver dudas sobre:
                                       setSelectedLead(lead);
                                       setShowMessageDialog(true);
                                     }}
-                                    className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20"
+                                    className="bg-primary hover:bg-primary/90 text-white shadow-sm"
                                   >
                                     <MessageSquare className="w-4 h-4 sm:mr-2" />
                                     <span className="hidden sm:inline">Contactar</span>
@@ -1090,19 +1071,19 @@ Puedo resolver dudas sobre:
 
                               {/* Info Grid */}
                               <div className="grid sm:grid-cols-2 gap-3 text-sm">
-                                <div className="flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
+                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB]">
                                   <Mail className="w-4 h-4 text-primary shrink-0" />
-                                  <span className="text-foreground truncate font-medium">{lead.email}</span>
+                                  <span className="text-[#0F172A] truncate font-medium">{lead.email}</span>
                                 </div>
-                                <div className="flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
-                                  <Phone className="w-4 h-4 text-accent shrink-0" />
-                                  <span className="text-foreground font-medium">{lead.phone}</span>
+                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB]">
+                                  <Phone className="w-4 h-4 text-primary shrink-0" />
+                                  <span className="text-[#0F172A] font-medium">{lead.phone}</span>
                                 </div>
-                                <div className="flex items-center gap-2 bg-background/50 rounded-lg px-3 py-2">
-                                  <Calendar className="w-4 h-4 text-muted-foreground shrink-0" />
-                                  <span className="text-foreground">{formatDate(lead.created_at)}</span>
+                                <div className="flex items-center gap-2 bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB]">
+                                  <Calendar className="w-4 h-4 text-[#64748B] shrink-0" />
+                                  <span className="text-[#0F172A]">{formatDate(lead.created_at)}</span>
                                 </div>
-                                <div className="bg-background/50 rounded-lg px-3 py-2">
+                                <div className="bg-[#F8FAFC] rounded-lg px-3 py-2 border border-[#E5E7EB]">
                                   <Select
                                     value={lead.status}
                                     onValueChange={(value) => updateLeadStatus(lead.id, value)}
@@ -1221,7 +1202,13 @@ Puedo resolver dudas sobre:
                                 {commission.referred_user?.username || commission.referred_user?.email || "Usuario"}
                               </div>
                               <div className="text-sm text-muted-foreground">
-                                {new Date(commission.created_at).toLocaleDateString("es-ES")}
+                                {new Date(commission.created_at).toLocaleDateString("es-ES", {
+                                    day: "2-digit",
+                                    month: "short",
+                                    year: "numeric",
+                                    hour: "2-digit",
+                                    minute: "2-digit"
+                                  })}
                               </div>
                             </div>
                             <div className="text-right">
@@ -1351,7 +1338,7 @@ Puedo resolver dudas sobre:
                               className="w-16 h-16 rounded-full object-cover border-2 border-primary/30"
                             />
                           ) : (
-                            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                            <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
                               {(isEditingProfile ? profileForm.full_name : profile?.full_name)?.[0]?.toUpperCase() || "U"}
                             </div>
                           )}
