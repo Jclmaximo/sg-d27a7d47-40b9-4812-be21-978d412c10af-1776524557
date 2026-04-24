@@ -169,11 +169,11 @@ export default function MWRPage() {
         <div className="min-h-screen">
           {/* STEP 2: Value Proposition - EXACT REFERENCE DESIGN */}
           {flowStep === 2 && (
-            <div className="fixed inset-0 z-50 overflow-hidden bg-white">
-              {/* Background Image - Top Half */}
+            <div className="fixed inset-0 z-50 overflow-hidden">
+              {/* Background Image - Full Screen */}
               <div className="absolute inset-0">
                 <img
-                  src="/paso2-hero.jpg"
+                  src="/F7B9293A-A20F-4693-AB59-774804355A44.png"
                   alt="Women having coffee conversation"
                   className="w-full h-full object-cover"
                 />
