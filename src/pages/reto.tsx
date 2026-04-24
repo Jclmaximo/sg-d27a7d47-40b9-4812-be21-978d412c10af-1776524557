@@ -8,7 +8,7 @@ import { SEO } from "@/components/SEO";
 import { 
   Play, Pause, Copy, Check, Share2, Focus, 
   Circle, CheckCircle2, Maximize2, Minimize2,
-  Zap, Users, BookOpen, Lock, Instagram
+  Zap, Users, BookOpen, Lock, Instagram, TrendingUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -264,12 +264,12 @@ export default function ZenCommandCenter() {
           0%, 100% { 
             transform: scale(1);
             opacity: 1;
-            box-shadow: 0 0 0 rgba(37, 99, 235, 0);
+            box-shadow: 0 0 0 rgba(66, 133, 244, 0);
           }
           50% { 
             transform: scale(1.05);
             opacity: 0.9;
-            box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+            box-shadow: 0 0 20px rgba(66, 133, 244, 0.4);
           }
         }
         
@@ -291,11 +291,11 @@ export default function ZenCommandCenter() {
               </p>
             </div>
             <Button
-              variant="ghost"
               onClick={() => router.push("/admin/main-dashboard")}
-              className="text-[#1D1D1F] hover:bg-gray-50 font-light"
+              className="bg-[#4285F4] hover:bg-[#3367D6] text-white font-medium h-[52px] px-10 rounded-xl shadow-[0_4px_12px_rgba(66,133,244,0.25)] hover:shadow-[0_6px_16px_rgba(66,133,244,0.35)] transition-all text-[15px] flex items-center gap-2"
             >
-              ← Dashboard
+              Ir a Mi Dashboard
+              <TrendingUp className="h-[18px] w-[18px]" />
             </Button>
           </div>
         </header>
@@ -530,9 +530,9 @@ export default function ZenCommandCenter() {
               {/* Centro de Comando - Siempre activo */}
               <button
                 onClick={() => router.push("/reto")}
-                className="group relative p-4 rounded-xl bg-white/50 hover:bg-white/80 transition-all shadow-sm"
+                className="group relative p-4 rounded-xl hover:bg-white/50 transition-all"
               >
-                <Zap className="w-6 h-6 text-[#2563EB] stroke-[1.5]" />
+                <Zap className="w-6 h-6 text-[#4285F4] stroke-[1.5]" />
                 <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                   Centro de Comando
                 </span>
@@ -560,7 +560,7 @@ export default function ZenCommandCenter() {
                 {!leadsUnlocked && (
                   <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400 group-hover:text-red-400 transition-colors" />
                 )}
-                <Users className={`w-6 h-6 stroke-[1.5] ${leadsUnlocked ? "text-[#2563EB]" : "text-gray-400"}`} />
+                <Users className={`w-6 h-6 stroke-[1.5] ${leadsUnlocked ? "text-[#4285F4]" : "text-gray-400"}`} />
                 {leadsUnlocked && (
                   <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                     Gestión de Leads
@@ -595,7 +595,7 @@ export default function ZenCommandCenter() {
                 {!resourcesUnlocked && (
                   <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400 group-hover:text-red-400 transition-colors" />
                 )}
-                <BookOpen className={`w-6 h-6 stroke-[1.5] ${resourcesUnlocked ? "text-[#2563EB]" : "text-gray-400"}`} />
+                <BookOpen className={`w-6 h-6 stroke-[1.5] ${resourcesUnlocked ? "text-[#4285F4]" : "text-gray-400"}`} />
                 {resourcesUnlocked && (
                   <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                     Bóveda de Recursos
