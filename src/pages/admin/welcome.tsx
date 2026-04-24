@@ -80,16 +80,25 @@ export default function WelcomePage() {
   const [copiedFunnel, setCopiedFunnel] = useState(false);
   const [copiedReferral, setCopiedReferral] = useState(false);
   const recentActivity: any[] = [];
+  const [dashboardLocked, setDashboardLocked] = useState(true);
 
   // Demo data (in a real app, this would come from the database)
   const funnelLink = typeof window !== "undefined" ? `${window.location.origin}/ambassador/${username}` : "";
   const referralLink = typeof window !== "undefined" ? `${window.location.origin}/mwr?ref=${username}` : "";
 
   useEffect(() => {
-    checkAuth();
+    loadData();
   }, []);
 
-  const checkAuth = async () => {
+  // Verificar si el usuario ha iniciado el reto para desbloquear dashboard
+  useEffect(() => {
+    const retoStarted = localStorage.getItem("reto_active");
+    if (retoStarted === "false") {
+      setDashboardLocked(false);
+    }
+  }, []);
+
+  const loadData = async () => {
     try {
       const session = await authService.getCurrentSession();
       
@@ -274,7 +283,7 @@ export default function WelcomePage() {
               {/* CTA Principal */}
               <Button
                 onClick={() => router.push("/admin/main-dashboard")}
-                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-medium h-[52px] px-10 rounded-xl shadow-[0_4px_12px_rgba(37,99,235,0.25)] hover:shadow-[0_6px_16px_rgba(37,99,235,0.35)] transition-all text-[15px]"
+                className="bg-[#4285F4] hover:bg-[#3367D6] text-white font-medium h-[52px] px-10 rounded-xl shadow-[0_4px_12px_rgba(66,133,244,0.25)] hover:shadow-[0_6px_16px_rgba(66,133,244,0.35)] transition-all text-[15px] flex items-center gap-2"
               >
                 Ir a Mi Dashboard
                 <TrendingUp className="ml-2 h-[18px] w-[18px]" />
@@ -316,10 +325,36 @@ export default function WelcomePage() {
                 </div>
               </div>
 
+              {/* Reto 24h Widget - Siempre visible y prioritario */}
+              <Card className="bg-gradient-to-br from-[#4285F4] to-[#3367D6] text-white border-0 shadow-lg mb-8">
+                <CardHeader>
+                  <CardTitle className="text-2xl font-semibold text-white flex items-center gap-3">
+                    <Zap className="w-8 h-8" />
+                    Reto de 24 Horas
+                  </CardTitle>
+                  <CardDescription className="text-white/90 text-base">
+                    {dashboardLocked 
+                      ? "Inicia el reto para desbloquear todas las funciones del dashboard"
+                      : "¡Reto activo! Completa tus objetivos del día"
+                    }
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button
+                    onClick={() => router.push("/reto")}
+                    variant="secondary"
+                    className="w-full sm:w-auto bg-white text-[#4285F4] hover:bg-gray-50 font-medium h-12 px-8 flex items-center gap-2"
+                  >
+                    {dashboardLocked ? "Iniciar Reto" : "Ir al Centro de Comando"}
+                    <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </CardContent>
+              </Card>
+
               {/* Quick Stats */}
               <div className="px-6 py-8">
                 <div className="max-w-7xl mx-auto">
-                  <div className="grid gap-6 md:grid-cols-3 mb-8">
+                  <div className={`grid gap-6 md:grid-cols-3 mb-8 transition-all duration-700 ${dashboardLocked ? "opacity-40 blur-sm pointer-events-none" : "opacity-100 blur-0"}`}>
                     <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
@@ -537,7 +572,7 @@ export default function WelcomePage() {
               </div>
 
               {/* Quick Actions */}
-              <Card className="bg-white border border-[#E2E8F0] shadow-sm mb-8">
+              <Card className={`bg-white border border-[#E2E8F0] shadow-sm mb-8 transition-all duration-700 ${dashboardLocked ? "opacity-40 blur-sm pointer-events-none" : "opacity-100 blur-0"}`}>
                 <CardHeader>
                   <CardTitle className="text-xl font-semibold text-[#0F172A]">Acciones Rápidas</CardTitle>
                   <CardDescription className="text-[#475569]">
@@ -604,7 +639,7 @@ export default function WelcomePage() {
               </Card>
 
               {/* Recent Activity */}
-              <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+              <Card className={`bg-white border border-[#E2E8F0] shadow-sm transition-all duration-700 ${dashboardLocked ? "opacity-40 blur-sm pointer-events-none" : "opacity-100 blur-0"}`}>
                 <CardHeader>
                   <CardTitle className="text-xl font-semibold text-[#0F172A]">Actividad Reciente</CardTitle>
                   <CardDescription className="text-[#475569]">
