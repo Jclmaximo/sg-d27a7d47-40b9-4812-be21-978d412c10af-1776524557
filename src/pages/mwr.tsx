@@ -265,87 +265,21 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 2: Interactive Quiz Selection */}
+                {/* STEP 2: Problem Statement */}
                 {flowStep === 2 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        ¿Qué quieres que <span className="text-primary">cambie</span> en tu negocio ahora mismo?
+                        Deja de perder prospectos por <span className="text-primary">falta de seguimiento</span>
                       </h2>
-                      <p className="text-gray-600">Elige lo que más impacto tendría para ti</p>
+                      <p className="text-gray-600">El problema no es que no estén interesados… es que nadie les da seguimiento. Este sistema te dice exactamente a quién escribir y en qué momento.</p>
                     </div>
-
-                    {/* Options Grid */}
-                    <div className="space-y-4 max-w-3xl mx-auto">
-                      {/* Option 1: Automatizar (Recommended) */}
-                      <div 
-                        onClick={() => setFlowStep(3)}
-                        className="relative cursor-pointer group"
-                      >
-                        <div className="absolute -top-3 left-6 z-10">
-                          <span className="bg-orange-500 text-white px-4 py-1 rounded-full text-xs font-semibold">
-                            Recomendado
-                          </span>
-                        </div>
-                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-primary rounded-xl hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                            <Zap className="w-7 h-7 text-primary" />
-                          </div>
-                          <div className="flex-1 pt-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Automatizar mi negocio</h3>
-                            <p className="text-sm text-gray-600">Que funcione incluso cuando no estás conectado</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Option 2: Escalar */}
-                      <div 
-                        onClick={() => setFlowStep(3)}
-                        className="cursor-pointer group"
-                      >
-                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <TrendingUp className="w-7 h-7 text-primary" />
-                          </div>
-                          <div className="flex-1 pt-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Escalar mis ventas</h3>
-                            <p className="text-sm text-gray-600">Generar más ventas sin tener que perseguir gente</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Option 3: Organizar */}
-                      <div 
-                        onClick={() => setFlowStep(3)}
-                        className="cursor-pointer group"
-                      >
-                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <FileText className="w-7 h-7 text-primary" />
-                          </div>
-                          <div className="flex-1 pt-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Organizar mis leads</h3>
-                            <p className="text-sm text-gray-600">No perder oportunidades ni olvidar a nadie</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Option 4: Simplificar */}
-                      <div 
-                        onClick={() => setFlowStep(3)}
-                        className="cursor-pointer group"
-                      >
-                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-7 h-7 text-primary" />
-                          </div>
-                          <div className="flex-1 pt-1">
-                            <h3 className="text-lg font-bold text-gray-900 mb-1">Simplificar el proceso</h3>
-                            <p className="text-sm text-gray-600">Tener un sistema claro que realmente funcione</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <button
+                      onClick={() => setFlowStep(3)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Ver cómo funciona →
+                    </button>
                   </div>
                 )}
 
