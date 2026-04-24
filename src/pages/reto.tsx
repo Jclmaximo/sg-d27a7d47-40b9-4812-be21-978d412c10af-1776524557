@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
 
 interface UserProfile {
   id: string;
@@ -207,7 +208,7 @@ export default function ZenCommandCenter() {
   };
 
   const copyFunnelLink = () => {
-    const link = `${window.location.origin}/mwr?ref=${profile?.username || ""}`;
+    const link = `https://mwr.hubia.vip/ambassador/${profile?.username || ""}`;
     navigator.clipboard.writeText(link);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
@@ -217,13 +218,13 @@ export default function ZenCommandCenter() {
   };
 
   const shareToWhatsApp = () => {
-    const funnelUrl = `${window.location.origin}/mwr?ref=${profile?.username || ""}`;
+    const funnelUrl = `https://mwr.hubia.vip/ambassador/${profile?.username || ""}`;
     const message = encodeURIComponent(`¡Descubre cómo viajar más por menos! ${funnelUrl}`);
     window.open(`https://wa.me/?text=${message}`, "_blank");
   };
 
   const shareToInstagram = () => {
-    const funnelUrl = `${window.location.origin}/mwr?ref=${profile?.username || ""}`;
+    const funnelUrl = `https://mwr.hubia.vip/ambassador/${profile?.username || ""}`;
     navigator.clipboard.writeText(funnelUrl);
     toast({
       title: "Link copiado",
@@ -351,13 +352,15 @@ export default function ZenCommandCenter() {
                 <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-4">
                   Tu Embudo Personal
                 </p>
-                <div className="bg-gray-50 rounded-2xl p-4 mb-6 font-mono text-sm text-[#1D1D1F] break-all">
-                  {`${typeof window !== "undefined" ? window.location.origin : ""}/mwr?ref=${profile?.username || ""}`}
-                </div>
-                <div className="flex gap-3 mb-6">
+                <div className="relative">
+                  <Input
+                    value={`https://mwr.hubia.vip/ambassador/${profile?.username || ""}`}
+                    readOnly
+                    className="pr-24 bg-white/80 border-gray-200 text-[15px] font-mono text-gray-600"
+                  />
                   <Button
                     onClick={copyFunnelLink}
-                    className="flex-1 bg-[#1D1D1F] hover:bg-gray-800 text-white rounded-xl font-light"
+                    className="absolute right-0 top-0 bottom-0 px-4 bg-[#1D1D1F] hover:bg-gray-800 text-white rounded-xl font-light"
                   >
                     {copiedLink ? (
                       <>
