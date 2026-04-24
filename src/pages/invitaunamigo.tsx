@@ -107,17 +107,17 @@ export default function InvitaUnAmigo() {
     setLoading(true);
 
     try {
-      // Guardar lead en base de datos
+      // Guardar lead en base de datos asociado al referente
       if (referrerId) {
         await leadsService.createLead({
           name: email.split("@")[0], // Nombre temporal del email
           email: email,
           phone: "",
           country: "",
-          referred_by: referrerId,
-          status: "nuevo",
-          interest_type: "reto-24h",
-          preferred_contact: "email",
+          source: "Invitación Reto 24h",
+          interest: "reto-24h",
+          contact_method: "email",
+          user_id: referrerId,
         });
       }
 
