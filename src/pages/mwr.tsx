@@ -169,8 +169,8 @@ export default function MWRPage() {
         <div className="min-h-screen">
           {/* STEP 2: Value Proposition - EXACT REFERENCE DESIGN */}
           {flowStep === 2 && (
-            <div className="fixed inset-0 z-50 overflow-hidden">
-              {/* Background Image - Full Screen */}
+            <div className="fixed inset-0 z-50 overflow-hidden bg-white">
+              {/* Background Image - Top Half */}
               <div className="absolute inset-0">
                 <img
                   src="/paso2-hero.jpg"
@@ -179,60 +179,58 @@ export default function MWRPage() {
                 />
               </div>
 
-              {/* Demo Label - Centered Top */}
-              <div className="absolute top-8 left-0 right-0 z-20 text-center">
-                <p className="text-white/80 text-sm font-medium tracking-wide">Demo 2/13</p>
+              {/* Demo Label - Top Right Area */}
+              <div className="absolute top-8 right-8 z-20">
+                <p className="text-white/90 text-sm font-medium tracking-wide">Demo 2/13</p>
               </div>
 
-              {/* Floating Metric Cards - MIDDLE OF SCREEN */}
-              <div className="absolute top-1/2 -translate-y-1/2 left-0 right-0 z-20 px-6">
-                <div className="max-w-5xl mx-auto relative">
+              {/* Floating Metric Cards - MIDDLE VERTICAL CENTER */}
+              <div className="absolute top-[35%] left-0 right-0 z-20 px-6">
+                <div className="max-w-6xl mx-auto relative">
                   {/* Prospectos Card - Left */}
-                  <div className="absolute left-0 top-0 animate-in slide-in-from-left duration-700">
-                    <div className="bg-white rounded-3xl shadow-2xl p-5 w-[220px]">
-                      <div className="flex items-center gap-3 mb-3">
-                        <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
+                  <div className="absolute left-0 top-0">
+                    <div className="bg-white rounded-3xl shadow-2xl p-5 w-[200px] sm:w-[240px]">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center flex-shrink-0">
                           <Users className="w-6 h-6 text-blue-600" />
                         </div>
-                        <p className="text-base text-gray-700 font-medium">Prospectos</p>
+                        <p className="text-base text-gray-800 font-medium">Prospectos</p>
                       </div>
-                      <div className="flex items-baseline gap-2">
+                      <div className="flex items-baseline gap-2 mt-3">
                         <p className="text-5xl font-bold text-gray-900">248</p>
-                        <p className="text-green-600 font-bold text-base flex items-center gap-1">
-                          <TrendingUp className="w-5 h-5" />
-                          31%
+                        <p className="text-green-600 font-bold text-base flex items-center gap-1 mb-1">
+                          ↑ 31%
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Ventas Card - Right with Graph Line */}
-                  <div className="absolute right-0 top-12 animate-in slide-in-from-right duration-700 delay-150">
+                  {/* Ventas Card - Right */}
+                  <div className="absolute right-0 top-8">
                     <div className="relative">
-                      {/* Graph Line to Card */}
-                      <svg className="absolute -top-8 right-12 w-32 h-24" viewBox="0 0 120 80">
+                      {/* Curved Line Connection */}
+                      <svg className="absolute -left-24 top-0 w-32 h-20" viewBox="0 0 120 80">
                         <path
-                          d="M 110 10 Q 80 30, 60 50 T 20 70"
+                          d="M 10 70 Q 40 40 90 20"
                           stroke="#3B82F6"
                           strokeWidth="3"
                           fill="none"
                           strokeLinecap="round"
                         />
-                        <circle cx="110" cy="10" r="6" fill="#3B82F6" />
+                        <circle cx="90" cy="20" r="5" fill="#3B82F6" />
                       </svg>
                       
-                      <div className="bg-white rounded-3xl shadow-2xl p-5 w-[240px]">
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center">
+                      <div className="bg-white rounded-3xl shadow-2xl p-5 w-[220px] sm:w-[260px]">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="w-12 h-12 rounded-2xl bg-green-50 flex items-center justify-center flex-shrink-0">
                             <TrendingUp className="w-6 h-6 text-green-600" />
                           </div>
-                          <p className="text-base text-gray-700 font-medium">Ventas cerradas</p>
+                          <p className="text-base text-gray-800 font-medium">Ventas cerradas</p>
                         </div>
-                        <div className="flex items-baseline gap-2">
+                        <div className="flex items-baseline gap-2 mt-3">
                           <p className="text-5xl font-bold text-gray-900">23</p>
-                          <p className="text-green-600 font-bold text-base flex items-center gap-1">
-                            <TrendingUp className="w-5 h-5" />
-                            27%
+                          <p className="text-green-600 font-bold text-base flex items-center gap-1 mb-1">
+                            ↑ 27%
                           </p>
                         </div>
                       </div>
@@ -241,29 +239,28 @@ export default function MWRPage() {
                 </div>
               </div>
 
-              {/* White Gradient Overlay at Bottom */}
-              <div className="absolute bottom-0 left-0 right-0 h-3/5 bg-gradient-to-t from-white via-white/95 to-transparent z-10"></div>
+              {/* Strong White Gradient Overlay - Bottom Half */}
+              <div className="absolute bottom-0 left-0 right-0 h-[55%] bg-gradient-to-t from-white via-white to-transparent z-10"></div>
 
-              {/* Content - Bottom Area */}
-              <div className="absolute bottom-0 left-0 right-0 pb-8 px-6 z-30">
+              {/* Content - Bottom Area on White Background */}
+              <div className="absolute bottom-0 left-0 right-0 pb-12 px-6 z-30">
                 <div className="max-w-4xl mx-auto text-center space-y-6">
                   {/* Headline */}
-                  <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight">
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight">
                     <span className="text-gray-900">Convierte prospectos<br />en clientes </span>
-                    <span className="text-[#4A90E2]">sin perseguir<br />a nadie</span>
+                    <span className="text-[#4A7FFF]">sin perseguir<br />a nadie</span>
                   </h1>
 
                   {/* Subheadline */}
-                  <p className="text-xl sm:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                    Un sistema que organiza tus contactos y te dice<br className="hidden sm:block" />
-                    exactamente qué hacer para cerrar más ventas
+                  <p className="text-lg sm:text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                    Un sistema que organiza tus contactos y te dice exactamente qué hacer para cerrar más ventas
                   </p>
 
                   {/* CTA Button */}
-                  <div className="pt-4">
+                  <div className="pt-2">
                     <button
                       onClick={() => setFlowStep(3)}
-                      className="w-full max-w-2xl mx-auto bg-[#4A90E2] hover:bg-[#3A7BC8] text-white py-6 px-8 rounded-2xl font-semibold text-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
+                      className="w-full max-w-3xl mx-auto bg-[#4A7FFF] hover:bg-[#3967D6] text-white py-6 px-8 rounded-2xl font-semibold text-xl transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-3"
                     >
                       Ver cómo funciona
                       <ArrowRight className="w-6 h-6" />
@@ -271,28 +268,27 @@ export default function MWRPage() {
                   </div>
 
                   {/* Trust Elements Row */}
-                  <div className="flex flex-wrap justify-center gap-12 text-lg pt-4">
-                    <div className="flex flex-col items-center gap-2">
-                      <Zap className="w-8 h-8 text-green-600" />
-                      <span className="text-gray-700 font-medium">Acceso<br />inmediato</span>
+                  <div className="flex flex-wrap justify-center gap-8 sm:gap-16 text-base sm:text-lg pt-4">
+                    <div className="flex items-center gap-2">
+                      <Zap className="w-7 h-7 text-green-600" />
+                      <div className="text-left">
+                        <p className="text-gray-800 font-medium leading-tight">Acceso<br />inmediato</p>
+                      </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2">
-                      <CheckCircle className="w-8 h-8 text-blue-600" />
-                      <span className="text-gray-700 font-medium">Sin<br />experiencia</span>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-7 h-7 text-blue-600" />
+                      <div className="text-left">
+                        <p className="text-gray-800 font-medium leading-tight">Sin<br />experiencia</p>
+                      </div>
                     </div>
-                    <div className="flex flex-col items-center gap-2">
-                      <TrendingUp className="w-8 h-8 text-purple-600" />
-                      <span className="text-gray-700 font-medium">Empieza<br />hoy</span>
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="w-7 h-7 text-purple-600" />
+                      <div className="text-left">
+                        <p className="text-gray-800 font-medium leading-tight">Empieza<br />hoy</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
-              {/* N Button - Bottom Left */}
-              <div className="absolute bottom-8 left-8 z-40">
-                <button className="w-16 h-16 rounded-full bg-gray-900 text-white font-bold text-2xl flex items-center justify-center shadow-2xl hover:bg-gray-800 transition-colors">
-                  N
-                </button>
               </div>
             </div>
           )}
@@ -379,7 +375,7 @@ export default function MWRPage() {
                     </div>
                   )}
 
-                  {/* STEP 3-13: Keep existing steps unchanged */}
+                  {/* STEP 3: Automation Preview */}
                   {flowStep === 3 && (
                     <div className="space-y-8 animate-in fade-in duration-700">
                       <div className="text-center space-y-4">
@@ -422,8 +418,6 @@ export default function MWRPage() {
                       </button>
                     </div>
                   )}
-
-                  {/* Continue with steps 4-13... keeping original code */}
                 </div>
               </div>
             </div>
