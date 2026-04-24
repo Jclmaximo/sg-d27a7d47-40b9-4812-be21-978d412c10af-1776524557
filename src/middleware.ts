@@ -9,7 +9,20 @@ import type { NextRequest } from "next/server";
  * redirijan automáticamente al dominio correcto manteniendo todos los
  * parámetros (tokens, query params, etc.)
  */
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+  const session = await getSession(request);
+
+  // Redirigir /mwr?ref=username a /invitaunamigo?ref=username
+  if (pathname === "/mwr") {
+    const ref = request.nextUrl.searchParams.get("ref");
+    if (ref) {
+      const url = new URL("/invitaunamigo", request.url);
+      url.searchParams.set("ref", ref);
+      return NextResponse.redirect(url);
+    }
+  }
+
   const hostname = request.headers.get("host") || "";
   const path = request.nextUrl.pathname;
   const search = request.nextUrl.search;
