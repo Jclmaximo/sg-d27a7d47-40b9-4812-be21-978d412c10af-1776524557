@@ -179,14 +179,43 @@ export default function MWRPage() {
               <div className="space-y-8">
                 {/* STEP 1: Hero */}
                 {flowStep === 1 && (
-                  <div className="relative min-h-screen flex items-center py-8 sm:py-16">
-                    {/* Hero Content */}
-                    <div className="relative z-10 w-full space-y-4 sm:space-y-8">
-                      <div className="text-center space-y-3 sm:space-y-6">
-                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight sm:leading-[1.2]">
+                  <div className="space-y-6 sm:space-y-8 animate-in fade-in duration-700">
+                    {/* Hero Image Section */}
+                    <div className="relative w-full aspect-[4/3] sm:aspect-video rounded-2xl overflow-hidden">
+                      <img
+                        src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&h=800&fit=crop&crop=faces,center"
+                        alt="Woman celebrating success with laptop dashboard"
+                        className="w-full h-full object-cover"
+                      />
+                      
+                      {/* Floating Notification - Over Image */}
+                      <div className="absolute top-4 sm:top-6 right-4 sm:right-6 animate-in slide-in-from-right duration-700">
+                        <div className="bg-white rounded-xl shadow-xl border border-gray-200 p-3 sm:p-4 max-w-[240px] sm:max-w-xs">
+                          <div className="flex items-start gap-2 sm:gap-3">
+                            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex-shrink-0 overflow-hidden">
+                              <img 
+                                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" 
+                                alt="María R."
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div>
+                              <p className="text-sm sm:text-base font-semibold text-gray-900">Nueva venta</p>
+                              <p className="text-xs sm:text-sm text-gray-600">María R. desde Colombia</p>
+                              <p className="text-xs text-gray-500">Hace 3 minutos</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Content Below Image */}
+                    <div className="space-y-6 sm:space-y-8">
+                      <div className="text-center space-y-3 sm:space-y-4">
+                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-gray-900 leading-tight">
                           El sistema que <span className="text-primary">cierra ventas</span> mientras duermes
                         </h1>
-                        <p className="text-base sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed sm:leading-normal line-clamp-2 sm:line-clamp-none">
+                        <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto">
                           Automatiza tu seguimiento, organiza tus prospectos y convierte más sin perseguir a nadie
                         </p>
                       </div>
@@ -194,54 +223,24 @@ export default function MWRPage() {
                       {/* CTA Button */}
                       <button
                         onClick={() => setFlowStep(2)}
-                        className="w-full bg-primary hover:bg-primary/90 text-white py-4 sm:py-6 rounded-xl font-semibold text-base sm:text-lg transition-colors shadow-lg hover:shadow-xl"
+                        className="w-full bg-primary hover:bg-primary/90 text-white py-5 sm:py-6 rounded-xl font-semibold text-base sm:text-lg transition-colors shadow-lg hover:shadow-xl"
                       >
                         Ver cómo funciona →
                       </button>
 
                       {/* Trust Elements */}
-                      <div className="flex flex-wrap justify-center gap-3 sm:gap-6 text-xs sm:text-sm text-gray-600">
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <Zap className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-green-600" />
+                      <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-sm sm:text-base text-gray-700">
+                        <div className="flex items-center gap-2">
+                          <Zap className="w-5 h-5 text-green-600" />
                           <span>Acceso inmediato</span>
                         </div>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <CheckCircle className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-blue-600" />
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-5 h-5 text-blue-600" />
                           <span>Sin experiencia</span>
                         </div>
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          <TrendingUp className="w-3.5 h-3.5 sm:w-5 sm:h-5 text-purple-600" />
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="w-5 h-5 text-purple-600" />
                           <span>Empieza hoy</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Bottom Image */}
-                    <div className="absolute bottom-0 left-0 right-0 h-32 sm:h-64 overflow-hidden">
-                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent z-10"></div>
-                      <img
-                        src="/dashboard-banner-clean.jpg"
-                        alt="Dashboard preview"
-                        className="w-full h-full object-cover object-top opacity-20"
-                      />
-                    </div>
-
-                    {/* Floating Notification */}
-                    <div className="absolute top-16 sm:top-24 right-4 sm:right-8 z-20 animate-in slide-in-from-right duration-700">
-                      <div className="bg-white rounded-lg shadow-xl border border-gray-200 p-2.5 sm:p-4 max-w-[200px] sm:max-w-xs">
-                        <div className="flex items-start gap-2 sm:gap-3">
-                          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex-shrink-0 overflow-hidden">
-                            <img 
-                              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face" 
-                              alt="María R."
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <div>
-                            <p className="text-xs sm:text-sm font-semibold text-gray-900">Nueva venta</p>
-                            <p className="text-[10px] sm:text-xs text-gray-600">María R. desde Colombia</p>
-                            <p className="text-[10px] sm:text-xs text-gray-500">Hace 3 minutos</p>
-                          </div>
                         </div>
                       </div>
                     </div>
