@@ -265,14 +265,16 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 2: Problem Statement */}
+                {/* STEP 2: Value Proposition */}
                 {flowStep === 2 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Deja de perder prospectos por <span className="text-primary">falta de seguimiento</span>
+                        Convierte prospectos en clientes sin perseguir a nadie
                       </h2>
-                      <p className="text-gray-600">El problema no es que no estén interesados… es que nadie les da seguimiento. Este sistema te dice exactamente a quién escribir y en qué momento.</p>
+                      <p className="text-gray-600">
+                        Un sistema que organiza tus contactos y te dice exactamente qué hacer para cerrar más ventas
+                      </p>
                     </div>
                     <button
                       onClick={() => setFlowStep(3)}
