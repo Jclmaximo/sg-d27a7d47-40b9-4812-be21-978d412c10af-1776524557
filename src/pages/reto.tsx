@@ -291,13 +291,6 @@ export default function ZenCommandCenter() {
                 {profile?.full_name}
               </p>
             </div>
-            <Button
-              onClick={() => router.push("/admin/main-dashboard")}
-              className="bg-[#4285F4] hover:bg-[#3367D6] text-white font-medium h-[52px] px-10 rounded-xl shadow-[0_4px_12px_rgba(66,133,244,0.25)] hover:shadow-[0_6px_16px_rgba(66,133,244,0.35)] transition-all text-[15px] flex items-center gap-2"
-            >
-              Ir a Mi Dashboard
-              <TrendingUp className="h-[18px] w-[18px]" />
-            </Button>
           </div>
         </header>
 
