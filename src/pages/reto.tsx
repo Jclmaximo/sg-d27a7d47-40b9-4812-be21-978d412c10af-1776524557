@@ -135,11 +135,11 @@ export default function ZenCommandCenter() {
     setShareCount(newCount);
     localStorage.setItem("reto_share_count", newCount.toString());
 
-    if (newCount === 5 && !resourcesUnlocked) {
+    if (newCount >= 5 && !resourcesUnlocked) {
       setResourcesUnlocked(true);
       toast({
-        title: "Meta alcanzada",
-        description: "Recursos de Marketing desbloqueados",
+        title: "🎉 Meta alcanzada",
+        description: "Has copiado tu link 5 veces. Recursos desbloqueados",
         duration: 5000,
       });
     }
@@ -211,13 +211,15 @@ export default function ZenCommandCenter() {
     navigator.clipboard.writeText(link);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
+    
+    // Incrementar contador de copias para desbloqueo
+    incrementShareCount();
   };
 
   const shareToWhatsApp = () => {
     const funnelUrl = `${window.location.origin}/mwr?ref=${profile?.username || ""}`;
     const message = encodeURIComponent(`¡Descubre cómo viajar más por menos! ${funnelUrl}`);
     window.open(`https://wa.me/?text=${message}`, "_blank");
-    incrementShareCount();
   };
 
   const shareToInstagram = () => {
@@ -228,7 +230,6 @@ export default function ZenCommandCenter() {
       description: "Pégalo en tu historia de Instagram",
       duration: 3000,
     });
-    incrementShareCount();
   };
 
   const formatTime = (seconds: number) => {
@@ -602,7 +603,7 @@ export default function ZenCommandCenter() {
                 )}
                 {!resourcesUnlocked && (
                   <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
-                    Bloqueado<br/>{shareCount}/5 compartidos
+                    Bloqueado<br/>{shareCount}/5 veces copiado
                   </span>
                 )}
               </button>
