@@ -187,6 +187,17 @@ export default function InvitaUnAmigo() {
 
   // PASO 4: Cronómetro countdown (Eliminado, usamos visual estático en paso 7)
 
+  // PASO 7: Auto-redirect a /reto después de 2 segundos
+  useEffect(() => {
+    if (step === 7) {
+      const timer = setTimeout(() => {
+        router.push("/reto");
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [step, router]);
+
   const handleAcceptChallenge = () => {
     setStep(3);
     setRegistrationProgress(33);
