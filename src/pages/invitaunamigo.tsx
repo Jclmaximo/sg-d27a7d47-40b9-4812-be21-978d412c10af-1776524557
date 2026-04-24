@@ -13,16 +13,23 @@ interface Profile {
 
 export default function InvitaUnAmigo() {
   const router = useRouter();
+  const { toast } = useToast();
   const { ref } = router.query;
 
   // Estados del flujo
   const [step, setStep] = useState(1);
-  const [progress, setProgress] = useState(0);
-  const [referrerName, setReferrerName] = useState("un mentor");
-  const [referrerId, setReferrerId] = useState<string | null>(null);
+  const [referrerName, setReferrerName] = useState("");
+  const [referrerId, setReferrerId] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState("24:00:00");
+
+  // NUEVOS ESTADOS - Registro por pasos
+  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [registrationProgress, setRegistrationProgress] = useState(0);
 
   // Cargar nombre del referente
   useEffect(() => {
@@ -96,40 +103,94 @@ export default function InvitaUnAmigo() {
 
   const handleAcceptChallenge = () => {
     setStep(3);
+    setRegistrationProgress(33);
   };
 
-  const handleActivateProtocol = async () => {
-    if (!email || !email.includes("@")) {
-      alert("Por favor ingresa un email válido");
+  // PASO 3.1 - Identidad
+  const handleIdentityNext = () => {
+    if (!fullName.trim() || !username.trim()) return;
+    setStep(4);
+    setRegistrationProgress(66);
+  };
+
+  // PASO 3.2 - Contacto
+  const handleContactNext = () => {
+    if (!email.trim() || !email.includes("@") || !whatsapp.trim()) return;
+    setStep(5);
+    setRegistrationProgress(100);
+  };
+
+  // PASO 3.3 - Seguridad y Registro Final
+  const handleFinishRegistration = async () => {
+    if (!password || password.length < 6) {
+      toast({
+        title: "Contraseña muy corta",
+        description: "Debe tener al menos 6 caracteres",
+        duration: 3000,
+      });
       return;
     }
 
     setLoading(true);
+    setStep(6); // Pantalla "Sincronizando Datos"
 
     try {
-      // Guardar lead en base de datos asociado al referente
-      if (referrerId) {
-        await leadsService.createLead({
-          name: email.split("@")[0], // Nombre temporal del email
-          email: email,
-          phone: "",
-          country: "",
-          source: "Invitación Reto 24h",
-          interest: "reto-24h",
-          contact_method: "email",
-          user_id: referrerId,
-        });
+      // Crear usuario en Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            full_name: fullName,
+            username: username,
+            phone: whatsapp,
+          },
+        },
+      });
+
+      if (authError) throw authError;
+
+      // Actualizar perfil con username y datos adicionales
+      if (authData.user) {
+        await supabase
+          .from("profiles")
+          .update({
+            full_name: fullName,
+            username: username,
+            phone: whatsapp,
+            referred_by: referrerId || null,
+          })
+          .eq("id", authData.user.id);
+
+        // Crear lead asociado al referente
+        if (referrerId) {
+          await leadsService.createLead({
+            name: fullName,
+            email: email,
+            phone: whatsapp,
+            country: "",
+            source: "Invitación Reto 24h",
+            interest: "reto-24h",
+            contact_method: "whatsapp",
+            user_id: referrerId,
+          });
+        }
       }
 
-      // Avanzar al paso 4
+      // Auto-advance a paso final después de 1.5s
       setTimeout(() => {
         setLoading(false);
-        setStep(4);
-      }, 800);
+        setStep(7);
+      }, 1500);
     } catch (error) {
-      console.error("Error saving lead:", error);
+      console.error("Error en registro:", error);
       setLoading(false);
-      alert("Hubo un error. Por favor intenta de nuevo.");
+      toast({
+        title: "Error al crear cuenta",
+        description: "Intenta con otro email o username",
+        duration: 5000,
+      });
+      setStep(5); // Volver al paso de seguridad
     }
   };
 
@@ -144,7 +205,28 @@ export default function InvitaUnAmigo() {
         description="Has sido seleccionado para el Reto de 24 Horas"
       />
 
-      <div className="min-h-screen bg-white flex items-center justify-center px-6 overflow-hidden">
+      <style jsx global>{`
+        body {
+          font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+            Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+            "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+            "Noto Color Emoji", system-ui, -apple-system, BlinkMacSystemFont,
+            sans-serif;
+          font-weight: 300;
+        }
+      `}</style>
+
+      {/* Barra de Progreso - Solo visible en pasos de registro (3, 4, 5) */}
+      {(step === 3 || step === 4 || step === 5) && (
+        <div className="fixed top-0 left-0 right-0 h-[1px] bg-gray-100 z-50">
+          <div
+            className="h-full bg-[#1D1D1F] transition-all duration-500 ease-out"
+            style={{ width: `${registrationProgress}%` }}
+          />
+        </div>
+      )}
+
+      <div className="min-h-screen bg-white relative overflow-hidden">
         {/* PASO 1: Validación de Acceso */}
         {step === 1 && (
           <div className="w-full max-w-md text-center animate-fadeIn">
@@ -168,93 +250,245 @@ export default function InvitaUnAmigo() {
         )}
 
         {/* PASO 2: El Desafío */}
-        {step === 2 && (
-          <div className="w-full max-w-lg text-center animate-fadeIn">
-            <h1 className="text-3xl font-light text-[#1D1D1F] mb-6 leading-relaxed tracking-wide">
-              Has sido seleccionado por<br />
-              <span className="font-normal">{referrerName}</span>
-            </h1>
+        <div
+          className={`
+            absolute inset-0 flex flex-col items-center justify-center px-6
+            transition-opacity duration-700 ease-out
+            ${step === 2 ? "opacity-100" : "opacity-0 pointer-events-none"}
+          `}
+        >
+          <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] font-light text-center max-w-2xl mb-6 leading-relaxed">
+            Has sido seleccionado por{" "}
+            <span className="font-normal">{referrerName || "un mentor"}</span>
+            <br />
+            para el Reto de Productividad de 24 Horas
+          </h1>
 
-            <p className="text-lg text-[#6B7280] font-light mb-12 leading-relaxed">
-              Para el Reto de Productividad de 24 Horas
-            </p>
+          <p className="text-[17px] text-gray-500 font-light mb-12">
+            ¿Aceptas el desafío?
+          </p>
 
-            <p className="text-base text-[#1D1D1F] mb-12 font-light">
-              ¿Aceptas el desafío?
-            </p>
+          <button
+            onClick={handleAcceptChallenge}
+            className="px-12 py-4 bg-[#1D1D1F] text-white rounded-full text-[15px] font-light tracking-wide hover:bg-[#2D2D2F] transition-all duration-300 shadow-sm"
+          >
+            Aceptar Desafío
+          </button>
+        </div>
 
-            <button
-              onClick={handleAcceptChallenge}
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-[#2563EB] text-white rounded-full font-light text-base hover:bg-[#1D4ED8] transition-all duration-300 hover:scale-105"
-            >
-              Aceptar Desafío
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
+        {/* PASO 3: Identidad (Nombre + Username) */}
+        <div
+          className={`
+            absolute inset-0 flex flex-col items-center justify-center px-6
+            transition-opacity duration-700 ease-out
+            ${step === 3 ? "opacity-100" : "opacity-0 pointer-events-none"}
+          `}
+        >
+          <h1 className="text-2xl text-[#1D1D1F] font-light text-center max-w-md mb-12">
+            ¿Cómo te identificaremos en el ecosistema?
+          </h1>
+
+          <div className="w-full max-w-sm space-y-8">
+            <div>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                placeholder="Nombre completo"
+                className="w-full px-2 py-4 bg-transparent border-b border-gray-200 text-[17px] text-[#1D1D1F] font-light text-center focus:outline-none focus:border-[#1D1D1F] transition-all duration-300 placeholder:text-gray-300"
+              />
+            </div>
+
+            <div>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value.toLowerCase().replace(/\s/g, ""))}
+                placeholder="Nombre de usuario"
+                className="w-full px-2 py-4 bg-transparent border-b border-gray-200 text-[17px] text-[#1D1D1F] font-light text-center focus:outline-none focus:border-[#1D1D1F] transition-all duration-300 placeholder:text-gray-300"
+              />
+              <p className="text-xs text-gray-400 text-center mt-2">
+                Sin espacios, todo en minúsculas
+              </p>
+            </div>
           </div>
-        )}
 
-        {/* PASO 3: Registro de Intención */}
-        {step === 3 && (
-          <div className="w-full max-w-md text-center animate-fadeIn">
-            <h2 className="text-2xl font-light text-[#1D1D1F] mb-12 tracking-wide">
-              Introduce tu email para activar<br />
-              tu Centro de Comando
-            </h2>
+          <button
+            onClick={handleIdentityNext}
+            disabled={!fullName.trim() || !username.trim()}
+            className={`
+              mt-12 px-12 py-4 
+              bg-[#1D1D1F] text-white 
+              rounded-full text-[15px] font-light tracking-wide
+              transition-all duration-300 shadow-sm
+              ${!fullName.trim() || !username.trim() 
+                ? "opacity-30 cursor-not-allowed" 
+                : "hover:bg-[#2D2D2F] opacity-100"
+              }
+            `}
+          >
+            Siguiente
+          </button>
+        </div>
 
-            <div className="mb-8">
+        {/* PASO 4: Contacto (Email + WhatsApp) */}
+        <div
+          className={`
+            absolute inset-0 flex flex-col items-center justify-center px-6
+            transition-opacity duration-700 ease-out
+            ${step === 4 ? "opacity-100" : "opacity-0 pointer-events-none"}
+          `}
+        >
+          <h1 className="text-2xl text-[#1D1D1F] font-light text-center max-w-md mb-12">
+            ¿A dónde enviaremos tus alertas de leads?
+          </h1>
+
+          <div className="w-full max-w-sm space-y-8">
+            <div>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="tu@email.com"
-                className="w-full px-6 py-4 text-center text-lg font-light bg-white border border-[#E5E7EB] rounded-2xl focus:border-[#2563EB] focus:outline-none focus:ring-2 focus:ring-[#2563EB]/20 transition-all"
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleActivateProtocol();
-                  }
-                }}
+                className="w-full px-2 py-4 bg-transparent border-b border-gray-200 text-[17px] text-[#1D1D1F] font-light text-center focus:outline-none focus:border-[#1D1D1F] transition-all duration-300 placeholder:text-gray-300"
               />
             </div>
 
-            <button
-              onClick={handleActivateProtocol}
-              disabled={loading}
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-[#2563EB] text-white rounded-full font-light text-base hover:bg-[#1D4ED8] transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
-            >
-              {loading ? "Activando..." : "Activar Protocolo"}
-              {!loading && (
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              )}
-            </button>
-          </div>
-        )}
-
-        {/* PASO 4: Confirmación y Lanzamiento */}
-        {step === 4 && (
-          <div className="w-full max-w-md text-center animate-fadeIn">
-            <div className="mb-12">
-              <div className="text-7xl font-extralight text-[#6B7280] mb-6 tracking-wider tabular-nums">
-                {timeRemaining}
-              </div>
+            <div>
+              <input
+                type="tel"
+                value={whatsapp}
+                onChange={(e) => setWhatsapp(e.target.value)}
+                placeholder="+1 234 567 8900"
+                className="w-full px-2 py-4 bg-transparent border-b border-gray-200 text-[17px] text-[#1D1D1F] font-light text-center focus:outline-none focus:border-[#1D1D1F] transition-all duration-300 placeholder:text-gray-300"
+              />
+              <p className="text-xs text-gray-400 text-center mt-2">
+                Incluye código de país
+              </p>
             </div>
-
-            <h2 className="text-2xl font-light text-[#1D1D1F] mb-4 tracking-wide">
-              Protocolo activado
-            </h2>
-
-            <p className="text-base text-[#6B7280] font-light mb-12">
-              El tiempo comienza ahora
-            </p>
-
-            <button
-              onClick={handleEnterDashboard}
-              className="group inline-flex items-center gap-3 px-10 py-4 bg-[#2563EB] text-white rounded-full font-light text-base hover:bg-[#1D4ED8] transition-all duration-300 hover:scale-105"
-            >
-              Entrar al Dashboard
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </button>
           </div>
-        )}
+
+          <button
+            onClick={handleContactNext}
+            disabled={!email.trim() || !email.includes("@") || !whatsapp.trim()}
+            className={`
+              mt-12 px-12 py-4 
+              bg-[#1D1D1F] text-white 
+              rounded-full text-[15px] font-light tracking-wide
+              transition-all duration-300 shadow-sm
+              ${!email.trim() || !email.includes("@") || !whatsapp.trim()
+                ? "opacity-30 cursor-not-allowed" 
+                : "hover:bg-[#2D2D2F] opacity-100"
+              }
+            `}
+          >
+            Siguiente
+          </button>
+        </div>
+
+        {/* PASO 5: Seguridad (Contraseña) */}
+        <div
+          className={`
+            absolute inset-0 flex flex-col items-center justify-center px-6
+            transition-opacity duration-700 ease-out
+            ${step === 5 ? "opacity-100" : "opacity-0 pointer-events-none"}
+          `}
+        >
+          <h1 className="text-2xl text-[#1D1D1F] font-light text-center max-w-md mb-12">
+            Crea tu acceso al Centro de Comando
+          </h1>
+
+          <div className="w-full max-w-sm">
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Contraseña (mínimo 6 caracteres)"
+                className="w-full px-2 py-4 bg-transparent border-b border-gray-200 text-[17px] text-[#1D1D1F] font-light text-center focus:outline-none focus:border-[#1D1D1F] transition-all duration-300 placeholder:text-gray-300"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#1D1D1F] transition-colors text-xs font-light"
+              >
+                {showPassword ? "Ocultar" : "Ver"}
+              </button>
+            </div>
+            <p className="text-xs text-gray-400 text-center mt-2">
+              Mínimo 6 caracteres
+            </p>
+          </div>
+
+          <button
+            onClick={handleFinishRegistration}
+            disabled={!password || password.length < 6 || loading}
+            className={`
+              mt-12 px-12 py-4 
+              bg-[#1D1D1F] text-white 
+              rounded-full text-[15px] font-light tracking-wide
+              transition-all duration-300 shadow-sm
+              ${!password || password.length < 6 || loading
+                ? "opacity-30 cursor-not-allowed" 
+                : "hover:bg-[#2D2D2F] opacity-100"
+              }
+            `}
+          >
+            {loading ? "Procesando..." : "Finalizar Registro"}
+          </button>
+        </div>
+
+        {/* PASO 6: Sincronizando Datos */}
+        <div
+          className={`
+            absolute inset-0 flex flex-col items-center justify-center px-6
+            transition-opacity duration-700 ease-out
+            ${step === 6 ? "opacity-100" : "opacity-0 pointer-events-none"}
+          `}
+        >
+          <h1 className="text-2xl text-[#1D1D1F] font-light mb-8 tracking-wide">
+            Sincronizando datos...
+          </h1>
+
+          <div className="w-full max-w-xs h-[1px] bg-gray-200 overflow-hidden">
+            <div className="h-full bg-[#1D1D1F] animate-progress" />
+          </div>
+        </div>
+
+        {/* PASO 7: Confirmación y Lanzamiento */}
+        <div
+          className={`
+            absolute inset-0 flex flex-col items-center justify-center px-6
+            transition-opacity duration-700 ease-out
+            ${step === 7 ? "opacity-100" : "opacity-0 pointer-events-none"}
+          `}
+        >
+          <h1 className="text-2xl text-[#1D1D1F] font-light text-center max-w-md mb-4">
+            Protocolo activado
+          </h1>
+
+          <p className="text-[17px] text-gray-500 font-light mb-12 text-center">
+            Bienvenido al equipo de{" "}
+            <span className="text-[#1D1D1F] font-normal">
+              {referrerName || "Travel Advantage"}
+            </span>
+          </p>
+
+          <div className="text-7xl font-extralight text-gray-400 tracking-widest mb-12 font-mono">
+            24:00:00
+          </div>
+
+          <p className="text-sm text-gray-400 font-light mb-8">
+            El tiempo comienza ahora
+          </p>
+
+          <button
+            onClick={() => router.push("/admin/welcome")}
+            className="px-12 py-4 bg-[#1D1D1F] text-white rounded-full text-[15px] font-light tracking-wide hover:bg-[#2D2D2F] transition-all duration-300 shadow-sm"
+          >
+            Entrar al Dashboard
+          </button>
+        </div>
       </div>
 
       <style jsx global>{`
