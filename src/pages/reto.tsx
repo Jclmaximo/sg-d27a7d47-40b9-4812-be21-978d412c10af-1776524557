@@ -208,7 +208,7 @@ export default function ZenCommandCenter() {
   };
 
   const copyFunnelLink = () => {
-    const link = `https://mwr.hubia.vip/ambassador/${profile?.username || ""}`;
+    const link = `https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`;
     navigator.clipboard.writeText(link);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2000);
@@ -218,13 +218,13 @@ export default function ZenCommandCenter() {
   };
 
   const shareToWhatsApp = () => {
-    const funnelUrl = `https://mwr.hubia.vip/ambassador/${profile?.username || ""}`;
+    const funnelUrl = `https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`;
     const message = encodeURIComponent(`¡Descubre cómo viajar más por menos! ${funnelUrl}`);
     window.open(`https://wa.me/?text=${message}`, "_blank");
   };
 
   const shareToInstagram = () => {
-    const funnelUrl = `https://mwr.hubia.vip/ambassador/${profile?.username || ""}`;
+    const funnelUrl = `https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`;
     navigator.clipboard.writeText(funnelUrl);
     toast({
       title: "Link copiado",
@@ -354,7 +354,7 @@ export default function ZenCommandCenter() {
                 </p>
                 <div className="relative">
                   <Input
-                    value={`https://mwr.hubia.vip/ambassador/${profile?.username || ""}`}
+                    value={`https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`}
                     readOnly
                     className="pr-24 bg-white/80 border-gray-200 text-[15px] font-mono text-gray-600"
                   />
