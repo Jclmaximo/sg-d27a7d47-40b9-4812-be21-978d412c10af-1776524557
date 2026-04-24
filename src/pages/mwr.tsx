@@ -249,26 +249,32 @@ export default function MWRPage() {
 
                 {/* STEP 2: Value Proposition */}
                 {flowStep === 2 && (
-                  <div className="relative min-h-screen flex items-end pb-8 sm:pb-16 animate-in fade-in duration-700">
-                    {/* Hero Image Background */}
+                  <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+                    {/* Hero Image Background - Full Screen */}
                     <div className="absolute inset-0 z-0">
                       <img
                         src="/paso2-hero.jpg"
                         alt="Two women having a conversation over coffee"
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-white via-white/60 to-transparent"></div>
+                      {/* Subtle dark overlay for text readability */}
+                      <div className="absolute inset-0 bg-black/5"></div>
                     </div>
 
-                    {/* Floating Metric Cards */}
-                    <div className="absolute top-32 sm:top-40 left-0 right-0 z-10 px-4">
-                      <div className="max-w-2xl mx-auto relative">
+                    {/* Demo Label - Top Right */}
+                    <div className="absolute top-8 right-8 z-20">
+                      <p className="text-white/80 text-sm font-medium tracking-wide">Demo 2/13</p>
+                    </div>
+
+                    {/* Floating Metric Cards - Top */}
+                    <div className="absolute top-24 sm:top-32 left-0 right-0 z-10 px-4">
+                      <div className="max-w-4xl mx-auto relative">
                         {/* Prospectos Card - Left */}
-                        <div className="absolute left-4 sm:left-8 top-0 animate-in slide-in-from-left duration-700">
-                          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 sm:p-5 w-[160px] sm:w-[200px]">
+                        <div className="absolute left-0 sm:left-8 top-0 animate-in slide-in-from-left duration-700">
+                          <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 sm:p-5 w-[160px] sm:w-[200px]">
                             <div className="flex items-center gap-3 mb-2">
-                              <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                                <Users className="w-5 h-5 text-primary" />
+                              <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
+                                <Users className="w-5 h-5 text-blue-600" />
                               </div>
                               <p className="text-sm text-gray-600 font-medium">Prospectos</p>
                             </div>
@@ -283,10 +289,10 @@ export default function MWRPage() {
                         </div>
 
                         {/* Ventas Card - Right */}
-                        <div className="absolute right-4 sm:right-8 top-12 sm:top-20 animate-in slide-in-from-right duration-700 delay-150">
-                          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-4 sm:p-5 w-[180px] sm:w-[220px]">
+                        <div className="absolute right-0 sm:right-8 top-12 sm:top-16 animate-in slide-in-from-right duration-700 delay-150">
+                          <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 sm:p-5 w-[180px] sm:w-[220px]">
                             <div className="flex items-center gap-3 mb-2">
-                              <div className="w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+                              <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
                                 <TrendingUp className="w-5 h-5 text-green-600" />
                               </div>
                               <p className="text-sm text-gray-600 font-medium">Ventas cerradas</p>
@@ -301,10 +307,10 @@ export default function MWRPage() {
                           </div>
                         </div>
 
-                        {/* Connection Line */}
-                        <svg className="absolute top-8 left-1/2 -translate-x-1/2 w-full h-32 opacity-40 hidden sm:block" viewBox="0 0 400 100">
+                        {/* Connection Line - Desktop Only */}
+                        <svg className="absolute top-10 left-1/2 -translate-x-1/2 w-full h-24 opacity-30 hidden lg:block pointer-events-none" viewBox="0 0 600 100">
                           <path
-                            d="M 50 20 Q 200 50 350 80"
+                            d="M 100 20 Q 300 60 500 90"
                             stroke="#3B82F6"
                             strokeWidth="3"
                             fill="none"
@@ -314,40 +320,53 @@ export default function MWRPage() {
                       </div>
                     </div>
 
-                    {/* Content Below */}
-                    <div className="relative z-10 w-full space-y-6 sm:space-y-8 pt-64 sm:pt-80">
-                      <div className="text-center space-y-3 sm:space-y-4">
-                        <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold leading-tight">
-                          Convierte prospectos<br />en clientes <span className="text-primary">sin perseguir<br />a nadie</span>
+                    {/* Main Content - Centered */}
+                    <div className="relative z-10 w-full max-w-4xl px-6 sm:px-8 space-y-6 sm:space-y-8 text-center">
+                      {/* Headline */}
+                      <div className="space-y-3 sm:space-y-4">
+                        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-gray-900">
+                          Convierte prospectos<br />
+                          en clientes <span className="text-[#4A7FFF]">sin perseguir<br />a nadie</span>
                         </h1>
-                        <p className="text-base sm:text-xl text-gray-600 max-w-3xl mx-auto">
-                          Un sistema que organiza tus contactos y te dice exactamente qué hacer para cerrar más ventas
+                        <p className="text-lg sm:text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto">
+                          Un sistema que organiza tus contactos y te dice<br className="hidden sm:block" />
+                          exactamente qué hacer para cerrar más ventas
                         </p>
                       </div>
 
                       {/* CTA Button */}
-                      <button
-                        onClick={() => setFlowStep(3)}
-                        className="w-full bg-primary hover:bg-primary/90 text-white py-5 sm:py-6 rounded-xl font-semibold text-base sm:text-lg transition-colors shadow-lg hover:shadow-xl"
-                      >
-                        Ver cómo funciona →
-                      </button>
+                      <div className="pt-4">
+                        <button
+                          onClick={() => setFlowStep(3)}
+                          className="w-full max-w-2xl mx-auto bg-[#4A7FFF] hover:bg-[#3A6FEF] text-white py-5 sm:py-6 px-8 rounded-2xl font-semibold text-lg sm:text-xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02] flex items-center justify-center gap-3"
+                        >
+                          Ver cómo funciona
+                          <ArrowRight className="w-6 h-6" />
+                        </button>
+                      </div>
 
                       {/* Trust Elements */}
-                      <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-sm sm:text-base text-gray-700">
-                        <div className="flex items-center gap-2">
-                          <Zap className="w-5 h-5 text-green-600" />
-                          <span>Acceso inmediato</span>
+                      <div className="flex flex-wrap justify-center gap-6 sm:gap-12 text-base sm:text-lg pt-4">
+                        <div className="flex items-center gap-2 text-gray-800">
+                          <Zap className="w-6 h-6 text-green-600" />
+                          <span className="font-medium">Acceso<br className="sm:hidden" /> inmediato</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <CheckCircle className="w-5 h-5 text-blue-600" />
-                          <span>Sin experiencia</span>
+                        <div className="flex items-center gap-2 text-gray-800">
+                          <CheckCircle className="w-6 h-6 text-blue-600" />
+                          <span className="font-medium">Sin<br className="sm:hidden" /> experiencia</span>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <TrendingUp className="w-5 h-5 text-purple-600" />
-                          <span>Empieza hoy</span>
+                        <div className="flex items-center gap-2 text-gray-800">
+                          <TrendingUp className="w-6 h-6 text-purple-600" />
+                          <span className="font-medium">Empieza<br className="sm:hidden" /> hoy</span>
                         </div>
                       </div>
+                    </div>
+
+                    {/* Bottom Left Circle Button */}
+                    <div className="absolute bottom-8 left-8 z-20">
+                      <button className="w-16 h-16 rounded-full bg-gray-900 hover:bg-gray-800 text-white font-bold text-2xl flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110">
+                        N
+                      </button>
                     </div>
                   </div>
                 )}
