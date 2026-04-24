@@ -296,7 +296,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -1450,28 +1450,33 @@ Puedo resolver dudas sobre:
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="flex gap-2">
-                      <Input
-                        readOnly
-                        value={funnelUrl}
-                        className="flex-1 bg-[#F8FAFC] border-[#E5E7EB] font-mono text-sm"
-                      />
-                      <Button
-                        onClick={copyReferralLink}
-                        className="bg-primary hover:bg-primary/90 text-white shadow-sm"
-                      >
-                        {copiedReferral ? (
-                          <>
-                            <Check className="w-4 h-4 mr-2" />
-                            Copiado
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-4 h-4 mr-2" />
-                            Copiar
-                          </>
-                        )}
-                      </Button>
+                    <div>
+                      <label className="text-sm font-semibold text-[#0F172A] mb-2 block">
+                        Tu Link de Referidos
+                      </label>
+                      <div className="flex gap-2">
+                        <Input
+                          readOnly
+                          value={funnelUrl}
+                          className="flex-1 bg-white border-[#E5E7EB] font-mono text-sm text-primary"
+                        />
+                        <Button
+                          onClick={copyReferralLink}
+                          className="bg-primary hover:bg-primary/90 text-white shadow-sm"
+                        >
+                          {copiedReferral ? (
+                            <>
+                              <Check className="w-4 h-4 mr-2" />
+                              Copiado
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-4 h-4 mr-2" />
+                              Copiar
+                            </>
+                          )}
+                        </Button>
+                      </div>
                     </div>
 
                     <div className="flex flex-wrap gap-2">
