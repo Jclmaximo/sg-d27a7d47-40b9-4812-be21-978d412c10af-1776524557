@@ -11,7 +11,6 @@ import type { NextRequest } from "next/server";
  */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const session = await getSession(request);
 
   // Redirigir /mwr?ref=username a /invitaunamigo?ref=username
   if (pathname === "/mwr") {
