@@ -24,8 +24,10 @@ import {
 import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
 import { referralService } from "@/services/referralService";
+import { productivityService } from "@/services/productivityService";
 import { supabase } from "@/integrations/supabase/client";
 import type { NetworkStats } from "@/services/referralService";
+import type { ProductivityStats, TeamMemberStats, DailyActivity } from "@/services/productivityService";
 import { useToast } from "@/hooks/use-toast";
 import {
   Users,
@@ -133,6 +135,19 @@ export default function MainDashboard() {
   // Wallet
   const [walletAddress, setWalletAddress] = useState("");
   const [savingWallet, setSavingWallet] = useState(false);
+
+  // Productivity
+  const [todayActivity, setTodayActivity] = useState<DailyActivity>({
+    contacted_prospects: false,
+    contacted_prospects_count: 0,
+    did_followup: false,
+    presented_business: false,
+    posted_content: false,
+    attended_training: false
+  });
+  const [productivityStats, setProductivityStats] = useState<ProductivityStats | null>(null);
+  const [teamStats, setTeamStats] = useState<TeamMemberStats[]>([]);
+  const [savingActivity, setSavingActivity] = useState(false);
 
   // Helper functions
   const getStatusText = (status: string) => {
@@ -354,6 +369,9 @@ Puedo resolver dudas sobre:
       if (commissionsData) {
         setCommissions(commissionsData);
       }
+
+      // Load productivity data
+      await loadProductivityData();
 
       setLoading(false);
     } catch (error) {
@@ -615,6 +633,71 @@ Puedo resolver dudas sobre:
         description: `Se procesará tu retiro de $${availableBalance.toFixed(2)} USD`
       });
       await loadData();
+    }
+  };
+
+  const loadProductivityData = async () => {
+    try {
+      const session = await authService.getCurrentSession();
+      if (!session) return;
+
+      // Cargar actividad de hoy
+      const today = await productivityService.getTodayProductivity(session.user.id);
+      if (today) {
+        setTodayActivity({
+          contacted_prospects: today.contacted_prospects || false,
+          contacted_prospects_count: today.contacted_prospects_count || 0,
+          did_followup: today.did_followup || false,
+          presented_business: today.presented_business || false,
+          posted_content: today.posted_content || false,
+          attended_training: today.attended_training || false
+        });
+      }
+
+      // Cargar estadísticas personales
+      const stats = await productivityService.getProductivityStats(session.user.id);
+      setProductivityStats(stats);
+
+      // Cargar estadísticas del equipo (solo admin)
+      if (profile?.role === "admin") {
+        const team = await productivityService.getTeamProductivityStats();
+        setTeamStats(team);
+      }
+    } catch (error) {
+      console.error("Error loading productivity data:", error);
+    }
+  };
+
+  const saveActivity = async () => {
+    try {
+      setSavingActivity(true);
+      const session = await authService.getCurrentSession();
+      if (!session) return;
+
+      const result = await productivityService.saveDailyActivity(session.user.id, todayActivity);
+
+      if (result.success) {
+        toast({
+          title: "✅ Actividad guardada",
+          description: "Tu progreso del día se actualizó correctamente"
+        });
+        await loadProductivityData();
+      } else {
+        toast({
+          title: "Error",
+          description: result.error || "No se pudo guardar la actividad",
+          variant: "destructive"
+        });
+      }
+    } catch (error) {
+      console.error("Error saving activity:", error);
+      toast({
+        title: "Error",
+        description: "Error al guardar actividad",
+        variant: "destructive"
+      });
+    } finally {
+      setSavingActivity(false);
     }
   };
 
@@ -1388,7 +1471,7 @@ Puedo resolver dudas sobre:
               {/* TAB 6 - PRODUCTIVIDAD */}
               <TabsContent value="productividad" className="space-y-6">
                 <div className="space-y-2">
-                  <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-green-400 bg-clip-text text-transparent">
+                  <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-cyan-400 to-emerald-400 bg-clip-text text-transparent">
                     Productividad
                   </h2>
                   <p className="text-muted-foreground">Mide tu actividad diaria y tu crecimiento</p>
@@ -1398,7 +1481,7 @@ Puedo resolver dudas sobre:
                   {/* MI DÍA - Card Principal */}
                   <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
                     <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
+                      <CardTitle className="text-sm font-medium text-muted-foreground flex items-center gap-2">
                         <CheckCircle className="w-5 h-5 text-primary" />
                         Mi Día
                       </CardTitle>
@@ -1406,30 +1489,44 @@ Puedo resolver dudas sobre:
                     </CardHeader>
                     <CardContent className="space-y-4">
                       {[
-                        { label: "Contacté prospectos", points: 3 },
-                        { label: "Hice seguimiento", points: 2 },
-                        { label: "Presenté el negocio", points: 5 },
-                        { label: "Publiqué contenido", points: 3 },
-                        { label: "Me conecté a entrenamiento", points: 2 }
-                      ].map((item, idx) => (
-                        <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-background/50 border border-border/30 hover:border-primary/30 transition-colors">
+                        { key: "contacted_prospects", label: "Contacté prospectos", points: 3, hasCount: true },
+                        { key: "did_followup", label: "Hice seguimiento", points: 2, hasCount: false },
+                        { key: "presented_business", label: "Presenté el negocio", points: 5, hasCount: false },
+                        { key: "posted_content", label: "Publiqué contenido", points: 3, hasCount: false },
+                        { key: "attended_training", label: "Me conecté a entrenamiento", points: 2, hasCount: false }
+                      ].map((item) => (
+                        <div key={item.key} className="flex items-center gap-3 p-3 rounded-lg bg-background/50 border border-border/30 hover:border-primary/30 transition-colors">
                           <input
                             type="checkbox"
+                            checked={todayActivity[item.key as keyof DailyActivity] as boolean}
+                            onChange={(e) => setTodayActivity({ ...todayActivity, [item.key]: e.target.checked })}
                             className="w-5 h-5 rounded border-primary/50 text-primary focus:ring-2 focus:ring-primary/50 cursor-pointer"
                           />
                           <span className="flex-1 text-sm font-medium">{item.label}</span>
-                          <input
-                            type="number"
-                            min="0"
-                            placeholder="0"
-                            className="w-16 px-2 py-1 text-sm text-center bg-background border border-border/30 rounded-md focus:ring-2 focus:ring-primary/50 focus:border-primary"
-                          />
+                          {item.hasCount && (
+                            <input
+                              type="number"
+                              min="0"
+                              value={todayActivity.contacted_prospects_count || ""}
+                              onChange={(e) => setTodayActivity({ ...todayActivity, contacted_prospects_count: parseInt(e.target.value) || 0 })}
+                              placeholder="0"
+                              className="w-16 px-2 py-1 text-sm text-center bg-background border border-border/30 rounded-md focus:ring-2 focus:ring-primary/50 focus:border-primary"
+                            />
+                          )}
                           <span className="text-xs text-muted-foreground">+{item.points}pts</span>
                         </div>
                       ))}
 
-                      <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg shadow-blue-500/20">
-                        <CheckCircle className="w-4 h-4 mr-2" />
+                      <Button 
+                        onClick={saveActivity}
+                        disabled={savingActivity}
+                        className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 shadow-lg shadow-blue-500/20"
+                      >
+                        {savingActivity ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <CheckCircle className="w-4 h-4 mr-2" />
+                        )}
                         Guardar Actividad
                       </Button>
                     </CardContent>
@@ -1442,9 +1539,9 @@ Puedo resolver dudas sobre:
                       <CardHeader>
                         <CardTitle className="text-sm font-medium text-muted-foreground">Puntos de hoy</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-4">
+                      <CardContent>
                         <div className="text-5xl font-black bg-gradient-to-br from-foreground to-foreground/70 bg-clip-text text-transparent">
-                          9 <span className="text-2xl text-muted-foreground">/ 15</span>
+                          {productivityStats?.total_points || 0} <span className="text-2xl text-muted-foreground">pts</span>
                         </div>
                         
                         {/* Barra de Progreso */}
@@ -1452,20 +1549,44 @@ Puedo resolver dudas sobre:
                           <div className="h-3 bg-background/50 rounded-full overflow-hidden">
                             <div 
                               className="h-full bg-gradient-to-r from-blue-500 via-cyan-500 to-green-500 rounded-full transition-all duration-500"
-                              style={{ width: "60%" }}
+                              style={{ width: `${Math.min((productivityStats?.total_points || 0) / 15 * 100, 100)}%` }}
                             ></div>
                           </div>
                           <div className="flex justify-between text-xs text-muted-foreground">
                             <span>Bajo</span>
-                            <span className="font-semibold text-cyan-400">En ritmo</span>
+                            <span className={`font-semibold ${
+                              (productivityStats?.total_points || 0) >= 10 ? "text-green-400" :
+                              (productivityStats?.total_points || 0) >= 5 ? "text-cyan-400" :
+                              "text-red-400"
+                            }`}>
+                              {(productivityStats?.total_points || 0) >= 10 ? "Alto rendimiento" :
+                               (productivityStats?.total_points || 0) >= 5 ? "En ritmo" : "Bajo"}
+                            </span>
                             <span>Alto rendimiento</span>
                           </div>
                         </div>
 
                         {/* Estado Badge */}
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/20 border border-cyan-500/30 shadow-lg shadow-cyan-500/10">
-                          <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></div>
-                          <span className="text-sm font-semibold text-cyan-400">En ritmo</span>
+                        <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border shadow-lg ${
+                          (productivityStats?.total_points || 0) >= 10 
+                            ? "bg-green-500/20 border-green-500/30 shadow-green-500/10" 
+                            : (productivityStats?.total_points || 0) >= 5
+                            ? "bg-cyan-500/20 border-cyan-500/30 shadow-cyan-500/10"
+                            : "bg-red-500/20 border-red-500/30 shadow-red-500/10"
+                        }`}>
+                          <div className={`w-2 h-2 rounded-full animate-pulse ${
+                            (productivityStats?.total_points || 0) >= 10 ? "bg-green-400" :
+                            (productivityStats?.total_points || 0) >= 5 ? "bg-cyan-400" :
+                            "bg-red-400"
+                          }`}></div>
+                          <span className={`text-sm font-semibold ${
+                            (productivityStats?.total_points || 0) >= 10 ? "text-green-400" :
+                            (productivityStats?.total_points || 0) >= 5 ? "text-cyan-400" :
+                            "text-red-400"
+                          }`}>
+                            {(productivityStats?.total_points || 0) >= 10 ? "Alto rendimiento" :
+                             (productivityStats?.total_points || 0) >= 5 ? "En ritmo" : "Bajo"}
+                          </span>
                         </div>
                       </CardContent>
                     </Card>
@@ -1476,7 +1597,7 @@ Puedo resolver dudas sobre:
                         <div className="flex items-center gap-3">
                           <div className="text-4xl">🔥</div>
                           <div>
-                            <div className="text-3xl font-bold text-orange-400">3 días</div>
+                            <div className="text-3xl font-bold text-orange-400">{productivityStats?.current_streak || 0} días</div>
                             <p className="text-sm text-orange-300/70">seguidos activo</p>
                           </div>
                         </div>
@@ -1495,34 +1616,36 @@ Puedo resolver dudas sobre:
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                       <div className="p-4 rounded-lg bg-background/50 border border-border/30">
                         <p className="text-sm text-muted-foreground">Días activos</p>
-                        <p className="text-2xl font-bold text-green-400">4/7</p>
+                        <p className="text-2xl font-bold text-green-400">{productivityStats?.days_active || 0}/7</p>
                       </div>
                       <div className="p-4 rounded-lg bg-background/50 border border-border/30">
                         <p className="text-sm text-muted-foreground">Total acciones</p>
-                        <p className="text-2xl font-bold">28</p>
+                        <p className="text-2xl font-bold">{productivityStats?.total_actions || 0}</p>
                       </div>
                       <div className="p-4 rounded-lg bg-background/50 border border-border/30">
                         <p className="text-sm text-muted-foreground">Promedio diario</p>
-                        <p className="text-2xl font-bold text-cyan-400">7</p>
+                        <p className="text-2xl font-bold text-cyan-400">{productivityStats?.average_daily || 0}</p>
                       </div>
                       <div className="p-4 rounded-lg bg-background/50 border border-border/30">
                         <p className="text-sm text-muted-foreground">Mejor día</p>
-                        <p className="text-2xl font-bold text-purple-400">12</p>
+                        <p className="text-2xl font-bold text-purple-400">{productivityStats?.best_day || 0}</p>
                       </div>
                     </div>
 
                     {/* Gráfica de Barras */}
                     <div className="flex items-end justify-between gap-2 h-40 p-4 rounded-lg bg-background/30">
-                      {["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"].map((day, idx) => {
-                        const heights = [60, 80, 40, 90, 70, 0, 0];
-                        const colors = ["bg-green-500", "bg-green-500", "bg-blue-500", "bg-green-500", "bg-blue-500", "bg-gray-600", "bg-gray-600"];
+                      {(productivityStats?.weekly_data || []).map((dayData, idx) => {
+                        const maxPoints = Math.max(...(productivityStats?.weekly_data || []).map(d => d.points), 1);
+                        const heightPercent = (dayData.points / maxPoints) * 100;
+                        const color = dayData.points >= 10 ? "bg-green-500" : dayData.points >= 5 ? "bg-blue-500" : "bg-gray-600";
+                        
                         return (
                           <div key={idx} className="flex-1 flex flex-col items-center gap-2">
                             <div 
-                              className={`w-full rounded-t ${colors[idx]} transition-all duration-500 hover:opacity-80`}
-                              style={{ height: `${heights[idx]}%` }}
+                              className={`w-full rounded-t ${color} transition-all duration-500 hover:opacity-80`}
+                              style={{ height: `${heightPercent}%` }}
                             ></div>
-                            <span className="text-xs text-muted-foreground">{day}</span>
+                            <span className="text-xs text-muted-foreground">{dayData.day}</span>
                           </div>
                         );
                       })}
@@ -1569,44 +1692,41 @@ Puedo resolver dudas sobre:
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-3">
-                        {[
-                          { name: "Carlos Martínez", percent: 98, days: 7, isUser: false },
-                          { name: "Ana López", percent: 87, days: 6, isUser: false },
-                          { name: "Pedro Sánchez", percent: 75, days: 5, isUser: false },
-                          { name: profile?.full_name || "Tú", percent: 60, days: 4, isUser: true },
-                          { name: "María García", percent: 45, days: 3, isUser: false }
-                        ].map((member, idx) => (
-                          <div
-                            key={idx}
-                            className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
-                              member.isUser
-                                ? "bg-primary/10 border-2 border-primary/50 shadow-lg shadow-primary/20"
-                                : "bg-background/50 border border-border/30 hover:border-primary/30"
-                            }`}
-                          >
-                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
-                              idx === 0 ? "bg-yellow-500 text-yellow-900" :
-                              idx === 1 ? "bg-gray-400 text-gray-900" :
-                              idx === 2 ? "bg-orange-600 text-orange-100" :
-                              "bg-gray-700 text-gray-300"
-                            }`}>
-                              {idx + 1}
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-semibold">{member.name}</p>
-                              <p className="text-sm text-muted-foreground">{member.days} días activos</p>
-                            </div>
-                            <div className="text-right">
-                              <p className={`text-2xl font-bold ${
-                                member.percent >= 80 ? "text-green-400" :
-                                member.percent >= 50 ? "text-yellow-400" :
-                                "text-red-400"
+                        {teamStats.slice(0, 5).map((member, idx) => {
+                          const isCurrentUser = member.user_id === profile?.id;
+                          return (
+                            <div
+                              key={member.user_id}
+                              className={`flex items-center gap-4 p-4 rounded-lg transition-all ${
+                                isCurrentUser
+                                  ? "bg-primary/10 border-2 border-primary/50 shadow-lg shadow-primary/20"
+                                  : "bg-background/50 border border-border/30 hover:border-primary/30"
+                              }`}
+                            >
+                              <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold ${
+                                idx === 0 ? "bg-yellow-500 text-yellow-900" :
+                                idx === 1 ? "bg-gray-400 text-gray-900" :
+                                idx === 2 ? "bg-orange-600 text-orange-100" :
+                                "bg-gray-700 text-gray-300"
                               }`}>
-                                {member.percent}%
-                              </p>
+                                {idx + 1}
+                              </div>
+                              <div className="flex-1">
+                                <p className="font-semibold">{member.full_name}{isCurrentUser ? " (Tú)" : ""}</p>
+                                <p className="text-sm text-muted-foreground">{member.days_active} días activos</p>
+                              </div>
+                              <div className="text-right">
+                                <p className={`text-2xl font-bold ${
+                                  member.percentage >= 80 ? "text-green-400" :
+                                  member.percentage >= 50 ? "text-yellow-400" :
+                                  "text-red-400"
+                                }`}>
+                                  {member.percentage}%
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     </CardContent>
                   </Card>
@@ -1630,14 +1750,8 @@ Puedo resolver dudas sobre:
                             </tr>
                           </thead>
                           <tbody>
-                            {[
-                              { name: "Carlos Martínez", percent: 98, days: 7, points: 142, lastActive: "Hace 2 horas", status: "active" },
-                              { name: "Ana López", percent: 87, days: 6, points: 128, lastActive: "Hace 5 horas", status: "active" },
-                              { name: "Pedro Sánchez", percent: 75, days: 5, points: 95, lastActive: "Hace 1 día", status: "medium" },
-                              { name: "María García", percent: 45, days: 3, points: 67, lastActive: "Hace 2 días", status: "low" },
-                              { name: "Juan Pérez", percent: 30, days: 2, points: 42, lastActive: "Hace 3 días", status: "inactive" }
-                            ].map((member, idx) => (
-                              <tr key={idx} className="border-b border-border/20 hover:bg-background/50 transition-colors cursor-pointer">
+                            {teamStats.map((member, idx) => (
+                              <tr key={member.user_id} className="border-b border-border/20 hover:bg-background/50 transition-colors cursor-pointer">
                                 <td className="p-3">
                                   <div className="flex items-center gap-2">
                                     <div className={`w-2 h-2 rounded-full ${
@@ -1645,21 +1759,21 @@ Puedo resolver dudas sobre:
                                       member.status === "medium" ? "bg-yellow-500" :
                                       "bg-red-500"
                                     }`}></div>
-                                    <span className="font-medium">{member.name}</span>
+                                    <span className="font-medium">{member.full_name}</span>
                                   </div>
                                 </td>
                                 <td className="p-3 text-center">
                                   <span className={`font-bold ${
-                                    member.percent >= 80 ? "text-green-400" :
-                                    member.percent >= 50 ? "text-yellow-400" :
+                                    member.percentage >= 80 ? "text-green-400" :
+                                    member.percentage >= 50 ? "text-yellow-400" :
                                     "text-red-400"
                                   }`}>
-                                    {member.percent}%
+                                    {member.percentage}%
                                   </span>
                                 </td>
-                                <td className="p-3 text-center">{member.days}/7</td>
-                                <td className="p-3 text-center font-semibold">{member.points}</td>
-                                <td className="p-3 text-sm text-muted-foreground">{member.lastActive}</td>
+                                <td className="p-3 text-center">{member.days_active}/7</td>
+                                <td className="p-3 text-center font-semibold">{member.total_points}</td>
+                                <td className="p-3 text-sm text-muted-foreground">{member.last_activity}</td>
                               </tr>
                             ))}
                           </tbody>
@@ -1794,27 +1908,25 @@ Puedo resolver dudas sobre:
                     <>
                       {leadNotes.map((note) => (
                         <div key={note.id} className="border rounded-lg p-4 bg-card">
-                          <div className="flex items-start justify-between mb-2">
-                            <div className="flex items-center gap-2">
-                              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                                <span className="text-xs font-semibold text-primary">
-                                  {note.profiles?.full_name?.[0] || note.profiles?.username?.[0] || "?"}
-                                </span>
-                              </div>
-                              <div>
-                                <p className="text-sm font-medium">
-                                  {note.profiles?.full_name || note.profiles?.username || "Usuario"}
-                                </p>
-                                <p className="text-xs text-muted-foreground">
-                                  {new Date(note.created_at).toLocaleString("es-ES", {
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="bg-gray-800/50 rounded-full p-3 flex items-center justify-center">
+                              <span className="text-xs font-semibold text-primary">
+                                {note.profiles?.full_name?.[0] || note.profiles?.username?.[0] || "?"}
+                              </span>
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium">
+                                {note.profiles?.full_name || note.profiles?.username || "Usuario"}
+                              </p>
+                              <p className="text-xs text-muted-foreground">
+                                {new Date(note.created_at).toLocaleDateString("es-ES", {
                                     day: "2-digit",
                                     month: "short",
                                     year: "numeric",
                                     hour: "2-digit",
                                     minute: "2-digit"
                                   })}
-                                </p>
-                              </div>
+                              </p>
                             </div>
                           </div>
                           <p className="text-sm whitespace-pre-line">{note.note}</p>
