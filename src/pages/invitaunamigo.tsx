@@ -600,7 +600,7 @@ export default function InvitaUnAmigo() {
           </p>
 
           <button
-            onClick={() => router.push("/admin/welcome")}
+            onClick={() => router.push("/reto")}
             className="px-12 py-4 bg-[#4285F4] text-white rounded-full text-[15px] font-light tracking-wide hover:bg-[#3367D6] transition-all duration-300 shadow-sm flex items-center gap-2"
           >
             Entrar al Dashboard
