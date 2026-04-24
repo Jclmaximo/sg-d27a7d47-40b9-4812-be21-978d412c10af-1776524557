@@ -43,20 +43,19 @@ export default function AdminPage() {
     setLoading(true);
 
     try {
-      const { user, error: loginError } = await authService.signIn(email, password);
+      const { data, error } = await authService.signIn(email, password);
 
-      if (loginError) {
-        setError(loginError.message || "Credenciales incorrectas");
-        setLoading(false);
+      if (error) {
+        setError(error.message);
         return;
       }
 
-      if (user) {
-        router.push("/admin/welcome");
-      }
+      // Redirect to home dashboard after successful login
+      router.push("/admin/home");
     } catch (err) {
-      const error = err as Error;
-      setError(error.message || "Error al iniciar sesión");
+      console.error("Login error:", err);
+      setError("Error al iniciar sesión");
+    } finally {
       setLoading(false);
     }
   };
