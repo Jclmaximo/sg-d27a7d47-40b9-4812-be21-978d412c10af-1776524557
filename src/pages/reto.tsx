@@ -293,7 +293,7 @@ export default function ZenCommandCenter() {
           <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-extralight text-[#1D1D1F] tracking-tight">
-                Zen Command Center
+                Command Center
               </h1>
               <p className="text-sm font-light text-gray-500 mt-1">
                 {profile?.full_name}
@@ -331,53 +331,33 @@ export default function ZenCommandCenter() {
             </div>
           </div>
 
+          {/* B. MOTOR DE CRECIMIENTO - Link de referido */}
+          <div className="mb-16">
+            <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
+              Tu Embudo Personal
+            </p>
+            
+            {/* Link container - responsive layout */}
+            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-6">
+              <input
+                type="text"
+                value={`https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`}
+                readOnly
+                className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 font-light"
+              />
+              <Button
+                onClick={copyFunnelLink}
+                className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-light whitespace-nowrap"
+              >
+                <Copy className="w-4 h-4 mr-2" />
+                Copiar Link
+              </Button>
+            </div>
+          </div>
+
           {/* B. MOTOR DE CRECIMIENTO */}
           <div className={`mb-16 transition-all duration-500 ${challengeActive ? "" : "opacity-30 blur-sm pointer-events-none"}`}>
             <div className="grid md:grid-cols-2 gap-8">
-              {/* Link del Embudo */}
-              <Card className="backdrop-blur-xl bg-white/80 border border-gray-100 shadow-sm p-8">
-                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-4">
-                  Tu Embudo Personal
-                </p>
-                <div className="relative">
-                  <Input
-                    value={`https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`}
-                    readOnly
-                    className="pr-24 bg-white/80 border-gray-200 text-[15px] font-mono text-gray-600"
-                  />
-                  <Button
-                    onClick={copyFunnelLink}
-                    className="absolute right-0 top-0 bottom-0 px-4 bg-[#1D1D1F] hover:bg-gray-800 text-white rounded-xl font-light"
-                  >
-                    {copiedLink ? (
-                      <>
-                        <Check className="w-4 h-4 mr-2" />
-                        Copiado
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-4 h-4 mr-2" />
-                        Copiar Link
-                      </>
-                    )}
-                  </Button>
-                </div>
-                <div className="flex gap-4 justify-center">
-                  <button
-                    onClick={shareToWhatsApp}
-                    className="w-14 h-14 rounded-full bg-[#25D366]/10 hover:bg-[#25D366]/20 flex items-center justify-center transition-all hover:scale-110"
-                  >
-                    <Share2 className="w-6 h-6 text-[#25D366] stroke-[1.5]" />
-                  </button>
-                  <button
-                    onClick={shareToInstagram}
-                    className="w-14 h-14 rounded-full bg-gradient-to-br from-[#833AB4]/10 via-[#E1306C]/10 to-[#F77737]/10 hover:from-[#833AB4]/20 hover:via-[#E1306C]/20 hover:to-[#F77737]/20 flex items-center justify-center transition-all hover:scale-110"
-                  >
-                    <Instagram className="w-6 h-6 text-[#E1306C] stroke-[1.5]" />
-                  </button>
-                </div>
-              </Card>
-
               {/* Live Lead Tracker */}
               <Card className="backdrop-blur-xl bg-white/80 border border-gray-100 shadow-sm p-8 flex flex-col items-center justify-center text-center">
                 <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6">
