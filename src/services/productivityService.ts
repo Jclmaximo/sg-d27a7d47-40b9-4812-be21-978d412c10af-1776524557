@@ -222,33 +222,22 @@ export async function getProductivityStats(userId: string): Promise<Productivity
  */
 export async function getTeamProductivityStats(userId: string): Promise<TeamMemberStats[]> {
   try {
-    // Primero obtener todos los IDs del equipo del usuario (referidos directos e indirectos)
-    const { data: teamMembers, error: teamError } = await supabase.rpc('get_team_members', {
-      p_user_id: userId
-    });
+    // Primero obtener todos los IDs del equipo del usuario (referidos directos)
+    // Para no complicar con funciones SQL no tipeadas, hacemos una consulta simple por ahora
+    const { data: directReferrals, error: teamError } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("referred_by", userId);
 
-    if (teamError) {
-      console.error("Error getting team members:", teamError);
-      // Si la función no existe, crear una consulta recursiva manual
-      const { data: directReferrals } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("referred_by", userId);
-      
-      if (!directReferrals || directReferrals.length === 0) {
-        return [];
-      }
-
-      const teamIds = directReferrals.map(r => r.id);
-      
-      // Para mantenerlo simple, solo nivel 1 por ahora
-      return getProductivityStatsForUsers(teamIds);
-    }
-
-    const teamIds = teamMembers?.map((m: any) => m.id) || [];
-    if (teamIds.length === 0) {
+    if (teamError || !directReferrals || directReferrals.length === 0) {
+      console.log("No team members found or error:", teamError);
       return [];
     }
+
+    const teamIds = directReferrals.map(r => r.id);
+    
+    // Aquí podríamos hacer más consultas para obtener nivel 2, 3, etc.
+    // Por ahora obtenemos las estadísticas de los directos
 
     return getProductivityStatsForUsers(teamIds);
   } catch (error) {
@@ -271,7 +260,7 @@ async function getProductivityStatsForUsers(userIds: string[]): Promise<TeamMemb
       user_id,
       date,
       total_points,
-      profiles!user_productivity_user_id_fkey(full_name)
+      profiles!user_productivity_user_id_fkey(full_name, avatar_url)
     `)
     .in("user_id", userIds)
     .gte("date", startDate.toISOString().split("T")[0])
@@ -288,6 +277,7 @@ async function getProductivityStatsForUsers(userIds: string[]): Promise<TeamMemb
     userStats.set(userId, {
       user_id: userId,
       full_name: "Usuario",
+      avatar_url: undefined,
       total_points: 0,
       days_active: 0,
       percentage: 0,
@@ -302,6 +292,7 @@ async function getProductivityStatsForUsers(userIds: string[]): Promise<TeamMemb
     
     if (stats) {
       stats.full_name = record.profiles?.full_name || "Usuario";
+      stats.avatar_url = record.profiles?.avatar_url || undefined;
       stats.total_points += record.total_points || 0;
       if (record.total_points > 0) {
         stats.days_active += 1;
