@@ -1442,17 +1442,18 @@ Puedo resolver dudas sobre:
 
               {/* TAB 5 - LINKS */}
               <TabsContent value="links" className="space-y-6">
+                {/* Link del Embudo */}
                 <Card className="bg-white border border-[#E5E7EB] shadow-sm">
                   <CardHeader>
-                    <CardTitle className="text-lg font-semibold text-[#0F172A]">Tu Embudo Personal</CardTitle>
+                    <CardTitle className="text-lg font-semibold text-[#0F172A]">Link del Embudo (MWR)</CardTitle>
                     <CardDescription className="text-[#64748B]">
-                      Comparte este enlace para capturar leads automáticamente
+                      Comparte este enlace para que vean tu embudo de ventas
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
                       <label className="text-sm font-semibold text-[#0F172A] mb-2 block">
-                        Tu Link de Referidos
+                        Tu Link de Embudo
                       </label>
                       <div className="flex gap-2">
                         <Input
@@ -1544,8 +1545,129 @@ Puedo resolver dudas sobre:
                         <div className="text-sm text-[#0F172A]">
                           <p className="font-medium mb-1">¿Cómo funciona?</p>
                           <p className="text-[#64748B]">
-                            Cada persona que visite este enlace verá tu embudo personalizado.
-                            Cuando se registren, aparecerán automáticamente en tu lista de leads.
+                            Este link lleva a tu página de embudo personalizada (MWR). 
+                            Cuando alguien se registre, aparecerá en tu lista de leads.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Link de Referidos */}
+                <Card className="bg-white border border-[#E5E7EB] shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="text-lg font-semibold text-[#0F172A]">Link de Referidos (Ambassador)</CardTitle>
+                    <CardDescription className="text-[#64748B]">
+                      Link directo para referir personas a Travel Advantage
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <label className="text-sm font-semibold text-[#0F172A] mb-2 block">
+                        Tu Link de Referidos
+                      </label>
+                      <div className="flex gap-2">
+                        <Input
+                          readOnly
+                          value={`${typeof window !== "undefined" ? window.location.origin : ""}/ambassador/${profile?.username || ""}`}
+                          className="flex-1 bg-white border-[#E5E7EB] font-mono text-sm text-primary"
+                        />
+                        <Button
+                          onClick={() => {
+                            const referralUrl = `${window.location.origin}/ambassador/${profile?.username || ""}`;
+                            navigator.clipboard.writeText(referralUrl);
+                            setCopiedReferral(true);
+                            setTimeout(() => setCopiedReferral(false), 2000);
+                          }}
+                          className="bg-primary hover:bg-primary/90 text-white shadow-sm"
+                        >
+                          {copiedReferral ? (
+                            <>
+                              <Check className="w-4 h-4 mr-2" />
+                              Copiado
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-4 h-4 mr-2" />
+                              Copiar
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const referralUrl = `${window.location.origin}/ambassador/${profile?.username || ""}`;
+                          window.open(
+                            `https://wa.me/?text=${encodeURIComponent(referralUrl)}`,
+                            "_blank"
+                          );
+                        }}
+                        className="border-[#E5E7EB] hover:border-[#25D366] hover:bg-[#25D366]/10 text-[#25D366]"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        WhatsApp
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const referralUrl = `${window.location.origin}/ambassador/${profile?.username || ""}`;
+                          window.open(
+                            `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(referralUrl)}`,
+                            "_blank"
+                          );
+                        }}
+                        className="border-[#E5E7EB] hover:border-[#1877F2] hover:bg-[#1877F2]/10 text-[#1877F2]"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Facebook
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const referralUrl = `${window.location.origin}/ambassador/${profile?.username || ""}`;
+                          window.open(
+                            `https://twitter.com/intent/tweet?url=${encodeURIComponent(referralUrl)}`,
+                            "_blank"
+                          );
+                        }}
+                        className="border-[#E5E7EB] hover:border-[#1DA1F2] hover:bg-[#1DA1F2]/10 text-[#1DA1F2]"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Twitter
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const referralUrl = `${window.location.origin}/ambassador/${profile?.username || ""}`;
+                          window.open(
+                            `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(referralUrl)}`,
+                            "_blank"
+                          );
+                        }}
+                        className="border-[#E5E7EB] hover:border-[#0A66C2] hover:bg-[#0A66C2]/10 text-[#0A66C2]"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        LinkedIn
+                      </Button>
+                    </div>
+
+                    <div className="p-4 bg-success/5 border border-success/20 rounded-lg">
+                      <div className="flex items-start gap-3">
+                        <Info className="w-5 h-5 text-success mt-0.5 shrink-0" />
+                        <div className="text-sm text-[#0F172A]">
+                          <p className="font-medium mb-1">¿Qué es esto?</p>
+                          <p className="text-[#64748B]">
+                            Este es tu link personal de ambassador. Úsalo para invitar personas directamente 
+                            a unirse como miembros o ambassadors de Travel Advantage.
                           </p>
                         </div>
                       </div>
