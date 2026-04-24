@@ -296,7 +296,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -786,13 +786,20 @@ Puedo resolver dudas sobre:
             {/* Navigation Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="w-full inline-flex h-auto flex-nowrap overflow-x-auto overflow-y-hidden gap-2 bg-white border border-[#E5E7EB] p-1 rounded-lg">
-                <TabsTrigger value="overview" className="flex-shrink-0">
-                  <LayoutDashboard className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Resumen</span>
+                <TabsTrigger 
+                  value="resumen" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                  onClick={() => router.push("/admin/welcome")}
+                >
+                  <LayoutGrid className="w-4 h-4 mr-2" />
+                  Resumen
                 </TabsTrigger>
-                <TabsTrigger value="leads" className="flex-shrink-0">
-                  <Users className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Leads</span>
+                <TabsTrigger 
+                  value="leads"
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                >
+                  <Users className="w-4 h-4 mr-2" />
+                  Leads
                 </TabsTrigger>
                 <TabsTrigger value="network" className="flex-shrink-0">
                   <Users className="w-4 h-4 sm:mr-2" />
