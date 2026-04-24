@@ -31,7 +31,10 @@ import {
   Star,
   ArrowRight,
   Plane,
-  PlayCircle
+  PlayCircle,
+  DollarSign,
+  Target,
+  Hand
 } from "lucide-react";
 
 interface Lead {
@@ -236,29 +239,56 @@ export default function WelcomePage() {
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/20 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: "1s" }} />
 
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-20">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20" />
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="text-center max-w-3xl mx-auto">
-              <div className="flex justify-center mb-6">
-                {profile?.avatar_url ? (
-                  <img
-                    src={profile.avatar_url}
-                    alt={profile.full_name}
-                    className="w-24 h-24 rounded-full object-cover border-4 border-white/30 shadow-xl"
-                  />
-                ) : (
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold border-4 border-white/30 shadow-xl">
-                    {profile?.full_name?.[0]?.toUpperCase() || "U"}
-                  </div>
-                )}
-              </div>
-              <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                ¡Bienvenido de nuevo, {profile?.full_name || profile?.username || "Usuario"}!
+        <div className="relative bg-gradient-to-br from-primary via-primary/90 to-primary/80 overflow-hidden">
+          {/* Overlay oscuro para mejor contraste */}
+          <div className="absolute inset-0 bg-black/25" />
+          
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2" />
+            <div className="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2" />
+          </div>
+
+          <div className="relative px-6 py-12 sm:py-16">
+            <div className="max-w-2xl mx-auto text-center space-y-6">
+              {/* Avatar */}
+              {profile?.avatar_url ? (
+                <img
+                  src={profile.avatar_url}
+                  alt={profile.full_name}
+                  className="w-20 h-20 rounded-full object-cover mx-auto border-3 border-white shadow-lg"
+                  onError={(e) => {
+                    console.error("Error loading avatar:", profile.avatar_url);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white text-2xl font-semibold mx-auto border-3 border-white shadow-lg">
+                  {profile?.full_name?.[0]?.toUpperCase() || "U"}
+                </div>
+              )}
+
+              {/* Headline - reducido y más limpio */}
+              <h1 className="text-3xl sm:text-4xl font-semibold text-white leading-tight">
+                Bienvenido, {profile?.full_name?.split(' ')[0] || profile?.username || "Usuario"}
               </h1>
+
+              {/* Descripción */}
+              <p className="text-lg text-white/90 max-w-lg mx-auto">
+                Tu centro de comando para hacer crecer tu negocio
+              </p>
+
+              {/* CTA Principal - más prominente */}
+              <Button
+                size="lg"
+                onClick={() => router.push("/admin/main-dashboard")}
+                className="bg-white text-primary hover:bg-white/90 font-semibold h-14 px-8 rounded-xl shadow-xl hover:shadow-2xl transition-all text-base"
+              >
+                Ir a Mi Dashboard
+                <TrendingUp className="ml-2 h-5 w-5" />
+              </Button>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 py-8">
@@ -293,51 +323,56 @@ export default function WelcomePage() {
                 </div>
               </div>
 
-              {/* Stats Grid - BRILLANTE */}
-              <div className="grid md:grid-cols-4 gap-6 mb-8">
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/50 shadow-[0_8px_30px_rgba(37,99,235,0.2)] hover:shadow-[0_10px_40px_rgba(37,99,235,0.3)] hover:-translate-y-1 hover:border-primary/60 transition-all">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Total Leads</CardTitle>
-                    <Users className="w-5 h-5 text-primary" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-5xl font-black text-foreground mb-1">{stats.total}</div>
-                    <p className="text-xs text-muted-foreground">Prospectos capturados</p>
-                  </CardContent>
-                </Card>
+              {/* Quick Stats */}
+              <div className="px-6 py-8">
+                <div className="max-w-7xl mx-auto">
+                  <div className="grid gap-6 md:grid-cols-3 mb-8">
+                    <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                          <DollarSign className="w-5 h-5 text-primary" />
+                          Total Ganado
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-4xl font-semibold text-[#0F172A] mb-1">
+                          ${(stats?.total_earned ?? 0).toFixed(2)}
+                        </div>
+                        <p className="text-sm text-[#475569]">Acumulado total</p>
+                      </CardContent>
+                    </Card>
 
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-accent/50 shadow-[0_8px_30px_rgba(56,189,248,0.2)] hover:shadow-[0_10px_40px_rgba(56,189,248,0.3)] hover:-translate-y-1 hover:border-accent/60 transition-all">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Nuevos</CardTitle>
-                    <Clock className="w-5 h-5 text-accent" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-5xl font-black text-foreground mb-1">{stats.nuevos}</div>
-                    <p className="text-xs text-muted-foreground">Por contactar</p>
-                  </CardContent>
-                </Card>
+                    <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                          <Users className="w-5 h-5 text-primary" />
+                          Red Activa
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-4xl font-semibold text-[#0F172A] mb-1">
+                          {stats?.network_size ?? 0}
+                        </div>
+                        <p className="text-sm text-[#475569]">Miembros en tu equipo</p>
+                      </CardContent>
+                    </Card>
 
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/50 shadow-[0_8px_30px_rgba(37,99,235,0.2)] hover:shadow-[0_10px_40px_rgba(37,99,235,0.3)] hover:-translate-y-1 hover:border-primary/60 transition-all">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Contactados</CardTitle>
-                    <MessageSquare className="w-5 h-5 text-primary" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-5xl font-black text-foreground mb-1">{stats.contactados}</div>
-                    <p className="text-xs text-muted-foreground">En seguimiento</p>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-secondary/50 shadow-[0_8px_30px_rgba(234,179,8,0.2)] hover:shadow-[0_10px_40px_rgba(234,179,8,0.3)] hover:-translate-y-1 hover:border-secondary/60 transition-all">
-                  <CardHeader className="flex flex-row items-center justify-between pb-2">
-                    <CardTitle className="text-sm font-medium text-muted-foreground">Convertidos</CardTitle>
-                    <CheckCircle2 className="w-5 h-5 text-secondary" />
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-5xl font-black text-foreground mb-1">{stats.convertidos}</div>
-                    <p className="text-xs text-muted-foreground">Ventas cerradas</p>
-                  </CardContent>
-                </Card>
+                    <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                          <TrendingUp className="w-5 h-5 text-primary" />
+                          Leads del Mes
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-4xl font-semibold text-[#0F172A] mb-1">
+                          {stats?.leads_count ?? 0}
+                        </div>
+                        <p className="text-sm text-[#475569]">Nuevos prospectos</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
               </div>
 
               {/* Funnel Link Card - BRILLANTE */}
@@ -508,146 +543,120 @@ export default function WelcomePage() {
                 </Card>
               </div>
 
-              {/* Quick Actions - BRILLANTE */}
-              <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20 mb-8">
+              {/* Quick Actions */}
+              <Card className="bg-white border border-[#E2E8F0] shadow-sm mb-8">
                 <CardHeader>
-                  <CardTitle>Acciones Rápidas</CardTitle>
-                  <CardDescription>Herramientas principales de tu negocio</CardDescription>
+                  <CardTitle className="text-xl font-semibold text-[#0F172A]">Acciones Rápidas</CardTitle>
+                  <CardDescription className="text-[#475569]">
+                    Herramientas para impulsar tu negocio hoy
+                  </CardDescription>
                 </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-3 gap-4">
-                    <Button
-                      variant="outline"
-                      className="h-auto py-6 flex-col gap-2 bg-white/5 backdrop-blur-md border-primary/30 hover:border-primary/50 hover:bg-primary/10 hover:shadow-[0_0_20px_rgba(37,99,235,0.3)] transition-all"
-                      onClick={() => window.open(funnelLink, "_blank")}
-                    >
-                      <Link2 className="w-8 h-8 text-primary" />
-                      <div className="text-center">
-                        <div className="font-semibold text-foreground">Tu Funnel</div>
-                        <div className="text-xs text-muted-foreground">Ver y compartir</div>
+                <CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
+                    onClick={() => router.push("/admin/main-dashboard?tab=links")}
+                  >
+                    <Link2 className="h-6 w-6 text-primary" />
+                    <div className="text-center">
+                      <div className="font-semibold text-[#0F172A] mb-1">Compartir Link</div>
+                      <div className="text-sm text-[#64748B]">
+                        Tu embudo personalizado
                       </div>
-                    </Button>
+                    </div>
+                  </Button>
 
-                    <Button
-                      variant="outline"
-                      className="h-auto py-6 flex-col gap-2 bg-white/5 backdrop-blur-md border-accent/30 hover:border-accent/50 hover:bg-accent/10 hover:shadow-[0_0_20px_rgba(56,189,248,0.3)] transition-all"
-                      onClick={() => router.push("/admin/leads")}
-                    >
-                      <Users className="w-8 h-8 text-accent" />
-                      <div className="text-center">
-                        <div className="font-semibold text-foreground">Mis Leads</div>
-                        <div className="text-xs text-muted-foreground">Gestionar prospectos</div>
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
+                    onClick={() => router.push("/admin/main-dashboard?tab=leads")}
+                  >
+                    <Users className="h-6 w-6 text-primary" />
+                    <div className="text-center">
+                      <div className="font-semibold text-[#0F172A] mb-1">Gestionar Leads</div>
+                      <div className="text-sm text-[#64748B]">
+                        {stats?.leads_count ?? 0} prospectos activos
                       </div>
-                    </Button>
+                    </div>
+                  </Button>
 
-                    <Button
-                      variant="outline"
-                      className="h-auto py-6 flex-col gap-2 bg-white/5 backdrop-blur-md border-secondary/30 hover:border-secondary/50 hover:bg-secondary/10 hover:shadow-[0_0_20px_rgba(234,179,8,0.3)] transition-all"
-                      onClick={copyFunnelLink}
-                    >
-                      <Share2 className="w-8 h-8 text-secondary" />
-                      <div className="text-center">
-                        <div className="font-semibold text-foreground">Compartir</div>
-                        <div className="text-xs text-muted-foreground">Copiar URL</div>
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
+                    onClick={() => router.push("/admin/recursos")}
+                  >
+                    <Gift className="h-6 w-6 text-primary" />
+                    <div className="text-center">
+                      <div className="font-semibold text-[#0F172A] mb-1">Recursos</div>
+                      <div className="text-sm text-[#64748B]">
+                        Marketing y materiales
                       </div>
-                    </Button>
-                  </div>
+                    </div>
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
+                    onClick={() => router.push("/admin/main-dashboard?tab=productividad")}
+                  >
+                    <Target className="h-6 w-6 text-primary" />
+                    <div className="text-center">
+                      <div className="font-semibold text-[#0F172A] mb-1">Productividad</div>
+                      <div className="text-sm text-[#64748B]">
+                        Tareas del día
+                      </div>
+                    </div>
+                  </Button>
                 </CardContent>
               </Card>
 
-              {/* Recent Leads - BRILLANTE */}
-              <Card className="bg-gradient-to-br from-card/80 to-card/40 backdrop-blur-sm border-primary/30 shadow-xl shadow-primary/20">
+              {/* Recent Activity */}
+              <Card className="bg-white border border-[#E2E8F0] shadow-sm">
                 <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle>Prospectos Recientes</CardTitle>
-                      <CardDescription>Últimos leads capturados</CardDescription>
-                    </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => router.push("/admin/leads")}
-                      className="text-primary hover:text-primary/80 hover:bg-primary/10"
-                    >
-                      Ver todos
-                      <ArrowRight className="w-4 h-4 ml-1" />
-                    </Button>
-                  </div>
+                  <CardTitle className="text-xl font-semibold text-[#0F172A]">Actividad Reciente</CardTitle>
+                  <CardDescription className="text-[#475569]">
+                    Últimos movimientos en tu red
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {recentLeads.length === 0 ? (
+                  {recentActivity.length === 0 ? (
                     <div className="text-center py-12">
-                      <Users className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-foreground mb-2">
-                        Aún no tienes leads
-                      </h3>
-                      <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
-                        Comienza compartiendo tu embudo para recibir tus primeros prospectos
-                      </p>
-                      <Button
-                        onClick={copyFunnelLink}
-                        className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
-                      >
-                        <Share2 className="w-4 h-4 mr-2" />
-                        Compartir Mi Embudo
-                      </Button>
+                      <Clock className="h-12 w-12 text-[#CBD5E1] mx-auto mb-4" />
+                      <p className="text-[#64748B]">No hay actividad reciente</p>
                     </div>
                   ) : (
-                    <>
-                      <div className="space-y-4">
-                        {recentLeads.map((lead) => (
+                    <div className="space-y-4">
+                      {recentActivity.map((activity) => (
+                        <div
+                          key={activity.id}
+                          className="flex items-start gap-4 p-4 rounded-lg bg-[#F8FAFC] border border-[#E2E8F0] hover:border-[#CBD5E1] transition-colors"
+                        >
                           <div
-                            key={lead.id}
-                            className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-lg bg-background/50 backdrop-blur-sm border border-primary/20 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/10 transition-all"
+                            className={`
+                              w-10 h-10 rounded-full flex items-center justify-center shrink-0
+                              ${activity.type === "lead" ? "bg-primary/10 text-primary" : ""}
+                              ${activity.type === "commission" ? "bg-success/10 text-success" : ""}
+                              ${activity.type === "referral" ? "bg-secondary/10 text-secondary" : ""}
+                            `}
                           >
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                <span className="font-semibold text-foreground truncate">{lead.name}</span>
-                                <Badge className={getStatusColor(lead.status)}>
-                                  {getStatusText(lead.status)}
-                                </Badge>
-                              </div>
-                              <div className="text-sm text-muted-foreground space-y-1">
-                                <div className="flex items-center gap-1 truncate">
-                                  <Mail className="w-3 h-3 shrink-0" />
-                                  <span className="truncate">{lead.email}</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <Calendar className="w-3 h-3 shrink-0" />
-                                  {formatDate(lead.created_at)}
-                                </div>
-                              </div>
-                            </div>
-                            <Button
-                              size="sm"
-                              className="bg-secondary hover:bg-secondary/90 text-secondary-foreground shadow-lg shadow-secondary/20 w-full sm:w-auto shrink-0"
-                              onClick={() => window.open(`https://wa.me/${lead.phone.replace(/\D/g, "")}`, "_blank")}
-                            >
-                              Contactar
-                            </Button>
+                            {activity.type === "lead" && <Users className="w-5 h-5" />}
+                            {activity.type === "commission" && <DollarSign className="w-5 h-5" />}
+                            {activity.type === "referral" && <Hand className="w-5 h-5" />}
                           </div>
-                        ))}
-                      </div>
-
-                      <div className="mt-6 grid md:grid-cols-2 gap-4">
-                        <Button
-                          size="lg"
-                          onClick={() => router.push("/admin/main-dashboard")}
-                          className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
-                        >
-                          <LayoutDashboard className="w-5 h-5 mr-2" />
-                          Ver Panel Principal
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="lg"
-                          className="bg-white/5 backdrop-blur-md border-accent/30 hover:border-accent/50 hover:bg-accent/10"
-                        >
-                          <TrendingUp className="w-5 h-5 mr-2" />
-                          Ver Comisiones
-                        </Button>
-                      </div>
-                    </>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-[#0F172A] mb-1">
+                              {activity.title}
+                            </p>
+                            <p className="text-sm text-[#64748B]">
+                              {activity.description}
+                            </p>
+                            <p className="text-xs text-[#94A3B8] mt-1">
+                              {formatDate(activity.timestamp)}
+                            </p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </CardContent>
               </Card>
