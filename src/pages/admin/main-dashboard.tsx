@@ -370,8 +370,8 @@ Puedo resolver dudas sobre:
         setCommissions(commissionsData);
       }
 
-      // Load productivity data
-      await loadProductivityData();
+      // Load productivity data - pass profile data to ensure role check works
+      await loadProductivityData(profileData);
 
       setLoading(false);
     } catch (error) {
@@ -636,7 +636,7 @@ Puedo resolver dudas sobre:
     }
   };
 
-  const loadProductivityData = async () => {
+  const loadProductivityData = async (userProfile?: UserProfile) => {
     try {
       const session = await authService.getCurrentSession();
       if (!session) return;
@@ -658,9 +658,11 @@ Puedo resolver dudas sobre:
       const stats = await productivityService.getProductivityStats(session.user.id);
       setProductivityStats(stats);
 
-      // Cargar estadísticas del equipo (solo admin)
-      if (profile?.role === "admin") {
+      // Cargar estadísticas del equipo (solo admin) - usar el profile pasado como parámetro
+      const currentProfile = userProfile || profile;
+      if (currentProfile?.role === "admin") {
         const team = await productivityService.getTeamProductivityStats(session.user.id);
+        console.log("Team stats loaded:", team); // Debug log
         setTeamStats(team);
       }
     } catch (error) {
