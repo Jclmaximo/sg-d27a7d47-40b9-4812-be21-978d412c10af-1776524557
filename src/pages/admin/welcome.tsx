@@ -36,9 +36,7 @@ import {
   Target,
   Hand,
   Search,
-  Bell,
-  Avatar,
-  AvatarFallback
+  Bell
 } from "lucide-react";
 
 interface Lead {
@@ -261,6 +259,18 @@ export default function WelcomePage() {
         <div className="relative bg-white overflow-hidden border-b border-[#E2E8F0]">
           <div className="absolute inset-0 bg-gradient-to-b from-[#F8FAFC] to-white pointer-events-none" />
           
+          {/* Logout Button */}
+          <div className="absolute top-4 right-4 sm:top-6 sm:right-6 z-10">
+            <Button
+              variant="ghost"
+              onClick={handleLogout}
+              className="text-[#64748B] hover:text-red-600 hover:bg-red-50 rounded-full flex items-center gap-2 px-4 transition-all"
+            >
+              <LogOut className="w-[18px] h-[18px]" />
+              <span className="hidden sm:inline text-sm font-medium">Salir</span>
+            </Button>
+          </div>
+
           <div className="relative px-6 py-10 sm:py-12">
             <div className="max-w-xl mx-auto text-center flex flex-col items-center">
               {/* Avatar */}
