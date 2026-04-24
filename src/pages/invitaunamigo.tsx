@@ -32,6 +32,8 @@ export default function InvitaUnAmigo() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [registrationProgress, setRegistrationProgress] = useState(0);
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
+  const [checkingUsername, setCheckingUsername] = useState(false);
 
   // Cargar nombre del referente
   useEffect(() => {
@@ -56,6 +58,45 @@ export default function InvitaUnAmigo() {
       console.error("Error loading referrer:", error);
     }
   };
+
+  // NUEVO - Verificar disponibilidad de username
+  const checkUsernameAvailability = async (username: string) => {
+    if (!username || username.length < 3) {
+      setUsernameAvailable(null);
+      return;
+    }
+
+    setCheckingUsername(true);
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("username")
+        .eq("username", username)
+        .single();
+
+      if (error && error.code === "PGRST116") {
+        // No encontrado = disponible
+        setUsernameAvailable(true);
+      } else if (data) {
+        // Encontrado = ocupado
+        setUsernameAvailable(false);
+      }
+    } catch (error) {
+      console.error("Error checking username:", error);
+    }
+    setCheckingUsername(false);
+  };
+
+  // Debounce para verificar username
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (username) {
+        checkUsernameAvailability(username);
+      }
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [username]);
 
   // PASO 1: Barra de progreso auto-advance
   useEffect(() => {
@@ -146,10 +187,8 @@ export default function InvitaUnAmigo() {
             phone: whatsapp,
             country: "",
             source: "Invitación Reto 24h",
-            interest: "reto-24h",
-            contact_method: "whatsapp",
             user_id: referrerId,
-          } as any); // using 'as any' to fix the TS error since we don't have the exact interface here
+          });
         }
       }
 
@@ -286,18 +325,29 @@ export default function InvitaUnAmigo() {
               <p className="text-xs text-gray-400 text-center mt-2">
                 Sin espacios, todo en minúsculas
               </p>
+              {username.length >= 3 && (
+                <p className={`text-xs text-center mt-1 ${
+                  checkingUsername ? "text-gray-400" :
+                  usernameAvailable === true ? "text-green-600" :
+                  usernameAvailable === false ? "text-red-600" : ""
+                }`}>
+                  {checkingUsername ? "Verificando..." :
+                   usernameAvailable === true ? "✓ Disponible" :
+                   usernameAvailable === false ? "✗ Este usuario ya existe" : ""}
+                </p>
+              )}
             </div>
           </div>
 
           <button
             onClick={handleIdentityNext}
-            disabled={!fullName.trim() || !username.trim()}
+            disabled={!fullName.trim() || !username.trim() || usernameAvailable !== true}
             className={`
               mt-12 px-12 py-4 
               bg-[#1D1D1F] text-white 
               rounded-full text-[15px] font-light tracking-wide
               transition-all duration-300 shadow-sm
-              ${!fullName.trim() || !username.trim() 
+              ${!fullName.trim() || !username.trim() || usernameAvailable !== true
                 ? "opacity-30 cursor-not-allowed" 
                 : "hover:bg-[#2D2D2F] opacity-100"
               }
@@ -446,7 +496,7 @@ export default function InvitaUnAmigo() {
           <p className="text-[17px] text-gray-500 font-light mb-12 text-center">
             Bienvenido al equipo de{" "}
             <span className="text-[#1D1D1F] font-normal">
-              {referrerName || "Travel Advantage"}
+              {referrerName || "Viaja Ligero"}
             </span>
           </p>
 
