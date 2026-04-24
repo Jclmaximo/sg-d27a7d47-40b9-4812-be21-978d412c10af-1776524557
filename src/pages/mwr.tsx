@@ -272,7 +272,7 @@ export default function MWRPage() {
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                         ¿Qué quieres que <span className="text-primary">cambie</span> en tu negocio ahora mismo?
                       </h2>
-                      <p className="text-gray-600">Elige lo que más impacto tendría para ti</p>
+                      <p className="text-gray-600">Selecciona lo que más impacto tendría para ti</p>
                     </div>
 
                     {/* Options Grid */}
@@ -336,7 +336,7 @@ export default function MWRPage() {
                         className="cursor-pointer group"
                       >
                         <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
-                          <div className="w-14 h-14 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
                             <CheckCircle className="w-7 h-7 text-primary" />
                           </div>
                           <div className="flex-1 pt-1">
@@ -349,142 +349,122 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 3: System Features */}
+                {/* STEP 3: Challenge/Pain Point Quiz - NEW */}
                 {flowStep === 3 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Todo lo que necesitas para <span className="text-primary">conseguir y cerrar prospectos</span>
+                        ¿Qué es lo que más <span className="text-primary">te está frenando</span> ahora mismo?
                       </h2>
+                      <p className="text-gray-600">Selecciona tu mayor desafío en este momento</p>
                     </div>
 
-                    <div className="space-y-4">
-                      {/* Block 1: Landing Pages */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <FileText className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Atrae prospectos todos los días</h3>
-                          <p className="text-sm text-gray-600">Con tu propia página lista para compartir</p>
-                        </div>
-                      </div>
-
-                      {/* Block 2: Lead Management */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Users className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Organiza tus contactos sin perder oportunidades</h3>
-                          <p className="text-sm text-gray-600">Todo claro y ordenado en un solo lugar</p>
-                        </div>
-                      </div>
-
-                      {/* Block 3: Semi-automated Messages - HIGHLIGHTED */}
-                      <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-primary/10 to-blue-50 border-2 border-primary rounded-xl shadow-md">
-                        <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 shadow-lg">
-                          <MessageSquare className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Responde más rápido sin pensar qué decir</h3>
-                          <p className="text-sm text-primary font-medium">Mensajes listos, solo das click y se envían</p>
-                        </div>
-                      </div>
-
-                      {/* Block 4: Content */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center mb-4">
-                            <ImageIcon className="w-6 h-6 text-indigo-600" />
+                    {/* Options Grid */}
+                    <div className="space-y-4 max-w-3xl mx-auto">
+                      {/* Option 1: Conseguir prospectos */}
+                      <div 
+                        onClick={() => setFlowStep(4)}
+                        className="cursor-pointer group"
+                      >
+                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
+                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <Users className="w-7 h-7 text-primary" />
+                          </div>
+                          <div className="flex-1 pt-1">
+                            <h3 className="text-lg font-bold text-gray-900 mb-1">Conseguir prospectos</h3>
+                            <p className="text-sm text-gray-600">No sabes cómo hacer que la gente llegue a ti</p>
                           </div>
                         </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Publica sin complicarte</h3>
-                          <p className="text-sm text-gray-600">Contenido listo para atraer personas todos los días</p>
+                      </div>
+
+                      {/* Option 2: Dar seguimiento */}
+                      <div 
+                        onClick={() => setFlowStep(4)}
+                        className="cursor-pointer group"
+                      >
+                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
+                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <MessageSquare className="w-7 h-7 text-primary" />
+                          </div>
+                          <div className="flex-1 pt-1">
+                            <h3 className="text-lg font-bold text-gray-900 mb-1">Dar seguimiento</h3>
+                            <p className="text-sm text-gray-600">Se te enfrían los prospectos o no sabes qué decirles</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Option 3: Cerrar ventas */}
+                      <div 
+                        onClick={() => setFlowStep(4)}
+                        className="cursor-pointer group"
+                      >
+                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary hover:shadow-lg transition-all">
+                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <Target className="w-7 h-7 text-primary" />
+                          </div>
+                          <div className="flex-1 pt-1">
+                            <h3 className="text-lg font-bold text-gray-900 mb-1">Cerrar ventas</h3>
+                            <p className="text-sm text-gray-600">Hablas con personas... pero no terminan entrando</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Option 4: Todo lo anterior (Recommended) */}
+                      <div 
+                        onClick={() => setFlowStep(4)}
+                        className="relative cursor-pointer group"
+                      >
+                        <div className="absolute -top-3 left-6 z-10">
+                          <span className="bg-orange-500 text-white px-4 py-1 rounded-full text-xs font-semibold">
+                            Recomendado
+                          </span>
+                        </div>
+                        <div className="flex items-start gap-4 p-6 bg-white border-2 border-primary rounded-xl hover:shadow-lg transition-all">
+                          <div className="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+                            <Zap className="w-7 h-7 text-primary" />
+                          </div>
+                          <div className="flex-1 pt-1">
+                            <h3 className="text-lg font-bold text-gray-900 mb-1">Todo lo anterior</h3>
+                            <p className="text-sm text-gray-600">Quiero que todo funcione sin estar encima todo el tiempo</p>
+                          </div>
                         </div>
                       </div>
                     </div>
-
-                    <button
-                      onClick={() => setFlowStep(4)}
-                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
-                    >
-                      Continuar →
-                    </button>
                   </div>
                 )}
 
-                {/* STEP 4: WhatsApp Integration */}
+                {/* STEP 4: Value Demo */}
                 {flowStep === 4 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Todo el seguimiento ya está <span className="text-primary">listo para ti</span>
+                        Esto es lo que hace el sistema <span className="text-primary">automáticamente</span>
                       </h2>
-                      <p className="text-gray-600">Mensajes preparados para que solo tengas que dar clic en enviar</p>
+                      <p className="text-gray-600">Sin que tengas que estar pendiente</p>
                     </div>
 
-                    {/* WhatsApp Mock Visual */}
-                    <div className="bg-gradient-to-b from-gray-50 to-white rounded-2xl p-6 border-2 border-gray-200 shadow-lg">
-                      {/* WhatsApp Header */}
-                      <div className="flex items-center gap-3 pb-4 mb-4 border-b border-gray-200">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold">
-                          JC
+                    {/* 3 Visual Steps */}
+                    <div className="grid md:grid-cols-3 gap-6">
+                      <div className="text-center space-y-3">
+                        <div className="w-16 h-16 mx-auto rounded-full bg-green-100 flex items-center justify-center">
+                          <UserPlus className="w-8 h-8 text-green-600" />
                         </div>
-                        <div>
-                          <p className="font-semibold text-gray-900">Juan Carlos</p>
-                          <p className="text-xs text-gray-500">en línea</p>
-                        </div>
+                        <h3 className="text-lg font-bold text-gray-900">Registra</h3>
+                        <p className="text-sm text-gray-600">Cada persona que llega se guarda automáticamente</p>
                       </div>
-
-                      {/* Messages */}
-                      <div className="space-y-3 mb-4">
-                        {/* Message 1 */}
-                        <div className="flex justify-end animate-in slide-in-from-right duration-500">
-                          <div className="max-w-[80%]">
-                            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl rounded-tr-sm px-4 py-3 shadow-md">
-                              <p className="text-white text-sm">Hola Juan Carlos 👋 Gracias por tu interés</p>
-                            </div>
-                            <div className="flex items-center justify-end gap-1 mt-1 pr-2">
-                              <p className="text-xs text-gray-400">10:30 AM</p>
-                              <div className="flex">
-                                <CheckCircle2 className="w-3 h-3 text-blue-500" />
-                                <CheckCircle2 className="w-3 h-3 text-blue-500 -ml-1" />
-                              </div>
-                            </div>
-                          </div>
+                      <div className="text-center space-y-3">
+                        <div className="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center">
+                          <MessageSquare className="w-8 h-8 text-blue-600" />
                         </div>
-
-                        {/* Message 2 */}
-                        <div className="flex justify-end animate-in slide-in-from-right duration-500 delay-300">
-                          <div className="max-w-[80%]">
-                            <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl rounded-tr-sm px-4 py-3 shadow-md">
-                              <p className="text-white text-sm">Te explico cómo funciona 👇</p>
-                            </div>
-                            <div className="flex items-center justify-end gap-1 mt-1 pr-2">
-                              <p className="text-xs text-gray-400">10:30 AM</p>
-                              <div className="flex">
-                                <CheckCircle2 className="w-3 h-3 text-blue-500" />
-                                <CheckCircle2 className="w-3 h-3 text-blue-500 -ml-1" />
-                              </div>
-                            </div>
-                          </div>
+                        <h3 className="text-lg font-bold text-gray-900">Organiza</h3>
+                        <p className="text-sm text-gray-600">Te dice a quién escribir y qué decir</p>
+                      </div>
+                      <div className="text-center space-y-3">
+                        <div className="w-16 h-16 mx-auto rounded-full bg-purple-100 flex items-center justify-center">
+                          <BarChart3 className="w-8 h-8 text-purple-600" />
                         </div>
-                      </div>
-
-                      {/* Send Button */}
-                      <div className="flex justify-center mb-4">
-                        <button className="flex items-center gap-2 px-6 py-2.5 bg-primary hover:bg-primary/90 text-white rounded-full font-medium text-sm shadow-md transition-colors">
-                          <MessageSquare className="w-4 h-4" />
-                          Enviar mensaje
-                        </button>
-                      </div>
-
-                      {/* Automation Indicator */}
-                      <div className="flex items-center justify-center gap-2 pt-4 border-t border-gray-200">
-                        <div className="w-2 h-2 rounded-full bg-primary"></div>
-                        <p className="text-xs text-gray-500 font-medium">Listo para enviar • Solo 1 clic</p>
+                        <h3 className="text-lg font-bold text-gray-900">Hace seguimiento</h3>
+                        <p className="text-sm text-gray-600">Nunca más se te olvida un prospecto</p>
                       </div>
                     </div>
 
@@ -497,8 +477,96 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 5: Dashboard */}
+                {/* STEP 5: Problem Agitation */}
                 {flowStep === 5 && (
+                  <div className="space-y-8 animate-in fade-in duration-700">
+                    <div className="text-center space-y-4">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        ¿Te ha pasado esto?
+                      </h2>
+                    </div>
+
+                    {/* Problem Points */}
+                    <div className="space-y-4 max-w-2xl mx-auto">
+                      <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div className="text-red-500 text-xl">❌</div>
+                        <p className="text-gray-700">Personas te preguntan... pero nunca les das seguimiento</p>
+                      </div>
+                      <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div className="text-red-500 text-xl">❌</div>
+                        <p className="text-gray-700">Pierdes prospectos porque no sabes cuándo escribirles</p>
+                      </div>
+                      <div className="flex items-start gap-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                        <div className="text-red-500 text-xl">❌</div>
+                        <p className="text-gray-700">No tienes claridad de quién está interesado y quién no</p>
+                      </div>
+                    </div>
+
+                    <div className="text-center">
+                      <p className="text-gray-700 font-medium mb-6">Esto es exactamente lo que este sistema resuelve</p>
+                      <button
+                        onClick={() => setFlowStep(6)}
+                        className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                      >
+                        Ver cómo lo resuelve →
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* STEP 6: Solution Overview */}
+                {flowStep === 6 && (
+                  <div className="space-y-8 animate-in fade-in duration-700">
+                    <div className="text-center space-y-4">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        El sistema hace <span className="text-primary">3 cosas</span> por ti
+                      </h2>
+                    </div>
+
+                    {/* 3 Solutions */}
+                    <div className="space-y-6 max-w-2xl mx-auto">
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl">
+                        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
+                          <span className="text-green-600 font-bold">1</span>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold text-gray-900 mb-2">Captura cada lead automáticamente</h3>
+                          <p className="text-gray-600">Desde el momento en que alguien se registra, el sistema ya lo tiene guardado</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl">
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                          <span className="text-blue-600 font-bold">2</span>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold text-gray-900 mb-2">Te dice exactamente a quién escribir</h3>
+                          <p className="text-gray-600">Organiza tus prospectos y te muestra quién necesita seguimiento ahora</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl">
+                        <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
+                          <span className="text-purple-600 font-bold">3</span>
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold text-gray-900 mb-2">Te da mensajes listos para enviar</h3>
+                          <p className="text-gray-600">No tienes que pensar qué decir, solo copias y envías</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => setFlowStep(7)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Continuar →
+                    </button>
+                  </div>
+                )}
+
+                {/* STEP 7: Control Panel */}
+                {flowStep === 7 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
@@ -574,199 +642,6 @@ export default function MWRPage() {
                     </div>
 
                     <button
-                      onClick={() => setFlowStep(6)}
-                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
-                    >
-                      Continuar →
-                    </button>
-                  </div>
-                )}
-
-                {/* STEP 6: Prospect Management */}
-                {flowStep === 6 && (
-                  <div className="space-y-8 animate-in fade-in duration-700">
-                    <div className="text-center space-y-4">
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Responde a tus prospectos <span className="text-primary">sin pensar qué decir</span>
-                      </h2>
-                      <p className="text-gray-600">Mensajes listos, tú decides cuándo enviarlos</p>
-                    </div>
-
-                    {/* Prospects List with Actions */}
-                    <div className="space-y-4">
-                      {/* Juan Pérez - Nuevo */}
-                      <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-primary font-semibold">
-                              JP
-                            </div>
-                            <div>
-                              <p className="text-gray-900 font-semibold">Juan Pérez</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700 border border-green-200">
-                                Nuevo
-                              </span>
-                            </div>
-                          </div>
-                          <button className="px-4 py-2 bg-white hover:bg-gray-50 text-primary border-2 border-primary rounded-lg text-sm font-medium transition-colors">
-                            Responder
-                          </button>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
-                          <p className="text-sm text-gray-600 mb-2">💬 <span className="font-medium">Mensaje sugerido:</span></p>
-                          <p className="text-sm text-gray-700 mb-3">"Hola Juan 👋 Vi que te interesa viajar más gastando menos. ¿Tienes 5 minutos para que te explique cómo funciona?"</p>
-                          <button className="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold transition-colors flex items-center justify-center gap-2 shadow-md">
-                            <MessageSquare className="w-4 h-4" />
-                            Enviar por WhatsApp
-                          </button>
-                          <p className="text-xs text-green-700 font-medium mt-2 text-center">✔ Solo das click y el mensaje se envía por ti</p>
-                        </div>
-                      </div>
-
-                      {/* María López - Contactado */}
-                      <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-semibold">
-                              ML
-                            </div>
-                            <div>
-                              <p className="text-gray-900 font-semibold">María López</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
-                                Contactado
-                              </span>
-                            </div>
-                          </div>
-                          <button className="px-4 py-2 bg-white hover:bg-gray-50 text-primary border-2 border-primary rounded-lg text-sm font-medium transition-colors">
-                            Ver mensaje
-                          </button>
-                        </div>
-                      </div>
-
-                      {/* Carlos Ruiz - Seguimiento */}
-                      <div className="bg-white rounded-xl p-5 border-2 border-gray-200 shadow-sm hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-semibold">
-                              CR
-                            </div>
-                            <div>
-                              <p className="text-gray-900 font-semibold">Carlos Ruiz</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-700 border border-orange-200">
-                                Seguimiento
-                              </span>
-                            </div>
-                          </div>
-                          <button className="px-4 py-2 bg-white hover:bg-gray-50 text-primary border-2 border-primary rounded-lg text-sm font-medium transition-colors">
-                            Enviar plantilla
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    <button
-                      onClick={() => setFlowStep(7)}
-                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
-                    >
-                      Continuar →
-                    </button>
-                  </div>
-                )}
-
-                {/* STEP 7: Control Panel */}
-                {flowStep === 7 && (
-                  <div className="space-y-8 animate-in fade-in duration-700">
-                    <div className="text-center space-y-4">
-                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Así se ve tu negocio cuando <span className="text-primary">todo está bajo control</span>
-                      </h2>
-                      <p className="text-gray-600">Sabes quién sigue, en qué etapa está y qué hacer en cada momento</p>
-                    </div>
-
-                    {/* Dashboard Visual Mock - Light Theme */}
-                    <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-200">
-                      {/* KPI Cards */}
-                      <div className="grid grid-cols-3 gap-4 mb-6">
-                        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                          <p className="text-4xl font-bold text-gray-900 mb-1">28</p>
-                          <p className="text-xs text-gray-600 font-medium">Prospectos</p>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                          <p className="text-4xl font-bold text-gray-900 mb-1">12</p>
-                          <p className="text-xs text-gray-600 font-medium">En seguimiento</p>
-                        </div>
-                        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                          <p className="text-4xl font-bold text-gray-900 mb-1">6</p>
-                          <p className="text-xs text-gray-600 font-medium">Contactados</p>
-                        </div>
-                      </div>
-
-                      {/* Leads List with Action Buttons */}
-                      <div className="space-y-3">
-                        {/* Juan Pérez */}
-                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-semibold text-sm">
-                              JP
-                            </div>
-                            <div>
-                              <p className="text-gray-900 font-semibold text-sm">Juan Pérez</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-700 border border-green-200">
-                                🟢 Nuevo
-                              </span>
-                            </div>
-                          </div>
-                          <button className="px-3 py-1.5 border-2 border-primary text-primary hover:bg-primary hover:text-white rounded text-xs font-medium transition-colors">
-                            Ver detalle
-                          </button>
-                        </div>
-
-                        {/* María López */}
-                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center text-white font-semibold text-sm">
-                              ML
-                            </div>
-                            <div>
-                              <p className="text-gray-900 font-semibold text-sm">María López</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
-                                🔵 Hablando
-                              </span>
-                            </div>
-                          </div>
-                          <button className="px-3 py-1.5 border-2 border-primary text-primary hover:bg-primary hover:text-white rounded text-xs font-medium transition-colors">
-                            Continuar
-                          </button>
-                        </div>
-
-                        {/* Carlos Ruiz */}
-                        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-orange-600 flex items-center justify-center text-white font-semibold text-sm">
-                              CR
-                            </div>
-                            <div>
-                              <p className="text-gray-900 font-semibold text-sm">Carlos Ruiz</p>
-                              <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700 border border-orange-200">
-                                🟠 Por cerrar
-                              </span>
-                            </div>
-                          </div>
-                          <button className="px-3 py-1.5 bg-primary hover:bg-primary/90 text-white rounded text-xs font-semibold transition-colors shadow-sm">
-                            Enviar mensaje
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Microcopy */}
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600 font-medium">
-                        Todo claro. Sin perder oportunidades.
-                      </p>
-                    </div>
-
-                    <button
                       onClick={() => setFlowStep(8)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
@@ -775,77 +650,37 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 8: Message Templates */}
+                {/* STEP 8: Time Freedom */}
                 {flowStep === 8 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Ya no tienes que <span className="text-primary">pensar qué decir</span>
+                        Imagina dedicar <span className="text-primary">10 minutos al día</span>
                       </h2>
-                      <p className="text-gray-600">Mensajes listos para cada momento, solo eliges y envías</p>
+                      <p className="text-gray-600">...y tener todo tu negocio organizado</p>
                     </div>
 
-                    <div className="space-y-4">
-                      {/* Block 1: First Message + Preview */}
-                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-start gap-4 mb-4">
-                          <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                            <MessageSquare className="w-6 h-6 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="font-bold text-gray-900 mb-1">Primer mensaje listo</h3>
-                            <p className="text-sm text-gray-600">Rompe el hielo sin improvisar</p>
-                          </div>
-                        </div>
-                        
-                        {/* Message Preview */}
-                        <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-2xl rounded-tl-sm p-4 shadow-md">
-                          <p className="text-white text-sm leading-relaxed">
-                            Hola 👋 Vi que te interesa viajar más gastando menos.<br />
-                            ¿Te explico cómo funciona en 2 minutos?
-                          </p>
-                        </div>
+                    {/* Time Comparison */}
+                    <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                      <div className="p-6 bg-red-50 border border-red-200 rounded-xl">
+                        <h3 className="text-lg font-bold text-gray-900 mb-3">❌ Sin el sistema</h3>
+                        <ul className="space-y-2 text-sm text-gray-700">
+                          <li>• Buscas en WhatsApp quién es cada persona</li>
+                          <li>• Tratas de recordar quién estaba interesado</li>
+                          <li>• Pierdes tiempo pensando qué escribir</li>
+                          <li>• Se te olvidan prospectos importantes</li>
+                        </ul>
                       </div>
 
-                      {/* Block 2: Follow-up */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Clock className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Seguimiento estratégico</h3>
-                          <p className="text-sm text-gray-600">Para no perder el interés del prospecto</p>
-                        </div>
+                      <div className="p-6 bg-green-50 border border-green-200 rounded-xl">
+                        <h3 className="text-lg font-bold text-gray-900 mb-3">✅ Con el sistema</h3>
+                        <ul className="space-y-2 text-sm text-gray-700">
+                          <li>• Abres el panel y ya sabes a quién escribir</li>
+                          <li>• Copias el mensaje sugerido</li>
+                          <li>• Lo envías en 30 segundos</li>
+                          <li>• Listo. Tu negocio avanza solo</li>
+                        </ul>
                       </div>
-
-                      {/* Block 3: Closing */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <CheckCircle className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Mensaje de cierre</h3>
-                          <p className="text-sm text-gray-600">Cuando la persona ya está lista</p>
-                        </div>
-                      </div>
-
-                      {/* Block 4: Post-sale */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Star className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Post-venta</h3>
-                          <p className="text-sm text-gray-600">Para activar y dar bienvenida correctamente</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Microcopy */}
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600 font-medium">
-                        Listo para usar. Solo das click y envías.
-                      </p>
                     </div>
 
                     <button
@@ -857,76 +692,42 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 9: Objection Handling */}
+                {/* STEP 9: Social Proof */}
                 {flowStep === 9 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Seguramente te estás <span className="text-primary">preguntando esto</span>
+                        Personas que ya lo están usando
                       </h2>
-                      <p className="text-gray-600">Esto es lo que necesitas saber antes de empezar</p>
                     </div>
 
-                    {/* FAQ Blocks */}
-                    <div className="space-y-4">
-                      {/* Objection 1: Time */}
-                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-start gap-4">
-                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                            <Clock className="w-5 h-5 text-primary" />
+                    {/* Testimonials */}
+                    <div className="space-y-4 max-w-2xl mx-auto">
+                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center">
+                            <span className="text-indigo-600 font-bold">MR</span>
                           </div>
                           <div>
-                            <h3 className="font-bold text-gray-900 mb-2 text-lg">¿Y si no tengo tiempo?</h3>
-                            <p className="text-gray-600 leading-relaxed">No necesitas horas. Solo unos minutos al día para dar seguimiento con mensajes ya listos.</p>
+                            <p className="font-semibold text-gray-900">María Rodríguez</p>
+                            <p className="text-sm text-gray-600">Colombia</p>
                           </div>
                         </div>
+                        <p className="text-gray-700">"Antes se me olvidaban los prospectos. Ahora el sistema me dice a quién escribir cada día."</p>
                       </div>
 
-                      {/* Objection 2: Sales Skills */}
-                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-start gap-4">
-                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                            <MessageSquare className="w-5 h-5 text-primary" />
+                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
+                        <div className="flex items-center gap-3 mb-3">
+                          <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                            <span className="text-purple-600 font-bold">JM</span>
                           </div>
                           <div>
-                            <h3 className="font-bold text-gray-900 mb-2 text-lg">¿Y si no sé vender?</h3>
-                            <p className="text-gray-600 leading-relaxed">No tienes que saber vender. El sistema te dice exactamente qué enviar.</p>
+                            <p className="font-semibold text-gray-900">Jorge Méndez</p>
+                            <p className="text-sm text-gray-600">México</p>
                           </div>
                         </div>
+                        <p className="text-gray-700">"Duplicó mis conversaciones en 2 semanas. Ya no pierdo tiempo buscando a quién contactar."</p>
                       </div>
-
-                      {/* Objection 3: Effectiveness */}
-                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-start gap-4">
-                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                            <CheckCircle className="w-5 h-5 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="font-bold text-gray-900 mb-2 text-lg">¿Esto realmente funciona?</h3>
-                            <p className="text-gray-600 leading-relaxed">Sí. Porque elimina la improvisación y enfoca tus acciones en lo que genera resultados.</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Objection 4: Manual Work */}
-                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-start gap-4">
-                          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-1">
-                            <Zap className="w-5 h-5 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="font-bold text-gray-900 mb-2 text-lg">¿Tengo que hacer todo manual?</h3>
-                            <p className="text-gray-600 leading-relaxed">No. El sistema ya tiene los mensajes listos. Tú solo das click para enviarlos.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Microcopy */}
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600 font-medium">
-                        Simple. Claro. Sin complicaciones.
-                      </p>
                     </div>
 
                     <button
@@ -938,94 +739,35 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 10: Social Proof */}
+                {/* STEP 10: Objection Handler */}
                 {flowStep === 10 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Personas normales ya están <span className="text-primary">viendo resultados</span>
+                        "¿Pero esto funciona si <span className="text-primary">no soy técnico</span>?"
                       </h2>
-                      <p className="text-gray-600">Sin experiencia, sin complicarse y siguiendo el sistema</p>
                     </div>
 
-                    {/* Testimonials */}
-                    <div className="space-y-4">
-                      {/* Testimonial 1 */}
-                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                            LC
-                          </div>
-                          <div>
-                            <p className="text-gray-700 leading-relaxed italic mb-2">
-                              "Pensé que sería complicado, pero literal solo seguí los pasos y empecé a tener respuestas el mismo día."
-                            </p>
-                            <p className="text-sm text-gray-500 font-medium">— Laura C.</p>
-                          </div>
-                        </div>
+                    <div className="max-w-2xl mx-auto space-y-6">
+                      <div className="p-6 bg-blue-50 border border-blue-200 rounded-xl">
+                        <p className="text-gray-700 text-lg mb-4">
+                          <span className="font-bold">Sí.</span> De hecho, está diseñado para personas sin experiencia técnica.
+                        </p>
+                        <ul className="space-y-2 text-gray-700">
+                          <li className="flex items-start gap-2">
+                            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                            <span>No necesitas saber de tecnología</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                            <span>Todo es visual y fácil de usar</span>
+                          </li>
+                          <li className="flex items-start gap-2">
+                            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                            <span>Empiezas a usarlo el mismo día</span>
+                          </li>
+                        </ul>
                       </div>
-
-                      {/* Testimonial 2 */}
-                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                            MR
-                          </div>
-                          <div>
-                            <p className="text-gray-700 leading-relaxed italic mb-2">
-                              "Antes no sabía qué decirle a la gente. Ahora solo uso los mensajes y listo."
-                            </p>
-                            <p className="text-sm text-gray-500 font-medium">— Miguel R.</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Testimonial 3 */}
-                      <div className="bg-white border-2 border-gray-200 rounded-xl p-6 hover:border-primary/50 transition-all duration-200">
-                        <div className="flex items-start gap-4">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
-                            AS
-                          </div>
-                          <div>
-                            <p className="text-gray-700 leading-relaxed italic mb-2">
-                              "Lo mejor es que no tienes que inventar nada, todo ya está hecho."
-                            </p>
-                            <p className="text-sm text-gray-500 font-medium">— Ana S.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Concrete Results */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border-2 border-blue-200">
-                      <h3 className="font-bold text-gray-900 mb-4 text-center">Resultados reales:</h3>
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-4 h-4 text-white" />
-                          </div>
-                          <p className="text-gray-700 font-medium">Primeros contactos en menos de 24 horas</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-4 h-4 text-white" />
-                          </div>
-                          <p className="text-gray-700 font-medium">Más conversaciones sin esfuerzo</p>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-4 h-4 text-white" />
-                          </div>
-                          <p className="text-gray-700 font-medium">Seguimiento constante sin olvidar prospectos</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Microcopy */}
-                    <div className="text-center">
-                      <p className="text-sm text-gray-600 font-medium">
-                        No es teoría. Es lo que ya está funcionando.
-                      </p>
                     </div>
 
                     <button
@@ -1037,182 +779,162 @@ export default function MWRPage() {
                   </div>
                 )}
 
-                {/* STEP 11: Value Presentation */}
+                {/* STEP 11: CTA Pre-frame */}
                 {flowStep === 11 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Esto es todo lo que tienes <span className="text-primary">listo desde el día 1</span>
+                        ¿Quieres que te enseñemos <span className="text-primary">cómo funciona</span> en vivo?
                       </h2>
-                      <p className="text-gray-600">Sin configurar, sin complicarte, solo empezar a usarlo</p>
+                      <p className="text-gray-600">Te mostramos el sistema completo y respondes cualquier pregunta</p>
                     </div>
 
-                    {/* Value Blocks */}
-                    <div className="space-y-4">
-                      {/* Block 1: Landing Page */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Globe className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Tu propia página para captar prospectos</h3>
-                          <p className="text-sm text-gray-600">Lista para compartir y empezar a recibir interesados</p>
-                        </div>
+                    {/* Benefits */}
+                    <div className="max-w-2xl mx-auto space-y-3">
+                      <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
+                        <p className="text-gray-700">Ves el sistema funcionando en tiempo real</p>
                       </div>
-
-                      {/* Block 2: Contact Organization */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Users className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Sistema para organizar tus contactos</h3>
-                          <p className="text-sm text-gray-600">Todo claro, sin perder oportunidades</p>
-                        </div>
+                      <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
+                        <p className="text-gray-700">Preguntas todo lo que necesites</p>
                       </div>
-
-                      {/* Block 3: Ready Messages - HIGHLIGHTED */}
-                      <div className="flex items-start gap-4 p-6 bg-gradient-to-r from-primary/10 to-blue-50 border-2 border-primary rounded-xl shadow-md">
-                        <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center flex-shrink-0 shadow-lg">
-                          <MessageSquare className="w-6 h-6 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Mensajes listos para cada etapa</h3>
-                          <p className="text-sm text-primary font-medium">No tienes que pensar qué decir, solo dar clic y enviar</p>
-                        </div>
+                      <div className="flex items-center gap-3 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0" />
+                        <p className="text-gray-700">Sin presión, solo información clara</p>
                       </div>
-
-                      {/* Block 4: Content */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <ImageIcon className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Contenido listo para publicar</h3>
-                          <p className="text-sm text-gray-600">Imágenes y textos para atraer personas todos los días</p>
-                        </div>
-                      </div>
-
-                      {/* Block 5: Dashboard */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <BarChart3 className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Panel de control para tu negocio</h3>
-                          <p className="text-sm text-gray-600">Sabes qué está pasando en todo momento</p>
-                        </div>
-                      </div>
-
-                      {/* Block 6: Support */}
-                      <div className="flex items-start gap-4 p-6 bg-white border-2 border-gray-200 rounded-xl hover:border-primary/50 transition-all duration-200">
-                        <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Heart className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-gray-900 mb-1">Soporte y acompañamiento</h3>
-                          <p className="text-sm text-gray-600">Para que no avances solo</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Microcopy */}
-                    <div className="text-center space-y-2">
-                      <p className="text-sm text-gray-600 font-medium">
-                        Todo ya está listo. Solo tienes que usarlo.
-                      </p>
-                      <p className="text-base text-primary font-bold">
-                        Lo que normalmente te tomaría semanas… aquí ya lo tienes listo
-                      </p>
                     </div>
 
                     <button
                       onClick={() => setFlowStep(12)}
                       className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
                     >
-                      Continuar →
+                      Sí, quiero verlo →
                     </button>
                   </div>
                 )}
 
-                {/* STEP 12: Pricing */}
+                {/* STEP 12: Urgency */}
                 {flowStep === 12 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
-                        Empieza hoy con <span className="text-primary">todo listo</span>
+                        Cada día que pasa <span className="text-primary">pierdes prospectos</span>
                       </h2>
-                      <p className="text-gray-600">No necesitas experiencia. Solo seguir el sistema y enviar los mensajes</p>
+                      <p className="text-gray-600">Mientras lo piensas, tus competidores ya están usando sistemas así</p>
                     </div>
 
-                    {/* Single Pricing Card */}
-                    <div className="bg-gradient-to-br from-primary to-blue-700 rounded-2xl p-8 shadow-2xl border-2 border-primary relative overflow-hidden">
-                      {/* Active Offer Badge */}
-                      <div className="absolute top-4 right-4">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-yellow-400 text-gray-900">
-                          🔥 OFERTA ACTIVA
-                        </span>
-                      </div>
-
-                      <div className="text-white space-y-6">
-                        <div className="text-center">
-                          <div className="flex items-baseline justify-center gap-2 mb-2">
-                            <span className="text-5xl font-bold">$29</span>
-                            <span className="text-xl text-yellow-300 font-bold">USD primer mes</span>
-                          </div>
-                          <p className="text-blue-100 mb-1">Luego $9 USD / mes</p>
-                          <p className="text-sm text-white font-semibold mt-3">
-                            Acceso completo <span className="text-yellow-300">desde el día 1</span>
-                          </p>
-                          {/* Perceived Value Line */}
-                          <p className="text-xs text-yellow-200/80 mt-2 font-medium">
-                            Valor real: $500–$1000 USD
-                          </p>
-                        </div>
-
-                        {/* Value Anchor */}
-                        <div className="bg-white/10 rounded-xl p-4 border border-white/20">
-                          <p className="text-sm text-white leading-relaxed text-center">
-                            Lo que normalmente te tomaría semanas configurar por tu cuenta…<br />
-                            <span className="font-bold">aquí ya lo tienes listo desde el día 1</span>
-                          </p>
-                        </div>
-
-                        {/* Value Reinforcement */}
-                        <div className="space-y-2 pt-2 border-t border-white/20">
-                          <p className="text-sm font-semibold">✓ Sin herramientas extra</p>
-                          <p className="text-sm font-semibold">✓ Sin procesos complicados</p>
-                          <p className="text-sm font-semibold">✓ Sin tener que inventar qué decir</p>
-                        </div>
-
-                        <button
-                          onClick={() => setFlowStep(13)}
-                          className="w-full bg-white hover:bg-gray-100 text-primary py-4 rounded-xl font-bold transition-colors shadow-lg text-lg"
-                        >
-                          Empezar ahora →
-                        </button>
+                    <div className="max-w-2xl mx-auto">
+                      <div className="p-6 bg-orange-50 border border-orange-200 rounded-xl">
+                        <p className="text-gray-700 text-center mb-4">
+                          <span className="font-bold">Empieza hoy.</span> No pierdas más oportunidades.
+                        </p>
+                        <p className="text-sm text-gray-600 text-center">
+                          Déjanos tus datos y te mostramos cómo funciona
+                        </p>
                       </div>
                     </div>
 
-                    {/* Security Microcopy */}
-                    <div className="text-center space-y-2">
-                      <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
-                        <CheckCircle className="w-4 h-4 text-green-600" />
-                        <span>Acceso inmediato</span>
-                        <span>•</span>
-                        <span>Empieza hoy</span>
-                        <span>•</span>
-                        <span>Sin complicaciones</span>
+                    <button
+                      onClick={() => setFlowStep(13)}
+                      className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                    >
+                      Registrarme ahora →
+                    </button>
+                  </div>
+                )}
+
+                {/* STEP 13: Form */}
+                {flowStep === 13 && (
+                  <div className="space-y-8 animate-in fade-in duration-700">
+                    <div className="text-center space-y-4">
+                      <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                        Regístrate y te mostramos cómo funciona
+                      </h2>
+                      <p className="text-gray-600">Completa el formulario para acceder al sistema piloto</p>
+                    </div>
+
+                    <div className="max-w-2xl mx-auto space-y-6">
+                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Nombre completo *
+                        </label>
+                        <Input
+                          type="text"
+                          placeholder="Tu nombre completo"
+                          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
+                        />
                       </div>
-                      <p className="text-sm text-gray-500">
-                        Sin riesgos. Puedes cancelar cuando quieras.
-                      </p>
+
+                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Correo electrónico *
+                        </label>
+                        <Input
+                          type="email"
+                          placeholder="tu@email.com"
+                          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
+                        />
+                      </div>
+
+                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Teléfono *
+                        </label>
+                        <Input
+                          type="tel"
+                          placeholder="+57 1 234 5678"
+                          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary"
+                        />
+                      </div>
+
+                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          País *
+                        </label>
+                        <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary pr-8">
+                          <option value="">Selecciona tu país</option>
+                          <option value="Colombia">Colombia</option>
+                          <option value="México">México</option>
+                          <option value="EE.UU.">EE.UU.</option>
+                        </select>
+                      </div>
+
+                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          ¿Cómo te enteraste de nosotros?
+                        </label>
+                        <select className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary pr-8">
+                          <option value="">Selecciona una opción</option>
+                          <option value="Recomendación">Recomendación</option>
+                          <option value="Redes sociales">Redes sociales</option>
+                          <option value="Sitio web">Sitio web</option>
+                          <option value="Otro">Otro</option>
+                        </select>
+                      </div>
+
+                      <div className="p-6 bg-white border border-gray-200 rounded-xl">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          ¿Por qué elegirías este sistema?
+                        </label>
+                        <textarea
+                          placeholder="Escribe tu respuesta..."
+                          className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary min-h-[120px]"
+                        />
+                      </div>
+
+                      <button
+                        onClick={() => setFlowStep(14)}
+                        className="w-full bg-primary hover:bg-primary/90 text-white py-4 rounded-xl font-semibold transition-colors"
+                      >
+                        Finalizar →
+                      </button>
                     </div>
                   </div>
                 )}
 
-                {/* STEP 13: Final Close */}
-                {flowStep === 13 && (
+                {/* STEP 14: Final Close */}
+                {flowStep === 14 && (
                   <div className="space-y-8 animate-in fade-in duration-700">
                     <div className="text-center space-y-4">
                       <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
