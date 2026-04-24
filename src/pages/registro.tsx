@@ -14,12 +14,10 @@ export default function Registro() {
   const [loading, setLoading] = useState(false);
 
   const [formData, setFormData] = useState({
-    nombre: "",
-    apellido: "",
+    nombreCompleto: "",
     email: "",
     password: "",
     telefono: "",
-    pais: "",
     mwrLink: ""
   });
 
@@ -33,9 +31,8 @@ export default function Registro() {
         password: formData.password,
         options: {
           data: {
-            full_name: `${formData.nombre} ${formData.apellido}`,
+            full_name: formData.nombreCompleto,
             whatsapp_number: formData.telefono,
-            country: formData.pais,
             mwr_link: formData.mwrLink
           }
         }
@@ -47,7 +44,7 @@ export default function Registro() {
         const { error: profileError } = await supabase
           .from("profiles")
           .update({
-            full_name: `${formData.nombre} ${formData.apellido}`,
+            full_name: formData.nombreCompleto,
             whatsapp_number: formData.telefono,
             mwr_link: formData.mwrLink
           })
@@ -107,110 +104,82 @@ export default function Registro() {
           {/* Registration Card */}
           <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Nombre */}
+              {/* Nombre Completo */}
               <div>
-                <Label htmlFor="nombre">Nombre</Label>
-                <Input
-                  id="nombre"
-                  name="nombre"
+                <label htmlFor="nombreCompleto" className="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre completo
+                </label>
+                <input
+                  id="nombreCompleto"
                   type="text"
                   required
-                  value={formData.nombre}
-                  onChange={handleChange}
-                  className="mt-1"
-                  placeholder="Tu nombre"
-                />
-              </div>
-
-              {/* Apellido */}
-              <div>
-                <Label htmlFor="apellido">Apellido</Label>
-                <Input
-                  id="apellido"
-                  name="apellido"
-                  type="text"
-                  required
-                  value={formData.apellido}
-                  onChange={handleChange}
-                  className="mt-1"
-                  placeholder="Tu apellido"
+                  value={formData.nombreCompleto}
+                  onChange={(e) => setFormData({ ...formData, nombreCompleto: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Tu nombre completo"
                 />
               </div>
 
               {/* Email */}
               <div>
-                <Label htmlFor="email">Email</Label>
-                <Input
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                  Email
+                </label>
+                <input
                   id="email"
-                  name="email"
                   type="email"
                   required
                   value={formData.email}
-                  onChange={handleChange}
-                  className="mt-1"
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="tu@email.com"
                 />
               </div>
 
-              {/* Password */}
+              {/* Contraseña */}
               <div>
-                <Label htmlFor="password">Contraseña</Label>
-                <Input
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                  Contraseña
+                </label>
+                <input
                   id="password"
-                  name="password"
                   type="password"
                   required
                   value={formData.password}
-                  onChange={handleChange}
-                  className="mt-1"
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="Mínimo 6 caracteres"
-                  minLength={6}
                 />
               </div>
 
               {/* Teléfono */}
               <div>
-                <Label htmlFor="telefono">Teléfono</Label>
-                <Input
+                <label htmlFor="telefono" className="block text-sm font-medium text-gray-700 mb-2">
+                  Teléfono
+                </label>
+                <input
                   id="telefono"
-                  name="telefono"
                   type="tel"
                   required
                   value={formData.telefono}
-                  onChange={handleChange}
-                  className="mt-1"
+                  onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                   placeholder="+1234567890"
                 />
               </div>
 
-              {/* País */}
+              {/* MWR Link */}
               <div>
-                <Label htmlFor="pais">País</Label>
-                <Input
-                  id="pais"
-                  name="pais"
-                  type="text"
-                  required
-                  value={formData.pais}
-                  onChange={handleChange}
-                  className="mt-1"
-                  placeholder="Tu país"
-                />
-              </div>
-
-              {/* MWR Link (opcional) */}
-              <div>
-                <Label htmlFor="mwrLink" className="text-gray-500 text-sm">
+                <label htmlFor="mwrLink" className="block text-sm font-medium text-gray-700 mb-2">
                   MWR Link (opcional)
-                </Label>
-                <Input
+                </label>
+                <input
                   id="mwrLink"
-                  name="mwrLink"
                   type="text"
                   value={formData.mwrLink}
-                  onChange={handleChange}
-                  className="mt-1"
-                  placeholder="https://mwr.life/..."
+                  onChange={(e) => setFormData({ ...formData, mwrLink: e.target.value })}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                  placeholder="Tu link de referido MWR (opcional)"
                 />
               </div>
 
