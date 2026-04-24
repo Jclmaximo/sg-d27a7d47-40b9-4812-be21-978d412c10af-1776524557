@@ -169,38 +169,36 @@ export default function MWRPage() {
         <div className="min-h-screen">
           {/* STEP 2: Value Proposition - FULL SCREEN */}
           {flowStep === 2 && (
-            <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
-              {/* Hero Image Background - Full Screen */}
-              <div className="absolute inset-0 z-0">
+            <div className="fixed inset-0 z-50 bg-white">
+              {/* Hero Image Background */}
+              <div className="absolute inset-0">
                 <img
                   src="/paso2-hero.jpg"
                   alt="Two women having a conversation over coffee"
                   className="w-full h-full object-cover"
                 />
-                {/* Subtle dark overlay for text readability */}
-                <div className="absolute inset-0 bg-black/5"></div>
               </div>
 
               {/* Demo Label - Top Right */}
-              <div className="absolute top-8 right-8 z-20">
-                <p className="text-white/80 text-sm font-medium tracking-wide">Demo 2/13</p>
+              <div className="absolute top-6 right-6 z-30">
+                <p className="text-white/90 text-sm font-medium">Demo 2/13</p>
               </div>
 
-              {/* Floating Metric Cards - Top */}
-              <div className="absolute top-24 sm:top-32 left-0 right-0 z-10 px-4">
-                <div className="max-w-4xl mx-auto relative">
-                  {/* Prospectos Card - Left */}
-                  <div className="absolute left-0 sm:left-8 top-0 animate-in slide-in-from-left duration-700">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 sm:p-5 w-[160px] sm:w-[200px]">
-                      <div className="flex items-center gap-3 mb-2">
+              {/* Floating Metric Cards - TOP AREA */}
+              <div className="absolute top-20 left-0 right-0 z-20 px-4">
+                <div className="max-w-5xl mx-auto relative h-40">
+                  {/* Prospectos Card - Top Left */}
+                  <div className="absolute left-4 top-0">
+                    <div className="bg-white rounded-2xl shadow-2xl p-4 w-[200px]">
+                      <div className="flex items-center gap-2 mb-1">
                         <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center">
                           <Users className="w-5 h-5 text-blue-600" />
                         </div>
-                        <p className="text-sm text-gray-600 font-medium">Prospectos</p>
+                        <p className="text-sm text-gray-700 font-medium">Prospectos</p>
                       </div>
-                      <div className="flex items-end gap-2">
-                        <p className="text-3xl sm:text-4xl font-bold text-gray-900">248</p>
-                        <p className="text-green-600 font-semibold text-sm mb-1 flex items-center gap-1">
+                      <div className="flex items-baseline gap-2 mt-2">
+                        <p className="text-4xl font-bold text-gray-900">248</p>
+                        <p className="text-green-600 font-semibold text-sm flex items-center gap-1">
                           <TrendingUp className="w-4 h-4" />
                           31%
                         </p>
@@ -208,18 +206,18 @@ export default function MWRPage() {
                     </div>
                   </div>
 
-                  {/* Ventas Card - Right */}
-                  <div className="absolute right-0 sm:right-8 top-12 sm:top-16 animate-in slide-in-from-right duration-700 delay-150">
-                    <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 p-4 sm:p-5 w-[180px] sm:w-[220px]">
-                      <div className="flex items-center gap-3 mb-2">
+                  {/* Ventas Card - Top Right */}
+                  <div className="absolute right-4 top-8">
+                    <div className="bg-white rounded-2xl shadow-2xl p-4 w-[220px]">
+                      <div className="flex items-center gap-2 mb-1">
                         <div className="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center">
                           <TrendingUp className="w-5 h-5 text-green-600" />
                         </div>
-                        <p className="text-sm text-gray-600 font-medium">Ventas cerradas</p>
+                        <p className="text-sm text-gray-700 font-medium">Ventas cerradas</p>
                       </div>
-                      <div className="flex items-end gap-2">
-                        <p className="text-3xl sm:text-4xl font-bold text-gray-900">23</p>
-                        <p className="text-green-600 font-semibold text-sm mb-1 flex items-center gap-1">
+                      <div className="flex items-baseline gap-2 mt-2">
+                        <p className="text-4xl font-bold text-gray-900">23</p>
+                        <p className="text-green-600 font-semibold text-sm flex items-center gap-1">
                           <TrendingUp className="w-4 h-4" />
                           27%
                         </p>
@@ -227,11 +225,11 @@ export default function MWRPage() {
                     </div>
                   </div>
 
-                  {/* Connection Line - Desktop Only */}
-                  <svg className="absolute top-10 left-1/2 -translate-x-1/2 w-full h-24 opacity-30 hidden lg:block pointer-events-none" viewBox="0 0 600 100">
+                  {/* Connection Line */}
+                  <svg className="absolute top-6 left-1/2 -translate-x-1/2 w-full h-20 hidden lg:block" viewBox="0 0 600 80" style={{ opacity: 0.3 }}>
                     <path
-                      d="M 100 20 Q 300 60 500 90"
-                      stroke="#3B82F6"
+                      d="M 120 15 Q 300 45 480 70"
+                      stroke="#3B82F4"
                       strokeWidth="3"
                       fill="none"
                       strokeLinecap="round"
@@ -240,51 +238,50 @@ export default function MWRPage() {
                 </div>
               </div>
 
-              {/* Main Content - Centered */}
-              <div className="relative z-10 w-full max-w-4xl px-6 sm:px-8 space-y-6 sm:space-y-8 text-center">
-                {/* Headline */}
-                <div className="space-y-3 sm:space-y-4">
-                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-gray-900">
+              {/* Main Content - BOTTOM-CENTER AREA */}
+              <div className="absolute bottom-0 left-0 right-0 pb-12 px-6">
+                <div className="max-w-4xl mx-auto text-center space-y-6">
+                  {/* Headline */}
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight text-gray-900">
                     Convierte prospectos<br />
                     en clientes <span className="text-[#4A7FFF]">sin perseguir<br />a nadie</span>
                   </h1>
-                  <p className="text-lg sm:text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto">
-                    Un sistema que organiza tus contactos y te dice<br className="hidden sm:block" />
-                    exactamente qué hacer para cerrar más ventas
-                  </p>
-                </div>
 
-                {/* CTA Button */}
-                <div className="pt-4">
+                  {/* Subtitle */}
+                  <p className="text-xl md:text-2xl text-gray-700 max-w-3xl mx-auto">
+                    Un sistema que organiza tus contactos y te dice exactamente qué hacer para cerrar más ventas
+                  </p>
+
+                  {/* CTA Button */}
                   <button
                     onClick={() => setFlowStep(3)}
-                    className="w-full max-w-2xl mx-auto bg-[#4A7FFF] hover:bg-[#3A6FEF] text-white py-5 sm:py-6 px-8 rounded-2xl font-semibold text-lg sm:text-xl transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-[1.02] flex items-center justify-center gap-3"
+                    className="w-full max-w-2xl mx-auto bg-[#4A7FFF] hover:bg-[#3967D6] text-white py-6 px-8 rounded-2xl font-semibold text-xl transition-all shadow-xl hover:shadow-2xl flex items-center justify-center gap-3"
                   >
                     Ver cómo funciona
                     <ArrowRight className="w-6 h-6" />
                   </button>
-                </div>
 
-                {/* Trust Elements */}
-                <div className="flex flex-wrap justify-center gap-6 sm:gap-12 text-base sm:text-lg pt-4">
-                  <div className="flex items-center gap-2 text-gray-800">
-                    <Zap className="w-6 h-6 text-green-600" />
-                    <span className="font-medium">Acceso inmediato</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-800">
-                    <CheckCircle className="w-6 h-6 text-blue-600" />
-                    <span className="font-medium">Sin experiencia</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-gray-800">
-                    <TrendingUp className="w-6 h-6 text-purple-600" />
-                    <span className="font-medium">Empieza hoy</span>
+                  {/* Trust Elements */}
+                  <div className="flex flex-wrap justify-center gap-8 text-lg pt-2">
+                    <div className="flex items-center gap-2">
+                      <Zap className="w-6 h-6 text-green-600" />
+                      <span className="text-gray-800 font-medium">Acceso inmediato</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="w-6 h-6 text-blue-600" />
+                      <span className="text-gray-800 font-medium">Sin experiencia</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="w-6 h-6 text-purple-600" />
+                      <span className="text-gray-800 font-medium">Empieza hoy</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
               {/* Bottom Left Circle Button */}
-              <div className="absolute bottom-8 left-8 z-20">
-                <button className="w-16 h-16 rounded-full bg-gray-900 hover:bg-gray-800 text-white font-bold text-2xl flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110">
+              <div className="absolute bottom-6 left-6 z-30">
+                <button className="w-16 h-16 rounded-full bg-gray-900 text-white font-bold text-2xl flex items-center justify-center shadow-2xl">
                   N
                 </button>
               </div>
