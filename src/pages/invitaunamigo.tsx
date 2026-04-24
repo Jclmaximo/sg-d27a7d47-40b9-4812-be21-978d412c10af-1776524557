@@ -67,10 +67,12 @@ export default function InvitaUnAmigo() {
         }
 
         // Si no está en localStorage, buscar en la base de datos
+        const refString = Array.isArray(ref) ? ref[0] : ref;
+        
         const { data, error } = await supabase
           .from("profiles")
           .select("id, full_name, username")
-          .eq("username", ref)
+          .eq("username", refString)
           .single();
 
         if (data) {
