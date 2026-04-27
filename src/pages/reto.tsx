@@ -69,6 +69,13 @@ export default function ZenCommandCenter() {
     }
   }, [challengeActive, timeRemaining]);
 
+  // Show navigation dock when challenge starts
+  useEffect(() => {
+    if (challengeActive) {
+      setNavigationVisible(true);
+    }
+  }, [challengeActive]);
+
   // NUEVO - Detectar primer lead y desbloquear
   useEffect(() => {
     if (leadsCount > 0 && previousLeadsCount === 0 && !leadsUnlocked) {
