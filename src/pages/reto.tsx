@@ -339,28 +339,74 @@ export default function ZenCommandCenter() {
           </div>
 
           {/* B. MOTOR DE CRECIMIENTO - Link de referido */}
-          <div className="mb-16">
-            <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
-              Tu Embudo Personal
-            </p>
-            
-            {/* Link container - responsive layout */}
-            <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-6">
-              <input
-                type="text"
-                value={`https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`}
-                readOnly
-                className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 font-light"
-              />
-              <Button
-                onClick={copyFunnelLink}
-                className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-light whitespace-nowrap"
-              >
-                <Copy className="w-4 h-4 mr-2" />
-                Copiar Link
-              </Button>
+          {challengeActive && (
+            <div className="mb-16">
+              <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
+                Tu Embudo Personal
+              </p>
+              
+              {/* Link container - responsive layout */}
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-6">
+                <input
+                  type="text"
+                  value={funnelLink}
+                  readOnly
+                  className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 font-light"
+                />
+                <Button
+                  onClick={copyToClipboard}
+                  className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-light whitespace-nowrap"
+                >
+                  <Copy className="w-4 h-4 mr-2" />
+                  Copiar Link
+                </Button>
+              </div>
+
+              {/* Botones de compartir */}
+              <div className="flex gap-3 justify-center">
+                <Button
+                  onClick={shareViaWhatsApp}
+                  className="bg-green-50 hover:bg-green-100 text-green-700 px-6 py-3 rounded-lg font-light border border-green-200"
+                >
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Compartir
+                </Button>
+                <Button
+                  onClick={shareToInstagram}
+                  className="bg-pink-50 hover:bg-pink-100 text-pink-700 px-6 py-3 rounded-lg font-light border border-pink-200"
+                >
+                  <Instagram className="w-4 h-4 mr-2" />
+                  Instagram
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
+
+          {/* C. LEADS CAPTURADOS - Contador */}
+          {challengeActive && (
+            <div className="mb-16">
+              <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
+                Leads Capturados
+              </p>
+              <div className="flex gap-8 justify-center">
+                <div className="text-center">
+                  <div className="text-4xl font-extralight text-amber-600 mb-2">⚡</div>
+                  <div className="text-3xl font-light text-[#1D1D1F] mb-1">{leadsCount}</div>
+                  <div className="text-xs text-gray-500 font-light">Total</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-extralight text-blue-600 mb-2">👥</div>
+                  <div className="text-3xl font-light text-[#1D1D1F] mb-1">0</div>
+                  <div className="text-xs text-gray-500 font-light">Contactados</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-4xl font-extralight text-green-600 mb-2">📖</div>
+                  <div className="text-3xl font-light text-[#1D1D1F] mb-1">0</div>
+                  <div className="text-xs text-gray-500 font-light">Convertidos</div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* B. MOTOR DE CRECIMIENTO */}
           <div className={`mb-16 transition-all duration-500 ${challengeActive ? "" : "opacity-30 blur-sm pointer-events-none"}`}>
