@@ -5,6 +5,7 @@ import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
 import { productivityService } from "@/services/productivityService";
 import { SEO } from "@/components/SEO";
+// Deploy trigger: fix funnelLink error and force vercel deployment
 import { 
   Play, Pause, Copy, Check, Share2, Focus, 
   Circle, CheckCircle2, Maximize2, Minimize2,
