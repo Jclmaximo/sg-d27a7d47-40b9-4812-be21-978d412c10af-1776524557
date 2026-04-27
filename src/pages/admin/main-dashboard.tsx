@@ -740,204 +740,193 @@ Puedo resolver dudas sobre:
 
         <main className="w-full px-6 py-8">
           <div className="max-w-7xl mx-auto w-full">
-            {/* Navigation Tabs */}
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="w-full inline-flex h-auto flex-nowrap overflow-x-auto overflow-y-hidden gap-2 bg-white border border-[#E2E8F0] p-1 rounded-lg shadow-sm">
-                <TabsTrigger 
-                  value="resumen" 
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
-                  onClick={() => router.push("/admin/welcome")}
-                >
-                  <LayoutGrid className="w-4 h-4 mr-2" />
-                  Resumen
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="leads"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
-                >
-                  <Users className="w-4 h-4 mr-2" />
-                  Leads
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="network"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
-                >
-                  <Network className="w-4 h-4 mr-2" />
-                  Mi Red
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="productividad"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
-                >
-                  <CheckCircle className="w-4 h-4 mr-2" />
-                  Productividad
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="links"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
-                >
-                  <Link2 className="w-4 h-4 mr-2" />
-                  Links
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="profile"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
-                >
-                  <User className="w-4 h-4 mr-2" />
-                  Perfil
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="recursos"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
-                >
-                  <Gift className="w-4 h-4 mr-2" />
-                  Recursos
-                </TabsTrigger>
-                <TabsTrigger 
-                  value="equipo"
-                  className="data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:shadow-sm hover:bg-[#F1F5F9] text-[#475569]"
-                >
-                  <Shield className="w-4 h-4 mr-2" />
-                  Equipo
-                </TabsTrigger>
-              </TabsList>
+            {/* Tabs Navigation */}
+            <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
+              <Button
+                variant={activeTab === "resumen" ? "default" : "outline"}
+                onClick={() => setActiveTab("resumen")}
+                className="whitespace-nowrap"
+              >
+                <LayoutDashboard className="w-4 h-4 mr-2" />
+                Resumen
+              </Button>
+              <Button
+                variant={activeTab === "leads" ? "default" : "outline"}
+                onClick={() => setActiveTab("leads")}
+                className="whitespace-nowrap"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Leads
+              </Button>
+              <Button
+                variant={activeTab === "red" ? "default" : "outline"}
+                onClick={() => setActiveTab("red")}
+                className="whitespace-nowrap"
+              >
+                <Network className="w-4 h-4 mr-2" />
+                Mi Red
+              </Button>
+              <Button
+                variant={activeTab === "productividad" ? "default" : "outline"}
+                onClick={() => setActiveTab("productividad")}
+                className="whitespace-nowrap"
+              >
+                <Target className="w-4 h-4 mr-2" />
+                Productividad
+              </Button>
+              <Button
+                variant={activeTab === "links" ? "default" : "outline"}
+                onClick={() => setActiveTab("links")}
+                className="whitespace-nowrap"
+              >
+                <Link2 className="w-4 h-4 mr-2" />
+                Mis Links
+              </Button>
+              <Button
+                variant={activeTab === "perfil" ? "default" : "outline"}
+                onClick={() => setActiveTab("perfil")}
+                className="whitespace-nowrap"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Perfil
+              </Button>
+            </div>
 
-              {/* TAB 1 - RESUMEN */}
-              <TabsContent value="resumen" className="space-y-6">
-                <div className="grid gap-6 md:grid-cols-3 mb-6">
-                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
-                        <DollarSign className="w-5 h-5 text-primary" />
-                        Total Ganado
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-4xl font-semibold text-[#0F172A] mb-1">
-                        ${(stats?.total_earned ?? 0).toFixed(2)}
-                      </div>
-                      <p className="text-sm text-[#475569]">Acumulado total</p>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-[#64748B]">Nuevos</CardTitle>
-                      <Clock className="w-5 h-5 text-primary" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-4xl font-semibold text-[#0F172A]">
-                        {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-[#64748B]">Contactados</CardTitle>
-                      <MessageSquare className="w-5 h-5 text-primary" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-4xl font-semibold text-[#0F172A]">
-                        {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Quick Actions */}
-                <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+            {/* TAB 1 - RESUMEN */}
+            <TabsContent value="resumen" className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-3 mb-6">
+                <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                   <CardHeader>
-                    <CardTitle className="text-lg font-semibold text-[#0F172A]">Acciones Rápidas</CardTitle>
-                    <CardDescription className="text-[#475569]">
-                      Herramientas para hacer crecer tu negocio
-                    </CardDescription>
+                    <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                      <DollarSign className="w-5 h-5 text-primary" />
+                      Total Ganado
+                    </CardTitle>
                   </CardHeader>
-                  <CardContent className="grid gap-4 md:grid-cols-3">
-                    <Button
-                      variant="outline"
-                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
-                      onClick={() => setActiveTab("links")}
-                    >
-                      <Link2 className="h-6 w-6 text-primary" />
-                      <div className="text-center">
-                        <div className="font-semibold text-[#0F172A]">Compartir Embudo</div>
-                        <div className="text-sm text-[#475569]">
-                          Copia tu link personalizado
-                        </div>
-                      </div>
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
-                      onClick={() => setActiveTab("leads")}
-                    >
-                      <Users className="h-6 w-6 text-primary" />
-                      <div className="text-center">
-                        <div className="font-semibold text-[#0F172A]">Ver Leads</div>
-                        <div className="text-sm text-[#475569]">
-                          {allLeads.length} prospectos capturados
-                        </div>
-                      </div>
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F8FAFC] hover:border-primary transition-all"
-                      onClick={() => router.push("/admin/recursos")}
-                    >
-                      <Gift className="h-6 w-6 text-primary" />
-                      <div className="text-center">
-                        <div className="font-semibold text-[#0F172A]">Recursos de Marketing</div>
-                        <div className="text-sm text-[#475569]">
-                          Imágenes, copys y enlaces
-                        </div>
-                      </div>
-                    </Button>
+                  <CardContent>
+                    <div className="text-4xl font-semibold text-[#0F172A] mb-1">
+                      ${(stats?.total_earned ?? 0).toFixed(2)}
+                    </div>
+                    <p className="text-sm text-[#475569]">Acumulado total</p>
                   </CardContent>
                 </Card>
-              </TabsContent>
 
-              {/* TAB 2 - LEADS */}
-              <TabsContent value="leads" className="space-y-6">
-                <div className="grid gap-6 md:grid-cols-4 mb-6">
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-[#64748B]">Total Leads</CardTitle>
-                      <Clock className="w-5 h-5 text-primary" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-semibold text-[#0F172A]">{allLeads.length}</div>
-                    </CardContent>
-                  </Card>
+                <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-[#64748B]">Nuevos</CardTitle>
+                    <Clock className="w-5 h-5 text-primary" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-4xl font-semibold text-[#0F172A]">
+                      {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
+                    </div>
+                  </CardContent>
+                </Card>
 
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-[#64748B]">Nuevos</CardTitle>
-                      <Clock className="w-5 h-5 text-primary" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-semibold text-[#0F172A]">
-                        {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
+                <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-[#64748B]">Contactados</CardTitle>
+                    <MessageSquare className="w-5 h-5 text-primary" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-4xl font-semibold text-[#0F172A]">
+                      {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Quick Actions */}
+              <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-lg font-semibold text-[#0F172A]">Acciones Rápidas</CardTitle>
+                  <CardDescription className="text-[#475569]">
+                    Herramientas para hacer crecer tu negocio
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid gap-4 md:grid-cols-3">
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
+                    onClick={() => setActiveTab("links")}
+                  >
+                    <Link2 className="h-6 w-6 text-primary" />
+                    <div className="text-center">
+                      <div className="font-semibold text-[#0F172A]">Compartir Embudo</div>
+                      <div className="text-sm text-[#475569]">
+                        Copia tu link personalizado
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </Button>
 
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-[#64748B]">Contactados</CardTitle>
-                      <MessageSquare className="w-5 h-5 text-primary" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-semibold text-[#0F172A]">
-                        {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
+                    onClick={() => setActiveTab("leads")}
+                  >
+                    <Users className="h-6 w-6 text-primary" />
+                    <div className="text-center">
+                      <div className="font-semibold text-[#0F172A]">Ver Leads</div>
+                      <div className="text-sm text-[#475569]">
+                        {allLeads.length} prospectos capturados
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              </TabsContent>
-            </Tabs>
+                    </div>
+                  </Button>
+
+                  <Button
+                    variant="outline"
+                    className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F8FAFC] hover:border-primary transition-all"
+                    onClick={() => router.push("/admin/recursos")}
+                  >
+                    <Gift className="h-6 w-6 text-primary" />
+                    <div className="text-center">
+                      <div className="font-semibold text-[#0F172A]">Recursos de Marketing</div>
+                      <div className="text-sm text-[#475569]">
+                        Imágenes, copys y enlaces
+                      </div>
+                    </div>
+                  </Button>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* TAB 2 - LEADS */}
+            <TabsContent value="leads" className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-4 mb-6">
+                <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-[#64748B]">Total Leads</CardTitle>
+                    <Clock className="w-5 h-5 text-primary" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-semibold text-[#0F172A]">{allLeads.length}</div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-[#64748B]">Nuevos</CardTitle>
+                    <Clock className="w-5 h-5 text-primary" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-semibold text-[#0F172A]">
+                      {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                  <CardHeader className="flex flex-row items-center justify-between pb-2">
+                    <CardTitle className="text-sm font-medium text-[#64748B]">Contactados</CardTitle>
+                    <MessageSquare className="w-5 h-5 text-primary" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-3xl font-semibold text-[#0F172A]">
+                      {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
           </div>
         </main>
       </div>
