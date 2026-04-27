@@ -257,6 +257,8 @@ export default function ZenCommandCenter() {
 
   const completionPercentage = (protocols.filter((p) => p.completed).length / protocols.length) * 100;
 
+  const funnelLink = profile?.username ? `https://mwr.hubia.vip/mwr?ref=${profile.username}` : "";
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -354,7 +356,7 @@ export default function ZenCommandCenter() {
                   className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 font-light"
                 />
                 <Button
-                  onClick={copyToClipboard}
+                  onClick={copyFunnelLink}
                   className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-light whitespace-nowrap"
                 >
                   <Copy className="w-4 h-4 mr-2" />
@@ -365,7 +367,7 @@ export default function ZenCommandCenter() {
               {/* Botones de compartir */}
               <div className="flex gap-3 justify-center">
                 <Button
-                  onClick={shareViaWhatsApp}
+                  onClick={shareToWhatsApp}
                   className="bg-green-50 hover:bg-green-100 text-green-700 px-6 py-3 rounded-lg font-light border border-green-200"
                 >
                   <Share2 className="w-4 h-4 mr-2" />
@@ -409,82 +411,86 @@ export default function ZenCommandCenter() {
           )}
 
           {/* B. MOTOR DE CRECIMIENTO */}
-          <div className={`mb-16 transition-all duration-500 ${challengeActive ? "" : "opacity-30 blur-sm pointer-events-none"}`}>
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Live Lead Tracker */}
-              <Card className="backdrop-blur-xl bg-white/80 border border-gray-100 shadow-sm p-8 flex flex-col items-center justify-center text-center">
-                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6">
-                  Leads Capturados
-                </p>
-                <div
-                  id="lead-tracker"
-                  className="text-8xl font-extralight text-[#1D1D1F] mb-4 transition-transform duration-300"
-                >
-                  {leadsCount}
-                </div>
-                <p className="text-sm font-light text-gray-500">
-                  {leadsCount === 0 ? "Comparte tu link para empezar" : "En tiempo real"}
-                </p>
-              </Card>
+          {challengeActive && (
+            <div className="mb-16 transition-all duration-500">
+              <div className="grid md:grid-cols-2 gap-8">
+                {/* Live Lead Tracker */}
+                <Card className="backdrop-blur-xl bg-white/80 border border-gray-100 shadow-sm p-8 flex flex-col items-center justify-center text-center">
+                  <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6">
+                    Leads Capturados
+                  </p>
+                  <div
+                    id="lead-tracker"
+                    className="text-8xl font-extralight text-[#1D1D1F] mb-4 transition-transform duration-300"
+                  >
+                    {leadsCount}
+                  </div>
+                  <p className="text-sm font-light text-gray-500">
+                    {leadsCount === 0 ? "Comparte tu link para empezar" : "En tiempo real"}
+                  </p>
+                </Card>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* C. ESTADO DE FLUJO - Checklist */}
-          <div className={`transition-all duration-500 ${challengeActive ? "" : "opacity-30 blur-sm pointer-events-none"}`}>
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-2">
-                  Protocolos de Hoy
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-32 h-1 bg-gray-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-primary transition-all duration-500"
-                      style={{ width: `${completionPercentage}%` }}
-                    />
+          {challengeActive && (
+            <div className="transition-all duration-500">
+              <div className="flex items-center justify-between mb-8">
+                <div>
+                  <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-2">
+                    Protocolos de Hoy
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-32 h-1 bg-gray-100 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-primary transition-all duration-500"
+                        style={{ width: `${completionPercentage}%` }}
+                      />
+                    </div>
+                    <span className="text-sm font-light text-[#1D1D1F]">
+                      {Math.round(completionPercentage)}%
+                    </span>
                   </div>
-                  <span className="text-sm font-light text-[#1D1D1F]">
-                    {Math.round(completionPercentage)}%
-                  </span>
                 </div>
-              </div>
-              <Button
-                variant="ghost"
-                onClick={() => setFocusMode(true)}
-                className="text-[#1D1D1F] hover:bg-gray-50 font-light"
-              >
-                <Maximize2 className="w-4 h-4 mr-2" />
-                Modo Enfoque
-              </Button>
-            </div>
-
-            <div className="space-y-4">
-              {protocols.map((protocol) => (
-                <button
-                  key={protocol.id}
-                  id={`protocol-${protocol.id}`}
-                  onClick={() => toggleProtocol(protocol.id)}
-                  className="w-full flex items-center gap-4 p-6 rounded-2xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all text-left group"
+                <Button
+                  variant="ghost"
+                  onClick={() => setFocusMode(true)}
+                  className="text-[#1D1D1F] hover:bg-gray-50 font-light"
                 >
-                  <div className="relative">
-                    {protocol.completed ? (
-                      <CheckCircle2 className="w-6 h-6 text-primary" strokeWidth={1} />
-                    ) : (
-                      <Circle className="w-6 h-6 text-gray-300 group-hover:text-gray-400" strokeWidth={1} />
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <p className={`text-sm font-light ${protocol.completed ? "line-through text-gray-400" : "text-[#1D1D1F]"}`}>
-                      {protocol.label}
-                    </p>
-                  </div>
-                  <div className="text-xs font-light text-gray-400">
-                    {protocol.points} pts
-                  </div>
-                </button>
-              ))}
+                  <Maximize2 className="w-4 h-4 mr-2" />
+                  Modo Enfoque
+                </Button>
+              </div>
+
+              <div className="space-y-4">
+                {protocols.map((protocol) => (
+                  <button
+                    key={protocol.id}
+                    id={`protocol-${protocol.id}`}
+                    onClick={() => toggleProtocol(protocol.id)}
+                    className="w-full flex items-center gap-4 p-6 rounded-2xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all text-left group"
+                  >
+                    <div className="relative">
+                      {protocol.completed ? (
+                        <CheckCircle2 className="w-6 h-6 text-primary" strokeWidth={1} />
+                      ) : (
+                        <Circle className="w-6 h-6 text-gray-300 group-hover:text-gray-400" strokeWidth={1} />
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <p className={`text-sm font-light ${protocol.completed ? "line-through text-gray-400" : "text-[#1D1D1F]"}`}>
+                        {protocol.label}
+                      </p>
+                    </div>
+                    <div className="text-xs font-light text-gray-400">
+                      {protocol.points} pts
+                    </div>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* MODO ENFOQUE - Pantalla Completa */}
