@@ -290,7 +290,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -1687,58 +1687,6 @@ Puedo resolver dudas sobre:
               <div className="space-y-6">
                 <Card className="bg-white border border-[#E2E8F0]">
                   <CardHeader>
-                    <CardTitle>Link de Funnel de Referidos</CardTitle>
-                    <CardDescription>
-                      Comparte este link para capturar leads y ganar comisiones
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="flex gap-2">
-                      <Input
-                        value={funnelUrl}
-                        readOnly
-                        className="flex-1 bg-[#F8FAFC] border-[#E2E8F0]"
-                      />
-                      <Button
-                        onClick={async () => {
-                          await navigator.clipboard.writeText(funnelUrl);
-                          setCopiedFunnel(true);
-                          setTimeout(() => setCopiedFunnel(false), 2000);
-                          toast({
-                            title: "¡Link copiado!",
-                            description: "Pégalo donde quieras compartirlo",
-                          });
-                        }}
-                        variant="outline"
-                      >
-                        {copiedFunnel ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                      </Button>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button
-                        onClick={() => window.open(funnelUrl, "_blank")}
-                        className="flex-1"
-                        variant="outline"
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Abrir en nueva pestaña
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          const message = `¡Descubre cómo viajar más por menos! 🌍✈️\n\n${funnelUrl}`;
-                          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
-                        }}
-                        className="flex-1"
-                      >
-                        <Share2 className="w-4 h-4 mr-2" />
-                        Compartir por WhatsApp
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-white border border-[#E2E8F0]">
-                  <CardHeader>
                     <CardTitle>Link de Embudo de Registro</CardTitle>
                     <CardDescription>
                       Link directo para registro de leads con tu código de referido
@@ -1783,6 +1731,58 @@ Puedo resolver dudas sobre:
                         onClick={() => {
                           const leadsUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`;
                           const message = `📋 Regístrate aquí para recibir acceso exclusivo:\n\n${leadsUrl}`;
+                          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+                        }}
+                        className="flex-1"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Compartir por WhatsApp
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Link de Funnel de Referidos</CardTitle>
+                    <CardDescription>
+                      Comparte este link para capturar leads y ganar comisiones
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex gap-2">
+                      <Input
+                        value={funnelUrl}
+                        readOnly
+                        className="flex-1 bg-[#F8FAFC] border-[#E2E8F0]"
+                      />
+                      <Button
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(funnelUrl);
+                          setCopiedFunnel(true);
+                          setTimeout(() => setCopiedFunnel(false), 2000);
+                          toast({
+                            title: "¡Link copiado!",
+                            description: "Pégalo donde quieras compartirlo",
+                          });
+                        }}
+                        variant="outline"
+                      >
+                        {copiedFunnel ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => window.open(funnelUrl, "_blank")}
+                        className="flex-1"
+                        variant="outline"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Abrir en nueva pestaña
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          const message = `¡Descubre cómo viajar más por menos! 🌍✈️\n\n${funnelUrl}`;
                           window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
                         }}
                         className="flex-1"
