@@ -102,8 +102,12 @@ export default function MainDashboard() {
   const [showNoteDialog, setShowNoteDialog] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [showNotesListDialog, setShowNotesListDialog] = useState(false);
+  const [newNote, setNewNote] = useState("");
+  const [addingNote, setAddingNote] = useState(false);
+  const [loadingNotes, setLoadingNotes] = useState(false);
   const [leadNotes, setLeadNotes] = useState<any[]>([]);
-  
+  const [messageTemplates, setMessageTemplates] = useState<any[]>([]);
+
   // Network
   const [stats, setStats] = useState<NetworkStats | null>(null);
   const [commissions, setCommissions] = useState<any[]>([]);
@@ -170,32 +174,47 @@ export default function MainDashboard() {
     });
   };
 
-  const handleAddNote = async () => {
-    if (!selectedLead || !noteText.trim()) {
-      toast({
-        title: "Error",
-        description: "Por favor escribe una nota",
-        variant: "destructive"
-      });
-      return;
+  // Load notes when lead is selected
+  useEffect(() => {
+    if (selectedLead) {
+      loadLeadNotes(selectedLead.id);
     }
+  }, [selectedLead]);
+
+  const loadLeadNotes = async (leadId: string) => {
+    try {
+      setLoadingNotes(true);
+      const notes = await leadsService.getLeadNotes(leadId);
+      setLeadNotes(notes || []);
+    } catch (error) {
+      console.error("Error loading notes:", error);
+      setLeadNotes([]);
+    } finally {
+      setLoadingNotes(false);
+    }
+  };
+
+  const handleAddNote = async () => {
+    if (!selectedLead || !newNote.trim()) return;
 
     try {
-      await leadsService.addLeadNote(selectedLead.id, noteText);
+      setAddingNote(true);
+      await leadsService.addLeadNote(selectedLead.id, newNote.trim());
+      setNewNote("");
+      await loadLeadNotes(selectedLead.id);
       toast({
-        title: "✅ Nota agregada",
-        description: "La nota se guardó correctamente"
+        title: "Nota agregada",
+        description: "La nota se guardó correctamente",
       });
-      setNoteText("");
-      setShowNoteDialog(false);
-      setSelectedLead(null);
     } catch (error) {
       console.error("Error adding note:", error);
       toast({
         title: "Error",
-        description: "No se pudo guardar la nota",
-        variant: "destructive"
+        description: "No se pudo agregar la nota",
+        variant: "destructive",
       });
+    } finally {
+      setAddingNote(false);
     }
   };
 
@@ -527,22 +546,6 @@ Puedo resolver dudas sobre:
     }
   };
 
-  const loadLeadNotes = async (lead: Lead) => {
-    try {
-      const notes = await leadsService.getLeadNotes(lead.id);
-      setLeadNotes(notes);
-      setSelectedLead(lead);
-      setShowNotesListDialog(true);
-    } catch (error) {
-      console.error("Error loading notes:", error);
-      toast({
-        title: "Error",
-        description: "No se pudieron cargar las notas",
-        variant: "destructive"
-      });
-    }
-  };
-
   const updateLeadStatus = async (leadId: string, newStatus: string) => {
     try {
       const result = await leadsService.updateLeadStatus(leadId, newStatus);
@@ -692,6 +695,21 @@ Puedo resolver dudas sobre:
       title: "¡Copiado!",
       description: "Link de referidos copiado al portapapeles",
     });
+  };
+
+  useEffect(() => {
+    loadData();
+    loadMessageTemplates();
+  }, []);
+
+  const loadMessageTemplates = async () => {
+    try {
+      const templates = await leadsService.getMessageTemplates();
+      setMessageTemplates(templates || []);
+    } catch (error) {
+      console.error("Error loading templates:", error);
+      setMessageTemplates([]);
+    }
   };
 
   if (loading) {
@@ -1053,6 +1071,239 @@ Puedo resolver dudas sobre:
                     ))
                   )}
                 </div>
+
+                {/* Lead Details Modal */}
+                <Dialog open={!!selectedLead} onOpenChange={(open) => !open && setSelectedLead(null)}>
+                  <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl">Detalles del Lead</DialogTitle>
+                      <DialogDescription>
+                        Gestiona la información y seguimiento de este prospecto
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    {selectedLead && (
+                      <div className="space-y-6">
+                        {/* Lead Info */}
+                        <div className="grid gap-4 md:grid-cols-2">
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">Nombre</Label>
+                            <p className="text-lg font-semibold text-[#0F172A] mt-1">{selectedLead.name}</p>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">Estado</Label>
+                            <Select
+                              value={selectedLead.status}
+                              onValueChange={async (newStatus) => {
+                                try {
+                                  await leadsService.updateLeadStatus(selectedLead.id, newStatus);
+                                  setSelectedLead({ ...selectedLead, status: newStatus });
+                                  const updatedLeads = allLeads.map(l => 
+                                    l.id === selectedLead.id ? { ...l, status: newStatus } : l
+                                  );
+                                  setAllLeads(updatedLeads);
+                                  toast({
+                                    title: "Estado actualizado",
+                                    description: `Lead marcado como ${newStatus}`,
+                                  });
+                                } catch (error) {
+                                  toast({
+                                    title: "Error",
+                                    description: "No se pudo actualizar el estado",
+                                    variant: "destructive",
+                                  });
+                                }
+                              }}
+                            >
+                              <SelectTrigger className="mt-1">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="nuevo">Nuevo</SelectItem>
+                                <SelectItem value="contactado">Contactado</SelectItem>
+                                <SelectItem value="convertido">Convertido</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">Email</Label>
+                            <p className="text-[#0F172A] mt-1">{selectedLead.email}</p>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">WhatsApp</Label>
+                            <div className="flex items-center gap-2 mt-1">
+                              <p className="text-[#0F172A]">{selectedLead.phone}</p>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                  const message = `Hola ${selectedLead.name}, vi que te interesa Viaja Ligero. ¿Tienes alguna pregunta?`;
+                                  window.open(`https://wa.me/${selectedLead.phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
+                                }}
+                              >
+                                <Phone className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">País</Label>
+                            <p className="text-[#0F172A] mt-1">{selectedLead.country}</p>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">Fecha de Captura</Label>
+                            <p className="text-[#0F172A] mt-1">
+                              {new Date(selectedLead.created_at).toLocaleDateString("es-ES", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              })}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Message Templates */}
+                        <div>
+                          <Label className="text-sm font-medium text-[#0F172A] mb-3 block">
+                            📝 Biblioteca de Mensajes
+                          </Label>
+                          <div className="space-y-2">
+                            {messageTemplates.length === 0 ? (
+                              <p className="text-sm text-[#64748B] py-4 text-center">
+                                No hay plantillas guardadas
+                              </p>
+                            ) : (
+                              messageTemplates.map((template) => (
+                                <Card
+                                  key={template.id}
+                                  className="p-4 hover:bg-[#F8FAFC] cursor-pointer transition-colors border-[#E2E8F0]"
+                                  onClick={() => {
+                                    const personalizedMessage = template.template
+                                      .replace("{{nombre}}", selectedLead.name)
+                                      .replace("{{email}}", selectedLead.email);
+                                    navigator.clipboard.writeText(personalizedMessage);
+                                    toast({
+                                      title: "Mensaje copiado",
+                                      description: "Pégalo en WhatsApp para enviarlo",
+                                    });
+                                  }}
+                                >
+                                  <div className="flex items-start justify-between gap-3">
+                                    <div className="flex-1">
+                                      <h4 className="font-medium text-[#0F172A] mb-1">
+                                        {template.name}
+                                      </h4>
+                                      <p className="text-sm text-[#64748B] line-clamp-2">
+                                        {template.template.replace("{{nombre}}", selectedLead.name)}
+                                      </p>
+                                    </div>
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        const personalizedMessage = template.template
+                                          .replace("{{nombre}}", selectedLead.name)
+                                          .replace("{{email}}", selectedLead.email);
+                                        navigator.clipboard.writeText(personalizedMessage);
+                                        toast({
+                                          title: "Copiado",
+                                          description: "Mensaje listo para pegar",
+                                        });
+                                      }}
+                                    >
+                                      <Copy className="w-4 h-4" />
+                                    </Button>
+                                  </div>
+                                </Card>
+                              ))
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Notes Section */}
+                        <div>
+                          <Label className="text-sm font-medium text-[#0F172A] mb-3 block">
+                            💬 Notas y Seguimiento
+                          </Label>
+                          
+                          {/* Add Note Form */}
+                          <div className="flex gap-2 mb-4">
+                            <Input
+                              placeholder="Escribe una nota sobre este lead..."
+                              value={newNote}
+                              onChange={(e) => setNewNote(e.target.value)}
+                              onKeyPress={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                  e.preventDefault();
+                                  handleAddNote();
+                                }
+                              }}
+                              className="flex-1"
+                            />
+                            <Button
+                              onClick={handleAddNote}
+                              disabled={!newNote.trim() || addingNote}
+                              size="sm"
+                            >
+                              {addingNote ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <>
+                                  <Plus className="w-4 h-4 mr-2" />
+                                  Agregar
+                                </>
+                              )}
+                            </Button>
+                          </div>
+
+                          {/* Notes List */}
+                          <div className="space-y-3 max-h-64 overflow-y-auto">
+                            {loadingNotes ? (
+                              <div className="flex items-center justify-center py-8">
+                                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                              </div>
+                            ) : leadNotes.length === 0 ? (
+                              <p className="text-sm text-[#64748B] text-center py-6">
+                                No hay notas aún. Agrega la primera nota de seguimiento.
+                              </p>
+                            ) : (
+                              leadNotes.map((note) => (
+                                <div
+                                  key={note.id}
+                                  className="bg-[#F8FAFC] rounded-lg p-4 border border-[#E2E8F0]"
+                                >
+                                  <div className="flex items-start justify-between gap-3 mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                        <span className="text-sm font-medium text-primary">
+                                          {note.profiles?.full_name?.charAt(0) || note.profiles?.username?.charAt(0) || "U"}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium text-[#0F172A]">
+                                          {note.profiles?.full_name || note.profiles?.username || "Usuario"}
+                                        </p>
+                                        <p className="text-xs text-[#64748B]">
+                                          {new Date(note.created_at).toLocaleDateString("es-ES", {
+                                            day: "numeric",
+                                            month: "short",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                          })}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <p className="text-sm text-[#475569]">{note.note}</p>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </DialogContent>
+                </Dialog>
               </div>
             )}
           </div>
