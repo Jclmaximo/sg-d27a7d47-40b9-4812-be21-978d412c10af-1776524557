@@ -106,7 +106,6 @@ export default function MainDashboard() {
   const [addingNote, setAddingNote] = useState(false);
   const [loadingNotes, setLoadingNotes] = useState(false);
   const [leadNotes, setLeadNotes] = useState<any[]>([]);
-  const [messageTemplates, setMessageTemplates] = useState<any[]>([]);
 
   // Network
   const [stats, setStats] = useState<NetworkStats | null>(null);
