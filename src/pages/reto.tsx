@@ -34,12 +34,12 @@ export default function ZenCommandCenter() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<UserProfile | null>(null);
-  const [leadsCount, setLeadsCount] = useState(0);
-  const [copiedLink, setCopiedLink] = useState(false);
   const [challengeActive, setChallengeActive] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(86400); // 24h en segundos
+  const [timeRemaining, setTimeRemaining] = useState(86400); // 24 horas en segundos
+  const [leadsCount, setLeadsCount] = useState(0);
+  const [copyCount, setCopyCount] = useState(0);
+  const [navigationVisible, setNavigationVisible] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
-  
   const [protocols, setProtocols] = useState<DailyProtocol[]>([
     { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
     { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
@@ -49,7 +49,6 @@ export default function ZenCommandCenter() {
   ]);
 
   // NUEVOS ESTADOS - Sistema de Desbloqueo
-  const [navigationVisible, setNavigationVisible] = useState(false);
   const [shareCount, setShareCount] = useState(0);
   const [leadsUnlocked, setLeadsUnlocked] = useState(false);
   const [resourcesUnlocked, setResourcesUnlocked] = useState(false);
@@ -57,8 +56,64 @@ export default function ZenCommandCenter() {
 
   useEffect(() => {
     loadData();
-    loadShareCount();
+    restoreChallengeState();
   }, []);
+
+  const restoreChallengeState = () => {
+    try {
+      const savedState = localStorage.getItem("challenge-state");
+      if (savedState) {
+        const state = JSON.parse(savedState);
+        
+        // Restore challenge active state
+        if (state.challengeActive) {
+          setChallengeActive(true);
+          setNavigationVisible(true);
+          
+          // Calculate elapsed time since start
+          const startTime = new Date(state.startTime).getTime();
+          const now = new Date().getTime();
+          const elapsedSeconds = Math.floor((now - startTime) / 1000);
+          const remaining = Math.max(0, 86400 - elapsedSeconds);
+          
+          setTimeRemaining(remaining);
+        }
+        
+        // Restore copy count
+        if (state.copyCount) {
+          setCopyCount(state.copyCount);
+        }
+        
+        // Restore protocols
+        if (state.protocols) {
+          setProtocols(state.protocols);
+        }
+      }
+    } catch (error) {
+      console.error("Error restoring challenge state:", error);
+    }
+  };
+
+  const saveChallengeState = (updates: {
+    challengeActive?: boolean;
+    startTime?: string;
+    copyCount?: number;
+    protocols?: DailyProtocol[];
+  }) => {
+    try {
+      const savedState = localStorage.getItem("challenge-state");
+      const currentState = savedState ? JSON.parse(savedState) : {};
+      
+      const newState = {
+        ...currentState,
+        ...updates
+      };
+      
+      localStorage.setItem("challenge-state", JSON.stringify(newState));
+    } catch (error) {
+      console.error("Error saving challenge state:", error);
+    }
+  };
 
   useEffect(() => {
     if (challengeActive && timeRemaining > 0) {
@@ -192,44 +247,29 @@ export default function ZenCommandCenter() {
     }
   };
 
-  const toggleProtocol = async (id: string) => {
-    setProtocols((prev) =>
-      prev.map((p) => {
-        if (p.id === id) {
-          const element = document.getElementById(`protocol-${id}`);
-          if (element) {
-            element.classList.add("scale-105");
-            setTimeout(() => element.classList.remove("scale-105"), 200);
-          }
-          return { ...p, completed: !p.completed };
-        }
-        return p;
-      })
+  const toggleProtocol = (id: number) => {
+    const updatedProtocols = protocols.map((p) =>
+      p.id === id ? { ...p, completed: !p.completed } : p
     );
-
-    if (profile?.id) {
-      const protocol = protocols.find((p) => p.id === id);
-      if (protocol) {
-        await productivityService.saveDailyActivity(profile.id, {
-          contacted_prospects: protocol.id === "1",
-          contacted_prospects_count: protocol.id === "1" ? 3 : 0,
-          posted_content: protocol.id === "2",
-          did_followup: protocol.id === "3",
-          presented_business: protocol.id === "4",
-          attended_training: protocol.id === "5",
-        });
-      }
-    }
+    setProtocols(updatedProtocols);
+    saveChallengeState({ protocols: updatedProtocols });
   };
 
   const copyFunnelLink = () => {
-    const link = `https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`;
+    const link = profile?.username ? `https://mwr.hubia.vip/mwr?ref=${profile.username}` : "";
     navigator.clipboard.writeText(link);
-    setCopiedLink(true);
-    setTimeout(() => setCopiedLink(false), 2000);
+    const newCount = copyCount + 1;
+    setCopyCount(newCount);
+    saveChallengeState({ copyCount: newCount });
     
-    // Incrementar contador de copias para desbloqueo
-    incrementShareCount();
+    // Auto-complete protocol when reached 5 copies
+    if (newCount === 5) {
+      const updatedProtocols = protocols.map((p) =>
+        p.id === 1 ? { ...p, completed: true } : p
+      );
+      setProtocols(updatedProtocols);
+      saveChallengeState({ protocols: updatedProtocols });
+    }
   };
 
   const shareToWhatsApp = () => {
@@ -322,7 +362,23 @@ export default function ZenCommandCenter() {
                 {formatTime(timeRemaining)}
               </div>
               <Button
-                onClick={() => setChallengeActive(!challengeActive)}
+                onClick={() => {
+                  const newState = !challengeActive;
+                  setChallengeActive(newState);
+                  
+                  if (newState) {
+                    // Starting challenge - save start time
+                    saveChallengeState({
+                      challengeActive: true,
+                      startTime: new Date().toISOString()
+                    });
+                  } else {
+                    // Pausing challenge - keep state but mark as paused
+                    saveChallengeState({
+                      challengeActive: false
+                    });
+                  }
+                }}
                 className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-8 py-3 rounded-xl font-light"
               >
                 {!challengeActive ? (
@@ -468,7 +524,7 @@ export default function ZenCommandCenter() {
                   <button
                     key={protocol.id}
                     id={`protocol-${protocol.id}`}
-                    onClick={() => toggleProtocol(protocol.id)}
+                    onClick={() => toggleProtocol(parseInt(protocol.id, 10))}
                     className="w-full flex items-center gap-4 p-6 rounded-2xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all text-left group"
                   >
                     <div className="relative">
@@ -524,7 +580,7 @@ export default function ZenCommandCenter() {
                 {protocols.map((protocol) => (
                   <button
                     key={protocol.id}
-                    onClick={() => toggleProtocol(protocol.id)}
+                    onClick={() => toggleProtocol(parseInt(protocol.id, 10))}
                     className="w-full flex items-center gap-6 p-8 rounded-3xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all text-left"
                   >
                     <div className="relative">
