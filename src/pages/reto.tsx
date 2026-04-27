@@ -247,9 +247,9 @@ export default function ZenCommandCenter() {
     }
   };
 
-  const toggleProtocol = (id: number) => {
+  const toggleProtocol = (id: number | string) => {
     const updatedProtocols = protocols.map((p) =>
-      p.id === id ? { ...p, completed: !p.completed } : p
+      Number(p.id) === Number(id) ? { ...p, completed: !p.completed } : p
     );
     setProtocols(updatedProtocols);
     saveChallengeState({ protocols: updatedProtocols });
@@ -265,7 +265,7 @@ export default function ZenCommandCenter() {
     // Auto-complete protocol when reached 5 copies
     if (newCount === 5) {
       const updatedProtocols = protocols.map((p) =>
-        p.id === 1 ? { ...p, completed: true } : p
+        Number(p.id) === 1 ? { ...p, completed: true } : p
       );
       setProtocols(updatedProtocols);
       saveChallengeState({ protocols: updatedProtocols });
