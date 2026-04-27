@@ -54,6 +54,9 @@ export default function ZenCommandCenter() {
   const [resourcesUnlocked, setResourcesUnlocked] = useState(false);
   const [previousLeadsCount, setPreviousLeadsCount] = useState(0);
 
+  // Define funnelLink early so it can be used in JSX
+  const funnelLink = profile?.username ? `https://mwr.hubia.vip/mwr?ref=${profile.username}` : "";
+
   useEffect(() => {
     loadData();
     restoreChallengeState();
@@ -308,8 +311,6 @@ export default function ZenCommandCenter() {
   };
 
   const completionPercentage = (protocols.filter((p) => p.completed).length / protocols.length) * 100;
-
-  const funnelLink = profile?.username ? `https://mwr.hubia.vip/mwr?ref=${profile.username}` : "";
 
   if (loading) {
     return (
