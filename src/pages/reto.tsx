@@ -452,32 +452,6 @@ export default function ZenCommandCenter() {
             </div>
           )}
 
-          {/* C. LEADS CAPTURADOS - Contador */}
-          {challengeActive && (
-            <div className="mb-16">
-              <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
-                Leads Capturados
-              </p>
-              <div className="flex gap-8 justify-center">
-                <div className="text-center">
-                  <div className="text-4xl font-extralight text-amber-600 mb-2">⚡</div>
-                  <div className="text-3xl font-light text-[#1D1D1F] mb-1">{leadsCount}</div>
-                  <div className="text-xs text-gray-500 font-light">Total</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl font-extralight text-blue-600 mb-2">👥</div>
-                  <div className="text-3xl font-light text-[#1D1D1F] mb-1">0</div>
-                  <div className="text-xs text-gray-500 font-light">Contactados</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-4xl font-extralight text-green-600 mb-2">📖</div>
-                  <div className="text-3xl font-light text-[#1D1D1F] mb-1">0</div>
-                  <div className="text-xs text-gray-500 font-light">Convertidos</div>
-                </div>
-              </div>
-            </div>
-          )}
-
           {/* B. MOTOR DE CRECIMIENTO */}
           {challengeActive && (
             <div className="mb-16 transition-all duration-500">
