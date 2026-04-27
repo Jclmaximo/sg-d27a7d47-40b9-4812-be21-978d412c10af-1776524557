@@ -5,7 +5,7 @@ import {
   Users, Clock, MessageSquare, CheckCircle2, 
   Download, LogOut, Mail, Phone, Calendar, Target, Plus, Eye,
   LayoutGrid, Share2, Copy, Check, Info, BookOpen, Network, DollarSign, Gift,
-  TrendingUp, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle
+  TrendingUp, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle, Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -731,28 +731,61 @@ Puedo resolver dudas sobre:
       />
       <div className="min-h-screen bg-[#F8FAFC]">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sm:gap-0 mb-8 px-4 sm:px-0 py-6 sm:py-0">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-12 w-12">
-              <AvatarImage src={profile?.avatar_url} />
-              <AvatarFallback className="bg-primary text-primary-foreground text-lg">
-                {profile?.full_name?.charAt(0) || profile?.username?.charAt(0) || "U"}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="text-sm text-[#64748B] mb-1">Bienvenido</p>
-              <h1 className="text-xl font-semibold text-[#0F172A]">
-                {profile?.full_name || profile?.username}
-              </h1>
+        <div className="bg-white border-b border-[#E2E8F0] mb-8">
+          <div className="max-w-7xl mx-auto px-6 py-6">
+            <div className="flex items-center justify-between gap-4">
+              {/* Left: Avatar + User Info */}
+              <div className="flex items-center gap-4">
+                {profile?.avatar_url ? (
+                  <img
+                    src={profile.avatar_url}
+                    alt={profile.full_name}
+                    className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                ) : (
+                  <div className="w-12 h-12 bg-[#F1F5F9] text-[#2563EB] rounded-full flex items-center justify-center text-lg font-semibold border-2 border-white shadow-sm">
+                    {profile?.full_name?.[0]?.toUpperCase() || "U"}
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs text-[#64748B] mb-1">Bienvenido</p>
+                  <h1 className="text-xl font-semibold text-[#0F172A]">
+                    {profile?.full_name || "Usuario"}
+                  </h1>
+                </div>
+              </div>
+
+              {/* Right: Action Buttons */}
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => router.push("/reto")}
+                  className="border-[#E2E8F0] hover:bg-[#F1F5F9] flex items-center gap-2"
+                >
+                  <Zap className="w-4 h-4" />
+                  <span className="hidden sm:inline">Command Center</span>
+                </Button>
+                <Button
+                  variant="ghost"
+                  onClick={async () => {
+                    try {
+                      await authService.signOut();
+                      router.push("/admin");
+                    } catch (error) {
+                      console.error("Error al cerrar sesión:", error);
+                    }
+                  }}
+                  className="text-[#64748B] hover:text-red-600 hover:bg-red-50"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden sm:inline ml-2">Salir</span>
+                </Button>
+              </div>
             </div>
           </div>
-          <Button
-            onClick={() => router.push("/reto")}
-            variant="outline"
-            className="border-[#4285F4] text-[#4285F4] hover:bg-[#4285F4]/10 w-full sm:w-auto"
-          >
-            ← Command Center
-          </Button>
         </div>
 
         <main className="w-full px-6 py-8">
