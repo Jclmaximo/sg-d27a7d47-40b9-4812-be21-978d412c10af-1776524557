@@ -288,7 +288,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Oferta válida: Últimos días
+⏰ Of Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -1590,40 +1590,40 @@ Puedo resolver dudas sobre:
                   <div className="grid gap-6 md:grid-cols-2">
                     <Card className="bg-white border border-[#E2E8F0]">
                       <CardHeader>
-                        <CardTitle>Esta Semana</CardTitle>
+                        <CardTitle>Resumen General (7 días)</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
                         <div className="flex justify-between">
                           <span className="text-[#64748B]">Días activos:</span>
-                          <span className="font-semibold">{productivityStats.current_week.active_days}/7</span>
+                          <span className="font-semibold">{productivityStats.days_active}/7</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-[#64748B]">Prospectos contactados:</span>
-                          <span className="font-semibold">{productivityStats.current_week.total_prospects}</span>
+                          <span className="text-[#64748B]">Acciones totales:</span>
+                          <span className="font-semibold">{productivityStats.total_actions}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-[#64748B]">Presentaciones:</span>
-                          <span className="font-semibold">{productivityStats.current_week.total_presentations}</span>
+                          <span className="text-[#64748B]">Promedio diario:</span>
+                          <span className="font-semibold">{productivityStats.average_daily} acciones</span>
                         </div>
                       </CardContent>
                     </Card>
 
                     <Card className="bg-white border border-[#E2E8F0]">
                       <CardHeader>
-                        <CardTitle>Este Mes</CardTitle>
+                        <CardTitle>Rendimiento</CardTitle>
                       </CardHeader>
                       <CardContent className="space-y-2">
                         <div className="flex justify-between">
-                          <span className="text-[#64748B]">Días activos:</span>
-                          <span className="font-semibold">{productivityStats.current_month.active_days}/30</span>
+                          <span className="text-[#64748B]">Puntos totales:</span>
+                          <span className="font-semibold">{productivityStats.total_points}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-[#64748B]">Prospectos contactados:</span>
-                          <span className="font-semibold">{productivityStats.current_month.total_prospects}</span>
+                          <span className="text-[#64748B]">Mejor día:</span>
+                          <span className="font-semibold">{productivityStats.best_day} pts</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-[#64748B]">Presentaciones:</span>
-                          <span className="font-semibold">{productivityStats.current_month.total_presentations}</span>
+                          <span className="text-[#64748B]">Racha actual:</span>
+                          <span className="font-semibold text-orange-500">{productivityStats.current_streak} días 🔥</span>
                         </div>
                       </CardContent>
                     </Card>
@@ -1643,21 +1643,33 @@ Puedo resolver dudas sobre:
                             key={member.user_id}
                             className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]"
                           >
-                            <div>
-                              <p className="font-medium text-[#0F172A]">
-                                {member.full_name || member.username}
-                              </p>
-                              <p className="text-sm text-[#64748B]">
-                                {member.active_days} días activos esta semana
-                              </p>
+                            <div className="flex items-center gap-3">
+                              {member.avatar_url ? (
+                                <img src={member.avatar_url} alt={member.full_name} className="w-8 h-8 rounded-full object-cover" />
+                              ) : (
+                                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                  {member.full_name?.charAt(0) || "U"}
+                                </div>
+                              )}
+                              <div>
+                                <p className="font-medium text-[#0F172A]">
+                                  {member.full_name}
+                                </p>
+                                <p className="text-sm text-[#64748B]">
+                                  {member.days_active} días activos esta semana
+                                </p>
+                              </div>
                             </div>
                             <div className="text-right">
-                              <p className="text-sm text-[#64748B]">
-                                {member.total_prospects} prospectos
+                              <p className="text-sm font-medium text-[#0F172A]">
+                                {member.total_points} puntos
                               </p>
-                              <p className="text-sm text-[#64748B]">
-                                {member.total_presentations} presentaciones
-                              </p>
+                              <div className="flex items-center justify-end gap-2 mt-1">
+                                <Badge variant={member.status === "active" ? "default" : member.status === "medium" ? "secondary" : "outline"}>
+                                  {member.percentage}%
+                                </Badge>
+                                <span className="text-xs text-[#64748B] ml-2">{member.last_activity}</span>
+                              </div>
                             </div>
                           </div>
                         ))}
