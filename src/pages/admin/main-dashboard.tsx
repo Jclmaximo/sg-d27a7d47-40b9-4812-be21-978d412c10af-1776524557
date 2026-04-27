@@ -931,6 +931,127 @@ Puedo resolver dudas sobre:
                       </div>
                     </CardContent>
                   </Card>
+
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Convertidos</CardTitle>
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-semibold text-[#0F172A]">
+                        {allLeads.filter(l => l.status === "convertido" || l.status === "converted").length}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Search and Filter */}
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]" />
+                    <Input
+                      placeholder="Buscar por nombre, email o teléfono..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 bg-white border-[#E2E8F0]"
+                    />
+                  </div>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className="w-full sm:w-[200px] bg-white border-[#E2E8F0]">
+                      <SelectValue placeholder="Filtrar por estado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos los estados</SelectItem>
+                      <SelectItem value="nuevo">Nuevos</SelectItem>
+                      <SelectItem value="contactado">Contactados</SelectItem>
+                      <SelectItem value="convertido">Convertidos</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Leads List */}
+                <div className="space-y-4">
+                  {filteredLeads.length === 0 ? (
+                    <Card className="bg-white border border-[#E2E8F0]">
+                      <CardContent className="flex flex-col items-center justify-center py-12">
+                        <Users className="w-12 h-12 text-[#CBD5E1] mb-4" />
+                        <p className="text-[#64748B] text-center mb-2">
+                          {searchTerm || statusFilter !== "all" 
+                            ? "No se encontraron leads con ese filtro"
+                            : "Aún no tienes leads capturados"}
+                        </p>
+                        <p className="text-sm text-[#94A3B8] text-center">
+                          {!searchTerm && statusFilter === "all" && "Comparte tu link de embudo para empezar a capturar leads"}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    filteredLeads.map((lead) => (
+                      <Card key={lead.id} className="bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] hover:shadow-md transition-all">
+                        <CardContent className="p-6">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div className="flex-1 space-y-2">
+                              <div className="flex items-center gap-3 flex-wrap">
+                                <h3 className="text-lg font-semibold text-[#0F172A]">
+                                  {lead.name}
+                                </h3>
+                                <Badge 
+                                  variant={
+                                    lead.status === "nuevo" || lead.status === "new" ? "secondary" :
+                                    lead.status === "contactado" || lead.status === "contacted" ? "default" :
+                                    "outline"
+                                  }
+                                  className="capitalize"
+                                >
+                                  {lead.status === "nuevo" || lead.status === "new" ? "Nuevo" :
+                                   lead.status === "contactado" || lead.status === "contacted" ? "Contactado" :
+                                   lead.status === "convertido" || lead.status === "converted" ? "Convertido" :
+                                   lead.status}
+                                </Badge>
+                              </div>
+                              <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[#64748B]">
+                                <div className="flex items-center gap-2">
+                                  <Mail className="w-4 h-4" />
+                                  {lead.email}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Phone className="w-4 h-4" />
+                                  {lead.phone}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Calendar className="w-4 h-4" />
+                                  {new Date(lead.created_at).toLocaleDateString("es-ES")}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 flex-wrap sm:flex-nowrap">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  const message = `Hola ${lead.name}, vi que te interesa Viaja Ligero. ¿Tienes alguna pregunta?`;
+                                  window.open(`https://wa.me/${lead.phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
+                                }}
+                                className="border-[#E2E8F0] hover:bg-[#F1F5F9]"
+                              >
+                                <Phone className="w-4 h-4 mr-2" />
+                                Contactar
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setSelectedLead(lead)}
+                                className="border-[#E2E8F0] hover:bg-[#F1F5F9]"
+                              >
+                                <Eye className="w-4 h-4 mr-2" />
+                                Ver Detalles
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
                 </div>
               </div>
             )}
