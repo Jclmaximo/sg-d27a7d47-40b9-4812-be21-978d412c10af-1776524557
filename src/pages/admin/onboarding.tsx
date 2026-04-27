@@ -36,7 +36,7 @@ export default function OnboardingPage() {
 
       // Only redirect if we have a username that's not empty
       if (!error && profile && profile.username && profile.username.trim() !== "") {
-        router.push("/admin/welcome");
+        router.push("/reto");
       }
     } catch (error) {
       console.error("Error checking profile:", error);
@@ -138,7 +138,7 @@ export default function OnboardingPage() {
         description: "Bienvenido a tu panel de control"
       });
 
-      router.push("/admin/welcome");
+      router.push("/reto");
     } catch (err: any) {
       console.error("Error setting username:", err);
       toast({

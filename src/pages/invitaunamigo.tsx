@@ -290,7 +290,7 @@ export default function InvitaUnAmigo() {
   };
 
   const handleEnterDashboard = () => {
-    router.push("/admin/welcome");
+    router.push("/reto");
   };
 
   return (

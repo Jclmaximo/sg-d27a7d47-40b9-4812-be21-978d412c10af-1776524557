@@ -28,7 +28,7 @@ export default function AdminPage() {
     try {
       const session = await authService.getCurrentSession();
       if (session) {
-        router.push("/admin/welcome");
+        router.push("/reto");
       }
     } catch (err) {
       console.error("Error checking session:", err);
@@ -51,7 +51,7 @@ export default function AdminPage() {
       }
 
       // Redirect to welcome page after successful login
-      router.push("/admin/welcome");
+      router.push("/reto");
     } catch (err) {
       console.error("Login error:", err);
       setError("Error al iniciar sesión");
