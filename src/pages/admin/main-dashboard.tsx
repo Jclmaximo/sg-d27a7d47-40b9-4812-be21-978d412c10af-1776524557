@@ -5,7 +5,7 @@ import {
   Users, Clock, MessageSquare, CheckCircle2, 
   Download, LogOut, Mail, Phone, Calendar, Target, Plus, Eye,
   LayoutGrid, Share2, Copy, Check, Info, BookOpen, Network, DollarSign, Gift,
-  TrendingUp, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle, Zap
+  TrendingUp, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle, Zap, Upload
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1221,32 +1221,23 @@ Puedo resolver dudas sobre:
                                   }}
                                 >
                                   <div className="flex items-start justify-between gap-3">
-                                    <div className="flex-1">
-                                      <h4 className="font-medium text-[#0F172A] mb-1">
-                                        {template.name}
-                                      </h4>
-                                      <p className="text-sm text-[#64748B] line-clamp-2">
-                                        {template.template.replace("{{nombre}}", selectedLead.name)}
-                                      </p>
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                        <span className="text-sm font-medium text-primary">
+                                          {template.name}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium text-[#0F172A]">
+                                          {template.name}
+                                        </p>
+                                        <p className="text-xs text-[#64748B]">
+                                          {template.emoji}
+                                        </p>
+                                      </div>
                                     </div>
-                                    <Button
-                                      size="sm"
-                                      variant="ghost"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        const personalizedMessage = template.template
-                                          .replace("{{nombre}}", selectedLead.name)
-                                          .replace("{{email}}", selectedLead.email);
-                                        navigator.clipboard.writeText(personalizedMessage);
-                                        toast({
-                                          title: "Copiado",
-                                          description: "Mensaje listo para pegar",
-                                        });
-                                      }}
-                                    >
-                                      <Copy className="w-4 h-4" />
-                                    </Button>
                                   </div>
+                                  <p className="text-sm text-[#475569]">{template.template.replace("{{nombre}}", selectedLead.name)}</p>
                                 </Card>
                               ))
                             )}
@@ -1337,6 +1328,603 @@ Puedo resolver dudas sobre:
                     )}
                   </DialogContent>
                 </Dialog>
+              </div>
+            )}
+
+            {/* TAB 3 - MI RED */}
+            {activeTab === "red" && (
+              <div className="space-y-6">
+                {/* Network Stats */}
+                <div className="grid gap-6 md:grid-cols-3 mb-6">
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                        <DollarSign className="w-5 h-5 text-primary" />
+                        Total Ganado
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold text-[#0F172A]">
+                        ${(stats?.total_earned ?? 0).toFixed(2)}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                        Disponible
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold text-[#0F172A]">
+                        ${(stats?.available_balance ?? 0).toFixed(2)}
+                      </div>
+                      {(stats?.available_balance ?? 0) >= 39.50 && (
+                        <Button
+                          size="sm"
+                          onClick={requestWithdrawal}
+                          className="mt-3"
+                        >
+                          Solicitar Retiro
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                        <Network className="w-5 h-5 text-primary" />
+                        Referidos Directos
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold text-[#0F172A]">
+                        {networkMembers.length}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Network Members */}
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Mi Red de Referidos</CardTitle>
+                    <CardDescription>
+                      Miembros que se han unido a través de tu enlace
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {networkMembers.length === 0 ? (
+                      <div className="text-center py-8">
+                        <Network className="w-12 h-12 text-[#CBD5E1] mx-auto mb-4" />
+                        <p className="text-[#64748B] mb-2">
+                          Aún no tienes referidos en tu red
+                        </p>
+                        <p className="text-sm text-[#94A3B8]">
+                          Comparte tu link personalizado para empezar a construir tu red
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {networkMembers.map((member: any) => (
+                          <div
+                            key={member.id}
+                            className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                <User className="w-5 h-5 text-primary" />
+                              </div>
+                              <div>
+                                <p className="font-medium text-[#0F172A]">
+                                  {member.full_name || member.username || member.email}
+                                </p>
+                                <p className="text-sm text-[#64748B]">
+                                  {new Date(member.created_at).toLocaleDateString("es-ES")}
+                                </p>
+                              </div>
+                            </div>
+                            <Badge variant="outline" className="capitalize">
+                              {member.role || "member"}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Commissions History */}
+                {commissions.length > 0 && (
+                  <Card className="bg-white border border-[#E2E8F0]">
+                    <CardHeader>
+                      <CardTitle>Historial de Comisiones</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {commissions.map((commission) => (
+                          <div
+                            key={commission.id}
+                            className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]"
+                          >
+                            <div>
+                              <p className="font-medium text-[#0F172A]">
+                                {commission.commission_type === "direct" ? "Comisión Directa" : "Comisión Indirecta"}
+                              </p>
+                              <p className="text-sm text-[#64748B]">
+                                {new Date(commission.created_at).toLocaleDateString("es-ES")}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-lg font-semibold text-green-600">
+                                +${commission.amount_usd.toFixed(2)}
+                              </p>
+                              <Badge variant="outline" className="mt-1">
+                                {commission.status}
+                              </Badge>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            )}
+
+            {/* TAB 4 - PRODUCTIVIDAD */}
+            {activeTab === "productividad" && (
+              <div className="space-y-6">
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Actividades de Hoy</CardTitle>
+                    <CardDescription>
+                      Marca las actividades que completaste hoy
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4" />
+                        Contacté prospectos
+                      </Label>
+                      <div className="flex items-center gap-2">
+                        <Input
+                          type="number"
+                          min="0"
+                          value={todayActivity.contacted_prospects_count}
+                          onChange={(e) => setTodayActivity({
+                            ...todayActivity,
+                            contacted_prospects: parseInt(e.target.value) > 0,
+                            contacted_prospects_count: parseInt(e.target.value)
+                          })}
+                          className="w-20"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <Label className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4" />
+                        Hice seguimiento
+                      </Label>
+                      <input
+                        type="checkbox"
+                        checked={todayActivity.did_followup}
+                        onChange={(e) => setTodayActivity({
+                          ...todayActivity,
+                          did_followup: e.target.checked
+                        })}
+                        className="w-5 h-5"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <Label className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4" />
+                        Presenté el negocio
+                      </Label>
+                      <input
+                        type="checkbox"
+                        checked={todayActivity.presented_business}
+                        onChange={(e) => setTodayActivity({
+                          ...todayActivity,
+                          presented_business: e.target.checked
+                        })}
+                        className="w-5 h-5"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <Label className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4" />
+                        Publiqué contenido
+                      </Label>
+                      <input
+                        type="checkbox"
+                        checked={todayActivity.posted_content}
+                        onChange={(e) => setTodayActivity({
+                          ...todayActivity,
+                          posted_content: e.target.checked
+                        })}
+                        className="w-5 h-5"
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <Label className="flex items-center gap-2">
+                        <CheckCircle className="w-4 h-4" />
+                        Asistí a entrenamiento
+                      </Label>
+                      <input
+                        type="checkbox"
+                        checked={todayActivity.attended_training}
+                        onChange={(e) => setTodayActivity({
+                          ...todayActivity,
+                          attended_training: e.target.checked
+                        })}
+                        className="w-5 h-5"
+                      />
+                    </div>
+
+                    <Button
+                      onClick={saveActivity}
+                      disabled={savingActivity}
+                      className="w-full"
+                    >
+                      {savingActivity ? (
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      ) : (
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                      )}
+                      Guardar Actividades
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Personal Stats */}
+                {productivityStats && (
+                  <div className="grid gap-6 md:grid-cols-2">
+                    <Card className="bg-white border border-[#E2E8F0]">
+                      <CardHeader>
+                        <CardTitle>Esta Semana</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-[#64748B]">Días activos:</span>
+                          <span className="font-semibold">{productivityStats.current_week.active_days}/7</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#64748B]">Prospectos contactados:</span>
+                          <span className="font-semibold">{productivityStats.current_week.total_prospects}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#64748B]">Presentaciones:</span>
+                          <span className="font-semibold">{productivityStats.current_week.total_presentations}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="bg-white border border-[#E2E8F0]">
+                      <CardHeader>
+                        <CardTitle>Este Mes</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="text-[#64748B]">Días activos:</span>
+                          <span className="font-semibold">{productivityStats.current_month.active_days}/30</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#64748B]">Prospectos contactados:</span>
+                          <span className="font-semibold">{productivityStats.current_month.total_prospects}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#64748B]">Presentaciones:</span>
+                          <span className="font-semibold">{productivityStats.current_month.total_presentations}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
+
+                {/* Team Stats (Admin only) */}
+                {profile?.role === "admin" && teamStats.length > 0 && (
+                  <Card className="bg-white border border-[#E2E8F0]">
+                    <CardHeader>
+                      <CardTitle>Productividad del Equipo</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {teamStats.map((member) => (
+                          <div
+                            key={member.user_id}
+                            className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]"
+                          >
+                            <div>
+                              <p className="font-medium text-[#0F172A]">
+                                {member.full_name || member.username}
+                              </p>
+                              <p className="text-sm text-[#64748B]">
+                                {member.active_days} días activos esta semana
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm text-[#64748B]">
+                                {member.total_prospects} prospectos
+                              </p>
+                              <p className="text-sm text-[#64748B]">
+                                {member.total_presentations} presentaciones
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            )}
+
+            {/* TAB 5 - MIS LINKS */}
+            {activeTab === "links" && (
+              <div className="space-y-6">
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Link de Funnel de Referidos</CardTitle>
+                    <CardDescription>
+                      Comparte este link para capturar leads y ganar comisiones
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex gap-2">
+                      <Input
+                        value={funnelUrl}
+                        readOnly
+                        className="flex-1 bg-[#F8FAFC] border-[#E2E8F0]"
+                      />
+                      <Button
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(funnelUrl);
+                          setCopiedFunnel(true);
+                          setTimeout(() => setCopiedFunnel(false), 2000);
+                          toast({
+                            title: "¡Link copiado!",
+                            description: "Pégalo donde quieras compartirlo",
+                          });
+                        }}
+                        variant="outline"
+                      >
+                        {copiedFunnel ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => window.open(funnelUrl, "_blank")}
+                        className="flex-1"
+                        variant="outline"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Abrir en nueva pestaña
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          const message = `¡Descubre cómo viajar más por menos! 🌍✈️\n\n${funnelUrl}`;
+                          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+                        }}
+                        className="flex-1"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Compartir por WhatsApp
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {profile?.mwr_link && (
+                  <Card className="bg-white border border-[#E2E8F0]">
+                    <CardHeader>
+                      <CardTitle>Link MWR Personalizado</CardTitle>
+                      <CardDescription>
+                        Tu link de referidos para el programa MWR
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex gap-2">
+                        <Input
+                          value={profile.mwr_link}
+                          readOnly
+                          className="flex-1 bg-[#F8FAFC] border-[#E2E8F0]"
+                        />
+                        <Button
+                          onClick={async () => {
+                            await navigator.clipboard.writeText(profile.mwr_link || "");
+                            setCopiedReferral(true);
+                            setTimeout(() => setCopiedReferral(false), 2000);
+                            toast({
+                              title: "¡Link copiado!",
+                              description: "Link MWR copiado al portapapeles",
+                            });
+                          }}
+                          variant="outline"
+                        >
+                          {copiedReferral ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            )}
+
+            {/* TAB 6 - PERFIL */}
+            {activeTab === "perfil" && (
+              <div className="space-y-6">
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Información Personal</CardTitle>
+                    <CardDescription>
+                      Actualiza tu información de perfil
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Avatar */}
+                    <div className="flex items-center gap-6">
+                      {profileForm.avatar_url ? (
+                        <img
+                          src={profileForm.avatar_url}
+                          alt="Avatar"
+                          className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 bg-[#F1F5F9] text-primary rounded-full flex items-center justify-center text-3xl font-semibold border-4 border-white shadow-lg">
+                          {profileForm.full_name?.[0]?.toUpperCase() || "U"}
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <Label htmlFor="avatar-upload" className="cursor-pointer">
+                          <div className="flex items-center gap-2 text-primary hover:text-primary/80">
+                            <Upload className="w-4 h-4" />
+                            <span className="font-medium">
+                              {uploadingAvatar ? "Subiendo..." : "Cambiar foto"}
+                            </span>
+                          </div>
+                        </Label>
+                        <input
+                          id="avatar-upload"
+                          type="file"
+                          accept="image/*"
+                          onChange={uploadAvatar}
+                          className="hidden"
+                          disabled={uploadingAvatar}
+                        />
+                        <p className="text-sm text-[#64748B] mt-1">
+                          JPG, PNG o GIF. Máximo 2MB.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Form Fields */}
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Nombre Completo</Label>
+                        <Input
+                          value={profileForm.full_name}
+                          onChange={(e) => setProfileForm({
+                            ...profileForm,
+                            full_name: e.target.value
+                          })}
+                          placeholder="Juan Pérez"
+                          className="mt-2"
+                        />
+                      </div>
+
+                      <div>
+                        <Label>Username (para links personalizados)</Label>
+                        <Input
+                          value={profileForm.username}
+                          onChange={(e) => setProfileForm({
+                            ...profileForm,
+                            username: e.target.value.toLowerCase().replace(/[^a-z0-9]/g, "")
+                          })}
+                          placeholder="juanperez"
+                          className="mt-2"
+                        />
+                        <p className="text-sm text-[#64748B] mt-1">
+                          Solo letras minúsculas y números, sin espacios
+                        </p>
+                      </div>
+
+                      <div>
+                        <Label>Link MWR Personalizado (opcional)</Label>
+                        <Input
+                          value={profileForm.mwr_link}
+                          onChange={(e) => setProfileForm({
+                            ...profileForm,
+                            mwr_link: e.target.value
+                          })}
+                          placeholder="https://tu-link-mwr.com"
+                          className="mt-2"
+                        />
+                      </div>
+
+                      <Button
+                        onClick={updateProfile}
+                        className="w-full"
+                      >
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        Guardar Cambios
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Wallet Configuration */}
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Billetera USDT (BSC)</CardTitle>
+                    <CardDescription>
+                      Configura tu dirección de billetera para recibir retiros
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label>Dirección de Billetera USDT (BEP-20)</Label>
+                      <Input
+                        value={walletAddress}
+                        onChange={(e) => setWalletAddress(e.target.value)}
+                        placeholder="0x..."
+                        className="mt-2 font-mono"
+                      />
+                      <p className="text-sm text-[#64748B] mt-1">
+                        Solo BEP-20 (Binance Smart Chain). Verifica bien la dirección.
+                      </p>
+                    </div>
+
+                    <Button
+                      onClick={async () => {
+                        try {
+                          setSavingWallet(true);
+                          const session = await authService.getCurrentSession();
+                          if (!session) return;
+
+                          const { error } = await supabase
+                            .from("profiles")
+                            .update({ usdt_wallet_address: walletAddress })
+                            .eq("id", session.user.id);
+
+                          if (error) throw error;
+
+                          await loadData();
+                          toast({
+                            title: "✅ Billetera guardada",
+                            description: "Tu dirección USDT se actualizó correctamente",
+                          });
+                        } catch (error) {
+                          console.error("Error saving wallet:", error);
+                          toast({
+                            title: "Error",
+                            description: "No se pudo guardar la billetera",
+                            variant: "destructive",
+                          });
+                        } finally {
+                          setSavingWallet(false);
+                        }
+                      }}
+                      disabled={!walletAddress || savingWallet}
+                      className="w-full"
+                    >
+                      {savingWallet ? (
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      ) : (
+                        <Shield className="w-4 h-4 mr-2" />
+                      )}
+                      Guardar Billetera
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
             )}
           </div>
