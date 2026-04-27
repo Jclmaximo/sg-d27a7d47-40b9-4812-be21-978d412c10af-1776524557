@@ -106,6 +106,7 @@ export default function MainDashboard() {
   const [addingNote, setAddingNote] = useState(false);
   const [loadingNotes, setLoadingNotes] = useState(false);
   const [leadNotes, setLeadNotes] = useState<any[]>([]);
+  const [customTemplates, setCustomTemplates] = useState<any[]>([]);
 
   // Network
   const [stats, setStats] = useState<NetworkStats | null>(null);
@@ -704,10 +705,10 @@ Puedo resolver dudas sobre:
   const loadMessageTemplates = async () => {
     try {
       const templates = await leadsService.getMessageTemplates();
-      setMessageTemplates(templates || []);
+      setCustomTemplates(templates || []);
     } catch (error) {
       console.error("Error loading templates:", error);
-      setMessageTemplates([]);
+      setCustomTemplates([]);
     }
   };
 
@@ -1166,12 +1167,12 @@ Puedo resolver dudas sobre:
                             📝 Biblioteca de Mensajes
                           </Label>
                           <div className="space-y-2">
-                            {messageTemplates.length === 0 ? (
+                            {customTemplates.length === 0 ? (
                               <p className="text-sm text-[#64748B] py-4 text-center">
                                 No hay plantillas guardadas
                               </p>
                             ) : (
-                              messageTemplates.map((template) => (
+                              customTemplates.map((template) => (
                                 <Card
                                   key={template.id}
                                   className="p-4 hover:bg-[#F8FAFC] cursor-pointer transition-colors border-[#E2E8F0]"
