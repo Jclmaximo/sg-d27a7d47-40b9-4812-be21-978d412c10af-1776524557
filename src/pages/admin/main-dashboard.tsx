@@ -115,6 +115,8 @@ export default function MainDashboard() {
   // Links
   const [copiedFunnel, setCopiedFunnel] = useState(false);
   const [copiedReferral, setCopiedReferral] = useState(false);
+  const [copiedLeads, setCopiedLeads] = useState(false);
+  const [showCreateTemplate, setShowCreateTemplate] = useState(false);
   
   // Wallet
   const [walletAddress, setWalletAddress] = useState("");
@@ -288,7 +290,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Of Oferta válida: Últimos días
+⏰ Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -1724,6 +1726,63 @@ Puedo resolver dudas sobre:
                       <Button
                         onClick={() => {
                           const message = `¡Descubre cómo viajar más por menos! 🌍✈️\n\n${funnelUrl}`;
+                          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+                        }}
+                        className="flex-1"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Compartir por WhatsApp
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Link de Embudo de Registro</CardTitle>
+                    <CardDescription>
+                      Link directo para registro de leads con tu código de referido
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex gap-2">
+                      <Input
+                        value={`${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`}
+                        readOnly
+                        className="flex-1 bg-[#F8FAFC] border-[#E2E8F0]"
+                      />
+                      <Button
+                        onClick={async () => {
+                          const leadsUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`;
+                          await navigator.clipboard.writeText(leadsUrl);
+                          setCopiedLeads(true);
+                          setTimeout(() => setCopiedLeads(false), 2000);
+                          toast({
+                            title: "¡Link copiado!",
+                            description: "Link de registro copiado al portapapeles",
+                          });
+                        }}
+                        variant="outline"
+                      >
+                        {copiedLeads ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => {
+                          const leadsUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`;
+                          window.open(leadsUrl, "_blank");
+                        }}
+                        className="flex-1"
+                        variant="outline"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Abrir en nueva pestaña
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          const leadsUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`;
+                          const message = `📋 Regístrate aquí para recibir acceso exclusivo:\n\n${leadsUrl}`;
                           window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
                         }}
                         className="flex-1"
