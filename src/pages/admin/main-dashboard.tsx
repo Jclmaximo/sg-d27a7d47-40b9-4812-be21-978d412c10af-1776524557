@@ -729,21 +729,13 @@ Puedo resolver dudas sobre:
               </h1>
             </div>
           </div>
-          <div className="flex gap-3">
-            <Button
-              onClick={() => router.push("/reto")}
-              variant="outline"
-              className="border-[#4285F4] text-[#4285F4] hover:bg-[#4285F4]/10 w-full sm:w-auto"
-            >
-              ← Command Center
-            </Button>
-            <Button
-              onClick={() => router.push("/admin/welcome")}
-              className="bg-[#4285F4] hover:bg-[#3367D6] text-white w-full sm:w-auto"
-            >
-              Ir a Mi Dashboard →
-            </Button>
-          </div>
+          <Button
+            onClick={() => router.push("/reto")}
+            variant="outline"
+            className="border-[#4285F4] text-[#4285F4] hover:bg-[#4285F4]/10 w-full sm:w-auto"
+          >
+            ← Command Center
+          </Button>
         </div>
 
         <main className="w-full px-6 py-8">
