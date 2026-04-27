@@ -57,6 +57,7 @@ export default function ZenCommandCenter() {
   useEffect(() => {
     loadData();
     restoreChallengeState();
+    loadShareCount();
   }, []);
 
   const restoreChallengeState = () => {
@@ -186,7 +187,7 @@ export default function ZenCommandCenter() {
     const saved = localStorage.getItem("reto_share_count");
     if (saved) {
       const count = parseInt(saved, 10);
-      setShareCount(count);
+      setCopyCount(count);
       if (count >= 5) {
         setResourcesUnlocked(true);
       }
@@ -262,6 +263,9 @@ export default function ZenCommandCenter() {
     setCopyCount(newCount);
     saveChallengeState({ copyCount: newCount });
     
+    // Save to localStorage for resources unlock
+    localStorage.setItem("reto_share_count", newCount.toString());
+    
     // Auto-complete protocol when reached 5 copies
     if (newCount === 5) {
       const updatedProtocols = protocols.map((p) =>
@@ -269,6 +273,14 @@ export default function ZenCommandCenter() {
       );
       setProtocols(updatedProtocols);
       saveChallengeState({ protocols: updatedProtocols });
+      
+      // Unlock resources
+      setResourcesUnlocked(true);
+      toast({
+        title: "🎉 Recursos Desbloqueados",
+        description: "Has copiado el link 5 veces. Bóveda de Recursos activada",
+        duration: 5000,
+      });
     }
   };
 
