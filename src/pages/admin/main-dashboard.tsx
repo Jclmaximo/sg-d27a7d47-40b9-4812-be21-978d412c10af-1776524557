@@ -35,6 +35,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { NetworkStats } from "@/services/referralService";
 import type { ProductivityStats, TeamMemberStats, DailyActivity } from "@/services/productivityService";
 import { useToast } from "@/hooks/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface Lead {
   id: string;
@@ -714,11 +715,19 @@ Puedo resolver dudas sobre:
       <div className="min-h-screen bg-[#F8FAFC]">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-semibold text-[#0F172A] mb-1">
-              Command Center
-            </h1>
-            <p className="text-sm text-[#64748B]">{profile?.full_name || profile?.username}</p>
+          <div className="flex items-center gap-4">
+            <Avatar className="h-12 w-12">
+              <AvatarImage src={profile?.avatar_url} />
+              <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+                {profile?.full_name?.charAt(0) || profile?.username?.charAt(0) || "U"}
+              </AvatarFallback>
+            </Avatar>
+            <div>
+              <p className="text-sm text-[#64748B] mb-1">Bienvenido</p>
+              <h1 className="text-xl font-semibold text-[#0F172A]">
+                {profile?.full_name || profile?.username}
+              </h1>
+            </div>
           </div>
           <Button
             onClick={() => router.push("/admin/welcome")}
