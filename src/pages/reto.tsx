@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
 import { productivityService } from "@/services/productivityService";
+import { challengeService, type ChallengeProtocol, type ChallengeTemplate, type UserChallengeProgress } from "@/services/challengeService";
 import { SEO } from "@/components/SEO";
 // Deploy trigger: fix funnelLink error and force vercel deployment
 import { 
@@ -41,13 +42,11 @@ export default function ZenCommandCenter() {
   const [copyCount, setCopyCount] = useState(0);
   const [navigationVisible, setNavigationVisible] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
-  const [protocols, setProtocols] = useState<DailyProtocol[]>([
-    { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
-    { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
-    { id: "3", label: "Hacer seguimiento a leads", completed: false, points: 10 },
-    { id: "4", label: "Compartir link en 2 plataformas", completed: false, points: 10 },
-    { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
-  ]);
+  const [protocols, setProtocols] = useState<DailyProtocol[]>([]);
+  
+  // NEW: Dynamic template & progress
+  const [activeTemplate, setActiveTemplate] = useState<ChallengeTemplate | null>(null);
+  const [userProgress, setUserProgress] = useState<UserChallengeProgress | null>(null);
 
   // NUEVOS ESTADOS - Sistema de Desbloqueo
   const [shareCount, setShareCount] = useState(0);
@@ -79,25 +78,13 @@ export default function ZenCommandCenter() {
         setChallengeActive(false);
         setTimeRemaining(86400); // Reset to 24 hours
         setCopyCount(0);
-        setProtocols([
-          { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
-          { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
-          { id: "3", label: "Hacer seguimiento a leads", completed: false, points: 10 },
-          { id: "4", label: "Compartir link en 2 plataformas", completed: false, points: 10 },
-          { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
-        ]);
+        setProtocols([]);
 
         // Save reset state to database
         await saveChallengeState({
           challengeActive: false,
           copyCount: 0,
-          protocols: [
-            { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
-            { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
-            { id: "3", label: "Hacer seguimiento a leads", completed: false, points: 10 },
-            { id: "4", label: "Compartir link en 2 plataformas", completed: false, points: 10 },
-            { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
-          ]
+          protocols: []
         });
 
         toast({
@@ -217,44 +204,41 @@ export default function ZenCommandCenter() {
 
       setProfile(profileData as UserProfile);
 
-      // Restore challenge state from database
-      if (profileData.challenge_active && profileData.challenge_start_time) {
+      // Load active template from database
+      const template = await challengeService.getActiveTemplate();
+      setActiveTemplate(template);
+
+      // Load user's active challenge progress
+      const progress = await challengeService.getUserActiveChallenge(session.user.id);
+      
+      if (progress) {
+        setUserProgress(progress);
         setChallengeActive(true);
         setNavigationVisible(true);
         
-        const startTime = new Date(profileData.challenge_start_time).getTime();
+        const startTime = new Date(progress.started_at).getTime();
         const now = new Date().getTime();
         const elapsedSeconds = Math.floor((now - startTime) / 1000);
-        const remaining = Math.max(0, 86400 - elapsedSeconds);
+        const remaining = Math.max(0, (template?.duration_hours || 24) * 3600 - elapsedSeconds);
         
         setTimeRemaining(remaining);
-
-        // Only restore copyCount if challenge is still active (< 24 hours)
-        if (remaining > 0 && profileData.challenge_copy_count) {
-          setCopyCount(profileData.challenge_copy_count);
-        } else {
-          // Reset copyCount if 24 hours have passed
-          setCopyCount(0);
+        setCopyCount(progress.copy_count);
+        
+        // Build protocols from template + user progress
+        if (template) {
+          const protocolsWithCompletion = template.protocols.map((p: ChallengeProtocol) => ({
+            ...p,
+            completed: progress.protocols_completed.includes(p.id)
+          }));
+          setProtocols(protocolsWithCompletion as DailyProtocol[]);
         }
-      } else {
-        // No active challenge - reset copyCount
-        setCopyCount(0);
-      }
-
-      // Restore protocols with validation
-      const defaultProtocols: DailyProtocol[] = [
-        { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
-        { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
-        { id: "3", label: "Hacer seguimiento a leads", completed: false, points: 10 },
-        { id: "4", label: "Compartir link en 2 plataformas", completed: false, points: 10 },
-        { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
-      ];
-      
-      if (profileData.challenge_protocols && Array.isArray(profileData.challenge_protocols) && profileData.challenge_protocols.length === 5) {
-        setProtocols(profileData.challenge_protocols as unknown as DailyProtocol[]);
-      } else {
-        // Use default protocols if DB data is missing or corrupted
-        setProtocols(defaultProtocols);
+      } else if (template) {
+        // No active progress, use template protocols as base
+        const defaultProtocols = template.protocols.map((p: ChallengeProtocol) => ({
+          ...p,
+          completed: false
+        }));
+        setProtocols(defaultProtocols as DailyProtocol[]);
       }
 
       // Load leads with error handling
@@ -274,11 +258,24 @@ export default function ZenCommandCenter() {
   };
 
   const toggleProtocol = async (id: number | string) => {
+    const protocol = protocols.find(p => Number(p.id) === Number(id));
+    if (!protocol) return;
+
     const updatedProtocols = protocols.map((p) =>
       Number(p.id) === Number(id) ? { ...p, completed: !p.completed } : p
     );
     setProtocols(updatedProtocols);
-    await saveChallengeState({ protocols: updatedProtocols });
+
+    // Update in database if user has active progress
+    if (userProgress) {
+      const completedIds = updatedProtocols
+        .filter(p => p.completed)
+        .map(p => p.id);
+
+      await challengeService.updateUserProgress(userProgress.id, {
+        protocols_completed: completedIds
+      });
+    }
   };
 
   const copyFunnelLink = async () => {

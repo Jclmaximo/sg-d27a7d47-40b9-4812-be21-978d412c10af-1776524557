@@ -42,6 +42,50 @@ export type Database = {
         }
         Relationships: []
       }
+      challenge_templates: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          duration_hours: number | null
+          id: string
+          is_active: boolean | null
+          name: string
+          protocols: Json
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          duration_hours?: number | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          protocols: Json
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          duration_hours?: number | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          protocols?: Json
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "challenge_templates_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       commissions: {
         Row: {
           amount_usd: number
@@ -463,6 +507,60 @@ export type Database = {
           wallet_address?: string | null
         }
         Relationships: []
+      }
+      user_challenge_progress: {
+        Row: {
+          copy_count: number | null
+          created_at: string | null
+          id: string
+          leads_captured: number | null
+          protocols_completed: Json
+          started_at: string
+          status: string | null
+          template_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          copy_count?: number | null
+          created_at?: string | null
+          id?: string
+          leads_captured?: number | null
+          protocols_completed?: Json
+          started_at: string
+          status?: string | null
+          template_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          copy_count?: number | null
+          created_at?: string | null
+          id?: string
+          leads_captured?: number | null
+          protocols_completed?: Json
+          started_at?: string
+          status?: string | null
+          template_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_challenge_progress_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "challenge_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_challenge_progress_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_productivity: {
         Row: {
