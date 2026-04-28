@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import {
   Plus, Trash2, Save, Users, Clock, Award,
-  Edit3, CheckCircle2, Circle, ArrowLeft
+  Edit3, CheckCircle2, Circle, ArrowLeft, Edit
 } from "lucide-react";
 
 export default function RetoConfig() {
@@ -180,29 +180,35 @@ export default function RetoConfig() {
                 <Button
                   variant="ghost"
                   onClick={() => router.push("/admin/main-dashboard")}
-                  className="text-gray-600 hover:text-[#1D1D1F]"
+                  className="flex items-center gap-2 text-gray-600 hover:text-gray-900"
                 >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Volver
+                  <ArrowLeft className="w-5 h-5" />
+                  <span className="hidden sm:inline">Volver</span>
                 </Button>
-                <div>
-                  <h1 className="text-2xl font-bold text-[#1D1D1F]">
-                    Configuración del Reto 24 Horas
-                  </h1>
-                  <p className="text-sm text-gray-500 mt-1">
-                    Gestiona protocolos y monitorea progreso en tiempo real
-                  </p>
-                </div>
               </div>
-              {!editMode && (
-                <Button
-                  onClick={() => setEditMode(true)}
-                  className="bg-primary hover:bg-primary/90 text-white"
-                >
-                  <Edit3 className="w-4 h-4 mr-2" />
-                  Editar Plantilla
-                </Button>
-              )}
+
+              {/* Title */}
+              <div className="flex-1 text-center sm:text-left">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                  Configuración del Reto 24 Horas
+                </h1>
+                <p className="text-sm text-gray-500">
+                  Gestiona protocolos y monitorea progreso en tiempo real
+                </p>
+              </div>
+
+              {/* Actions */}
+              <div className="flex items-center gap-2">
+                {!editMode && (
+                  <Button
+                    onClick={() => setEditMode(true)}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    <Edit className="w-4 h-4 sm:mr-2" />
+                    <span className="hidden sm:inline">Editar Plantilla</span>
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
