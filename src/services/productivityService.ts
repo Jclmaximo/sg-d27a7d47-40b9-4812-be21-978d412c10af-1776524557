@@ -25,6 +25,23 @@ export interface ProductivityStats {
     day: string;
     points: number;
   }[];
+  // Campos de Gamificación y Dashbaord
+  daily_score: number;
+  total_actions_today: number;
+  contacts_today: number;
+  follow_ups_today: number;
+  presentations_today: number;
+  posts_today: number;
+  decisions_today: number;
+  
+  // Resúmenes Temporales
+  active_days_week: number;
+  total_actions_week: number;
+  active_days_month: number;
+  
+  // Conversión
+  presentations_total: number;
+  decisions_total: number;
 }
 
 export interface TeamMemberStats {
@@ -125,12 +142,12 @@ export async function saveDailyActivity(
 }
 
 /**
- * Obtener estadísticas de productividad (últimos 7 días)
+ * Obtener estadísticas de productividad (últimos 30 días para datos mensuales)
  */
 export async function getProductivityStats(userId: string): Promise<ProductivityStats | null> {
-  const sevenDaysAgo = new Date();
-  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-  const startDate = sevenDaysAgo.toISOString().split("T")[0];
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const startDate = thirtyDaysAgo.toISOString().split("T")[0];
 
   const { data, error } = await supabase
     .from("user_productivity")
@@ -152,14 +169,36 @@ export async function getProductivityStats(userId: string): Promise<Productivity
       average_daily: 0,
       best_day: 0,
       current_streak: 0,
-      weekly_data: []
+      weekly_data: [],
+      daily_score: 0,
+      total_actions_today: 0,
+      contacts_today: 0,
+      follow_ups_today: 0,
+      presentations_today: 0,
+      posts_today: 0,
+      decisions_today: 0,
+      active_days_week: 0,
+      total_actions_week: 0,
+      active_days_month: 0,
+      presentations_total: 0,
+      decisions_total: 0
     };
   }
 
-  // Calcular estadísticas
-  const total_points = data.reduce((sum, day) => sum + (day.total_points || 0), 0);
-  const days_active = data.length;
-  const total_actions = data.reduce((sum, day) => {
+  const today = new Date().toISOString().split("T")[0];
+  
+  // Filtrar datos de la última semana
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const weekStartDate = sevenDaysAgo.toISOString().split("T")[0];
+  
+  const weekData = data.filter(d => d.date >= weekStartDate);
+  const todayData = data.find(d => d.date === today);
+
+  // Calcular estadísticas generales (última semana, compatible con código anterior)
+  const total_points = weekData.reduce((sum, day) => sum + (day.total_points || 0), 0);
+  const days_active = weekData.length;
+  const total_actions = weekData.reduce((sum, day) => {
     let actions = 0;
     if (day.contacted_prospects) actions++;
     if (day.did_followup) actions++;
@@ -169,12 +208,11 @@ export async function getProductivityStats(userId: string): Promise<Productivity
     return sum + actions;
   }, 0);
   const average_daily = days_active > 0 ? Math.round(total_actions / days_active) : 0;
-  const best_day = Math.max(...data.map(d => d.total_points || 0));
+  const best_day = Math.max(...weekData.map(d => d.total_points || 0));
 
   // Calcular racha actual
   const sortedDesc = [...data].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   let current_streak = 0;
-  const today = new Date().toISOString().split("T")[0];
   
   for (let i = 0; i < sortedDesc.length; i++) {
     const recordDate = sortedDesc[i].date;
@@ -199,12 +237,40 @@ export async function getProductivityStats(userId: string): Promise<Productivity
     const dateStr = date.toISOString().split("T")[0];
     const dayName = dayNames[date.getDay()];
     
-    const record = data.find(d => d.date === dateStr);
+    const record = weekData.find(d => d.date === dateStr);
     weekly_data.push({
       day: dayName,
       points: record?.total_points || 0
     });
   }
+
+  // CÁLCULOS DE GAMIFICACIÓN (NUEVO)
+
+  // Datos de hoy
+  const contacts_today = todayData?.contacted_prospects_count || (todayData?.contacted_prospects ? 1 : 0);
+  const follow_ups_today = todayData?.did_followup ? 1 : 0; // Podría cambiarse a un count real si existe en DB
+  const presentations_today = todayData?.presented_business ? 1 : 0;
+  const posts_today = todayData?.posted_content ? 1 : 0;
+  const decisions_today = 0; // TODO: Asignar a campo de DB
+  
+  const total_actions_today = contacts_today + follow_ups_today + presentations_today + posts_today + decisions_today;
+  
+  // Score de hoy (Fórmula simple basada en objetivos)
+  // Objetivos: 20 contactos, 10 seguimientos, 3 presentaciones, 3 publicaciones, 5 decisiones
+  const contactsScore = Math.min(contacts_today / 20, 1) * 30; // 30% peso
+  const followupsScore = Math.min(follow_ups_today / 10, 1) * 20; // 20% peso
+  const presentationsScore = Math.min(presentations_today / 3, 1) * 25; // 25% peso
+  const postsScore = Math.min(posts_today / 3, 1) * 10; // 10% peso
+  const decisionsScore = Math.min(decisions_today / 5, 1) * 15; // 15% peso
+  
+  const daily_score = Math.round(contactsScore + followupsScore + presentationsScore + postsScore + decisionsScore);
+
+  // Datos de conversión y mes
+  const active_days_month = data.length;
+  
+  const presentations_total = data.reduce((sum, day) => sum + (day.presented_business ? 1 : 0), 0);
+  // Decisiones totales (Mock, requiere campo en DB para ser exacto)
+  const decisions_total = Math.floor(presentations_total * 0.25); // ~25% conversión mockeada para prueba
 
   return {
     total_points,
@@ -213,7 +279,19 @@ export async function getProductivityStats(userId: string): Promise<Productivity
     average_daily,
     best_day,
     current_streak,
-    weekly_data
+    weekly_data,
+    daily_score,
+    total_actions_today,
+    contacts_today,
+    follow_ups_today,
+    presentations_today,
+    posts_today,
+    decisions_today,
+    active_days_week: weekData.length,
+    total_actions_week: total_actions,
+    active_days_month,
+    presentations_total,
+    decisions_total
   };
 }
 
