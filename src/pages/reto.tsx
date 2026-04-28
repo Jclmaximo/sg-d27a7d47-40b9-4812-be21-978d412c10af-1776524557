@@ -543,6 +543,104 @@ export default function ZenCommandCenter() {
         {/* Main content with top padding to account for fixed header */}
         <div className="pt-20">
           <div className={`max-w-7xl mx-auto px-6 py-12 ${focusMode ? "hidden" : ""}`}>
+            
+            {/* HERO SECTION - Show when challenge is NOT active */}
+            {!challengeActive && activeTemplate && (
+              <div className="max-w-3xl mx-auto text-center py-16">
+                <div className="mb-8">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+                    <Zap className="w-4 h-4 text-primary" />
+                    <span className="text-sm font-medium text-primary">Reto de Productividad</span>
+                  </div>
+                  <h1 className="text-4xl md:text-5xl font-bold text-[#1D1D1F] mb-4">
+                    {activeTemplate.name}
+                  </h1>
+                  <p className="text-lg text-gray-600 font-light max-w-2xl mx-auto">
+                    {activeTemplate.description}
+                  </p>
+                </div>
+
+                {/* Challenge info */}
+                <div className="grid md:grid-cols-3 gap-6 mb-12">
+                  <Card className="p-6 text-center border-gray-200">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <Circle className="w-6 h-6 text-primary" />
+                    </div>
+                    <h3 className="font-semibold text-[#1D1D1F] mb-2">Duración</h3>
+                    <p className="text-sm text-gray-600">7 días consecutivos</p>
+                  </Card>
+
+                  <Card className="p-6 text-center border-gray-200">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <CheckCircle2 className="w-6 h-6 text-primary" />
+                    </div>
+                    <h3 className="font-semibold text-[#1D1D1F] mb-2">Protocolos</h3>
+                    <p className="text-sm text-gray-600">{activeTemplate.protocols.length} acciones diarias</p>
+                  </Card>
+
+                  <Card className="p-6 text-center border-gray-200">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                      <TrendingUp className="w-6 h-6 text-primary" />
+                    </div>
+                    <h3 className="font-semibold text-[#1D1D1F] mb-2">Objetivo</h3>
+                    <p className="text-sm text-gray-600">Construir hábitos productivos</p>
+                  </Card>
+                </div>
+
+                {/* Start button */}
+                <Button
+                  onClick={async () => {
+                    if (!profile?.id || !activeTemplate) return;
+
+                    try {
+                      // Create new challenge in database
+                      const newChallenge = await challengeService.startChallenge(
+                        profile.id,
+                        activeTemplate.id
+                      );
+
+                      if (newChallenge) {
+                        setUserProgress(newChallenge);
+                        setChallengeActive(true);
+                        setNavigationVisible(true);
+                        setCurrentDay(1);
+
+                        // Initialize protocols from template
+                        const initialProtocols = activeTemplate.protocols.map((p: ChallengeProtocol) => ({
+                          ...p,
+                          completed: false
+                        }));
+                        setProtocols(initialProtocols as DailyProtocol[]);
+
+                        toast({
+                          title: "✅ Reto iniciado",
+                          description: "Comienza tu día. Los protocolos se reinician a las 00:00",
+                          duration: 5000,
+                        });
+                      } else {
+                        throw new Error("No se pudo crear el reto");
+                      }
+                    } catch (error) {
+                      console.error("Error starting challenge:", error);
+                      toast({
+                        title: "❌ Error",
+                        description: "No se pudo iniciar el reto. Intenta de nuevo.",
+                        variant: "destructive",
+                      });
+                    }
+                  }}
+                  className="bg-primary hover:bg-primary/90 text-white px-12 py-6 text-lg rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
+                >
+                  <Play className="w-6 h-6 mr-3" />
+                  Iniciar Reto Ahora
+                </Button>
+
+                <p className="text-sm text-gray-500 mt-6">
+                  El reto comienza hoy y se reinicia cada día a las 00:00
+                </p>
+              </div>
+            )}
+
             {/* A. PRUEBA SOCIAL - Contador de progreso de streak */}
             <div className="grid gap-6">
               {/* B. ESCASEZ - Cuenta regresiva del día */}
