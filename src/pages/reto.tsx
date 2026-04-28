@@ -546,50 +546,52 @@ export default function ZenCommandCenter() {
             {/* A. PRUEBA SOCIAL - Contador de progreso de streak */}
             <div className="grid gap-6">
               {/* B. ESCASEZ - Cuenta regresiva del día */}
-              <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
-                  Tiempo Restante del Día
-                </p>
-                
-                <div className="flex justify-center gap-4 mb-6">
-                  {/* Hours */}
-                  <div className="text-center">
-                    <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
-                      <span className="text-3xl font-light text-gray-800">
-                        {String(timeLeft.hours).padStart(2, "0")}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-400 font-light">Horas</p>
-                  </div>
-
-                  {/* Minutes */}
-                  <div className="text-center">
-                    <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
-                      <span className="text-3xl font-light text-gray-800">
-                        {String(timeLeft.minutes).padStart(2, "0")}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-400 font-light">Minutos</p>
-                  </div>
-
-                  {/* Seconds */}
-                  <div className="text-center">
-                    <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
-                      <span className="text-3xl font-light text-gray-800">
-                        {String(timeLeft.seconds).padStart(2, "0")}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-400 font-light">Segundos</p>
-                  </div>
-                </div>
-
-                {/* Day counter indicator */}
-                <div className="text-center">
-                  <p className="text-sm text-gray-500 font-light">
-                    Día <span className="font-medium text-primary">{currentDay}</span> de {totalDays}
+              {challengeActive && (
+                <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+                  <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
+                    Tiempo Restante del Día
                   </p>
+                  
+                  <div className="flex justify-center gap-4 mb-6">
+                    {/* Hours */}
+                    <div className="text-center">
+                      <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
+                        <span className="text-3xl font-light text-gray-800">
+                          {String(timeLeft.hours).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400 font-light">Horas</p>
+                    </div>
+
+                    {/* Minutes */}
+                    <div className="text-center">
+                      <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
+                        <span className="text-3xl font-light text-gray-800">
+                          {String(timeLeft.minutes).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400 font-light">Minutos</p>
+                    </div>
+
+                    {/* Seconds */}
+                    <div className="text-center">
+                      <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
+                        <span className="text-3xl font-light text-gray-800">
+                          {String(timeLeft.seconds).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400 font-light">Segundos</p>
+                    </div>
+                  </div>
+
+                  {/* Day counter indicator */}
+                  <div className="text-center">
+                    <p className="text-sm text-gray-500 font-light">
+                      Día <span className="font-medium text-primary">{currentDay}</span> de {totalDays}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* B. SCORE DE HOY - Progreso prominente */}
