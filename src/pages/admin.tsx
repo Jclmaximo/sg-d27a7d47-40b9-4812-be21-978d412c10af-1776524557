@@ -4,7 +4,7 @@ import { authService } from "@/services/authService";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
-import { Mail, Lock, ArrowRight, Eye, EyeOff } from "lucide-react";
+import { Mail, Lock, ArrowRight, Eye, EyeOff, Zap } from "lucide-react";
 import Link from "next/link";
 import { SEO } from "@/components/SEO";
 
@@ -46,22 +46,10 @@ export default function AdminLogin() {
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50 flex items-center justify-center p-4">
         <Card className="w-full max-w-md p-8 shadow-lg border-0">
-          {/* Avatar */}
+          {/* Ícono de Rayo */}
           <div className="flex justify-center mb-6">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md">
-              <svg
-                className="w-10 h-10 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
+            <div className="w-20 h-20 rounded-xl bg-[#3A7BFF] flex items-center justify-center shadow-md">
+              <Zap className="w-10 h-10 text-white fill-white" />
             </div>
           </div>
 
