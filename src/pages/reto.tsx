@@ -10,7 +10,7 @@ import { SEO } from "@/components/SEO";
 import { 
   Play, Pause, Copy, Check, Share2, Focus, 
   Circle, CheckCircle2, Maximize2, Minimize2,
-  Zap, Users, BookOpen, Lock, Instagram, TrendingUp, LogOut
+  Zap, Users, BookOpen, Lock, Instagram, TrendingUp, LogOut, Clock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -645,48 +645,64 @@ export default function ZenCommandCenter() {
             <div className="grid gap-6">
               {/* B. ESCASEZ - Cuenta regresiva del día */}
               {challengeActive && (
-                <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-                  <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
-                    Tiempo Restante del Día
-                  </p>
+                <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 rounded-3xl p-8 shadow-lg border border-primary/20">
+                  <div className="flex items-center justify-center gap-2 mb-6">
+                    <Clock className="w-5 h-5 text-primary animate-pulse" />
+                    <p className="text-sm font-semibold text-primary uppercase tracking-wider">
+                      Tiempo Restante del Día
+                    </p>
+                  </div>
                   
-                  <div className="flex justify-center gap-4 mb-6">
+                  <div className="flex justify-center gap-3 mb-6">
                     {/* Hours */}
                     <div className="text-center">
-                      <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
-                        <span className="text-3xl font-light text-gray-800">
+                      <div className="bg-white rounded-2xl w-24 h-24 flex items-center justify-center mb-3 shadow-md border-2 border-primary/20 hover:border-primary/40 transition-all">
+                        <span className="text-4xl font-bold text-[#1D1D1F] tabular-nums">
                           {String(timeLeft.hours).padStart(2, "0")}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-400 font-light">Horas</p>
+                      <p className="text-xs text-[#64748B] font-medium uppercase tracking-wide">Horas</p>
+                    </div>
+
+                    {/* Separator */}
+                    <div className="flex items-center pb-8">
+                      <span className="text-3xl font-light text-primary">:</span>
                     </div>
 
                     {/* Minutes */}
                     <div className="text-center">
-                      <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
-                        <span className="text-3xl font-light text-gray-800">
+                      <div className="bg-white rounded-2xl w-24 h-24 flex items-center justify-center mb-3 shadow-md border-2 border-primary/20 hover:border-primary/40 transition-all">
+                        <span className="text-4xl font-bold text-[#1D1D1F] tabular-nums">
                           {String(timeLeft.minutes).padStart(2, "0")}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-400 font-light">Minutos</p>
+                      <p className="text-xs text-[#64748B] font-medium uppercase tracking-wide">Minutos</p>
+                    </div>
+
+                    {/* Separator */}
+                    <div className="flex items-center pb-8">
+                      <span className="text-3xl font-light text-primary">:</span>
                     </div>
 
                     {/* Seconds */}
                     <div className="text-center">
-                      <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
-                        <span className="text-3xl font-light text-gray-800">
+                      <div className="bg-white rounded-2xl w-24 h-24 flex items-center justify-center mb-3 shadow-md border-2 border-secondary/30 hover:border-secondary/50 transition-all">
+                        <span className="text-4xl font-bold text-[#1D1D1F] tabular-nums">
                           {String(timeLeft.seconds).padStart(2, "0")}
                         </span>
                       </div>
-                      <p className="text-xs text-gray-400 font-light">Segundos</p>
+                      <p className="text-xs text-[#64748B] font-medium uppercase tracking-wide">Segundos</p>
                     </div>
                   </div>
 
-                  {/* Day counter indicator */}
+                  {/* Day counter indicator with progress bar */}
                   <div className="text-center">
-                    <p className="text-sm text-gray-500 font-light">
-                      Día <span className="font-medium text-primary">{currentDay}</span> de {totalDays}
-                    </p>
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-primary/20">
+                      <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+                      <p className="text-sm text-[#475569] font-medium">
+                        Día <span className="font-bold text-primary">{currentDay}</span> de {totalDays}
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
