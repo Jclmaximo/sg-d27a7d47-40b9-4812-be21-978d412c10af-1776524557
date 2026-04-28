@@ -71,6 +71,46 @@ export default function ZenCommandCenter() {
     }
   }, [challengeActive, timeRemaining]);
 
+  // Auto-reset challenge when countdown reaches 0
+  useEffect(() => {
+    if (challengeActive && timeRemaining === 0) {
+      const resetChallenge = async () => {
+        // Reset all states
+        setChallengeActive(false);
+        setTimeRemaining(86400); // Reset to 24 hours
+        setCopyCount(0);
+        setProtocols([
+          { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
+          { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
+          { id: "3", label: "Hacer seguimiento a leads", completed: false, points: 10 },
+          { id: "4", label: "Compartir link en 2 plataformas", completed: false, points: 10 },
+          { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
+        ]);
+
+        // Save reset state to database
+        await saveChallengeState({
+          challengeActive: false,
+          copyCount: 0,
+          protocols: [
+            { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
+            { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
+            { id: "3", label: "Hacer seguimiento a leads", completed: false, points: 10 },
+            { id: "4", label: "Compartir link en 2 plataformas", completed: false, points: 10 },
+            { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
+          ]
+        });
+
+        toast({
+          title: "🎉 Reto Completado",
+          description: "24 horas cumplidas. ¡Puedes iniciar un nuevo reto!",
+          duration: 5000,
+        });
+      };
+
+      resetChallenge();
+    }
+  }, [challengeActive, timeRemaining, toast]);
+
   // Show navigation dock when challenge starts
   useEffect(() => {
     if (challengeActive) {
@@ -379,38 +419,24 @@ export default function ZenCommandCenter() {
               <div className="text-7xl font-extralight text-[#1D1D1F] tracking-tighter mb-6">
                 {formatTime(timeRemaining)}
               </div>
-              <Button
-                onClick={async () => {
-                  const newState = !challengeActive;
-                  setChallengeActive(newState);
-                  
-                  if (newState) {
+              {!challengeActive && (
+                <Button
+                  onClick={async () => {
+                    setChallengeActive(true);
+                    setTimeRemaining(86400); // Reset to 24 hours
+                    
                     // Starting challenge - save start time to database
                     await saveChallengeState({
                       challengeActive: true,
                       startTime: new Date().toISOString()
                     });
-                  } else {
-                    // Pausing challenge - mark as paused in database
-                    await saveChallengeState({
-                      challengeActive: false
-                    });
-                  }
-                }}
-                className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-8 py-3 rounded-xl font-light"
-              >
-                {!challengeActive ? (
-                  <>
-                    <Play className="w-5 h-5 mr-2" />
-                    Iniciar Reto
-                  </>
-                ) : (
-                  <>
-                    <Pause className="w-5 h-5 mr-2" />
-                    Pausar
-                  </>
-                )}
-              </Button>
+                  }}
+                  className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-8 py-3 rounded-xl font-light"
+                >
+                  <Play className="w-5 h-5 mr-2" />
+                  Iniciar Reto
+                </Button>
+              )}
             </div>
           </div>
 
