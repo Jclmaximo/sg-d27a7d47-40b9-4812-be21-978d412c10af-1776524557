@@ -770,6 +770,16 @@ Puedo resolver dudas sobre:
                   <Zap className="w-4 h-4" />
                   <span className="hidden sm:inline">Command Center</span>
                 </Button>
+                {profile?.role === "admin" && (
+                  <Button
+                    variant="outline"
+                    onClick={() => router.push("/admin/reto-config")}
+                    className="border-[#E2E8F0] hover:bg-[#F1F5F9] flex items-center gap-2"
+                  >
+                    <Target className="w-4 h-4" />
+                    <span className="hidden sm:inline">Config Reto</span>
+                  </Button>
+                )}
                 <Button
                   variant="ghost"
                   onClick={async () => {
