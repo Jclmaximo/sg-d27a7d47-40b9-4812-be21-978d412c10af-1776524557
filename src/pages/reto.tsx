@@ -518,25 +518,30 @@ export default function ZenCommandCenter() {
         {/* Fixed header with navigation */}
         {navigationVisible && (
           <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 shadow-sm">
-            <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-              {/* Left: Title */}
-              <h1 className="text-xl font-bold text-[#1D1D1F]">Reto 24 Horas</h1>
-
-              {/* Center: User profile */}
-              <div className="flex items-center gap-3">
-                <Avatar className="w-8 h-8 md:w-10 md:h-10 border-2 border-primary/20">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4">
+              {/* Left: User profile (prominent) */}
+              <div className="flex items-center gap-3 flex-1 min-w-0">
+                <Avatar className="w-10 h-10 md:w-12 md:h-12 border-2 border-primary/30 shadow-sm flex-shrink-0">
                   <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.full_name || "Usuario"} />
-                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
+                  <AvatarFallback className="bg-primary/10 text-primary font-bold text-base md:text-lg">
                     {profile?.full_name?.charAt(0).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
-                <div>
-                  <p className="text-sm font-semibold text-[#1D1D1F]">
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm md:text-base font-bold text-[#1D1D1F] truncate">
                     {profile?.full_name || "Usuario"}
                   </p>
-                  <p className="text-xs text-gray-500 hidden md:block">
+                  <p className="text-xs text-gray-500 truncate">
                     @{profile?.username || "usuario"}
                   </p>
+                </div>
+              </div>
+
+              {/* Center: Badge title */}
+              <div className="flex-shrink-0">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-primary/10 rounded-full border border-primary/20">
+                  <Zap className="w-3.5 h-3.5 text-primary" />
+                  <span className="text-xs font-semibold text-primary whitespace-nowrap">Reto 24h</span>
                 </div>
               </div>
 
@@ -544,10 +549,9 @@ export default function ZenCommandCenter() {
               <Button
                 variant="ghost"
                 onClick={() => router.push("/admin/main-dashboard")}
-                className="text-gray-600 hover:text-[#1D1D1F]"
+                className="text-gray-600 hover:text-[#1D1D1F] flex-shrink-0 px-2 md:px-3"
               >
-                <ArrowLeft className="w-5 h-5 mr-2" />
-                <span className="hidden md:inline">Salir</span>
+                <ArrowLeft className="w-5 h-5" />
               </Button>
             </div>
           </div>
@@ -877,7 +881,7 @@ export default function ZenCommandCenter() {
                     {userProgress && (
                       <div className="text-right">
                         <p className="text-xs font-semibold text-primary">
-                          {userProgress.link_shares || 0}/5
+                          {copyCount || 0}/5
                         </p>
                         <p className="text-[10px] text-gray-400">copias</p>
                       </div>
@@ -886,53 +890,13 @@ export default function ZenCommandCenter() {
                   
                   <button
                     onClick={async () => {
-                      const referralLink = `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`;
-                      
                       try {
-                        await navigator.clipboard.writeText(referralLink);
-                        
-                        // Increment link shares counter
-                        if (userProgress && profile?.id) {
-                          const newCount = (userProgress.link_shares || 0) + 1;
-                          
-                          // Update in database
-                          const { data, error } = await supabase
-                            .from("user_progress")
-                            .update({ link_shares: newCount })
-                            .eq("user_id", profile.id)
-                            .select()
-                            .single();
-
-                          if (!error && data) {
-                            setUserProgress(data);
-                            
-                            // Check if resources should be unlocked
-                            if (newCount >= 5 && !data.resources_unlocked) {
-                              await supabase
-                                .from("user_progress")
-                                .update({ resources_unlocked: true })
-                                .eq("user_id", profile.id);
-                              
-                              toast({
-                                title: "🎉 ¡Recursos desbloqueados!",
-                                description: "Has compartido el link 5 veces. Ahora tienes acceso a los recursos.",
-                                duration: 5000,
-                              });
-                            } else {
-                              toast({
-                                title: "✅ Link copiado",
-                                description: `Copiado ${newCount}/5 veces. ${5 - newCount} más para desbloquear recursos.`,
-                                duration: 3000,
-                              });
-                            }
-                          }
-                        } else {
-                          toast({
-                            title: "✅ Link copiado",
-                            description: "El link de referido se copió al portapapeles",
-                            duration: 3000,
-                          });
-                        }
+                        await copyFunnelLink();
+                        toast({
+                          title: "✅ Link copiado",
+                          description: `Link de referido copiado al portapapeles (${copyCount + 1}/5)`,
+                          duration: 3000,
+                        });
                       } catch (error) {
                         toast({
                           title: "❌ Error",
