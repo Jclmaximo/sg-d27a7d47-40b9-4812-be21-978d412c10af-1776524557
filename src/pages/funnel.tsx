@@ -9,7 +9,14 @@ import { FunnelForm } from "@/components/FunnelForm";
 import { FunnelFooter } from "@/components/FunnelFooter";
 
 export default function FunnelPage() {
-  const [selectedSegment, setSelectedSegment] = useState<string | null>(null);
+  const [selectedSegment, setSelectedSegment] = useState<"save" | "earn" | "both" | null>(null);
+
+  const handleCTAClick = () => {
+    const formSection = document.getElementById("form-section");
+    if (formSection) {
+      formSection.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <>
@@ -20,12 +27,14 @@ export default function FunnelPage() {
       />
 
       <main className="min-h-screen bg-gradient-to-b from-white via-blue-50/30 to-white">
-        <FunnelHero />
+        <FunnelHero onCTAClick={handleCTAClick} />
         <ValueProposition />
-        <FunnelSegmentation onSegmentSelect={setSelectedSegment} />
+        <FunnelSegmentation onSelect={setSelectedSegment} />
         <SocialProof />
         <FunnelTestimonials />
-        <FunnelForm selectedSegment={selectedSegment} />
+        <div id="form-section">
+          <FunnelForm />
+        </div>
         <FunnelFooter />
       </main>
     </>
