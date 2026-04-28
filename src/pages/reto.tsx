@@ -235,9 +235,20 @@ export default function ZenCommandCenter() {
         setCopyCount(profileData.challenge_copy_count);
       }
 
-      // Restore protocols
-      if (profileData.challenge_protocols && Array.isArray(profileData.challenge_protocols)) {
+      // Restore protocols with validation
+      const defaultProtocols: DailyProtocol[] = [
+        { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
+        { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
+        { id: "3", label: "Hacer seguimiento a leads", completed: false, points: 10 },
+        { id: "4", label: "Compartir link en 2 plataformas", completed: false, points: 10 },
+        { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
+      ];
+      
+      if (profileData.challenge_protocols && Array.isArray(profileData.challenge_protocols) && profileData.challenge_protocols.length === 5) {
         setProtocols(profileData.challenge_protocols as unknown as DailyProtocol[]);
+      } else {
+        // Use default protocols if DB data is missing or corrupted
+        setProtocols(defaultProtocols);
       }
 
       // Load leads with error handling
