@@ -10,7 +10,7 @@ import { SEO } from "@/components/SEO";
 import { 
   Play, Pause, Copy, Check, Share2, Focus, 
   Circle, CheckCircle2, Maximize2, Minimize2,
-  Zap, Users, BookOpen, Lock, Instagram, TrendingUp, LogOut, Clock
+  Zap, Users, BookOpen, Lock, Instagram, TrendingUp, LogOut, Clock, ExternalLink, Trophy, Target, BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -794,7 +794,7 @@ export default function ZenCommandCenter() {
 
             {/* C. PROTOCOLOS - Daily action checklist */}
             {challengeActive && (
-              <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 rounded-3xl p-6 md:p-8 shadow-lg border border-primary/20">
+              <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 rounded-3xl p-6 md:p-8 shadow-lg border border-primary/20 mb-24">
                 <div className="flex items-center gap-2 mb-6">
                   <CheckCircle2 className="w-5 h-5 text-primary" />
                   <h2 className="text-lg font-semibold text-primary uppercase tracking-wider">
@@ -802,7 +802,7 @@ export default function ZenCommandCenter() {
                   </h2>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-3 mb-8">
                   {protocols.map((protocol) => (
                     <div
                       key={protocol.id}
@@ -849,6 +849,35 @@ export default function ZenCommandCenter() {
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Referral link section */}
+                <div className="bg-white rounded-2xl p-6 border-2 border-primary/20">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <Share2 className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-[#1D1D1F]">Comparte tu link</h3>
+                      <p className="text-xs text-gray-500">Invita a otros a unirse</p>
+                    </div>
+                  </div>
+                  
+                  <a
+                    href={`https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full bg-primary hover:bg-primary/90 text-white text-center py-3 rounded-xl font-medium transition-all shadow-sm hover:shadow-md"
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      <ExternalLink className="w-4 h-4" />
+                      <span>Abrir embudo de registro</span>
+                    </div>
+                  </a>
+                  
+                  <p className="text-xs text-gray-500 text-center mt-3">
+                    Tu referido: {profile?.username || "cargando..."}
+                  </p>
                 </div>
               </div>
             )}
