@@ -44,7 +44,7 @@ export default function ZenCommandCenter() {
   const [copyCount, setCopyCount] = useState(0);
   const [navigationVisible, setNavigationVisible] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
-  const [protocols, setProtocols] = useState<ChallengeProtocol[]>([]);
+  const [protocols, setProtocols] = useState<DailyProtocol[]>([]);
   
   // NEW: Dynamic template & progress
   const [activeTemplate, setActiveTemplate] = useState<ChallengeTemplate | null>(null);
