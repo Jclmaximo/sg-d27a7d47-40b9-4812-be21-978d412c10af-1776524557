@@ -13,7 +13,7 @@ import {
   Edit3, CheckCircle2, Circle, ArrowLeft
 } from "lucide-react";
 
-export default function RetoCo nfig() {
+export default function RetoConfig() {
   const router = useRouter();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
