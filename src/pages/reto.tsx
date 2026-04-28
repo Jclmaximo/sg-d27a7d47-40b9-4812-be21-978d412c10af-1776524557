@@ -870,34 +870,82 @@ export default function ZenCommandCenter() {
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                       <Share2 className="w-5 h-5 text-primary" />
                     </div>
-                    <div>
+                    <div className="flex-1">
                       <h3 className="text-sm font-semibold text-[#1D1D1F]">Comparte tu link</h3>
                       <p className="text-xs text-gray-500">Invita a otros a unirse</p>
                     </div>
+                    {userProgress && (
+                      <div className="text-right">
+                        <p className="text-xs font-semibold text-primary">
+                          {userProgress.link_shares || 0}/5
+                        </p>
+                        <p className="text-[10px] text-gray-400">copias</p>
+                      </div>
+                    )}
                   </div>
                   
                   <button
-                    onClick={() => {
+                    onClick={async () => {
                       const referralLink = `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`;
-                      navigator.clipboard.writeText(referralLink).then(() => {
-                        toast({
-                          title: "✅ Link copiado",
-                          description: "El link de referido se copió al portapapeles",
-                          duration: 3000,
-                        });
-                      }).catch(() => {
+                      
+                      try {
+                        await navigator.clipboard.writeText(referralLink);
+                        
+                        // Increment link shares counter
+                        if (userProgress && profile?.id) {
+                          const newCount = (userProgress.link_shares || 0) + 1;
+                          
+                          // Update in database
+                          const { data, error } = await supabase
+                            .from("user_progress")
+                            .update({ link_shares: newCount })
+                            .eq("user_id", profile.id)
+                            .select()
+                            .single();
+
+                          if (!error && data) {
+                            setUserProgress(data);
+                            
+                            // Check if resources should be unlocked
+                            if (newCount >= 5 && !data.resources_unlocked) {
+                              await supabase
+                                .from("user_progress")
+                                .update({ resources_unlocked: true })
+                                .eq("user_id", profile.id);
+                              
+                              toast({
+                                title: "🎉 ¡Recursos desbloqueados!",
+                                description: "Has compartido el link 5 veces. Ahora tienes acceso a los recursos.",
+                                duration: 5000,
+                              });
+                            } else {
+                              toast({
+                                title: "✅ Link copiado",
+                                description: `Copiado ${newCount}/5 veces. ${5 - newCount} más para desbloquear recursos.`,
+                                duration: 3000,
+                              });
+                            }
+                          }
+                        } else {
+                          toast({
+                            title: "✅ Link copiado",
+                            description: "El link de referido se copió al portapapeles",
+                            duration: 3000,
+                          });
+                        }
+                      } catch (error) {
                         toast({
                           title: "❌ Error",
                           description: "No se pudo copiar el link",
                           variant: "destructive",
                         });
-                      });
+                      }
                     }}
                     className="block w-full bg-primary hover:bg-primary/90 text-white text-center py-3 rounded-xl font-medium transition-all shadow-sm hover:shadow-md"
                   >
                     <div className="flex items-center justify-center gap-2">
                       <Copy className="w-4 h-4" />
-                      <span>Copiar link de registro</span>
+                      <span>Copiar Funnel MWR</span>
                     </div>
                   </button>
                   
