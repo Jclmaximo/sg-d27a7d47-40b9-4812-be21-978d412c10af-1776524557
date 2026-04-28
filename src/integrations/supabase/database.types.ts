@@ -389,6 +389,7 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          mwr_custom_link: string | null
           mwr_link: string | null
           referred_by: string | null
           role: string | null
@@ -408,6 +409,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          mwr_custom_link?: string | null
           mwr_link?: string | null
           referred_by?: string | null
           role?: string | null
@@ -427,6 +429,7 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          mwr_custom_link?: string | null
           mwr_link?: string | null
           referred_by?: string | null
           role?: string | null

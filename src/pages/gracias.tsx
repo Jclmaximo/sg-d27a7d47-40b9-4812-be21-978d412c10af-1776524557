@@ -1,11 +1,38 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { SEO } from "@/components/SEO";
-import { CheckCircle2, ArrowRight, MessageCircle, Check } from "lucide-react";
+import { CheckCircle2, ArrowRight, MessageCircle, Check, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Gracias() {
   const router = useRouter();
   const referralCode = typeof router.query.ref === "string" ? router.query.ref : null;
+  const [mwrLink, setMwrLink] = useState("");
+
+  useEffect(() => {
+    const fetchMwrLink = async () => {
+      if (!referralCode || typeof referralCode !== "string") {
+        setMwrLink(`https://mwr.hubia.vip/leads-registro`);
+        return;
+      }
+
+      const { data } = await supabase
+        .from("profiles")
+        .select("mwr_custom_link, username")
+        .eq("username", referralCode)
+        .single();
+
+      if (data?.mwr_custom_link) {
+        setMwrLink(data.mwr_custom_link);
+      } else {
+        setMwrLink(`https://mwr.hubia.vip/leads-registro?ref=${referralCode}`);
+      }
+    };
+
+    fetchMwrLink();
+  }, [referralCode]);
 
   useEffect(() => {
     // Auto-redirect to VSL after 5 seconds if user doesn't click
@@ -93,22 +120,23 @@ export default function Gracias() {
 
             {/* CTAs */}
             <div className="space-y-3">
-              <button
-                onClick={handleCTA}
-                className="w-full h-16 bg-[#4FD1C5] hover:bg-[#3FBFB3] active:bg-[#2FA89D] text-[#1A1F3A] font-bold text-base rounded-2xl shadow-lg active:shadow-md transition-transform duration-150 ease-in-out active:scale-[0.97] flex items-center justify-center gap-2"
+              <Button
+                size="lg"
+                className="w-full bg-gradient-to-r from-primary to-blue-600 hover:from-primary/90 hover:to-blue-600/90 text-white font-semibold py-6"
+                onClick={() => window.open(mwrLink, "_blank")}
               >
-                <span>ACTIVAR MI ACCESO AHORA</span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
+                <Zap className="mr-2 h-5 w-5" />
+                Quiero mi acceso
+              </Button>
 
-              {/* Secondary CTA */}
-              <button
-                onClick={handleWhatsApp}
-                className="w-full h-14 bg-white/5 hover:bg-white/10 active:bg-white/15 border border-white/20 text-white font-medium text-base rounded-2xl shadow-sm active:shadow-none transition-transform duration-150 ease-in-out active:scale-[0.97] flex items-center justify-center gap-2"
+              <Button
+                size="lg"
+                variant="outline"
+                className="w-full border-2 border-primary text-primary hover:bg-primary/5 font-semibold py-6"
+                onClick={() => window.open(mwrLink, "_blank")}
               >
-                <MessageCircle className="w-5 h-5" />
-                Hablar por WhatsApp
-              </button>
+                Activar mi membresía
+              </Button>
             </div>
 
           </div>
