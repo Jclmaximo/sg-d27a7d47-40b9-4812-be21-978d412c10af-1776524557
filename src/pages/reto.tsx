@@ -386,7 +386,7 @@ export default function ZenCommandCenter() {
     if (percentage <= 65) return { stroke: "#FBBF24", text: "#F59E0B", glow: false }; // Amarillo bajo
     if (percentage <= 79) return { stroke: "#FACC15", text: "#EAB308", glow: false }; // Amarillo alto
     if (percentage <= 90) return { stroke: "#10B981", text: "#059669", glow: false }; // Verde
-    return { stroke: "#047857", text: "#047857", glow: true }; // Verde intenso + glow
+    return { stroke: "#047857", text: "#047857", glow: false }; // Verde intenso (sin glow)
   };
 
   const progressColor = getProgressColor(completionPercentage);
