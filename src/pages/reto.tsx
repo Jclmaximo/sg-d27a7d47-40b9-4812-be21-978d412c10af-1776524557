@@ -70,6 +70,40 @@ export default function ZenCommandCenter() {
     }
   }, [challengeActive, timeRemaining]);
 
+  // REALTIME: Subscribe to template changes from admin
+  useEffect(() => {
+    if (!activeTemplate) return;
+
+    const channel = challengeService.subscribeToTemplateChanges((updatedTemplate) => {
+      setActiveTemplate(updatedTemplate);
+      
+      // Rebuild protocols with updated template
+      if (userProgress) {
+        const updatedProtocols = updatedTemplate.protocols.map((p: ChallengeProtocol) => ({
+          ...p,
+          completed: userProgress.protocols_completed.includes(p.id)
+        }));
+        setProtocols(updatedProtocols as DailyProtocol[]);
+      } else {
+        const newProtocols = updatedTemplate.protocols.map((p: ChallengeProtocol) => ({
+          ...p,
+          completed: false
+        }));
+        setProtocols(newProtocols as DailyProtocol[]);
+      }
+
+      toast({
+        title: "🔄 Reto actualizado",
+        description: "El administrador ha modificado las tareas del reto",
+        duration: 4000,
+      });
+    });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [activeTemplate, userProgress, toast]);
+
   // Auto-reset challenge when countdown reaches 0
   useEffect(() => {
     if (challengeActive && timeRemaining === 0) {
@@ -442,14 +476,43 @@ export default function ZenCommandCenter() {
                 {!challengeActive && (
                   <Button
                     onClick={async () => {
-                      setChallengeActive(true);
-                      setTimeRemaining(86400); // Reset to 24 hours
-                    
-                      // Starting challenge - save start time to database
-                      await saveChallengeState({
-                        challengeActive: true,
-                        startTime: new Date().toISOString()
-                      });
+                      if (!profile?.id || !activeTemplate) {
+                        toast({
+                          title: "❌ Error",
+                          description: "No se pudo iniciar el reto",
+                          variant: "destructive",
+                        });
+                        return;
+                      }
+
+                      // Create user challenge progress in database
+                      const result = await challengeService.startUserChallenge(profile.id);
+                      
+                      if (result.success && result.data) {
+                        setUserProgress(result.data);
+                        setChallengeActive(true);
+                        setTimeRemaining(activeTemplate.duration_hours * 3600);
+                        setCopyCount(0);
+                        
+                        // Initialize protocols from template
+                        const initialProtocols = activeTemplate.protocols.map((p: ChallengeProtocol) => ({
+                          ...p,
+                          completed: false
+                        }));
+                        setProtocols(initialProtocols as DailyProtocol[]);
+
+                        toast({
+                          title: "✅ Reto iniciado",
+                          description: "Tienes 24 horas para completar los protocolos",
+                          duration: 5000,
+                        });
+                      } else {
+                        toast({
+                          title: "❌ Error",
+                          description: result.error || "No se pudo iniciar el reto",
+                          variant: "destructive",
+                        });
+                      }
                     }}
                     className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-8 py-3 rounded-xl font-light"
                   >
