@@ -523,50 +523,6 @@ export default function ZenCommandCenter() {
               </div>
             </div>
 
-            {/* B. MOTOR DE CRECIMIENTO - Link de referido */}
-            {challengeActive && (
-              <div className="mb-16">
-                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
-                  Tu Embudo Personal
-                </p>
-                
-                {/* Link container - responsive layout */}
-                <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-6">
-                  <input
-                    type="text"
-                    value={funnelLink}
-                    readOnly
-                    className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 font-light"
-                  />
-                  <Button
-                    onClick={copyFunnelLink}
-                    className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-light whitespace-nowrap"
-                  >
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copiar Link
-                  </Button>
-                </div>
-
-                {/* Botones de compartir */}
-                <div className="flex gap-3 justify-center">
-                  <Button
-                    onClick={shareToWhatsApp}
-                    className="bg-green-50 hover:bg-green-100 text-green-700 px-6 py-3 rounded-lg font-light border border-green-200"
-                  >
-                    <Share2 className="w-4 h-4 mr-2" />
-                    Compartir
-                  </Button>
-                  <Button
-                    onClick={shareToInstagram}
-                    className="bg-pink-50 hover:bg-pink-100 text-pink-700 px-6 py-3 rounded-lg font-light border border-pink-200"
-                  >
-                    <Instagram className="w-4 h-4 mr-2" />
-                    Instagram
-                  </Button>
-                </div>
-              </div>
-            )}
-
             {/* B. SCORE DE HOY - Progreso prominente */}
             {challengeActive && (
               <div className="mb-16 transition-all duration-500">
@@ -637,25 +593,46 @@ export default function ZenCommandCenter() {
               </div>
             )}
 
-            {/* B. MOTOR DE CRECIMIENTO */}
+            {/* MOTOR DE CRECIMIENTO - Link de referido */}
             {challengeActive && (
-              <div className="mb-16 transition-all duration-500">
-                <div className="grid md:grid-cols-2 gap-8">
-                  {/* Live Lead Tracker */}
-                  <Card className="backdrop-blur-xl bg-white/80 border border-gray-100 shadow-sm p-8 flex flex-col items-center justify-center text-center">
-                    <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6">
-                      Leads Capturados
-                    </p>
-                    <div
-                      id="lead-tracker"
-                      className="text-8xl font-extralight text-[#1D1D1F] mb-4 transition-transform duration-300"
-                    >
-                      {leadsCount}
-                    </div>
-                    <p className="text-sm font-light text-gray-500">
-                      {leadsCount === 0 ? "Comparte tu link para empezar" : "En tiempo real"}
-                    </p>
-                  </Card>
+              <div className="mb-16">
+                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
+                  Tu Embudo Personal
+                </p>
+                
+                {/* Link container - responsive layout */}
+                <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-6">
+                  <input
+                    type="text"
+                    value={funnelLink}
+                    readOnly
+                    className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 font-light"
+                  />
+                  <Button
+                    onClick={copyFunnelLink}
+                    className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-light whitespace-nowrap"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copiar Link
+                  </Button>
+                </div>
+
+                {/* Botones de compartir */}
+                <div className="flex gap-3 justify-center">
+                  <Button
+                    onClick={shareToWhatsApp}
+                    className="bg-green-50 hover:bg-green-100 text-green-700 px-6 py-3 rounded-lg font-light border border-green-200"
+                  >
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Compartir
+                  </Button>
+                  <Button
+                    onClick={shareToInstagram}
+                    className="bg-pink-50 hover:bg-pink-100 text-pink-700 px-6 py-3 rounded-lg font-light border border-pink-200"
+                  >
+                    <Instagram className="w-4 h-4 mr-2" />
+                    Instagram
+                  </Button>
                 </div>
               </div>
             )}
