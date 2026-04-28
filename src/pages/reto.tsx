@@ -9,7 +9,7 @@ import { SEO } from "@/components/SEO";
 import { 
   Play, Pause, Copy, Check, Share2, Focus, 
   Circle, CheckCircle2, Maximize2, Minimize2,
-  Zap, Users, BookOpen, Lock, Instagram, TrendingUp
+  Zap, Users, BookOpen, Lock, Instagram, TrendingUp, LogOut
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -394,322 +394,329 @@ export default function ZenCommandCenter() {
         }
       `}</style>
 
-      <div className="min-h-screen bg-white relative overflow-hidden pb-24">
-        {/* Header minimalista */}
-        <header className="border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-extralight text-[#1D1D1F] tracking-tight">
-                Command Center
-              </h1>
-              <p className="text-sm font-light text-gray-500 mt-1">
-                {profile?.full_name}
-              </p>
-            </div>
+      <div className="min-h-screen bg-white">
+        {/* Header with logout button */}
+        <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 px-6 py-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <h1 className="text-2xl font-bold text-[#1D1D1F]">Reto 24 Horas</h1>
+            <Button
+              onClick={async () => {
+                await authService.signOut();
+                router.push("/admin");
+              }}
+              variant="outline"
+              size="sm"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Salir
+            </Button>
           </div>
-        </header>
+        </div>
 
-        <div className={`max-w-7xl mx-auto px-6 py-12 ${focusMode ? "hidden" : ""}`}>
-          {/* A. EL PULSO - Cronómetro 24h */}
-          <div className="mb-16 text-center">
-            <div className="inline-block">
-              <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-4">
-                Reto de 24 Horas
-              </p>
-              <div className="text-7xl font-extralight text-[#1D1D1F] tracking-tighter mb-6">
-                {formatTime(timeRemaining)}
-              </div>
-              {!challengeActive && (
-                <Button
-                  onClick={async () => {
-                    setChallengeActive(true);
-                    setTimeRemaining(86400); // Reset to 24 hours
+        {/* Main content with top padding to account for fixed header */}
+        <div className="pt-20">
+          <div className="max-w-7xl mx-auto px-6 py-12 ${focusMode ? "hidden" : ""}">
+            {/* A. EL PULSO - Cronómetro 24h */}
+            <div className="mb-16 text-center">
+              <div className="inline-block">
+                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-4">
+                  Reto de 24 Horas
+                </p>
+                <div className="text-7xl font-extralight text-[#1D1D1F] tracking-tighter mb-6">
+                  {formatTime(timeRemaining)}
+                </div>
+                {!challengeActive && (
+                  <Button
+                    onClick={async () => {
+                      setChallengeActive(true);
+                      setTimeRemaining(86400); // Reset to 24 hours
                     
-                    // Starting challenge - save start time to database
-                    await saveChallengeState({
-                      challengeActive: true,
-                      startTime: new Date().toISOString()
-                    });
-                  }}
-                  className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-8 py-3 rounded-xl font-light"
-                >
-                  <Play className="w-5 h-5 mr-2" />
-                  Iniciar Reto
-                </Button>
-              )}
+                      // Starting challenge - save start time to database
+                      await saveChallengeState({
+                        challengeActive: true,
+                        startTime: new Date().toISOString()
+                      });
+                    }}
+                    className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-8 py-3 rounded-xl font-light"
+                  >
+                    <Play className="w-5 h-5 mr-2" />
+                    Iniciar Reto
+                  </Button>
+                )}
+              </div>
             </div>
+
+            {/* B. MOTOR DE CRECIMIENTO - Link de referido */}
+            {challengeActive && (
+              <div className="mb-16">
+                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
+                  Tu Embudo Personal
+                </p>
+                
+                {/* Link container - responsive layout */}
+                <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-6">
+                  <input
+                    type="text"
+                    value={funnelLink}
+                    readOnly
+                    className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 font-light"
+                  />
+                  <Button
+                    onClick={copyFunnelLink}
+                    className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-light whitespace-nowrap"
+                  >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copiar Link
+                  </Button>
+                </div>
+
+                {/* Botones de compartir */}
+                <div className="flex gap-3 justify-center">
+                  <Button
+                    onClick={shareToWhatsApp}
+                    className="bg-green-50 hover:bg-green-100 text-green-700 px-6 py-3 rounded-lg font-light border border-green-200"
+                  >
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Compartir
+                  </Button>
+                  <Button
+                    onClick={shareToInstagram}
+                    className="bg-pink-50 hover:bg-pink-100 text-pink-700 px-6 py-3 rounded-lg font-light border border-pink-200"
+                  >
+                    <Instagram className="w-4 h-4 mr-2" />
+                    Instagram
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* B. MOTOR DE CRECIMIENTO */}
+            {challengeActive && (
+              <div className="mb-16 transition-all duration-500">
+                <div className="grid md:grid-cols-2 gap-8">
+                  {/* Live Lead Tracker */}
+                  <Card className="backdrop-blur-xl bg-white/80 border border-gray-100 shadow-sm p-8 flex flex-col items-center justify-center text-center">
+                    <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6">
+                      Leads Capturados
+                    </p>
+                    <div
+                      id="lead-tracker"
+                      className="text-8xl font-extralight text-[#1D1D1F] mb-4 transition-transform duration-300"
+                    >
+                      {leadsCount}
+                    </div>
+                    <p className="text-sm font-light text-gray-500">
+                      {leadsCount === 0 ? "Comparte tu link para empezar" : "En tiempo real"}
+                    </p>
+                  </Card>
+                </div>
+              </div>
+            )}
+
+            {/* C. ESTADO DE FLUJO - Checklist */}
+            {challengeActive && (
+              <div className="transition-all duration-500">
+                <div className="flex items-center justify-between mb-8">
+                  <div>
+                    <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-2">
+                      Protocolos de Hoy
+                    </p>
+                    <div className="flex items-center gap-3">
+                      <div className="w-32 h-1 bg-gray-100 rounded-full overflow-hidden">
+                        <div
+                          className="h-full bg-primary transition-all duration-500"
+                          style={{ width: `${completionPercentage}%` }}
+                        />
+                      </div>
+                      <span className="text-sm font-light text-[#1D1D1F]">
+                        {Math.round(completionPercentage)}%
+                      </span>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setFocusMode(true)}
+                    className="text-[#1D1D1F] hover:bg-gray-50 font-light"
+                  >
+                    <Maximize2 className="w-4 h-4 mr-2" />
+                    Modo Enfoque
+                  </Button>
+                </div>
+
+                <div className="space-y-4">
+                  {protocols.map((protocol) => (
+                    <button
+                      key={protocol.id}
+                      id={`protocol-${protocol.id}`}
+                      onClick={() => toggleProtocol(parseInt(protocol.id, 10))}
+                      className="w-full flex items-center gap-4 p-6 rounded-2xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all text-left group"
+                    >
+                      <div className="relative">
+                        {protocol.completed ? (
+                          <CheckCircle2 className="w-6 h-6 text-primary" strokeWidth={1} />
+                        ) : (
+                          <Circle className="w-6 h-6 text-gray-300 group-hover:text-gray-400" strokeWidth={1} />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className={`text-sm font-light ${protocol.completed ? "line-through text-gray-400" : "text-[#1D1D1F]"}`}>
+                          {protocol.label}
+                        </p>
+                      </div>
+                      <div className="text-xs font-light text-gray-400">
+                        {protocol.points} pts
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* B. MOTOR DE CRECIMIENTO - Link de referido */}
-          {challengeActive && (
-            <div className="mb-16">
-              <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
-                Tu Embudo Personal
-              </p>
-              
-              {/* Link container - responsive layout */}
-              <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-6">
-                <input
-                  type="text"
-                  value={funnelLink}
-                  readOnly
-                  className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 font-light"
-                />
+          {/* MODO ENFOQUE - Pantalla Completa */}
+          {focusMode && (
+            <div className="fixed inset-0 bg-white z-50 flex flex-col">
+              <div className="flex items-center justify-between p-6 border-b border-gray-100">
+                <h2 className="text-xl font-extralight text-[#1D1D1F]">Modo Enfoque</h2>
                 <Button
-                  onClick={copyFunnelLink}
-                  className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-light whitespace-nowrap"
+                  variant="ghost"
+                  onClick={() => setFocusMode(false)}
+                  className="text-[#1D1D1F] hover:bg-gray-50 font-light"
                 >
-                  <Copy className="w-4 h-4 mr-2" />
-                  Copiar Link
+                  <Minimize2 className="w-4 h-4 mr-2" />
+                  Salir
                 </Button>
               </div>
-
-              {/* Botones de compartir */}
-              <div className="flex gap-3 justify-center">
-                <Button
-                  onClick={shareToWhatsApp}
-                  className="bg-green-50 hover:bg-green-100 text-green-700 px-6 py-3 rounded-lg font-light border border-green-200"
-                >
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Compartir
-                </Button>
-                <Button
-                  onClick={shareToInstagram}
-                  className="bg-pink-50 hover:bg-pink-100 text-pink-700 px-6 py-3 rounded-lg font-light border border-pink-200"
-                >
-                  <Instagram className="w-4 h-4 mr-2" />
-                  Instagram
-                </Button>
-              </div>
-            </div>
-          )}
-
-          {/* B. MOTOR DE CRECIMIENTO */}
-          {challengeActive && (
-            <div className="mb-16 transition-all duration-500">
-              <div className="grid md:grid-cols-2 gap-8">
-                {/* Live Lead Tracker */}
-                <Card className="backdrop-blur-xl bg-white/80 border border-gray-100 shadow-sm p-8 flex flex-col items-center justify-center text-center">
-                  <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6">
-                    Leads Capturados
-                  </p>
-                  <div
-                    id="lead-tracker"
-                    className="text-8xl font-extralight text-[#1D1D1F] mb-4 transition-transform duration-300"
-                  >
-                    {leadsCount}
-                  </div>
-                  <p className="text-sm font-light text-gray-500">
-                    {leadsCount === 0 ? "Comparte tu link para empezar" : "En tiempo real"}
-                  </p>
-                </Card>
-              </div>
-            </div>
-          )}
-
-          {/* C. ESTADO DE FLUJO - Checklist */}
-          {challengeActive && (
-            <div className="transition-all duration-500">
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-2">
-                    Protocolos de Hoy
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-32 h-1 bg-gray-100 rounded-full overflow-hidden">
+              <div className="flex-1 overflow-auto p-12">
+                <div className="max-w-2xl mx-auto space-y-6">
+                  <div className="mb-12">
+                    <div className="w-48 h-1 bg-gray-100 rounded-full overflow-hidden mb-4">
                       <div
                         className="h-full bg-primary transition-all duration-500"
                         style={{ width: `${completionPercentage}%` }}
                       />
                     </div>
-                    <span className="text-sm font-light text-[#1D1D1F]">
-                      {Math.round(completionPercentage)}%
-                    </span>
+                    <p className="text-sm font-light text-gray-500">
+                      {protocols.filter((p) => p.completed).length} de {protocols.length} completados
+                    </p>
                   </div>
+                  
+                  {protocols.map((protocol) => (
+                    <button
+                      key={protocol.id}
+                      onClick={() => toggleProtocol(parseInt(protocol.id, 10))}
+                      className="w-full flex items-center gap-6 p-8 rounded-3xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all text-left"
+                    >
+                      <div className="relative">
+                        {protocol.completed ? (
+                          <CheckCircle2 className="w-8 h-8 text-primary" strokeWidth={1} />
+                        ) : (
+                          <Circle className="w-8 h-8 text-gray-300" strokeWidth={1} />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <p className={`text-lg font-light ${protocol.completed ? "line-through text-gray-400" : "text-[#1D1D1F]"}`}>
+                          {protocol.label}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
                 </div>
-                <Button
-                  variant="ghost"
-                  onClick={() => setFocusMode(true)}
-                  className="text-[#1D1D1F] hover:bg-gray-50 font-light"
-                >
-                  <Maximize2 className="w-4 h-4 mr-2" />
-                  Modo Enfoque
-                </Button>
-              </div>
-
-              <div className="space-y-4">
-                {protocols.map((protocol) => (
-                  <button
-                    key={protocol.id}
-                    id={`protocol-${protocol.id}`}
-                    onClick={() => toggleProtocol(parseInt(protocol.id, 10))}
-                    className="w-full flex items-center gap-4 p-6 rounded-2xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all text-left group"
-                  >
-                    <div className="relative">
-                      {protocol.completed ? (
-                        <CheckCircle2 className="w-6 h-6 text-primary" strokeWidth={1} />
-                      ) : (
-                        <Circle className="w-6 h-6 text-gray-300 group-hover:text-gray-400" strokeWidth={1} />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className={`text-sm font-light ${protocol.completed ? "line-through text-gray-400" : "text-[#1D1D1F]"}`}>
-                        {protocol.label}
-                      </p>
-                    </div>
-                    <div className="text-xs font-light text-gray-400">
-                      {protocol.points} pts
-                    </div>
-                  </button>
-                ))}
               </div>
             </div>
           )}
-        </div>
 
-        {/* MODO ENFOQUE - Pantalla Completa */}
-        {focusMode && (
-          <div className="fixed inset-0 bg-white z-50 flex flex-col">
-            <div className="flex items-center justify-between p-6 border-b border-gray-100">
-              <h2 className="text-xl font-extralight text-[#1D1D1F]">Modo Enfoque</h2>
-              <Button
-                variant="ghost"
-                onClick={() => setFocusMode(false)}
-                className="text-[#1D1D1F] hover:bg-gray-50 font-light"
-              >
-                <Minimize2 className="w-4 h-4 mr-2" />
-                Salir
-              </Button>
-            </div>
-            <div className="flex-1 overflow-auto p-12">
-              <div className="max-w-2xl mx-auto space-y-6">
-                <div className="mb-12">
-                  <div className="w-48 h-1 bg-gray-100 rounded-full overflow-hidden mb-4">
-                    <div
-                      className="h-full bg-primary transition-all duration-500"
-                      style={{ width: `${completionPercentage}%` }}
-                    />
-                  </div>
-                  <p className="text-sm font-light text-gray-500">
-                    {protocols.filter((p) => p.completed).length} de {protocols.length} completados
-                  </p>
-                </div>
-                
-                {protocols.map((protocol) => (
-                  <button
-                    key={protocol.id}
-                    onClick={() => toggleProtocol(parseInt(protocol.id, 10))}
-                    className="w-full flex items-center gap-6 p-8 rounded-3xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all text-left"
-                  >
-                    <div className="relative">
-                      {protocol.completed ? (
-                        <CheckCircle2 className="w-8 h-8 text-primary" strokeWidth={1} />
-                      ) : (
-                        <Circle className="w-8 h-8 text-gray-300" strokeWidth={1} />
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <p className={`text-lg font-light ${protocol.completed ? "line-through text-gray-400" : "text-[#1D1D1F]"}`}>
-                        {protocol.label}
-                      </p>
-                    </div>
-                  </button>
-                ))}
+          {/* Navigation Dock - Invisible hasta iniciar reto */}
+          <div
+            className={`
+              fixed bottom-8 left-1/2 -translate-x-1/2 z-50
+              transition-all duration-700 ease-out
+              ${navigationVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"}
+            `}
+          >
+            <div className="backdrop-blur-xl bg-white/80 border border-gray-100/20 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 py-3">
+              <div className="flex items-center gap-2">
+                {/* Centro de Comando - Siempre activo */}
+                <button
+                  onClick={() => router.push("/reto")}
+                  className="group relative p-4 rounded-xl hover:bg-white/50 transition-all"
+                >
+                  <Zap className="w-6 h-6 text-[#4285F4] stroke-[1.5]" />
+                  <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    Centro de Comando
+                  </span>
+                </button>
+
+                {/* Divisor */}
+                <div className="w-px h-8 bg-gray-200/50" />
+
+                {/* Gestión de Leads - Bloqueado hasta primer lead */}
+                <button
+                  onClick={() => {
+                    if (leadsUnlocked) {
+                      router.push("/admin/main-dashboard?tab=leads");
+                    }
+                  }}
+                  disabled={!leadsUnlocked}
+                  className={`
+                    group relative p-4 rounded-xl transition-all
+                    ${leadsUnlocked 
+                      ? "hover:bg-white/80 cursor-pointer shadow-sm unlock-animation" 
+                      : "opacity-40 cursor-not-allowed hover:bg-gray-50/50"
+                    }
+                  `}
+                >
+                  {!leadsUnlocked && (
+                    <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400 group-hover:text-red-400 transition-colors" />
+                  )}
+                  <Users className={`w-6 h-6 stroke-[1.5] ${leadsUnlocked ? "text-[#4285F4]" : "text-gray-400"}`} />
+                  {leadsUnlocked && (
+                    <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                      Gestión de Leads
+                    </span>
+                  )}
+                  {!leadsUnlocked && (
+                    <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
+                      Bloqueado<br/>Necesitas 1 lead
+                    </span>
+                  )}
+                </button>
+
+                {/* Divisor */}
+                <div className="w-px h-8 bg-gray-200/50" />
+
+                {/* Bóveda de Recursos - Bloqueado hasta 5 shares */}
+                <button
+                  onClick={() => {
+                    if (resourcesUnlocked) {
+                      router.push("/admin/recursos");
+                    }
+                  }}
+                  disabled={!resourcesUnlocked}
+                  className={`
+                    group relative p-4 rounded-xl transition-all
+                    ${resourcesUnlocked 
+                      ? "hover:bg-white/80 cursor-pointer shadow-sm unlock-animation" 
+                      : "opacity-40 cursor-not-allowed hover:bg-gray-50/50"
+                    }
+                  `}
+                >
+                  {!resourcesUnlocked && (
+                    <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400 group-hover:text-red-400 transition-colors" />
+                  )}
+                  <BookOpen className={`w-6 h-6 stroke-[1.5] ${resourcesUnlocked ? "text-[#4285F4]" : "text-gray-400"}`} />
+                  {resourcesUnlocked && (
+                    <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                      Bóveda de Recursos
+                    </span>
+                  )}
+                  {!resourcesUnlocked && (
+                    <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
+                      Bloqueado<br/>{shareCount}/5 veces copiado
+                    </span>
+                  )}
+                </button>
               </div>
-            </div>
-          </div>
-        )}
-
-        {/* Navigation Dock - Invisible hasta iniciar reto */}
-        <div
-          className={`
-            fixed bottom-8 left-1/2 -translate-x-1/2 z-50
-            transition-all duration-700 ease-out
-            ${navigationVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8 pointer-events-none"}
-          `}
-        >
-          <div className="backdrop-blur-xl bg-white/80 border border-gray-100/20 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] px-4 py-3">
-            <div className="flex items-center gap-2">
-              {/* Centro de Comando - Siempre activo */}
-              <button
-                onClick={() => router.push("/reto")}
-                className="group relative p-4 rounded-xl hover:bg-white/50 transition-all"
-              >
-                <Zap className="w-6 h-6 text-[#4285F4] stroke-[1.5]" />
-                <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                  Centro de Comando
-                </span>
-              </button>
-
-              {/* Divisor */}
-              <div className="w-px h-8 bg-gray-200/50" />
-
-              {/* Gestión de Leads - Bloqueado hasta primer lead */}
-              <button
-                onClick={() => {
-                  if (leadsUnlocked) {
-                    router.push("/admin/main-dashboard?tab=leads");
-                  }
-                }}
-                disabled={!leadsUnlocked}
-                className={`
-                  group relative p-4 rounded-xl transition-all
-                  ${leadsUnlocked 
-                    ? "hover:bg-white/80 cursor-pointer shadow-sm unlock-animation" 
-                    : "opacity-40 cursor-not-allowed hover:bg-gray-50/50"
-                  }
-                `}
-              >
-                {!leadsUnlocked && (
-                  <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400 group-hover:text-red-400 transition-colors" />
-                )}
-                <Users className={`w-6 h-6 stroke-[1.5] ${leadsUnlocked ? "text-[#4285F4]" : "text-gray-400"}`} />
-                {leadsUnlocked && (
-                  <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                    Gestión de Leads
-                  </span>
-                )}
-                {!leadsUnlocked && (
-                  <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
-                    Bloqueado<br/>Necesitas 1 lead
-                  </span>
-                )}
-              </button>
-
-              {/* Divisor */}
-              <div className="w-px h-8 bg-gray-200/50" />
-
-              {/* Bóveda de Recursos - Bloqueado hasta 5 shares */}
-              <button
-                onClick={() => {
-                  if (resourcesUnlocked) {
-                    router.push("/admin/recursos");
-                  }
-                }}
-                disabled={!resourcesUnlocked}
-                className={`
-                  group relative p-4 rounded-xl transition-all
-                  ${resourcesUnlocked 
-                    ? "hover:bg-white/80 cursor-pointer shadow-sm unlock-animation" 
-                    : "opacity-40 cursor-not-allowed hover:bg-gray-50/50"
-                  }
-                `}
-              >
-                {!resourcesUnlocked && (
-                  <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400 group-hover:text-red-400 transition-colors" />
-                )}
-                <BookOpen className={`w-6 h-6 stroke-[1.5] ${resourcesUnlocked ? "text-[#4285F4]" : "text-gray-400"}`} />
-                {resourcesUnlocked && (
-                  <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-                    Bóveda de Recursos
-                  </span>
-                )}
-                {!resourcesUnlocked && (
-                  <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
-                    Bloqueado<br/>{shareCount}/5 veces copiado
-                  </span>
-                )}
-              </button>
             </div>
           </div>
         </div>
