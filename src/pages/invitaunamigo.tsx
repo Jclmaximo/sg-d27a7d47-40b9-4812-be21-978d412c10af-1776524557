@@ -6,6 +6,7 @@ import { SEO } from "@/components/SEO";
 import { ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Zap } from "lucide-react";
 
 interface Profile {
   id: string;
@@ -330,11 +331,48 @@ export default function InvitaUnAmigo() {
             ${step === 1 ? "opacity-100" : "opacity-0 pointer-events-none"}
           `}
         >
-          <div className="flex flex-col items-center gap-6">
-            <div className="w-12 h-12 border-3 border-gray-200 border-t-[#4285F4] rounded-full animate-spin" />
-            <p className="text-lg text-[#1D1D1F] font-light">
-              Sincronizando invitación de {referrerName || "tu mentor"}...
-            </p>
+          <div className="flex flex-col items-center gap-8 max-w-md w-full">
+            {/* Ícono de Rayo */}
+            <div className="relative">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#4285F4] to-[#3367D6] flex items-center justify-center shadow-lg shadow-blue-500/20">
+                <svg
+                  className="w-10 h-10 text-white animate-pulse"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" />
+                </svg>
+              </div>
+              {/* Anillo animado */}
+              <div className="absolute inset-0 rounded-2xl border-2 border-[#4285F4] animate-ping opacity-20" />
+            </div>
+
+            {/* Mensaje de bienvenida */}
+            <div className="text-center space-y-2">
+              <p className="text-sm font-light text-gray-400 tracking-wide uppercase">
+                Invitación exclusiva
+              </p>
+              <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] font-light leading-relaxed">
+                Sincronizando invitación de
+                <br />
+                <span className="font-normal text-[#4285F4]">
+                  {referrerName || "tu mentor"}
+                </span>
+              </h1>
+            </div>
+
+            {/* Barra de progreso elegante */}
+            <div className="w-full space-y-2">
+              <div className="w-full h-1 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-[#4285F4] to-[#3367D6] transition-all duration-300 ease-out"
+                  style={{ width: `${progress}%` }}
+                />
+              </div>
+              <p className="text-xs text-gray-400 text-center font-light">
+                Preparando experiencia personalizada...
+              </p>
+            </div>
           </div>
         </div>
 
