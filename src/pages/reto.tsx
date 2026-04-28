@@ -289,12 +289,19 @@ export default function ZenCommandCenter() {
         setChallengeActive(true);
         setNavigationVisible(true);
         
-        const startTime = new Date(progress.started_at).getTime();
-        const now = new Date().getTime();
-        const elapsedSeconds = Math.floor((now - startTime) / 1000);
-        const remaining = Math.max(0, (template?.duration_hours || 24) * 3600 - elapsedSeconds);
+        // Calculate current day based on start date
+        if (progress.started_at) {
+          const startDate = new Date(progress.started_at);
+          const today = new Date();
+          startDate.setHours(0, 0, 0, 0);
+          today.setHours(0, 0, 0, 0);
+          const daysDiff = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+          setCurrentDay(Math.min(daysDiff + 1, totalDays));
+        }
+
+        // Ya no calculamos el timeLeft desde el inicio, sino hasta el final del día
+        // (esto ya se maneja en el useEffect del timer principal)
         
-        setTimeLeft({ hours: Math.floor(remaining / 3600), minutes: Math.floor((remaining % 3600) / 60), seconds: remaining % 60 });
         setCopyCount(progress.copy_count);
         
         // Build protocols from template + user progress
@@ -340,48 +347,6 @@ export default function ZenCommandCenter() {
     }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!session.user) return;
-      
-      setLoading(true);
-      try {
-        const data = await challengeService.getChallengeState(session.user.id);
-        
-        if (data) {
-          setChallengeActive(data.is_active);
-          setProtocols(data.protocols || []);
-          
-          // Calculate current day based on start date
-          if (data.start_date) {
-            const startDate = new Date(data.start_date);
-            const today = new Date();
-            
-            // Reset time to start of day for accurate day calculation
-            startDate.setHours(0, 0, 0, 0);
-            today.setHours(0, 0, 0, 0);
-            
-            const daysDiff = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-            const calculatedDay = daysDiff + 1; // Day 1 is the start date
-            
-            setCurrentDay(Math.min(calculatedDay, totalDays)); // Cap at total days
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching challenge:", error);
-        toast({
-          title: "Error",
-          description: "No se pudo cargar el estado del reto",
-          variant: "destructive",
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [session.user, totalDays]);
-
   const toggleProtocol = async (id: number | string) => {
     const protocol = protocols.find(p => Number(p.id) === Number(id));
     if (!protocol) return;
@@ -418,8 +383,8 @@ export default function ZenCommandCenter() {
       const updatedProtocols = protocols.map((p) =>
         Number(p.id) === 1 ? { ...p, completed: true } : p
       );
-      setProtocols(updatedProtocols);
-      await saveChallengeState({ protocols: updatedProtocols });
+      setProtocols(updatedProtocols as DailyProtocol[]);
+      await saveChallengeState({ protocols: updatedProtocols as DailyProtocol[] });
       
       // Unlock resources
       setResourcesUnlocked(true);
@@ -617,7 +582,7 @@ export default function ZenCommandCenter() {
 
                         toast({
                           title: "✅ Reto iniciado",
-                          description: "Tienes 24 horas para completar los protocolos",
+                          description: "Comienza tu día. Los protocolos se reinician a las 00:00",
                           duration: 5000,
                         });
                       } else {
