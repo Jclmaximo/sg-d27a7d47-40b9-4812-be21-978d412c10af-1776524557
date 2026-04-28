@@ -546,44 +546,41 @@ export default function ZenCommandCenter() {
             
             {/* HERO SECTION - Show when challenge is NOT active */}
             {!challengeActive && activeTemplate && (
-              <div className="max-w-3xl mx-auto text-center py-16">
-                <div className="mb-8">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-6">
+              <div className="max-w-3xl mx-auto text-center py-6 md:py-16">
+                <div className="mb-6 md:mb-8">
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4 md:mb-6">
                     <Zap className="w-4 h-4 text-primary" />
                     <span className="text-sm font-medium text-primary">Reto de Productividad</span>
                   </div>
-                  <h1 className="text-4xl md:text-5xl font-bold text-[#1D1D1F] mb-4">
-                    {activeTemplate.name}
-                  </h1>
-                  <p className="text-lg text-gray-600 font-light max-w-2xl mx-auto">
+                  <p className="text-base md:text-lg text-gray-600 font-light max-w-2xl mx-auto">
                     {activeTemplate.description}
                   </p>
                 </div>
 
-                {/* Challenge info */}
-                <div className="grid md:grid-cols-3 gap-6 mb-12">
-                  <Card className="p-6 text-center border-gray-200">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                      <Circle className="w-6 h-6 text-primary" />
+                {/* Challenge info - Compact grid for mobile */}
+                <div className="grid grid-cols-3 gap-3 md:gap-6 mb-6 md:mb-12">
+                  <Card className="p-4 md:p-6 text-center border-gray-200">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2 md:mb-4">
+                      <Circle className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                     </div>
-                    <h3 className="font-semibold text-[#1D1D1F] mb-2">Duración</h3>
-                    <p className="text-sm text-gray-600">7 días consecutivos</p>
+                    <h3 className="font-semibold text-[#1D1D1F] text-sm md:text-base mb-1 md:mb-2">Duración</h3>
+                    <p className="text-xs md:text-sm text-gray-600">7 días</p>
                   </Card>
 
-                  <Card className="p-6 text-center border-gray-200">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                      <CheckCircle2 className="w-6 h-6 text-primary" />
+                  <Card className="p-4 md:p-6 text-center border-gray-200">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2 md:mb-4">
+                      <CheckCircle2 className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                     </div>
-                    <h3 className="font-semibold text-[#1D1D1F] mb-2">Protocolos</h3>
-                    <p className="text-sm text-gray-600">{activeTemplate.protocols.length} acciones diarias</p>
+                    <h3 className="font-semibold text-[#1D1D1F] text-sm md:text-base mb-1 md:mb-2">Protocolos</h3>
+                    <p className="text-xs md:text-sm text-gray-600">{activeTemplate.protocols.length} acciones</p>
                   </Card>
 
-                  <Card className="p-6 text-center border-gray-200">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
-                      <TrendingUp className="w-6 h-6 text-primary" />
+                  <Card className="p-4 md:p-6 text-center border-gray-200">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-2 md:mb-4">
+                      <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-primary" />
                     </div>
-                    <h3 className="font-semibold text-[#1D1D1F] mb-2">Objetivo</h3>
-                    <p className="text-sm text-gray-600">Construir hábitos productivos</p>
+                    <h3 className="font-semibold text-[#1D1D1F] text-sm md:text-base mb-1 md:mb-2">Objetivo</h3>
+                    <p className="text-xs md:text-sm text-gray-600">Hábitos productivos</p>
                   </Card>
                 </div>
 
@@ -629,13 +626,13 @@ export default function ZenCommandCenter() {
                       });
                     }
                   }}
-                  className="bg-primary hover:bg-primary/90 text-white px-12 py-6 text-lg rounded-xl font-medium shadow-lg hover:shadow-xl transition-all"
+                  className="bg-primary hover:bg-primary/90 text-white px-8 md:px-12 py-4 md:py-6 text-base md:text-lg rounded-xl font-medium shadow-lg hover:shadow-xl transition-all w-full md:w-auto"
                 >
-                  <Play className="w-6 h-6 mr-3" />
+                  <Play className="w-5 h-5 md:w-6 md:h-6 mr-2 md:mr-3" />
                   Iniciar Reto Ahora
                 </Button>
 
-                <p className="text-sm text-gray-500 mt-6">
+                <p className="text-xs md:text-sm text-gray-500 mt-4 md:mt-6">
                   El reto comienza hoy y se reinicia cada día a las 00:00
                 </p>
               </div>
