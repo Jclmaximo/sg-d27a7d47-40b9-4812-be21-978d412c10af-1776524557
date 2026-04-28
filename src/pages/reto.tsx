@@ -526,7 +526,7 @@ export default function ZenCommandCenter() {
 
             {/* C. ESTADO DE FLUJO - Checklist */}
             {challengeActive && (
-              <div className="transition-all duration-500">
+              <div className="transition-all duration-500 pb-32">
                 <div className="flex items-center justify-between mb-8">
                   <div>
                     <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-2">
@@ -554,7 +554,7 @@ export default function ZenCommandCenter() {
                   </Button>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 mb-8">
                   {protocols.map((protocol) => (
                     <button
                       key={protocol.id}
@@ -579,6 +579,24 @@ export default function ZenCommandCenter() {
                       </div>
                     </button>
                   ))}
+                </div>
+
+                {/* Botón de Guardar Progreso */}
+                <div className="flex justify-center">
+                  <Button
+                    onClick={async () => {
+                      await saveChallengeState({ protocols });
+                      toast({
+                        title: "✅ Progreso guardado",
+                        description: "Tus protocolos han sido actualizados",
+                        duration: 3000,
+                      });
+                    }}
+                    className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-light"
+                  >
+                    <Check className="w-5 h-5 mr-2" />
+                    Guardar Progreso
+                  </Button>
                 </div>
               </div>
             )}
