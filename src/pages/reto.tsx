@@ -228,11 +228,17 @@ export default function ZenCommandCenter() {
         const remaining = Math.max(0, 86400 - elapsedSeconds);
         
         setTimeRemaining(remaining);
-      }
 
-      // Restore copy count
-      if (profileData.challenge_copy_count) {
-        setCopyCount(profileData.challenge_copy_count);
+        // Only restore copyCount if challenge is still active (< 24 hours)
+        if (remaining > 0 && profileData.challenge_copy_count) {
+          setCopyCount(profileData.challenge_copy_count);
+        } else {
+          // Reset copyCount if 24 hours have passed
+          setCopyCount(0);
+        }
+      } else {
+        // No active challenge - reset copyCount
+        setCopyCount(0);
       }
 
       // Restore protocols with validation
