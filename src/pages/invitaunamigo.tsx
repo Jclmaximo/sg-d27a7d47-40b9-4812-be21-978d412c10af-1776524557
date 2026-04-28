@@ -7,6 +7,13 @@ import { ArrowRight } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Zap } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Profile {
   id: string;
@@ -32,11 +39,28 @@ export default function InvitaUnAmigo() {
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
+  const [countryCode, setCountryCode] = useState("+52"); // México por default
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [registrationProgress, setRegistrationProgress] = useState(0);
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [checkingUsername, setCheckingUsername] = useState(false);
+
+  // Lista de países con códigos
+  const countries = [
+    { code: "+52", name: "México", flag: "🇲🇽" },
+    { code: "+1", name: "USA/Canadá", flag: "🇺🇸" },
+    { code: "+57", name: "Colombia", flag: "🇨🇴" },
+    { code: "+51", name: "Perú", flag: "🇵🇪" },
+    { code: "+56", name: "Chile", flag: "🇨🇱" },
+    { code: "+54", name: "Argentina", flag: "🇦🇷" },
+    { code: "+34", name: "España", flag: "🇪🇸" },
+    { code: "+507", name: "Panamá", flag: "🇵🇦" },
+    { code: "+506", name: "Costa Rica", flag: "🇨🇷" },
+    { code: "+593", name: "Ecuador", flag: "🇪🇨" },
+    { code: "+58", name: "Venezuela", flag: "🇻🇪" },
+    { code: "+55", name: "Brasil", flag: "🇧🇷" },
+  ];
 
   // Función para formatear nombre del referente
   const formatReferrerName = (name: string): string => {
@@ -233,6 +257,9 @@ export default function InvitaUnAmigo() {
     setStep(6); // Pantalla "Sincronizando Datos"
 
     try {
+      // Combinar código de país + número de WhatsApp
+      const fullWhatsApp = `${countryCode}${whatsapp}`;
+
       // Crear usuario en Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: email,
@@ -241,7 +268,7 @@ export default function InvitaUnAmigo() {
           data: {
             full_name: fullName,
             username: username,
-            phone: whatsapp,
+            phone: fullWhatsApp,
           },
         },
       });
@@ -255,7 +282,7 @@ export default function InvitaUnAmigo() {
           .update({
             full_name: fullName,
             username: username,
-            whatsapp_number: whatsapp, // Corrección: la columna real en DB es whatsapp_number, no phone
+            whatsapp_number: fullWhatsApp,
             referred_by: referrerId || null,
           })
           .eq("id", authData.user.id);
@@ -265,7 +292,7 @@ export default function InvitaUnAmigo() {
           await leadsService.createLead({
             name: fullName,
             email: email,
-            phone: whatsapp,
+            phone: fullWhatsApp,
             country: "",
             source: "Invitación Reto 24h",
             user_id: referrerId,
@@ -550,16 +577,40 @@ export default function InvitaUnAmigo() {
               />
             </div>
 
-            <div>
-              <input
-                type="tel"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
-                placeholder="+1 234 567 8900"
-                className="w-full px-2 py-4 bg-transparent border-b border-gray-200 text-[17px] text-[#1D1D1F] font-light text-center focus:outline-none focus:border-[#1D1D1F] transition-all duration-300 placeholder:text-gray-300"
-              />
-              <p className="text-xs text-gray-400 text-center mt-2">
-                Incluye código de país
+            <div className="space-y-3">
+              {/* Selector de país */}
+              <Select value={countryCode} onValueChange={setCountryCode}>
+                <SelectTrigger className="w-full border-b border-gray-200 border-t-0 border-x-0 rounded-none bg-transparent px-2 py-3 text-[17px] font-light focus:ring-0 focus:border-[#1D1D1F] transition-all duration-300">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {countries.map((country) => (
+                    <SelectItem key={country.code} value={country.code} className="text-[15px] font-light">
+                      <span className="flex items-center gap-2">
+                        <span className="text-xl">{country.flag}</span>
+                        <span>{country.code}</span>
+                        <span className="text-gray-400">{country.name}</span>
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {/* Campo de WhatsApp */}
+              <div className="relative">
+                <input
+                  type="tel"
+                  value={whatsapp}
+                  onChange={(e) => setWhatsapp(e.target.value.replace(/\D/g, ""))}
+                  placeholder="234 567 8900"
+                  className="w-full px-2 py-4 bg-transparent border-b border-gray-200 text-[17px] text-[#1D1D1F] font-light text-center focus:outline-none focus:border-[#1D1D1F] transition-all duration-300 placeholder:text-gray-300"
+                />
+                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-[15px] font-light">
+                  {countryCode}
+                </span>
+              </div>
+              <p className="text-xs text-gray-400 text-center">
+                Solo números, sin código de país
               </p>
             </div>
           </div>
