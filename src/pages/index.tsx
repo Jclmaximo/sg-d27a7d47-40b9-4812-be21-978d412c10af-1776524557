@@ -33,23 +33,17 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const { error } = await authService.signIn(email, password);
+      const { data, error } = await authService.signIn(email, password);
 
       if (error) {
-        toast({
-          title: "Error",
-          description: error.message || "Credenciales incorrectas",
-          variant: "destructive",
-        });
+        setError(error.message);
+        setLoading(false);
         return;
       }
 
-      toast({
-        title: "Bienvenido",
-        description: "Acceso concedido al sistema",
-      });
-
-      router.push("/admin/main-dashboard");
+      if (data?.user) {
+        router.push("/reto");
+      }
     } catch (error: any) {
       toast({
         title: "Error",
