@@ -1680,32 +1680,11 @@ Puedo resolver dudas sobre:
                           {productivityStats?.contacts_today || 0} / 20
                         </span>
                       </div>
-                      <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden mb-3">
+                      <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-blue-500 transition-all duration-300"
                           style={{ width: `${Math.min(((productivityStats?.contacts_today || 0) / 20) * 100, 100)}%` }}
                         />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +1 action
-                          }}
-                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-                        >
-                          +1
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +5 action
-                          }}
-                          variant="outline"
-                          className="flex-1"
-                        >
-                          +5
-                        </Button>
                       </div>
                     </div>
 
@@ -1717,32 +1696,11 @@ Puedo resolver dudas sobre:
                           {productivityStats?.follow_ups_today || 0} / 10
                         </span>
                       </div>
-                      <div className="w-full h-2 bg-green-100 rounded-full overflow-hidden mb-3">
+                      <div className="w-full h-2 bg-green-100 rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-green-500 transition-all duration-300"
                           style={{ width: `${Math.min(((productivityStats?.follow_ups_today || 0) / 10) * 100, 100)}%` }}
                         />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +1 action
-                          }}
-                          className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                        >
-                          +1
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +5 action
-                          }}
-                          variant="outline"
-                          className="flex-1"
-                        >
-                          +5
-                        </Button>
                       </div>
                     </div>
 
@@ -1754,32 +1712,11 @@ Puedo resolver dudas sobre:
                           {productivityStats?.presentations_today || 0} / 3
                         </span>
                       </div>
-                      <div className="w-full h-2 bg-purple-100 rounded-full overflow-hidden mb-3">
+                      <div className="w-full h-2 bg-purple-100 rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-purple-500 transition-all duration-300"
                           style={{ width: `${Math.min(((productivityStats?.presentations_today || 0) / 3) * 100, 100)}%` }}
                         />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +1 action
-                          }}
-                          className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
-                        >
-                          +1
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +5 action
-                          }}
-                          variant="outline"
-                          className="flex-1"
-                        >
-                          +5
-                        </Button>
                       </div>
                     </div>
 
@@ -1791,32 +1728,11 @@ Puedo resolver dudas sobre:
                           {productivityStats?.posts_today || 0} / 3
                         </span>
                       </div>
-                      <div className="w-full h-2 bg-orange-100 rounded-full overflow-hidden mb-3">
+                      <div className="w-full h-2 bg-orange-100 rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-orange-500 transition-all duration-300"
                           style={{ width: `${Math.min(((productivityStats?.posts_today || 0) / 3) * 100, 100)}%` }}
                         />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +1 action
-                          }}
-                          className="flex-1 bg-orange-600 hover:bg-orange-700 text-white"
-                        >
-                          +1
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +5 action
-                          }}
-                          variant="outline"
-                          className="flex-1"
-                        >
-                          +5
-                        </Button>
                       </div>
                     </div>
 
@@ -1828,32 +1744,11 @@ Puedo resolver dudas sobre:
                           {productivityStats?.decisions_today || 0} / 5
                         </span>
                       </div>
-                      <div className="w-full h-2 bg-red-100 rounded-full overflow-hidden mb-3">
+                      <div className="w-full h-2 bg-red-100 rounded-full overflow-hidden">
                         <div 
                           className="h-full bg-red-500 transition-all duration-300"
                           style={{ width: `${Math.min(((productivityStats?.decisions_today || 0) / 5) * 100, 100)}%` }}
                         />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +1 action
-                          }}
-                          className="flex-1 bg-red-600 hover:bg-red-700 text-white"
-                        >
-                          +1
-                        </Button>
-                        <Button
-                          size="sm"
-                          onClick={() => {
-                            // TODO: Implement +5 action
-                          }}
-                          variant="outline"
-                          className="flex-1"
-                        >
-                          +5
-                        </Button>
                       </div>
                     </div>
                   </div>
