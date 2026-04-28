@@ -22,7 +22,7 @@ export default function AdminLogin() {
     const checkSession = async () => {
       const session = await authService.getCurrentSession();
       if (session) {
-        router.push("/admin/main-dashboard");
+        router.push("/reto");
       }
     };
     checkSession();
@@ -33,15 +33,19 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      const { data, error } = await authService.signIn(email, password);
+      const { user, error } = await authService.signIn(email, password);
 
       if (error) {
-        setError(error.message);
+        toast({
+          title: "Error al iniciar sesión",
+          description: error.message,
+          variant: "destructive",
+        });
         setLoading(false);
         return;
       }
 
-      if (data?.user) {
+      if (user) {
         router.push("/reto");
       }
     } catch (error: any) {
