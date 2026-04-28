@@ -387,9 +387,12 @@ export default function InvitaUnAmigo() {
           <div className="flex flex-col items-center gap-8 max-w-lg w-full">
             {/* Avatar del mentor */}
             <div className="relative">
-              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center text-5xl font-light text-gray-600 shadow-xl shadow-gray-200/50 ring-4 ring-white">
-                {referrerName?.[0]?.toUpperCase() || "M"}
-              </div>
+              <Avatar className="w-28 h-28 shadow-xl shadow-gray-200/50 ring-4 ring-white">
+                <AvatarImage src={referrerAvatar} alt={referrerName} />
+                <AvatarFallback className="bg-gradient-to-br from-gray-50 to-gray-100 text-5xl font-light text-gray-600">
+                  {referrerName?.[0]?.toUpperCase() || "M"}
+                </AvatarFallback>
+              </Avatar>
               {/* Badge de verificación */}
               <div className="absolute -bottom-1 -right-1 w-9 h-9 bg-gradient-to-br from-[#4285F4] to-[#3367D6] rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30">
                 <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
