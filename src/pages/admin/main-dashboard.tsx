@@ -139,6 +139,9 @@ export default function MainDashboard() {
   // Challenge sync (NEW)
   const [activeTemplate, setActiveTemplate] = useState<ChallengeTemplate | null>(null);
   const [userProgress, setUserProgress] = useState<UserChallengeProgress | null>(null);
+  const [challengeProtocols, setChallengeProtocols] = useState<any[]>([]);
+  const [allTemplates, setAllTemplates] = useState<ChallengeTemplate[]>([]);
+  const [allUsersProgress, setAllUsersProgress] = useState<UserChallengeProgress[]>([]);
 
   // Helper functions
   const getStatusText = (status: string) => {
@@ -385,6 +388,90 @@ Puedo resolver dudas sobre:
       setLoading(false);
     }
   }, [router]);
+
+  const loadDashboardData = async () => {
+    try {
+      const session = await authService.getCurrentSession();
+      if (!session) {
+        router.push("/admin");
+        return;
+      }
+
+      const { data: profileData } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", session.user.id)
+        .single();
+
+      if (profileData) {
+        setProfile(profileData as UserProfile);
+
+        // Load leads with error handling
+        try {
+          const leadsData = await leadsService.getLeads(session.user.id);
+          setLeads(leadsData || []);
+        } catch (error) {
+          console.error("Error loading leads:", error);
+          setLeads([]);
+        }
+
+        // Load network stats
+        try {
+          const networkData = await referralService.getNetworkStats(session.user.id);
+          setStats(networkData);
+        } catch (error) {
+          console.error("Error loading network stats:", error);
+        }
+
+        // Load productivity stats
+        try {
+          const prodStats = await productivityService.getProductivityStats(session.user.id);
+          setProductivityStats(prodStats);
+        } catch (error) {
+          console.error("Error loading productivity stats:", error);
+        }
+
+        // Load active challenge progress for protocols
+        try {
+          const activeChallenge = await challengeService.getUserActiveChallenge(session.user.id);
+          if (activeChallenge) {
+            const template = await challengeService.getActiveTemplate();
+            if (template) {
+              // Store protocols with completion status
+              const protocolsWithStatus = template.protocols.slice(0, 5).map((p: any) => ({
+                ...p,
+                completed: activeChallenge.protocols_completed.includes(p.id)
+              }));
+              setChallengeProtocols(protocolsWithStatus);
+            }
+          }
+        } catch (error) {
+          console.error("Error loading challenge progress:", error);
+        }
+
+        // Load all challenge templates (for admin)
+        try {
+          const templates = await challengeService.getAllTemplates();
+          setAllTemplates(templates);
+        } catch (error) {
+          console.error("Error loading templates:", error);
+        }
+
+        // Load all users' progress (for admin)
+        try {
+          const allProgress = await challengeService.getAllUsersProgress();
+          setAllUsersProgress(allProgress);
+        } catch (error) {
+          console.error("Error loading all users progress:", error);
+        }
+      }
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error loading dashboard data:", error);
+      setLoading(false);
+    }
+  };
 
   const filterLeads = useCallback(() => {
     let filtered = [...allLeads];
@@ -738,6 +825,22 @@ Puedo resolver dudas sobre:
       setCustomTemplates([]);
     }
   };
+
+  useEffect(() => {
+    loadDashboardData();
+
+    // Realtime subscription for challenge progress
+    if (profile?.id) {
+      const channel = challengeService.subscribeToTemplateChanges((updatedTemplate) => {
+        // Reload challenge protocols when template changes
+        loadDashboardData();
+      });
+
+      return () => {
+        supabase.removeChannel(channel);
+      };
+    }
+  }, [profile?.id]);
 
   if (loading) {
     return (
@@ -1668,90 +1771,76 @@ Puedo resolver dudas sobre:
                   </div>
                 </div>
 
-                {/* 2. ACTIVIDAD DIARIA - Tarjetas con progreso */}
+                {/* 2. ACTIVIDAD DIARIA - Protocolos del Reto Activo */}
                 <Card className="p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-6">Actividad Diaria</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                    {/* Contactos */}
-                    <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium text-gray-700">Contactos</span>
-                        <span className="text-sm text-gray-500">
-                          {productivityStats?.contacts_today || 0} / 20
-                        </span>
-                      </div>
-                      <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-blue-500 transition-all duration-300"
-                          style={{ width: `${Math.min(((productivityStats?.contacts_today || 0) / 20) * 100, 100)}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Seguimientos */}
-                    <div className="p-4 bg-green-50 border border-green-100 rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium text-gray-700">Seguimientos</span>
-                        <span className="text-sm text-gray-500">
-                          {productivityStats?.follow_ups_today || 0} / 10
-                        </span>
-                      </div>
-                      <div className="w-full h-2 bg-green-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-green-500 transition-all duration-300"
-                          style={{ width: `${Math.min(((productivityStats?.follow_ups_today || 0) / 10) * 100, 100)}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Presentaciones */}
-                    <div className="p-4 bg-purple-50 border border-purple-100 rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium text-gray-700">Presentaciones</span>
-                        <span className="text-sm text-gray-500">
-                          {productivityStats?.presentations_today || 0} / 3
-                        </span>
-                      </div>
-                      <div className="w-full h-2 bg-purple-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-purple-500 transition-all duration-300"
-                          style={{ width: `${Math.min(((productivityStats?.presentations_today || 0) / 3) * 100, 100)}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Publicaciones */}
-                    <div className="p-4 bg-orange-50 border border-orange-100 rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium text-gray-700">Publicaciones</span>
-                        <span className="text-sm text-gray-500">
-                          {productivityStats?.posts_today || 0} / 3
-                        </span>
-                      </div>
-                      <div className="w-full h-2 bg-orange-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-orange-500 transition-all duration-300"
-                          style={{ width: `${Math.min(((productivityStats?.posts_today || 0) / 3) * 100, 100)}%` }}
-                        />
-                      </div>
-                    </div>
-
-                    {/* Decisiones */}
-                    <div className="p-4 bg-red-50 border border-red-100 rounded-lg">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium text-gray-700">Decisiones</span>
-                        <span className="text-sm text-gray-500">
-                          {productivityStats?.decisions_today || 0} / 5
-                        </span>
-                      </div>
-                      <div className="w-full h-2 bg-red-100 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-red-500 transition-all duration-300"
-                          style={{ width: `${Math.min(((productivityStats?.decisions_today || 0) / 5) * 100, 100)}%` }}
-                        />
-                      </div>
-                    </div>
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900">Actividad Diaria</h3>
+                    {challengeProtocols.length > 0 ? (
+                      <span className="text-sm text-gray-500">
+                        {challengeProtocols.filter(p => p.completed).length} / {challengeProtocols.length} completados
+                      </span>
+                    ) : (
+                      <Button
+                        onClick={() => router.push("/reto")}
+                        size="sm"
+                        variant="outline"
+                        className="text-sm"
+                      >
+                        Iniciar Reto
+                      </Button>
+                    )}
                   </div>
+
+                  {challengeProtocols.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                      {challengeProtocols.map((protocol, index) => {
+                        const colors = [
+                          { bg: "bg-blue-50", border: "border-blue-100", bar: "bg-blue-500", text: "text-blue-700" },
+                          { bg: "bg-green-50", border: "border-green-100", bar: "bg-green-500", text: "text-green-700" },
+                          { bg: "bg-purple-50", border: "border-purple-100", bar: "bg-purple-500", text: "text-purple-700" },
+                          { bg: "bg-orange-50", border: "border-orange-100", bar: "bg-orange-500", text: "text-orange-700" },
+                          { bg: "bg-red-50", border: "border-red-100", bar: "bg-red-500", text: "text-red-700" }
+                        ];
+                        const color = colors[index % 5];
+
+                        return (
+                          <div key={protocol.id} className={`p-4 ${color.bg} border ${color.border} rounded-lg`}>
+                            <div className="flex items-start justify-between mb-3">
+                              <span className="text-sm font-medium text-gray-700 line-clamp-2">
+                                {protocol.label}
+                              </span>
+                              {protocol.completed && (
+                                <CheckCircle2 className={`w-5 h-5 ${color.text} flex-shrink-0 ml-2`} />
+                              )}
+                            </div>
+                            <div className="w-full h-2 bg-white rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full ${color.bar} transition-all duration-300`}
+                                style={{ width: protocol.completed ? "100%" : "0%" }}
+                              />
+                            </div>
+                            <div className="mt-2 text-xs text-gray-600">
+                              {protocol.points} puntos
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Zap className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <p className="text-gray-600 mb-2">No hay reto activo</p>
+                      <p className="text-sm text-gray-500 mb-4">Inicia el reto de 24 horas para ver tus protocolos aquí</p>
+                      <Button
+                        onClick={() => router.push("/reto")}
+                        className="bg-primary hover:bg-primary/90"
+                      >
+                        Ir al Reto
+                      </Button>
+                    </div>
+                  )}
                 </Card>
 
                 {/* 3. RESÚMENES - Semanal, Mensual y Conversión */}
