@@ -596,7 +596,7 @@ export default function InvitaUnAmigo() {
             </span>
           </p>
 
-          <div className="text-7xl font-extralight text-gray-400 tracking-widest mb-12 font-mono">
+          <div className="text-5xl md:text-7xl font-extralight text-gray-400 tracking-widest mb-12 font-mono">
             24:00:00
           </div>
 
