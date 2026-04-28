@@ -53,6 +53,9 @@ export default function ZenCommandCenter() {
   const [leadsUnlocked, setLeadsUnlocked] = useState(false);
   const [resourcesUnlocked, setResourcesUnlocked] = useState(false);
   const [previousLeadsCount, setPreviousLeadsCount] = useState(0);
+  
+  // Productivity stats for streak
+  const [currentStreak, setCurrentStreak] = useState(0);
 
   // Define funnelLink early so it can be used in JSX
   const funnelLink = profile?.username ? `https://mwr.hubia.vip/leads-registro?ref=${profile.username}` : "";
@@ -284,6 +287,16 @@ export default function ZenCommandCenter() {
         setLeadsCount(0);
       }
 
+      // Load productivity stats for streak
+      try {
+        const stats = await productivityService.getProductivityStats(session.user.id);
+        if (stats) {
+          setCurrentStreak(stats.current_streak || 0);
+        }
+      } catch (statsError) {
+        console.error("Error loading productivity stats:", statsError);
+      }
+
       setLoading(false);
     } catch (error) {
       console.error("Error loading data:", error);
@@ -446,7 +459,17 @@ export default function ZenCommandCenter() {
         {/* Header with logout button */}
         <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 px-6 py-4">
           <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-[#1D1D1F]">Reto 24 Horas</h1>
+            <div className="flex items-center gap-4">
+              <h1 className="text-2xl font-bold text-[#1D1D1F]">Reto 24 Horas</h1>
+              {currentStreak > 0 && (
+                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-orange-50 border border-orange-200 rounded-lg">
+                  <span className="text-lg">🔥</span>
+                  <span className="text-sm font-medium text-orange-700">
+                    Racha: {currentStreak} {currentStreak === 1 ? 'día' : 'días'}
+                  </span>
+                </div>
+              )}
+            </div>
             <Button
               onClick={async () => {
                 await authService.signOut();
