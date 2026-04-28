@@ -290,7 +290,7 @@ Tú también puedes viajar más por menos.
 Solo paso a recordarte que los precios especiales de lanzamiento están por terminar.
 
 🎯 Membresía anual: $179 USD
-⏰ Of Oferta válida: Últimos días
+⏰ Oferta válida: Últimos días
 
 ¿Aseguramos tu lugar ahora? 💳`
     },
@@ -1715,7 +1715,7 @@ Puedo resolver dudas sobre:
                         {copiedLeads ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       </Button>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <Button
                         onClick={() => {
                           const leadsUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`;
@@ -1771,7 +1771,7 @@ Puedo resolver dudas sobre:
                         {copiedFunnel ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                       </Button>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                       <Button
                         onClick={() => window.open(funnelUrl, "_blank")}
                         className="flex-1"
