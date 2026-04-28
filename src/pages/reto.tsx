@@ -415,7 +415,7 @@ export default function ZenCommandCenter() {
 
         {/* Main content with top padding to account for fixed header */}
         <div className="pt-20">
-          <div className="max-w-7xl mx-auto px-6 py-12 ${focusMode ? "hidden" : ""}">
+          <div className={`max-w-7xl mx-auto px-6 py-12 ${focusMode ? "hidden" : ""}`}>
             {/* A. EL PULSO - Cronómetro 24h */}
             <div className="mb-16 text-center">
               <div className="inline-block">
