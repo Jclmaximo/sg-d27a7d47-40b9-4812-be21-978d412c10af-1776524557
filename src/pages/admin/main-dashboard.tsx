@@ -1436,12 +1436,12 @@ Puedo resolver dudas sobre:
                                       .replace(/\{\{email\}\}/g, selectedLead.email);
                                     
                                     // Clean WhatsApp number (remove + and spaces)
-                                    const cleanPhone = selectedLead.whatsapp?.replace(/[\s\+]/g, "") || "";
+                                    const cleanPhone = selectedLead.phone?.replace(/[\s\+]/g, "") || "";
                                     
                                     if (!cleanPhone) {
                                       toast({
                                         title: "⚠️ Sin número de WhatsApp",
-                                        description: "Este lead no tiene WhatsApp registrado",
+                                        description: "Este lead no tiene número registrado",
                                         variant: "destructive",
                                       });
                                       return;
