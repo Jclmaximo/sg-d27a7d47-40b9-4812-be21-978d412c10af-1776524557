@@ -10,10 +10,12 @@ import { SEO } from "@/components/SEO";
 import { 
   Play, Pause, Copy, Check, Share2, Focus, 
   Circle, CheckCircle2, Maximize2, Minimize2,
-  Zap, Users, BookOpen, Lock, Instagram, TrendingUp, LogOut, Clock, ExternalLink, Trophy, Target, BarChart3
+  Zap, Users, BookOpen, Lock, Instagram, TrendingUp, LogOut, Clock, ExternalLink, Trophy, Target, BarChart3, ArrowLeft
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 
@@ -22,6 +24,7 @@ interface UserProfile {
   email: string;
   full_name: string;
   username: string;
+  avatar_url?: string;
 }
 
 interface DailyProtocol {
@@ -512,33 +515,43 @@ export default function ZenCommandCenter() {
       `}</style>
 
       <div className="min-h-screen bg-white">
-        {/* Header with logout button */}
-        <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 px-6 py-4">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold text-[#1D1D1F]">Reto 24 Horas</h1>
-              {currentStreak > 0 && (
-                <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-orange-50 border border-orange-200 rounded-lg">
-                  <span className="text-lg">🔥</span>
-                  <span className="text-sm font-medium text-orange-700">
-                    Racha: {currentStreak} {currentStreak === 1 ? 'día' : 'días'}
-                  </span>
+        {/* Fixed header with navigation */}
+        {navigationVisible && (
+          <div className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50 shadow-sm">
+            <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+              {/* Left: Title */}
+              <h1 className="text-xl font-bold text-[#1D1D1F]">Reto 24 Horas</h1>
+
+              {/* Center: User profile */}
+              <div className="flex items-center gap-3">
+                <Avatar className="w-8 h-8 md:w-10 md:h-10 border-2 border-primary/20">
+                  <AvatarImage src={profile?.avatar_url || undefined} alt={profile?.full_name || "Usuario"} />
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-sm">
+                    {profile?.full_name?.charAt(0).toUpperCase() || "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="hidden md:block">
+                  <p className="text-sm font-semibold text-[#1D1D1F]">
+                    {profile?.full_name || "Usuario"}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    @{profile?.username || "usuario"}
+                  </p>
                 </div>
-              )}
+              </div>
+
+              {/* Right: Exit button */}
+              <Button
+                variant="ghost"
+                onClick={() => router.push("/admin/main-dashboard")}
+                className="text-gray-600 hover:text-[#1D1D1F]"
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                <span className="hidden md:inline">Salir</span>
+              </Button>
             </div>
-            <Button
-              onClick={async () => {
-                await authService.signOut();
-                router.push("/admin");
-              }}
-              variant="outline"
-              size="sm"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Salir
-            </Button>
           </div>
-        </div>
+        )}
 
         {/* Main content with top padding to account for fixed header */}
         <div className="pt-20">
