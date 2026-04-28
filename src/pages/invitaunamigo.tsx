@@ -14,6 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Profile {
   id: string;
@@ -45,6 +49,15 @@ export default function InvitaUnAmigo() {
   const [registrationProgress, setRegistrationProgress] = useState(0);
   const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
   const [checkingUsername, setCheckingUsername] = useState(false);
+  const [formData, setFormData] = useState({
+    full_name: "",
+    email: "",
+    username: "",
+    password: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState<File | null>(null);
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState<string>("");
 
   // Lista de países con códigos
   const countries = [
@@ -463,21 +476,21 @@ export default function InvitaUnAmigo() {
             </div>
 
             {/* Pregunta de aceptación */}
-            <p className="text-base text-gray-500 font-light">
-              ¿Aceptas el desafío?
-            </p>
+            <div className="text-center space-y-4">
+              <p className="text-lg text-gray-600">
+                para el <span className="font-semibold text-primary">Reto de Productividad de 24 Horas</span>
+              </p>
 
-            {/* CTA impactante con gradiente y glow */}
-            <button
-              onClick={() => setStep(3)}
-              className="group relative w-full max-w-sm overflow-hidden rounded-2xl bg-gradient-to-r from-[#4285F4] to-[#3367D6] px-8 py-4 text-white font-medium text-lg shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              <span className="relative flex items-center justify-center gap-2">
-                Aceptar Desafío
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
-              </span>
-            </button>
+              <p className="text-base text-gray-500">¿Aceptas el desafío?</p>
+
+              <Button
+                onClick={handleAcceptChallenge}
+                size="lg"
+                className="w-full bg-primary hover:bg-primary/90 text-white font-semibold py-6 text-lg shadow-lg hover:shadow-xl transition-all"
+              >
+                Aceptar Desafío <ArrowRight className="ml-2" />
+              </Button>
+            </div>
 
             {/* Texto de seguridad */}
             <p className="text-xs text-gray-400 text-center max-w-md leading-relaxed">
@@ -664,6 +677,56 @@ export default function InvitaUnAmigo() {
             <p className="text-xs text-gray-400 text-center mt-2">
               Mínimo 6 caracteres
             </p>
+          </div>
+
+          {/* Foto de Perfil (opcional) */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="profile_photo" className="text-sm font-medium text-gray-700">
+                📸 Foto de perfil <span className="text-gray-400 font-normal">(opcional)</span>
+              </Label>
+            </div>
+
+            {/* Avatar Preview */}
+            <div className="flex items-center gap-4">
+              <Avatar className="w-16 h-16 border-2 border-primary/20">
+                {profilePhotoPreview ? (
+                  <AvatarImage src={profilePhotoPreview} alt="Preview" />
+                ) : (
+                  <AvatarFallback className="bg-primary/10 text-primary font-bold text-xl">
+                    {formData.full_name.charAt(0).toUpperCase() || "?"}
+                  </AvatarFallback>
+                )}
+              </Avatar>
+              
+              <div className="flex-1">
+                <Input
+                  id="profile_photo"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      setProfilePhoto(file);
+                      const reader = new FileReader();
+                      reader.onloadend = () => {
+                        setProfilePhotoPreview(reader.result as string);
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="text-sm"
+                />
+              </div>
+            </div>
+
+            {/* Motivational message */}
+            <div className="flex items-start gap-2 bg-primary/5 rounded-lg p-3 border border-primary/10">
+              <div className="text-primary mt-0.5">💡</div>
+              <p className="text-xs text-gray-600 leading-relaxed">
+                Puedes subirla después, pero es mejor si lo haces ahora :)
+              </p>
+            </div>
           </div>
 
           <button
