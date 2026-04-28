@@ -543,108 +543,52 @@ export default function ZenCommandCenter() {
         {/* Main content with top padding to account for fixed header */}
         <div className="pt-20">
           <div className={`max-w-7xl mx-auto px-6 py-12 ${focusMode ? "hidden" : ""}`}>
-            {/* A. EL PULSO - Cronómetro 24h */}
-            <div className="mb-16 text-center">
-              <div className="inline-block">
-                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-4">
-                  Reto de 24 Horas
+            {/* A. PRUEBA SOCIAL - Contador de progreso de streak */}
+            <div className="grid gap-6">
+              {/* B. ESCASEZ - Cuenta regresiva del día */}
+              <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
+                  Tiempo Restante del Día
                 </p>
-                <div className="text-7xl font-extralight text-[#1D1D1F] tracking-tighter mb-6">
-                  {formatTime(timeLeft.seconds)}
-                </div>
-                {!challengeActive && (
-                  <Button
-                    onClick={async () => {
-                      if (!profile?.id || !activeTemplate) {
-                        toast({
-                          title: "❌ Error",
-                          description: "No se pudo iniciar el reto",
-                          variant: "destructive",
-                        });
-                        return;
-                      }
-
-                      // Create user challenge progress in database
-                      const result = await challengeService.startUserChallenge(profile.id);
-                      
-                      if (result.success && result.data) {
-                        setUserProgress(result.data);
-                        setChallengeActive(true);
-                        setTimeLeft({ hours: activeTemplate.duration_hours, minutes: 0, seconds: 0 });
-                        setCopyCount(0);
-                        
-                        // Initialize protocols from template
-                        const initialProtocols = activeTemplate.protocols.map((p: ChallengeProtocol) => ({
-                          ...p,
-                          completed: false
-                        }));
-                        setProtocols(initialProtocols as DailyProtocol[]);
-
-                        toast({
-                          title: "✅ Reto iniciado",
-                          description: "Comienza tu día. Los protocolos se reinician a las 00:00",
-                          duration: 5000,
-                        });
-                      } else {
-                        toast({
-                          title: "❌ Error",
-                          description: result.error || "No se pudo iniciar el reto",
-                          variant: "destructive",
-                        });
-                      }
-                    }}
-                    className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-8 py-3 rounded-xl font-light"
-                  >
-                    <Play className="w-5 h-5 mr-2" />
-                    Iniciar Reto
-                  </Button>
-                )}
-              </div>
-            </div>
-
-            {/* B. ESCASEZ - Cuenta regresiva del día */}
-            <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
-              <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
-                Tiempo Restante del Día
-              </p>
-              
-              <div className="flex justify-center gap-4 mb-6">
-                {/* Hours */}
-                <div className="text-center">
-                  <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
-                    <span className="text-3xl font-light text-gray-800">
-                      {String(timeLeft.hours).padStart(2, "0")}
-                    </span>
+                
+                <div className="flex justify-center gap-4 mb-6">
+                  {/* Hours */}
+                  <div className="text-center">
+                    <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
+                      <span className="text-3xl font-light text-gray-800">
+                        {String(timeLeft.hours).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-400 font-light">Horas</p>
                   </div>
-                  <p className="text-xs text-gray-400 font-light">Horas</p>
-                </div>
 
-                {/* Minutes */}
-                <div className="text-center">
-                  <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
-                    <span className="text-3xl font-light text-gray-800">
-                      {String(timeLeft.minutes).padStart(2, "0")}
-                    </span>
+                  {/* Minutes */}
+                  <div className="text-center">
+                    <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
+                      <span className="text-3xl font-light text-gray-800">
+                        {String(timeLeft.minutes).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-400 font-light">Minutos</p>
                   </div>
-                  <p className="text-xs text-gray-400 font-light">Minutos</p>
-                </div>
 
-                {/* Seconds */}
-                <div className="text-center">
-                  <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
-                    <span className="text-3xl font-light text-gray-800">
-                      {String(timeLeft.seconds).padStart(2, "0")}
-                    </span>
+                  {/* Seconds */}
+                  <div className="text-center">
+                    <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
+                      <span className="text-3xl font-light text-gray-800">
+                        {String(timeLeft.seconds).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-400 font-light">Segundos</p>
                   </div>
-                  <p className="text-xs text-gray-400 font-light">Segundos</p>
                 </div>
-              </div>
 
-              {/* Day counter indicator */}
-              <div className="text-center">
-                <p className="text-sm text-gray-500 font-light">
-                  Día <span className="font-medium text-primary">{currentDay}</span> de {totalDays}
-                </p>
+                {/* Day counter indicator */}
+                <div className="text-center">
+                  <p className="text-sm text-gray-500 font-light">
+                    Día <span className="font-medium text-primary">{currentDay}</span> de {totalDays}
+                  </p>
+                </div>
               </div>
             </div>
 
