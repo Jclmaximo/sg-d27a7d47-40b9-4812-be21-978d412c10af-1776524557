@@ -1420,67 +1420,97 @@ Puedo resolver dudas sobre:
                           <Label className="text-sm font-medium text-[#0F172A] mb-3 block">
                             📝 Biblioteca de Mensajes
                           </Label>
-                          <div className="space-y-2">
+                          <div className="space-y-4">
                             {customTemplates.length === 0 ? (
                               <p className="text-sm text-[#64748B] py-4 text-center">
                                 No hay plantillas guardadas
                               </p>
                             ) : (
-                              customTemplates.map((template) => (
-                                <Card
-                                  key={template.id}
-                                  className="p-4 hover:bg-[#F8FAFC] cursor-pointer transition-colors border-[#E2E8F0]"
-                                  onClick={() => {
-                                    // Replace all possible placeholder formats with lead name
-                                    const personalizedMessage = template.template
-                                      .replace(/\{name\}/g, selectedLead.name)
-                                      .replace(/\{\{name\}\}/g, selectedLead.name)
-                                      .replace(/\{nombre\}/g, selectedLead.name)
-                                      .replace(/\{\{nombre\}\}/g, selectedLead.name)
-                                      .replace(/\{email\}/g, selectedLead.email)
-                                      .replace(/\{\{email\}\}/g, selectedLead.email);
-                                    
-                                    // Clean WhatsApp number (remove + and spaces)
-                                    const cleanPhone = selectedLead.phone?.replace(/[\s\+]/g, "") || "";
-                                    
-                                    if (!cleanPhone) {
-                                      toast({
-                                        title: "⚠️ Sin número de WhatsApp",
-                                        description: "Este lead no tiene número registrado",
-                                        variant: "destructive",
-                                      });
-                                      return;
-                                    }
-                                    
-                                    // Open WhatsApp with personalized message
-                                    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(personalizedMessage)}`;
-                                    window.open(whatsappUrl, "_blank");
-                                    
-                                    toast({
-                                      title: "✅ WhatsApp abierto",
-                                      description: "Mensaje personalizado listo para enviar",
-                                    });
-                                  }}
-                                >
-                                  <div className="flex items-start justify-between gap-3 mb-3">
-                                    <div className="flex items-center gap-3">
-                                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
-                                        {template.emoji}
+                              <>
+                                {/* Group templates by category */}
+                                {[
+                                  { key: 'primer_contacto', label: '👋 Primer Contacto', emoji: '👋' },
+                                  { key: 'seguimiento_1', label: '📧 Seguimiento 1', emoji: '📧' },
+                                  { key: 'seguimiento_2', label: '🎁 Seguimiento 2', emoji: '🎁' },
+                                  { key: 'recordatorio', label: '⏰ Recordatorio', emoji: '⏰' },
+                                ].map((categoryGroup) => {
+                                  const templatesInCategory = customTemplates.filter(
+                                    (t) => t.category === categoryGroup.key
+                                  );
+
+                                  if (templatesInCategory.length === 0) return null;
+
+                                  return (
+                                    <div key={categoryGroup.key} className="space-y-2">
+                                      {/* Category Header */}
+                                      <div className="flex items-center gap-2 pt-2">
+                                        <div className="h-px flex-1 bg-[#E2E8F0]" />
+                                        <p className="text-xs font-medium text-[#64748B] uppercase tracking-wider">
+                                          {categoryGroup.label}
+                                        </p>
+                                        <div className="h-px flex-1 bg-[#E2E8F0]" />
                                       </div>
-                                      <p className="text-sm font-medium text-[#0F172A]">
-                                        {template.name}
-                                      </p>
+
+                                      {/* Templates in this category */}
+                                      {templatesInCategory.map((template) => (
+                                        <Card
+                                          key={template.id}
+                                          className="p-4 hover:bg-[#F8FAFC] cursor-pointer transition-colors border-[#E2E8F0]"
+                                          onClick={() => {
+                                            // Replace all possible placeholder formats with lead name
+                                            const personalizedMessage = template.template
+                                              .replace(/\{name\}/g, selectedLead.name)
+                                              .replace(/\{\{name\}\}/g, selectedLead.name)
+                                              .replace(/\{nombre\}/g, selectedLead.name)
+                                              .replace(/\{\{nombre\}\}/g, selectedLead.name)
+                                              .replace(/\{email\}/g, selectedLead.email)
+                                              .replace(/\{\{email\}\}/g, selectedLead.email);
+                                            
+                                            // Clean WhatsApp number (remove + and spaces)
+                                            const cleanPhone = selectedLead.phone?.replace(/[\s\+]/g, "") || "";
+                                            
+                                            if (!cleanPhone) {
+                                              toast({
+                                                title: "⚠️ Sin número de WhatsApp",
+                                                description: "Este lead no tiene número registrado",
+                                                variant: "destructive",
+                                              });
+                                              return;
+                                            }
+                                            
+                                            // Open WhatsApp with personalized message
+                                            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(personalizedMessage)}`;
+                                            window.open(whatsappUrl, "_blank");
+                                            
+                                            toast({
+                                              title: "✅ WhatsApp abierto",
+                                              description: "Mensaje personalizado listo para enviar",
+                                            });
+                                          }}
+                                        >
+                                          <div className="flex items-start justify-between gap-3 mb-3">
+                                            <div className="flex items-center gap-3">
+                                              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
+                                                {template.emoji}
+                                              </div>
+                                              <p className="text-sm font-medium text-[#0F172A]">
+                                                {template.name}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <p className="text-sm text-[#475569] leading-relaxed">
+                                            {template.template
+                                              .replace(/\{name\}/g, selectedLead.name)
+                                              .replace(/\{\{name\}\}/g, selectedLead.name)
+                                              .replace(/\{nombre\}/g, selectedLead.name)
+                                              .replace(/\{\{nombre\}\}/g, selectedLead.name)}
+                                          </p>
+                                        </Card>
+                                      ))}
                                     </div>
-                                  </div>
-                                  <p className="text-sm text-[#475569] leading-relaxed">
-                                    {template.template
-                                      .replace(/\{name\}/g, selectedLead.name)
-                                      .replace(/\{\{name\}\}/g, selectedLead.name)
-                                      .replace(/\{nombre\}/g, selectedLead.name)
-                                      .replace(/\{\{nombre\}\}/g, selectedLead.name)}
-                                  </p>
-                                </Card>
-                              ))
+                                  );
+                                })}
+                              </>
                             )}
                           </div>
                         </div>

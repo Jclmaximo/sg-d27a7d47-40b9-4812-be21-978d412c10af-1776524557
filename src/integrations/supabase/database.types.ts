@@ -262,19 +262,25 @@ export type Database = {
       }
       message_templates: {
         Row: {
+          category: string | null
           created_at: string | null
+          emoji: string | null
           id: string
           name: string
           template: string
         }
         Insert: {
+          category?: string | null
           created_at?: string | null
+          emoji?: string | null
           id?: string
           name: string
           template: string
         }
         Update: {
+          category?: string | null
           created_at?: string | null
+          emoji?: string | null
           id?: string
           name?: string
           template?: string
