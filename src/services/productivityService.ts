@@ -42,6 +42,14 @@ export interface ProductivityStats {
   // Conversión
   presentations_total: number;
   decisions_total: number;
+  
+  // Datos mensuales para gráfica de tendencia (30 días)
+  monthly_data: {
+    date: string;
+    day: number;
+    points: number;
+    score: number;
+  }[];
 }
 
 export interface TeamMemberStats {
@@ -181,7 +189,8 @@ export async function getProductivityStats(userId: string): Promise<Productivity
       total_actions_week: 0,
       active_days_month: 0,
       presentations_total: 0,
-      decisions_total: 0
+      decisions_total: 0,
+      monthly_data: []
     };
   }
 
@@ -244,6 +253,41 @@ export async function getProductivityStats(userId: string): Promise<Productivity
     });
   }
 
+  // Preparar datos mensuales (últimos 30 días) para gráfica de tendencia
+  const monthly_data = [];
+  
+  for (let i = 29; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split("T")[0];
+    const dayNumber = date.getDate();
+    
+    const record = data.find(d => d.date === dateStr);
+    const dayPoints = record?.total_points || 0;
+    
+    // Calcular score del día (mismo algoritmo que daily_score)
+    const dayContacts = record?.contacted_prospects_count || (record?.contacted_prospects ? 1 : 0);
+    const dayFollowups = record?.did_followup ? 1 : 0;
+    const dayPresentations = record?.presented_business ? 1 : 0;
+    const dayPosts = record?.posted_content ? 1 : 0;
+    const dayDecisions = 0;
+    
+    const contactsScore = Math.min(dayContacts / 20, 1) * 30;
+    const followupsScore = Math.min(dayFollowups / 10, 1) * 20;
+    const presentationsScore = Math.min(dayPresentations / 3, 1) * 25;
+    const postsScore = Math.min(dayPosts / 3, 1) * 10;
+    const decisionsScore = Math.min(dayDecisions / 5, 1) * 15;
+    
+    const dayScore = Math.round(contactsScore + followupsScore + presentationsScore + postsScore + decisionsScore);
+    
+    monthly_data.push({
+      date: dateStr,
+      day: dayNumber,
+      points: dayPoints,
+      score: dayScore
+    });
+  }
+
   // CÁLCULOS DE GAMIFICACIÓN (NUEVO)
 
   // Datos de hoy
@@ -291,7 +335,8 @@ export async function getProductivityStats(userId: string): Promise<Productivity
     total_actions_week: total_actions,
     active_days_month,
     presentations_total,
-    decisions_total
+    decisions_total,
+    monthly_data
   };
 }
 

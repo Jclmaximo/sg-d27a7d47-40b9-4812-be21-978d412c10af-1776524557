@@ -5,7 +5,7 @@ import {
   Users, Clock, MessageSquare, CheckCircle2, 
   Download, LogOut, Mail, Phone, Calendar, Target, Plus, Eye,
   LayoutGrid, Share2, Copy, Check, Info, BookOpen, Network, DollarSign, Gift,
-  TrendingUp, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle, Zap, Upload, Circle
+  TrendingUp, TrendingDown, Minus, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle, Zap, Upload, Circle, BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
