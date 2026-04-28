@@ -376,47 +376,84 @@ export default function InvitaUnAmigo() {
           </div>
         </div>
 
-        {/* PASO 2: El Desafío */}
+        {/* PASO 2: Pantalla de invitación personalizada */}
         <div
           className={`
             absolute inset-0 flex flex-col items-center justify-center px-6
-            transition-opacity duration-700 ease-out
-            ${step === 2 ? "opacity-100" : "opacity-0 pointer-events-none"}
+            transition-all duration-700 ease-out
+            ${step === 2 ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"}
           `}
         >
-          {/* Avatar del Referente */}
-          <Avatar className="w-24 h-24 border-2 border-gray-100 shadow-sm mb-8">
-            {referrerAvatar ? (
-              <AvatarImage 
-                src={referrerAvatar} 
-                alt={referrerName || "Mentor"}
-                className="object-cover"
-              />
-            ) : (
-              <AvatarFallback className="bg-gray-50 text-[#1D1D1F] text-2xl font-light">
-                {(referrerName || "M").charAt(0).toUpperCase()}
-              </AvatarFallback>
-            )}
-          </Avatar>
+          <div className="flex flex-col items-center gap-8 max-w-lg w-full">
+            {/* Avatar del mentor */}
+            <div className="relative">
+              <div className="w-28 h-28 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center text-5xl font-light text-gray-600 shadow-xl shadow-gray-200/50 ring-4 ring-white">
+                {referrerName?.[0]?.toUpperCase() || "M"}
+              </div>
+              {/* Badge de verificación */}
+              <div className="absolute -bottom-1 -right-1 w-9 h-9 bg-gradient-to-br from-[#4285F4] to-[#3367D6] rounded-full flex items-center justify-center shadow-lg shadow-blue-500/30">
+                <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              </div>
+            </div>
 
-          <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] font-light text-center max-w-2xl mb-6 leading-relaxed">
-            Has sido seleccionado por{" "}
-            <span className="font-normal">{referrerName || "un mentor"}</span>
-            <br />
-            para el Reto de Productividad de 24 Horas
-          </h1>
+            {/* Badge de invitación exclusiva */}
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100/50 shadow-sm">
+              <div className="w-2 h-2 rounded-full bg-[#4285F4] animate-pulse" />
+              <span className="text-xs font-medium text-[#4285F4] tracking-wide uppercase">
+                Invitación Exclusiva
+              </span>
+            </div>
 
-          <p className="text-[17px] text-gray-500 font-light mb-12">
-            ¿Aceptas el desafío?
-          </p>
+            {/* Mensaje principal con jerarquía mejorada */}
+            <div className="text-center space-y-3">
+              <h1 className="text-3xl sm:text-4xl font-light text-[#1D1D1F] leading-tight">
+                Has sido seleccionado por{" "}
+                <span className="font-normal bg-gradient-to-r from-[#4285F4] to-[#3367D6] bg-clip-text text-transparent">
+                  {referrerName || "un mentor"}
+                </span>
+              </h1>
+              <p className="text-xl sm:text-2xl font-light text-gray-600">
+                para el Reto de Productividad de 24 Horas
+              </p>
+            </div>
 
-          <button
-            onClick={handleAcceptChallenge}
-            className="px-12 py-4 bg-[#4285F4] text-white rounded-full text-[15px] font-light tracking-wide hover:bg-[#3367D6] transition-all duration-300 shadow-sm flex items-center gap-2"
-          >
-            Aceptar Desafío
-            <ArrowRight className="w-4 h-4 stroke-[1.5]" />
-          </button>
+            {/* Micro-copy explicativo */}
+            <div className="w-full max-w-md">
+              <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 shadow-lg shadow-gray-200/30 border border-gray-100">
+                <p className="text-sm text-gray-600 text-center leading-relaxed">
+                  24 horas que pueden transformar tu productividad.
+                  <br />
+                  <span className="text-gray-500">
+                    Un desafío diseñado para ejecutores comprometidos con resultados reales.
+                  </span>
+                </p>
+              </div>
+            </div>
+
+            {/* Pregunta de aceptación */}
+            <p className="text-base text-gray-500 font-light">
+              ¿Aceptas el desafío?
+            </p>
+
+            {/* CTA impactante con gradiente y glow */}
+            <button
+              onClick={() => setStep(3)}
+              className="group relative w-full max-w-sm overflow-hidden rounded-2xl bg-gradient-to-r from-[#4285F4] to-[#3367D6] px-8 py-4 text-white font-medium text-lg shadow-2xl shadow-blue-500/30 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
+              <span className="relative flex items-center justify-center gap-2">
+                Aceptar Desafío
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+              </span>
+            </button>
+
+            {/* Texto de seguridad */}
+            <p className="text-xs text-gray-400 text-center max-w-md leading-relaxed">
+              Al aceptar, confirmas tu compromiso con el reto de 24 horas y recibirás las instrucciones por correo.
+            </p>
+          </div>
         </div>
 
         {/* PASO 3: Identidad (Nombre + Username) */}
