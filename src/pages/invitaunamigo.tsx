@@ -462,25 +462,8 @@ export default function InvitaUnAmigo() {
               </p>
             </div>
 
-            {/* Micro-copy explicativo */}
-            <div className="w-full max-w-md">
-              <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-6 shadow-lg shadow-gray-200/30 border border-gray-100">
-                <p className="text-sm text-gray-600 text-center leading-relaxed">
-                  24 horas que pueden transformar tu productividad.
-                  <br />
-                  <span className="text-gray-500">
-                    Un desafío diseñado para ejecutores comprometidos con resultados reales.
-                  </span>
-                </p>
-              </div>
-            </div>
-
             {/* Pregunta de aceptación */}
             <div className="text-center space-y-4">
-              <p className="text-lg text-gray-600">
-                para el <span className="font-semibold text-primary">Reto de Productividad de 24 Horas</span>
-              </p>
-
               <p className="text-base text-gray-500">¿Aceptas el desafío?</p>
 
               <Button
