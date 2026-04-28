@@ -331,6 +331,10 @@ export type Database = {
         Row: {
           ambassador_active: boolean | null
           avatar_url: string | null
+          challenge_active: boolean | null
+          challenge_copy_count: number | null
+          challenge_protocols: Json | null
+          challenge_start_time: string | null
           created_at: string | null
           email: string | null
           full_name: string | null
@@ -346,6 +350,10 @@ export type Database = {
         Insert: {
           ambassador_active?: boolean | null
           avatar_url?: string | null
+          challenge_active?: boolean | null
+          challenge_copy_count?: number | null
+          challenge_protocols?: Json | null
+          challenge_start_time?: string | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null
@@ -361,6 +369,10 @@ export type Database = {
         Update: {
           ambassador_active?: boolean | null
           avatar_url?: string | null
+          challenge_active?: boolean | null
+          challenge_copy_count?: number | null
+          challenge_protocols?: Json | null
+          challenge_start_time?: string | null
           created_at?: string | null
           email?: string | null
           full_name?: string | null

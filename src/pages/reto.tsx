@@ -60,65 +60,7 @@ export default function ZenCommandCenter() {
 
   useEffect(() => {
     loadData();
-    restoreChallengeState();
-    loadShareCount();
   }, []);
-
-  const restoreChallengeState = () => {
-    try {
-      const savedState = localStorage.getItem("challenge-state");
-      if (savedState) {
-        const state = JSON.parse(savedState);
-        
-        // Restore challenge active state
-        if (state.challengeActive) {
-          setChallengeActive(true);
-          setNavigationVisible(true);
-          
-          // Calculate elapsed time since start
-          const startTime = new Date(state.startTime).getTime();
-          const now = new Date().getTime();
-          const elapsedSeconds = Math.floor((now - startTime) / 1000);
-          const remaining = Math.max(0, 86400 - elapsedSeconds);
-          
-          setTimeRemaining(remaining);
-        }
-        
-        // Restore copy count
-        if (state.copyCount) {
-          setCopyCount(state.copyCount);
-        }
-        
-        // Restore protocols
-        if (state.protocols) {
-          setProtocols(state.protocols);
-        }
-      }
-    } catch (error) {
-      console.error("Error restoring challenge state:", error);
-    }
-  };
-
-  const saveChallengeState = (updates: {
-    challengeActive?: boolean;
-    startTime?: string;
-    copyCount?: number;
-    protocols?: DailyProtocol[];
-  }) => {
-    try {
-      const savedState = localStorage.getItem("challenge-state");
-      const currentState = savedState ? JSON.parse(savedState) : {};
-      
-      const newState = {
-        ...currentState,
-        ...updates
-      };
-      
-      localStorage.setItem("challenge-state", JSON.stringify(newState));
-    } catch (error) {
-      console.error("Error saving challenge state:", error);
-    }
-  };
 
   useEffect(() => {
     if (challengeActive && timeRemaining > 0) {
@@ -235,6 +177,29 @@ export default function ZenCommandCenter() {
 
       setProfile(profileData as UserProfile);
 
+      // Restore challenge state from database
+      if (profileData.challenge_active && profileData.challenge_start_time) {
+        setChallengeActive(true);
+        setNavigationVisible(true);
+        
+        const startTime = new Date(profileData.challenge_start_time).getTime();
+        const now = new Date().getTime();
+        const elapsedSeconds = Math.floor((now - startTime) / 1000);
+        const remaining = Math.max(0, 86400 - elapsedSeconds);
+        
+        setTimeRemaining(remaining);
+      }
+
+      // Restore copy count
+      if (profileData.challenge_copy_count) {
+        setCopyCount(profileData.challenge_copy_count);
+      }
+
+      // Restore protocols
+      if (profileData.challenge_protocols && Array.isArray(profileData.challenge_protocols)) {
+        setProtocols(profileData.challenge_protocols);
+      }
+
       // Load leads with error handling
       try {
         const leads = await leadsService.getLeads(session.user.id);
@@ -248,26 +213,25 @@ export default function ZenCommandCenter() {
     } catch (error) {
       console.error("Error loading data:", error);
       setLoading(false);
-      // Don't redirect on error, just show empty state
     }
   };
 
-  const toggleProtocol = (id: number | string) => {
+  const toggleProtocol = async (id: number | string) => {
     const updatedProtocols = protocols.map((p) =>
       Number(p.id) === Number(id) ? { ...p, completed: !p.completed } : p
     );
     setProtocols(updatedProtocols);
-    saveChallengeState({ protocols: updatedProtocols });
+    await saveChallengeState({ protocols: updatedProtocols });
   };
 
-  const copyFunnelLink = () => {
+  const copyFunnelLink = async () => {
     const link = profile?.username ? `https://mwr.hubia.vip/mwr?ref=${profile.username}` : "";
     navigator.clipboard.writeText(link);
     const newCount = copyCount + 1;
     setCopyCount(newCount);
-    saveChallengeState({ copyCount: newCount });
+    await saveChallengeState({ copyCount: newCount });
     
-    // Save to localStorage for resources unlock
+    // Save to localStorage for resources unlock (keeping backward compatibility)
     localStorage.setItem("reto_share_count", newCount.toString());
     
     // Auto-complete protocol when reached 5 copies
@@ -276,7 +240,7 @@ export default function ZenCommandCenter() {
         Number(p.id) === 1 ? { ...p, completed: true } : p
       );
       setProtocols(updatedProtocols);
-      saveChallengeState({ protocols: updatedProtocols });
+      await saveChallengeState({ protocols: updatedProtocols });
       
       // Unlock resources
       setResourcesUnlocked(true);
@@ -312,6 +276,46 @@ export default function ZenCommandCenter() {
   };
 
   const completionPercentage = (protocols.filter((p) => p.completed).length / protocols.length) * 100;
+
+  const saveChallengeState = async (updates: {
+    challengeActive?: boolean;
+    startTime?: string;
+    copyCount?: number;
+    protocols?: DailyProtocol[];
+  }) => {
+    if (!profile?.id) return;
+
+    try {
+      const updateData: any = {};
+      
+      if (updates.challengeActive !== undefined) {
+        updateData.challenge_active = updates.challengeActive;
+      }
+      
+      if (updates.startTime) {
+        updateData.challenge_start_time = updates.startTime;
+      }
+      
+      if (updates.copyCount !== undefined) {
+        updateData.challenge_copy_count = updates.copyCount;
+      }
+      
+      if (updates.protocols) {
+        updateData.challenge_protocols = updates.protocols;
+      }
+
+      const { error } = await supabase
+        .from("profiles")
+        .update(updateData)
+        .eq("id", profile.id);
+
+      if (error) {
+        console.error("Error saving challenge state:", error);
+      }
+    } catch (error) {
+      console.error("Error saving challenge state:", error);
+    }
+  };
 
   if (loading) {
     return (
@@ -376,19 +380,19 @@ export default function ZenCommandCenter() {
                 {formatTime(timeRemaining)}
               </div>
               <Button
-                onClick={() => {
+                onClick={async () => {
                   const newState = !challengeActive;
                   setChallengeActive(newState);
                   
                   if (newState) {
-                    // Starting challenge - save start time
-                    saveChallengeState({
+                    // Starting challenge - save start time to database
+                    await saveChallengeState({
                       challengeActive: true,
                       startTime: new Date().toISOString()
                     });
                   } else {
-                    // Pausing challenge - keep state but mark as paused
-                    saveChallengeState({
+                    // Pausing challenge - mark as paused in database
+                    await saveChallengeState({
                       challengeActive: false
                     });
                   }
