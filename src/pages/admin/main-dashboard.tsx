@@ -1334,51 +1334,6 @@ Puedo resolver dudas sobre:
                           </div>
                         </div>
 
-                        {/* Message Templates */}
-                        <div>
-                          <Label className="text-sm font-medium text-[#0F172A] mb-3 block">
-                            📝 Biblioteca de Mensajes
-                          </Label>
-                          <div className="space-y-2">
-                            {customTemplates.length === 0 ? (
-                              <p className="text-sm text-[#64748B] py-4 text-center">
-                                No hay plantillas guardadas
-                              </p>
-                            ) : (
-                              customTemplates.map((template) => (
-                                <Card
-                                  key={template.id}
-                                  className="p-4 hover:bg-[#F8FAFC] cursor-pointer transition-colors border-[#E2E8F0]"
-                                  onClick={() => {
-                                    const personalizedMessage = template.template
-                                      .replace("{{nombre}}", selectedLead.name)
-                                      .replace("{{email}}", selectedLead.email);
-                                    navigator.clipboard.writeText(personalizedMessage);
-                                    toast({
-                                      title: "Mensaje copiado",
-                                      description: "Pégalo en WhatsApp para enviarlo",
-                                    });
-                                  }}
-                                >
-                                  <div className="flex items-start justify-between gap-3 mb-3">
-                                    <div className="flex items-center gap-3">
-                                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
-                                        {template.emoji}
-                                      </div>
-                                      <p className="text-sm font-medium text-[#0F172A]">
-                                        {template.name}
-                                      </p>
-                                    </div>
-                                  </div>
-                                  <p className="text-sm text-[#475569] leading-relaxed">
-                                    {template.template.replace("{{nombre}}", selectedLead.name)}
-                                  </p>
-                                </Card>
-                              ))
-                            )}
-                          </div>
-                        </div>
-
                         {/* Notes Section */}
                         <div>
                           <Label className="text-sm font-medium text-[#0F172A] mb-3 block">
@@ -1455,6 +1410,51 @@ Puedo resolver dudas sobre:
                                   </div>
                                   <p className="text-sm text-[#475569]">{note.note}</p>
                                 </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Message Templates */}
+                        <div>
+                          <Label className="text-sm font-medium text-[#0F172A] mb-3 block">
+                            📝 Biblioteca de Mensajes
+                          </Label>
+                          <div className="space-y-2">
+                            {customTemplates.length === 0 ? (
+                              <p className="text-sm text-[#64748B] py-4 text-center">
+                                No hay plantillas guardadas
+                              </p>
+                            ) : (
+                              customTemplates.map((template) => (
+                                <Card
+                                  key={template.id}
+                                  className="p-4 hover:bg-[#F8FAFC] cursor-pointer transition-colors border-[#E2E8F0]"
+                                  onClick={() => {
+                                    const personalizedMessage = template.template
+                                      .replace("{{nombre}}", selectedLead.name)
+                                      .replace("{{email}}", selectedLead.email);
+                                    navigator.clipboard.writeText(personalizedMessage);
+                                    toast({
+                                      title: "Mensaje copiado",
+                                      description: "Pégalo en WhatsApp para enviarlo",
+                                    });
+                                  }}
+                                >
+                                  <div className="flex items-start justify-between gap-3 mb-3">
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
+                                        {template.emoji}
+                                      </div>
+                                      <p className="text-sm font-medium text-[#0F172A]">
+                                        {template.name}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <p className="text-sm text-[#475569] leading-relaxed">
+                                    {template.template.replace("{{nombre}}", selectedLead.name)}
+                                  </p>
+                                </Card>
                               ))
                             )}
                           </div>
