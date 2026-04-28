@@ -597,7 +597,7 @@ export default function InvitaUnAmigo() {
               </Select>
 
               {/* Campo de WhatsApp */}
-              <div className="relative">
+              <div>
                 <input
                   type="tel"
                   value={whatsapp}
@@ -605,9 +605,6 @@ export default function InvitaUnAmigo() {
                   placeholder="234 567 8900"
                   className="w-full px-2 py-4 bg-transparent border-b border-gray-200 text-[17px] text-[#1D1D1F] font-light text-center focus:outline-none focus:border-[#1D1D1F] transition-all duration-300 placeholder:text-gray-300"
                 />
-                <span className="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400 text-[15px] font-light">
-                  {countryCode}
-                </span>
               </div>
               <p className="text-xs text-gray-400 text-center">
                 Solo números, sin código de país

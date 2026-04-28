@@ -1360,24 +1360,19 @@ Puedo resolver dudas sobre:
                                     });
                                   }}
                                 >
-                                  <div className="flex items-start justify-between gap-3">
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
-                                        <span className="text-sm font-medium text-primary">
-                                          {template.name}
-                                        </span>
+                                  <div className="flex items-start justify-between gap-3 mb-3">
+                                    <div className="flex items-center gap-3">
+                                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
+                                        {template.emoji}
                                       </div>
-                                      <div>
-                                        <p className="text-sm font-medium text-[#0F172A]">
-                                          {template.name}
-                                        </p>
-                                        <p className="text-xs text-[#64748B]">
-                                          {template.emoji}
-                                        </p>
-                                      </div>
+                                      <p className="text-sm font-medium text-[#0F172A]">
+                                        {template.name}
+                                      </p>
                                     </div>
                                   </div>
-                                  <p className="text-sm text-[#475569]">{template.template.replace("{{nombre}}", selectedLead.name)}</p>
+                                  <p className="text-sm text-[#475569] leading-relaxed">
+                                    {template.template.replace("{{nombre}}", selectedLead.name)}
+                                  </p>
                                 </Card>
                               ))
                             )}
