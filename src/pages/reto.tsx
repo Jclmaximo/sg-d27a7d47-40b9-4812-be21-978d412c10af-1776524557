@@ -83,7 +83,7 @@ export default function ZenCommandCenter() {
           { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
           { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
           { id: "3", label: "Hacer seguimiento a leads", completed: false, points: 10 },
-          { id: "4", label: "Compartar link en 2 plataformas", completed: false, points: 10 },
+          { id: "4", label: "Compartir link en 2 plataformas", completed: false, points: 10 },
           { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
         ]);
 
