@@ -378,6 +378,19 @@ export default function ZenCommandCenter() {
 
   const completionPercentage = (protocols.filter((p) => p.completed).length / protocols.length) * 100;
 
+  // Dynamic color based on completion percentage
+  const getProgressColor = (percentage: number) => {
+    if (percentage === 0) return { stroke: "#E5E7EB", text: "#6B7280", glow: false };
+    if (percentage <= 30) return { stroke: "#DC2626", text: "#DC2626", glow: false }; // Rojo fuerte
+    if (percentage <= 49) return { stroke: "#F87171", text: "#EF4444", glow: false }; // Rojo suave
+    if (percentage <= 65) return { stroke: "#FBBF24", text: "#F59E0B", glow: false }; // Amarillo bajo
+    if (percentage <= 79) return { stroke: "#FACC15", text: "#EAB308", glow: false }; // Amarillo alto
+    if (percentage <= 90) return { stroke: "#10B981", text: "#059669", glow: false }; // Verde
+    return { stroke: "#047857", text: "#047857", glow: true }; // Verde intenso + glow
+  };
+
+  const progressColor = getProgressColor(completionPercentage);
+
   const saveChallengeState = async (updates: {
     challengeActive?: boolean;
     startTime?: string;
@@ -571,17 +584,23 @@ export default function ZenCommandCenter() {
                             cx="64"
                             cy="64"
                             r="56"
-                            stroke="#F59E0B"
+                            stroke={progressColor.stroke}
                             strokeWidth="8"
                             fill="none"
                             strokeDasharray={`${2 * Math.PI * 56}`}
                             strokeDashoffset={`${2 * Math.PI * 56 * (1 - completionPercentage / 100)}`}
                             strokeLinecap="round"
                             className="transition-all duration-500"
+                            style={progressColor.glow ? {
+                              filter: "drop-shadow(0 0 8px rgba(4, 120, 87, 0.6))"
+                            } : {}}
                           />
                         </svg>
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <span className="text-4xl font-light text-[#1D1D1F]">
+                          <span 
+                            className="text-4xl font-light transition-colors duration-500"
+                            style={{ color: progressColor.text }}
+                          >
                             {Math.round(completionPercentage)}%
                           </span>
                         </div>
@@ -589,7 +608,10 @@ export default function ZenCommandCenter() {
 
                       {/* Status & Message */}
                       <div className="flex-1 text-center md:text-left">
-                        <h3 className="text-2xl font-light text-[#F59E0B] mb-2">
+                        <h3 
+                          className="text-2xl font-light mb-2 transition-colors duration-500"
+                          style={{ color: progressColor.text }}
+                        >
                           {completionPercentage === 0 ? "Comienza ahora" :
                            completionPercentage < 40 ? "Productividad baja" :
                            completionPercentage < 80 ? "Productividad media" :
@@ -606,6 +628,14 @@ export default function ZenCommandCenter() {
                             <TrendingUp className="w-4 h-4 text-amber-600" />
                             <span className="text-sm text-amber-700 font-light">
                               Estás a {protocols.filter(p => !p.completed).length} {protocols.filter(p => !p.completed).length === 1 ? 'acción' : 'acciones'} de completar el día
+                            </span>
+                          </div>
+                        )}
+                        {completionPercentage === 100 && (
+                          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-lg">
+                            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                            <span className="text-sm text-emerald-700 font-light">
+                              ¡Todos los protocolos completados! 🎉
                             </span>
                           </div>
                         )}
