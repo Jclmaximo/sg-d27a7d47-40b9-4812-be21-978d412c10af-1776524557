@@ -37,12 +37,14 @@ export default function ZenCommandCenter() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [challengeActive, setChallengeActive] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(86400); // 24 horas en segundos
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const [currentDay, setCurrentDay] = useState(1);
+  const [totalDays, setTotalDays] = useState(7);
   const [leadsCount, setLeadsCount] = useState(0);
   const [copyCount, setCopyCount] = useState(0);
   const [navigationVisible, setNavigationVisible] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
-  const [protocols, setProtocols] = useState<DailyProtocol[]>([]);
+  const [protocols, setProtocols] = useState<ChallengeProtocol[]>([]);
   
   // NEW: Dynamic template & progress
   const [activeTemplate, setActiveTemplate] = useState<ChallengeTemplate | null>(null);
@@ -64,14 +66,48 @@ export default function ZenCommandCenter() {
     loadData();
   }, []);
 
+  // Calculate time until end of day (23:59:59) based on user's local timezone
   useEffect(() => {
-    if (challengeActive && timeRemaining > 0) {
-      const interval = setInterval(() => {
-        setTimeRemaining((prev) => Math.max(0, prev - 1));
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-  }, [challengeActive, timeRemaining]);
+    const calculateTimeUntilEndOfDay = () => {
+      const now = new Date();
+      const endOfDay = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        23, 59, 59, 999
+      );
+      
+      const diff = endOfDay.getTime() - now.getTime();
+      
+      if (diff <= 0) {
+        // Past midnight - new day starts
+        return { hours: 23, minutes: 59, seconds: 59 };
+      }
+      
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      return { hours, minutes, seconds };
+    };
+
+    // Initial calculation
+    setTimeLeft(calculateTimeUntilEndOfDay());
+
+    // Update every second
+    const interval = setInterval(() => {
+      const newTime = calculateTimeUntilEndOfDay();
+      setTimeLeft(newTime);
+      
+      // Reset at midnight (when all values are max again)
+      if (newTime.hours === 23 && newTime.minutes === 59 && newTime.seconds === 59) {
+        // New day - could trigger data refresh here
+        console.log("🌅 Nuevo día comenzado - Reset automático");
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   // REALTIME: Subscribe to template changes from admin
   useEffect(() => {
@@ -109,11 +145,11 @@ export default function ZenCommandCenter() {
 
   // Auto-reset challenge when countdown reaches 0
   useEffect(() => {
-    if (challengeActive && timeRemaining === 0) {
+    if (challengeActive && timeLeft.seconds === 0 && timeLeft.minutes === 0 && timeLeft.hours === 0) {
       const resetChallenge = async () => {
         // Reset all states
         setChallengeActive(false);
-        setTimeRemaining(86400); // Reset to 24 hours
+        setTimeLeft({ hours: 23, minutes: 59, seconds: 59 });
         setCopyCount(0);
         setProtocols([]);
 
@@ -133,7 +169,7 @@ export default function ZenCommandCenter() {
 
       resetChallenge();
     }
-  }, [challengeActive, timeRemaining, toast]);
+  }, [challengeActive, timeLeft, toast]);
 
   // Show navigation dock when challenge starts
   useEffect(() => {
@@ -258,7 +294,7 @@ export default function ZenCommandCenter() {
         const elapsedSeconds = Math.floor((now - startTime) / 1000);
         const remaining = Math.max(0, (template?.duration_hours || 24) * 3600 - elapsedSeconds);
         
-        setTimeRemaining(remaining);
+        setTimeLeft({ hours: Math.floor(remaining / 3600), minutes: Math.floor((remaining % 3600) / 60), seconds: remaining % 60 });
         setCopyCount(progress.copy_count);
         
         // Build protocols from template + user progress
@@ -303,6 +339,48 @@ export default function ZenCommandCenter() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!session.user) return;
+      
+      setLoading(true);
+      try {
+        const data = await challengeService.getChallengeState(session.user.id);
+        
+        if (data) {
+          setChallengeActive(data.is_active);
+          setProtocols(data.protocols || []);
+          
+          // Calculate current day based on start date
+          if (data.start_date) {
+            const startDate = new Date(data.start_date);
+            const today = new Date();
+            
+            // Reset time to start of day for accurate day calculation
+            startDate.setHours(0, 0, 0, 0);
+            today.setHours(0, 0, 0, 0);
+            
+            const daysDiff = Math.floor((today.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+            const calculatedDay = daysDiff + 1; // Day 1 is the start date
+            
+            setCurrentDay(Math.min(calculatedDay, totalDays)); // Cap at total days
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching challenge:", error);
+        toast({
+          title: "Error",
+          description: "No se pudo cargar el estado del reto",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [session.user, totalDays]);
 
   const toggleProtocol = async (id: number | string) => {
     const protocol = protocols.find(p => Number(p.id) === Number(id));
@@ -507,7 +585,7 @@ export default function ZenCommandCenter() {
                   Reto de 24 Horas
                 </p>
                 <div className="text-7xl font-extralight text-[#1D1D1F] tracking-tighter mb-6">
-                  {formatTime(timeRemaining)}
+                  {formatTime(timeLeft.seconds)}
                 </div>
                 {!challengeActive && (
                   <Button
@@ -527,7 +605,7 @@ export default function ZenCommandCenter() {
                       if (result.success && result.data) {
                         setUserProgress(result.data);
                         setChallengeActive(true);
-                        setTimeRemaining(activeTemplate.duration_hours * 3600);
+                        setTimeLeft({ hours: activeTemplate.duration_hours, minutes: 0, seconds: 0 });
                         setCopyCount(0);
                         
                         // Initialize protocols from template
@@ -556,6 +634,52 @@ export default function ZenCommandCenter() {
                     Iniciar Reto
                   </Button>
                 )}
+              </div>
+            </div>
+
+            {/* B. ESCASEZ - Cuenta regresiva del día */}
+            <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
+              <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
+                Tiempo Restante del Día
+              </p>
+              
+              <div className="flex justify-center gap-4 mb-6">
+                {/* Hours */}
+                <div className="text-center">
+                  <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
+                    <span className="text-3xl font-light text-gray-800">
+                      {String(timeLeft.hours).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400 font-light">Horas</p>
+                </div>
+
+                {/* Minutes */}
+                <div className="text-center">
+                  <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
+                    <span className="text-3xl font-light text-gray-800">
+                      {String(timeLeft.minutes).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400 font-light">Minutos</p>
+                </div>
+
+                {/* Seconds */}
+                <div className="text-center">
+                  <div className="bg-gray-50 rounded-2xl w-20 h-20 flex items-center justify-center mb-2">
+                    <span className="text-3xl font-light text-gray-800">
+                      {String(timeLeft.seconds).padStart(2, "0")}
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400 font-light">Segundos</p>
+                </div>
+              </div>
+
+              {/* Day counter indicator */}
+              <div className="text-center">
+                <p className="text-sm text-gray-500 font-light">
+                  Día <span className="font-medium text-primary">{currentDay}</span> de {totalDays}
+                </p>
               </div>
             </div>
 
