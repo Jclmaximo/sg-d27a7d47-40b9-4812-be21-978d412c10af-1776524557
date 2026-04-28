@@ -1432,12 +1432,28 @@ Puedo resolver dudas sobre:
                                   className="p-4 hover:bg-[#F8FAFC] cursor-pointer transition-colors border-[#E2E8F0]"
                                   onClick={() => {
                                     const personalizedMessage = template.template
-                                      .replace("{{nombre}}", selectedLead.name)
-                                      .replace("{{email}}", selectedLead.email);
-                                    navigator.clipboard.writeText(personalizedMessage);
+                                      .replace(/\{\{nombre\}\}/g, selectedLead.name)
+                                      .replace(/\{\{email\}\}/g, selectedLead.email);
+                                    
+                                    // Clean WhatsApp number (remove + and spaces)
+                                    const cleanPhone = selectedLead.whatsapp?.replace(/[\s\+]/g, "") || "";
+                                    
+                                    if (!cleanPhone) {
+                                      toast({
+                                        title: "⚠️ Sin número de WhatsApp",
+                                        description: "Este lead no tiene WhatsApp registrado",
+                                        variant: "destructive",
+                                      });
+                                      return;
+                                    }
+                                    
+                                    // Open WhatsApp with personalized message
+                                    const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(personalizedMessage)}`;
+                                    window.open(whatsappUrl, "_blank");
+                                    
                                     toast({
-                                      title: "Mensaje copiado",
-                                      description: "Pégalo en WhatsApp para enviarlo",
+                                      title: "✅ WhatsApp abierto",
+                                      description: "Mensaje personalizado listo para enviar",
                                     });
                                   }}
                                 >
@@ -1452,7 +1468,7 @@ Puedo resolver dudas sobre:
                                     </div>
                                   </div>
                                   <p className="text-sm text-[#475569] leading-relaxed">
-                                    {template.template.replace("{{nombre}}", selectedLead.name)}
+                                    {template.template.replace(/\{\{nombre\}\}/g, selectedLead.name)}
                                   </p>
                                 </Card>
                               ))
