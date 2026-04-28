@@ -1431,8 +1431,13 @@ Puedo resolver dudas sobre:
                                   key={template.id}
                                   className="p-4 hover:bg-[#F8FAFC] cursor-pointer transition-colors border-[#E2E8F0]"
                                   onClick={() => {
+                                    // Replace all possible placeholder formats with lead name
                                     const personalizedMessage = template.template
+                                      .replace(/\{name\}/g, selectedLead.name)
+                                      .replace(/\{\{name\}\}/g, selectedLead.name)
+                                      .replace(/\{nombre\}/g, selectedLead.name)
                                       .replace(/\{\{nombre\}\}/g, selectedLead.name)
+                                      .replace(/\{email\}/g, selectedLead.email)
                                       .replace(/\{\{email\}\}/g, selectedLead.email);
                                     
                                     // Clean WhatsApp number (remove + and spaces)
@@ -1468,7 +1473,11 @@ Puedo resolver dudas sobre:
                                     </div>
                                   </div>
                                   <p className="text-sm text-[#475569] leading-relaxed">
-                                    {template.template.replace(/\{\{nombre\}\}/g, selectedLead.name)}
+                                    {template.template
+                                      .replace(/\{name\}/g, selectedLead.name)
+                                      .replace(/\{\{name\}\}/g, selectedLead.name)
+                                      .replace(/\{nombre\}/g, selectedLead.name)
+                                      .replace(/\{\{nombre\}\}/g, selectedLead.name)}
                                   </p>
                                 </Card>
                               ))
