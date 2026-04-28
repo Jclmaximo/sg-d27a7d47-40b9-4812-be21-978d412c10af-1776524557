@@ -590,17 +590,17 @@ export default function ZenCommandCenter() {
                 {/* Start button */}
                 <Button
                   onClick={async () => {
-                    if (!session?.user?.id || !activeTemplate) return;
+                    if (!profile?.id || !activeTemplate) return;
 
                     try {
                       // Create new challenge in database
-                      const newChallenge = await challengeService.startUserChallenge(
-                        session.user.id,
+                      const response = await challengeService.startUserChallenge(
+                        profile.id,
                         activeTemplate.id
                       );
 
-                      if (newChallenge) {
-                        setUserProgress(newChallenge);
+                      if (response.success && response.data) {
+                        setUserProgress(response.data);
                         setChallengeActive(true);
                         setNavigationVisible(true);
                         setCurrentDay(1);
@@ -618,7 +618,7 @@ export default function ZenCommandCenter() {
                           duration: 5000,
                         });
                       } else {
-                        throw new Error("No se pudo crear el reto");
+                        throw new Error(response.error || "No se pudo crear el reto");
                       }
                     } catch (error) {
                       console.error("Error starting challenge:", error);
