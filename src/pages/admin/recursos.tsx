@@ -21,7 +21,8 @@ import {
   TrendingUp,
   ArrowLeft,
   CheckCircle2,
-  Globe
+  Globe,
+  LogOut
 } from "lucide-react";
 import Link from "next/link";
 
@@ -561,13 +562,25 @@ export default function RecursosPage() {
         <div className="container mx-auto max-w-7xl">
           {/* Header */}
           <div className="mb-8">
-            <div className="flex items-center gap-4 mb-4">
+            <div className="flex items-center justify-between mb-4">
               <Link href="/admin/main-dashboard">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Volver
                 </Button>
               </Link>
+              <Button
+                onClick={async () => {
+                  const { authService } = await import("@/services/authService");
+                  await authService.signOut();
+                  router.push("/admin");
+                }}
+                variant="outline"
+                size="sm"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Salir
+              </Button>
             </div>
             <h1 className="text-4xl font-bold">Recursos para Difusión</h1>
             <p className="text-muted-foreground mt-2">
