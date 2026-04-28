@@ -846,13 +846,8 @@ export default function ZenCommandCenter() {
                                 : "text-[#1D1D1F]"
                             }`}
                           >
-                            {protocol.title}
+                            {protocol.label}
                           </p>
-                          {protocol.description && (
-                            <p className="text-xs text-gray-500 mt-1">
-                              {protocol.description}
-                            </p>
-                          )}
                         </div>
                       </div>
                     </div>
