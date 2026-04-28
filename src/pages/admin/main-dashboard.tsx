@@ -1514,137 +1514,476 @@ Puedo resolver dudas sobre:
 
             {/* TAB 4 - PRODUCTIVIDAD */}
             {activeTab === "productividad" && (
-              <div className="space-y-6">
-                <Card className="bg-white border border-[#E2E8F0]">
-                  <CardHeader>
-                    <CardTitle>Protocolos del Reto Activo</CardTitle>
-                    <CardDescription>
-                      {userProgress 
-                        ? "Marca los protocolos que completaste hoy"
-                        : "Inicia el reto desde /reto para comenzar a registrar tu progreso"}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {!userProgress ? (
-                      <div className="text-center py-8">
-                        <Target className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                        <p className="text-gray-500 mb-4">
-                          No tienes un reto activo
-                        </p>
-                        <Button
-                          onClick={() => router.push("/reto")}
-                          className="bg-primary hover:bg-primary/90"
-                        >
-                          <Zap className="w-4 h-4 mr-2" />
-                          Ir al Command Center
-                        </Button>
+              <div className="space-y-8">
+                {/* 1. SCORE DEL DÍA - Principal */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Score Principal */}
+                  <Card className="p-8 bg-gradient-to-br from-white to-gray-50">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-lg font-semibold text-gray-900">Score de Hoy</h2>
+                      {productivityStats && productivityStats.current_streak > 0 && (
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 border border-orange-200 rounded-lg">
+                          <span className="text-lg">🔥</span>
+                          <span className="text-sm font-medium text-orange-700">
+                            Racha: {productivityStats.current_streak} {productivityStats.current_streak === 1 ? 'día' : 'días'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-8">
+                      {/* Circular Progress */}
+                      <div className="relative w-32 h-32 flex-shrink-0">
+                        <svg className="w-32 h-32 transform -rotate-90">
+                          <circle
+                            cx="64"
+                            cy="64"
+                            r="56"
+                            stroke="#E5E7EB"
+                            strokeWidth="8"
+                            fill="none"
+                          />
+                          <circle
+                            cx="64"
+                            cy="64"
+                            r="56"
+                            stroke={
+                              (productivityStats?.daily_score || 0) >= 80 ? "#10B981" :
+                              (productivityStats?.daily_score || 0) >= 50 ? "#F59E0B" :
+                              "#EF4444"
+                            }
+                            strokeWidth="8"
+                            fill="none"
+                            strokeDasharray={`${2 * Math.PI * 56}`}
+                            strokeDashoffset={`${2 * Math.PI * 56 * (1 - (productivityStats?.daily_score || 0) / 100)}`}
+                            strokeLinecap="round"
+                            className="transition-all duration-500"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span 
+                            className="text-4xl font-bold"
+                            style={{
+                              color: 
+                                (productivityStats?.daily_score || 0) >= 80 ? "#10B981" :
+                                (productivityStats?.daily_score || 0) >= 50 ? "#F59E0B" :
+                                "#EF4444"
+                            }}
+                          >
+                            {Math.round(productivityStats?.daily_score || 0)}%
+                          </span>
+                        </div>
                       </div>
-                    ) : activeTemplate ? (
-                      <>
-                        <div className="space-y-3">
-                          {activeTemplate.protocols.map((protocol, index) => {
-                            const isCompleted = userProgress.protocols_completed.includes(protocol.id);
-                            return (
-                              <div
-                                key={protocol.id}
-                                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
-                              >
-                                <div className="flex items-center gap-3">
-                                  {isCompleted ? (
-                                    <CheckCircle2 className="w-5 h-5 text-primary" />
-                                  ) : (
-                                    <Circle className="w-5 h-5 text-gray-300" />
-                                  )}
-                                  <Label className={isCompleted ? "line-through text-gray-400" : "text-gray-900"}>
-                                    {protocol.label}
-                                  </Label>
-                                </div>
-                                <Badge variant="outline" className="text-xs">
-                                  {protocol.points} pts
-                                </Badge>
-                              </div>
-                            );
-                          })}
-                        </div>
 
-                        <div className="pt-4 border-t border-gray-200">
-                          <div className="flex items-center justify-between mb-3">
-                            <span className="text-sm text-gray-600">Progreso del reto</span>
-                            <span className="text-sm font-semibold text-primary">
-                              {userProgress.protocols_completed.length}/{activeTemplate.protocols.length} completados
-                            </span>
-                          </div>
-                          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-primary transition-all duration-300"
-                              style={{
-                                width: `${(userProgress.protocols_completed.length / activeTemplate.protocols.length) * 100}%`
-                              }}
-                            />
-                          </div>
-                        </div>
-
-                        <Button
-                          onClick={() => router.push("/reto")}
-                          variant="outline"
-                          className="w-full mt-4"
+                      {/* Status & Message */}
+                      <div className="flex-1">
+                        <h3 
+                          className="text-2xl font-semibold mb-2"
+                          style={{
+                            color: 
+                              (productivityStats?.daily_score || 0) >= 80 ? "#10B981" :
+                              (productivityStats?.daily_score || 0) >= 50 ? "#F59E0B" :
+                              "#EF4444"
+                          }}
                         >
-                          <Zap className="w-4 h-4 mr-2" />
-                          Ver en Command Center
-                        </Button>
-                      </>
-                    ) : (
-                      <p className="text-center text-gray-500 py-8">
-                        Cargando plantilla del reto...
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
+                          {(productivityStats?.daily_score || 0) >= 80 ? "Productividad Alta" :
+                           (productivityStats?.daily_score || 0) >= 50 ? "Productividad Media" :
+                           "Productividad Baja"}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                          {(productivityStats?.daily_score || 0) >= 80 
+                            ? "¡Excelente! Mantén este ritmo" 
+                            : (productivityStats?.daily_score || 0) >= 50
+                            ? "Buen progreso, sigue así"
+                            : `Te faltan ${Math.ceil((80 - (productivityStats?.daily_score || 0)) / 10)} acciones para nivel alto`
+                          }
+                        </p>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+                          <TrendingUp className="w-4 h-4 text-blue-600" />
+                          <span className="text-sm text-blue-700">
+                            {productivityStats?.total_actions_today || 0} acciones completadas hoy
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
 
-                {/* Personal Stats */}
-                {productivityStats && (
-                  <div className="grid gap-6 md:grid-cols-2">
-                    <Card className="bg-white border border-[#E2E8F0]">
-                      <CardHeader>
-                        <CardTitle>Resumen General (7 días)</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-[#64748B]">Días activos:</span>
-                          <span className="font-semibold">{productivityStats.days_active}/7</span>
+                  {/* Quick Stats */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <Card className="p-6">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                          <Users className="w-5 h-5 text-blue-600" />
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#64748B]">Acciones totales:</span>
-                          <span className="font-semibold">{productivityStats.total_actions}</span>
+                        <div>
+                          <p className="text-2xl font-bold text-gray-900">
+                            {productivityStats?.contacts_today || 0}
+                          </p>
+                          <p className="text-xs text-gray-500">Contactos hoy</p>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#64748B]">Promedio diario:</span>
-                          <span className="font-semibold">{productivityStats.average_daily} acciones</span>
-                        </div>
-                      </CardContent>
+                      </div>
                     </Card>
 
-                    <Card className="bg-white border border-[#E2E8F0]">
-                      <CardHeader>
-                        <CardTitle>Rendimiento</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-2">
-                        <div className="flex justify-between">
-                          <span className="text-[#64748B]">Puntos totales:</span>
-                          <span className="font-semibold">{productivityStats.total_points}</span>
+                    <Card className="p-6">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                          <CheckCircle2 className="w-5 h-5 text-green-600" />
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#64748B]">Mejor día:</span>
-                          <span className="font-semibold">{productivityStats.best_day} pts</span>
+                        <div>
+                          <p className="text-2xl font-bold text-gray-900">
+                            {productivityStats?.follow_ups_today || 0}
+                          </p>
+                          <p className="text-xs text-gray-500">Seguimientos</p>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-[#64748B]">Racha actual:</span>
-                          <span className="font-semibold text-orange-500">{productivityStats.current_streak} días 🔥</span>
+                      </div>
+                    </Card>
+
+                    <Card className="p-6">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                          <Calendar className="w-5 h-5 text-purple-600" />
                         </div>
-                      </CardContent>
+                        <div>
+                          <p className="text-2xl font-bold text-gray-900">
+                            {productivityStats?.presentations_today || 0}
+                          </p>
+                          <p className="text-xs text-gray-500">Presentaciones</p>
+                        </div>
+                      </div>
+                    </Card>
+
+                    <Card className="p-6">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                          <Share2 className="w-5 h-5 text-orange-600" />
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-gray-900">
+                            {productivityStats?.posts_today || 0}
+                          </p>
+                          <p className="text-xs text-gray-500">Publicaciones</p>
+                        </div>
+                      </div>
                     </Card>
                   </div>
-                )}
+                </div>
+
+                {/* 2. ACTIVIDAD DIARIA - Tarjetas con progreso */}
+                <Card className="p-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-6">Actividad Diaria</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    {/* Contactos */}
+                    <div className="p-4 bg-blue-50 border border-blue-100 rounded-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-medium text-gray-700">Contactos</span>
+                        <span className="text-sm text-gray-500">
+                          {productivityStats?.contacts_today || 0} / 20
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-blue-100 rounded-full overflow-hidden mb-3">
+                        <div 
+                          className="h-full bg-blue-500 transition-all duration-300"
+                          style={{ width: `${Math.min(((productivityStats?.contacts_today || 0) / 20) * 100, 100)}%` }}
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +1 action
+                          }}
+                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                        >
+                          +1
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +5 action
+                          }}
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          +5
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Seguimientos */}
+                    <div className="p-4 bg-green-50 border border-green-100 rounded-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-medium text-gray-700">Seguimientos</span>
+                        <span className="text-sm text-gray-500">
+                          {productivityStats?.follow_ups_today || 0} / 10
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-green-100 rounded-full overflow-hidden mb-3">
+                        <div 
+                          className="h-full bg-green-500 transition-all duration-300"
+                          style={{ width: `${Math.min(((productivityStats?.follow_ups_today || 0) / 10) * 100, 100)}%` }}
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +1 action
+                          }}
+                          className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                        >
+                          +1
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +5 action
+                          }}
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          +5
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Presentaciones */}
+                    <div className="p-4 bg-purple-50 border border-purple-100 rounded-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-medium text-gray-700">Presentaciones</span>
+                        <span className="text-sm text-gray-500">
+                          {productivityStats?.presentations_today || 0} / 3
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-purple-100 rounded-full overflow-hidden mb-3">
+                        <div 
+                          className="h-full bg-purple-500 transition-all duration-300"
+                          style={{ width: `${Math.min(((productivityStats?.presentations_today || 0) / 3) * 100, 100)}%` }}
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +1 action
+                          }}
+                          className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+                        >
+                          +1
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +5 action
+                          }}
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          +5
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Publicaciones */}
+                    <div className="p-4 bg-orange-50 border border-orange-100 rounded-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-medium text-gray-700">Publicaciones</span>
+                        <span className="text-sm text-gray-500">
+                          {productivityStats?.posts_today || 0} / 3
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-orange-100 rounded-full overflow-hidden mb-3">
+                        <div 
+                          className="h-full bg-orange-500 transition-all duration-300"
+                          style={{ width: `${Math.min(((productivityStats?.posts_today || 0) / 3) * 100, 100)}%` }}
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +1 action
+                          }}
+                          className="flex-1 bg-orange-600 hover:bg-orange-700 text-white"
+                        >
+                          +1
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +5 action
+                          }}
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          +5
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Decisiones */}
+                    <div className="p-4 bg-red-50 border border-red-100 rounded-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-medium text-gray-700">Decisiones</span>
+                        <span className="text-sm text-gray-500">
+                          {productivityStats?.decisions_today || 0} / 5
+                        </span>
+                      </div>
+                      <div className="w-full h-2 bg-red-100 rounded-full overflow-hidden mb-3">
+                        <div 
+                          className="h-full bg-red-500 transition-all duration-300"
+                          style={{ width: `${Math.min(((productivityStats?.decisions_today || 0) / 5) * 100, 100)}%` }}
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +1 action
+                          }}
+                          className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                        >
+                          +1
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={() => {
+                            // TODO: Implement +5 action
+                          }}
+                          variant="outline"
+                          className="flex-1"
+                        >
+                          +5
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+
+                {/* 3. RESÚMENES - Semanal, Mensual y Conversión */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Resumen Semanal */}
+                  <Card className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Resumen Semanal</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-600">Días activos</span>
+                          <span className="text-sm font-medium text-gray-900">
+                            {productivityStats?.active_days_week || 0}/7
+                          </span>
+                        </div>
+                        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-blue-500 transition-all duration-300"
+                            style={{ width: `${((productivityStats?.active_days_week || 0) / 7) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span className="text-sm text-gray-600">Estado</span>
+                        <span className={`text-sm font-medium ${
+                          (productivityStats?.active_days_week || 0) >= 5 ? "text-green-600" :
+                          (productivityStats?.active_days_week || 0) >= 3 ? "text-yellow-600" :
+                          "text-red-600"
+                        }`}>
+                          {(productivityStats?.active_days_week || 0) >= 5 ? "Alto" :
+                           (productivityStats?.active_days_week || 0) >= 3 ? "Medio" :
+                           "Bajo"}
+                        </span>
+                      </div>
+
+                      <div>
+                        <p className="text-sm text-gray-600 mb-1">Promedio diario</p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {Math.round((productivityStats?.total_actions_week || 0) / 7)} acciones
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {(productivityStats?.total_actions_week || 0) / 7 < 5 
+                            ? "Por debajo del objetivo (5)" 
+                            : "Objetivo alcanzado"}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Resumen Mensual */}
+                  <Card className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Resumen Mensual</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-600">Días activos</span>
+                          <span className="text-sm font-medium text-gray-900">
+                            {productivityStats?.active_days_month || 0}/31
+                          </span>
+                        </div>
+                        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-purple-500 transition-all duration-300"
+                            style={{ width: `${((productivityStats?.active_days_month || 0) / 31) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span className="text-sm text-gray-600">Consistencia</span>
+                        <span className="text-sm font-medium text-gray-900">
+                          {Math.round(((productivityStats?.active_days_month || 0) / 31) * 100)}%
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span className="text-sm text-gray-600">Estado</span>
+                        <span className={`text-sm font-medium ${
+                          (productivityStats?.active_days_month || 0) >= 20 ? "text-green-600" :
+                          (productivityStats?.active_days_month || 0) >= 10 ? "text-yellow-600" :
+                          "text-red-600"
+                        }`}>
+                          {(productivityStats?.active_days_month || 0) >= 20 ? "Alta" :
+                           (productivityStats?.active_days_month || 0) >= 10 ? "Media" :
+                           "Baja"}
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Conversión */}
+                  <Card className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Conversión</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Presentaciones</span>
+                        <span className="text-2xl font-bold text-gray-900">
+                          {productivityStats?.presentations_total || 0}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Decisiones</span>
+                        <span className="text-2xl font-bold text-gray-900">
+                          {productivityStats?.decisions_total || 0}
+                        </span>
+                      </div>
+
+                      <div className="border-t pt-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-600">Tasa de conversión</span>
+                          <span className={`text-2xl font-bold ${
+                            ((productivityStats?.decisions_total || 0) / (productivityStats?.presentations_total || 1)) * 100 >= 25 
+                              ? "text-green-600" 
+                              : "text-yellow-600"
+                          }`}>
+                            {Math.round(((productivityStats?.decisions_total || 0) / (productivityStats?.presentations_total || 1)) * 100)}%
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          Meta recomendada: 25%+
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
 
                 {/* Team Stats (Admin only) */}
                 {profile?.role === "admin" && teamStats.length > 0 && (
