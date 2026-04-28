@@ -2032,6 +2032,161 @@ Puedo resolver dudas sobre:
                     </CardContent>
                   </Card>
                 )}
+
+                {/* 4. GRÁFICA DE TENDENCIA - Últimos 30 Días */}
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">Tendencia de Productividad</h3>
+                      <p className="text-sm text-gray-500 mt-1">Últimos 30 días</p>
+                    </div>
+                    {productivityStats?.monthly_data && productivityStats.monthly_data.length > 1 && (
+                      <div className="flex items-center gap-2">
+                        {(() => {
+                          const firstHalf = productivityStats.monthly_data.slice(0, 15);
+                          const secondHalf = productivityStats.monthly_data.slice(15);
+                          const avgFirst = firstHalf.reduce((sum, d) => sum + d.score, 0) / firstHalf.length;
+                          const avgSecond = secondHalf.reduce((sum, d) => sum + d.score, 0) / secondHalf.length;
+                          const trend = avgSecond > avgFirst ? 'up' : avgSecond < avgFirst ? 'down' : 'stable';
+                          
+                          return (
+                            <>
+                              {trend === 'up' && (
+                                <>
+                                  <TrendingUp className="w-5 h-5 text-green-600" />
+                                  <span className="text-sm font-medium text-green-600">Subiendo</span>
+                                </>
+                              )}
+                              {trend === 'down' && (
+                                <>
+                                  <TrendingDown className="w-5 h-5 text-red-600" />
+                                  <span className="text-sm font-medium text-red-600">Bajando</span>
+                                </>
+                              )}
+                              {trend === 'stable' && (
+                                <>
+                                  <Minus className="w-5 h-5 text-gray-600" />
+                                  <span className="text-sm font-medium text-gray-600">Estable</span>
+                                </>
+                              )}
+                            </>
+                          );
+                        })()}
+                      </div>
+                    )}
+                  </div>
+
+                  {productivityStats?.monthly_data && productivityStats.monthly_data.length > 0 ? (
+                    <div className="w-full h-64 relative">
+                      <svg className="w-full h-full" viewBox="0 0 800 200" preserveAspectRatio="none">
+                        {/* Grid lines */}
+                        {[0, 25, 50, 75, 100].map((y) => (
+                          <line
+                            key={y}
+                            x1="0"
+                            y1={200 - (y * 2)}
+                            x2="800"
+                            y2={200 - (y * 2)}
+                            stroke="#E5E7EB"
+                            strokeWidth="1"
+                          />
+                        ))}
+
+                        {/* Line chart */}
+                        {(() => {
+                          const points = productivityStats.monthly_data.map((d, i) => ({
+                            x: (i / (productivityStats.monthly_data.length - 1)) * 800,
+                            y: 200 - (d.score * 2)
+                          }));
+
+                          const pathD = points
+                            .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)
+                            .join(' ');
+
+                          return (
+                            <>
+                              {/* Area fill */}
+                              <path
+                                d={`${pathD} L 800 200 L 0 200 Z`}
+                                fill="url(#gradient)"
+                                opacity="0.2"
+                              />
+                              
+                              {/* Line */}
+                              <path
+                                d={pathD}
+                                fill="none"
+                                stroke="#3B82F6"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+
+                              {/* Gradient definition */}
+                              <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                  <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.4" />
+                                  <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+                                </linearGradient>
+                              </defs>
+
+                              {/* Points */}
+                              {points.map((p, i) => (
+                                <g key={i}>
+                                  <circle
+                                    cx={p.x}
+                                    cy={p.y}
+                                    r="4"
+                                    fill="#3B82F6"
+                                    stroke="white"
+                                    strokeWidth="2"
+                                  />
+                                  {/* Show value on hover or every 5th point */}
+                                  {(i % 5 === 0 || i === points.length - 1) && (
+                                    <text
+                                      x={p.x}
+                                      y={p.y - 10}
+                                      textAnchor="middle"
+                                      fontSize="10"
+                                      fill="#6B7280"
+                                    >
+                                      {productivityStats.monthly_data[i].score}%
+                                    </text>
+                                  )}
+                                </g>
+                              ))}
+                            </>
+                          );
+                        })()}
+                      </svg>
+
+                      {/* Y-axis labels */}
+                      <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 -ml-8">
+                        <span>100%</span>
+                        <span>75%</span>
+                        <span>50%</span>
+                        <span>25%</span>
+                        <span>0%</span>
+                      </div>
+
+                      {/* X-axis labels */}
+                      <div className="flex justify-between mt-2 text-xs text-gray-500">
+                        {productivityStats.monthly_data
+                          .filter((_, i) => i % 5 === 0 || i === productivityStats.monthly_data.length - 1)
+                          .map((d, i) => (
+                            <span key={i}>{d.day}</span>
+                          ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="h-64 flex items-center justify-center text-gray-400">
+                      <div className="text-center">
+                        <BarChart3 className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                        <p>No hay datos suficientes para mostrar la tendencia</p>
+                      </div>
+                    </div>
+                  )}
+                </Card>
               </div>
             )}
 
