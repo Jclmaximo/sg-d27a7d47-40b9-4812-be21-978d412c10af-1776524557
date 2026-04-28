@@ -50,7 +50,7 @@ class ChallengeService {
         return null;
       }
 
-      return data as ChallengeTemplate;
+      return data as unknown as ChallengeTemplate;
     } catch (error) {
       console.error("Error in getActiveTemplate:", error);
       return null;
@@ -72,7 +72,7 @@ class ChallengeService {
         return [];
       }
 
-      return (data || []) as ChallengeTemplate[];
+      return (data || []) as unknown as ChallengeTemplate[];
     } catch (error) {
       console.error("Error in getAllTemplates:", error);
       return [];
@@ -94,7 +94,7 @@ class ChallengeService {
         .insert({
           name,
           description,
-          protocols,
+          protocols: protocols as any,
           duration_hours: durationHours,
           is_active: false
         })
@@ -105,7 +105,7 @@ class ChallengeService {
         return { success: false, error: error.message };
       }
 
-      return { success: true, data: data as ChallengeTemplate };
+      return { success: true, data: data as unknown as ChallengeTemplate };
     } catch (error) {
       return { success: false, error: String(error) };
     }
@@ -125,9 +125,11 @@ class ChallengeService {
     }
   ): Promise<{ success: boolean; data?: ChallengeTemplate; error?: string }> {
     try {
+      const updateData: any = { ...updates };
+      
       const { data, error } = await supabase
         .from("challenge_templates")
-        .update(updates)
+        .update(updateData)
         .eq("id", templateId)
         .select()
         .single();
@@ -136,7 +138,7 @@ class ChallengeService {
         return { success: false, error: error.message };
       }
 
-      return { success: true, data: data as ChallengeTemplate };
+      return { success: true, data: data as unknown as ChallengeTemplate };
     } catch (error) {
       return { success: false, error: String(error) };
     }
