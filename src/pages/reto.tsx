@@ -567,6 +567,76 @@ export default function ZenCommandCenter() {
               </div>
             )}
 
+            {/* B. SCORE DE HOY - Progreso prominente */}
+            {challengeActive && (
+              <div className="mb-16 transition-all duration-500">
+                <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
+                  Score de Hoy
+                </p>
+                
+                <div className="max-w-2xl mx-auto">
+                  <Card className="backdrop-blur-xl bg-white border border-gray-100 shadow-sm p-8">
+                    <div className="flex flex-col md:flex-row items-center gap-8">
+                      {/* Circular Progress */}
+                      <div className="relative w-32 h-32 flex-shrink-0">
+                        <svg className="w-32 h-32 transform -rotate-90">
+                          <circle
+                            cx="64"
+                            cy="64"
+                            r="56"
+                            stroke="#E5E7EB"
+                            strokeWidth="8"
+                            fill="none"
+                          />
+                          <circle
+                            cx="64"
+                            cy="64"
+                            r="56"
+                            stroke="#F59E0B"
+                            strokeWidth="8"
+                            fill="none"
+                            strokeDasharray={`${2 * Math.PI * 56}`}
+                            strokeDashoffset={`${2 * Math.PI * 56 * (1 - completionPercentage / 100)}`}
+                            strokeLinecap="round"
+                            className="transition-all duration-500"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-4xl font-light text-[#1D1D1F]">
+                            {Math.round(completionPercentage)}%
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Status & Message */}
+                      <div className="flex-1 text-center md:text-left">
+                        <h3 className="text-2xl font-light text-[#F59E0B] mb-2">
+                          {completionPercentage === 0 ? "Comienza ahora" :
+                           completionPercentage < 40 ? "Productividad baja" :
+                           completionPercentage < 80 ? "Productividad media" :
+                           completionPercentage < 100 ? "Casi lo logras" : "¡Objetivo alcanzado!"}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4 font-light">
+                          {completionPercentage === 0 ? "Empieza marcando tu primer protocolo" :
+                           completionPercentage < 40 ? "Sigue así para alcanzar tu objetivo" :
+                           completionPercentage < 80 ? "Buen progreso. Continúa con el siguiente protocolo" :
+                           completionPercentage < 100 ? "¡Estás muy cerca! Un protocolo más" : "Has completado todos los protocolos del día"}
+                        </p>
+                        {completionPercentage < 100 && (
+                          <div className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 border border-amber-200 rounded-lg">
+                            <TrendingUp className="w-4 h-4 text-amber-600" />
+                            <span className="text-sm text-amber-700 font-light">
+                              Estás a {protocols.filter(p => !p.completed).length} {protocols.filter(p => !p.completed).length === 1 ? 'acción' : 'acciones'} de completar el día
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+              </div>
+            )}
+
             {/* B. MOTOR DE CRECIMIENTO */}
             {challengeActive && (
               <div className="mb-16 transition-all duration-500">
@@ -765,6 +835,12 @@ export default function ZenCommandCenter() {
                     <Lock className="absolute top-2 right-2 w-3 h-3 text-gray-400 group-hover:text-red-400 transition-colors" />
                   )}
                   <Users className={`w-6 h-6 stroke-[1.5] ${leadsUnlocked ? "text-[#4285F4]" : "text-gray-400"}`} />
+                  {/* Badge with lead count */}
+                  {leadsCount > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-primary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-medium">
+                      {leadsCount}
+                    </span>
+                  )}
                   {leadsUnlocked && (
                     <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                       Gestión de Leads
