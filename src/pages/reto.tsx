@@ -530,11 +530,11 @@ export default function ZenCommandCenter() {
                     {profile?.full_name?.charAt(0).toUpperCase() || "U"}
                   </AvatarFallback>
                 </Avatar>
-                <div className="hidden md:block">
+                <div>
                   <p className="text-sm font-semibold text-[#1D1D1F]">
                     {profile?.full_name || "Usuario"}
                   </p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-gray-500 hidden md:block">
                     @{profile?.username || "usuario"}
                   </p>
                 </div>
@@ -876,17 +876,30 @@ export default function ZenCommandCenter() {
                     </div>
                   </div>
                   
-                  <a
-                    href={`https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => {
+                      const referralLink = `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`;
+                      navigator.clipboard.writeText(referralLink).then(() => {
+                        toast({
+                          title: "✅ Link copiado",
+                          description: "El link de referido se copió al portapapeles",
+                          duration: 3000,
+                        });
+                      }).catch(() => {
+                        toast({
+                          title: "❌ Error",
+                          description: "No se pudo copiar el link",
+                          variant: "destructive",
+                        });
+                      });
+                    }}
                     className="block w-full bg-primary hover:bg-primary/90 text-white text-center py-3 rounded-xl font-medium transition-all shadow-sm hover:shadow-md"
                   >
                     <div className="flex items-center justify-center gap-2">
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Abrir embudo de registro</span>
+                      <Copy className="w-4 h-4" />
+                      <span>Copiar link de registro</span>
                     </div>
-                  </a>
+                  </button>
                   
                   <p className="text-xs text-gray-500 text-center mt-3">
                     Tu referido: {profile?.username || "cargando..."}
