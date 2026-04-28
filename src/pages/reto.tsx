@@ -645,61 +645,61 @@ export default function ZenCommandCenter() {
             <div className="grid gap-6">
               {/* B. ESCASEZ - Cuenta regresiva del día */}
               {challengeActive && (
-                <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 rounded-3xl p-8 shadow-lg border border-primary/20">
-                  <div className="flex items-center justify-center gap-2 mb-6">
-                    <Clock className="w-5 h-5 text-primary animate-pulse" />
-                    <p className="text-sm font-semibold text-primary uppercase tracking-wider">
+                <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 rounded-3xl p-4 md:p-8 shadow-lg border border-primary/20">
+                  <div className="flex items-center justify-center gap-2 mb-4 md:mb-6">
+                    <Clock className="w-4 h-4 md:w-5 md:h-5 text-primary animate-pulse" />
+                    <p className="text-xs md:text-sm font-semibold text-primary uppercase tracking-wider">
                       Tiempo Restante del Día
                     </p>
                   </div>
                   
-                  <div className="flex justify-center gap-3 mb-6">
+                  <div className="flex justify-center gap-2 md:gap-3 mb-4 md:mb-6">
                     {/* Hours */}
                     <div className="text-center">
-                      <div className="bg-white rounded-2xl w-24 h-24 flex items-center justify-center mb-3 shadow-md border-2 border-primary/20 hover:border-primary/40 transition-all">
-                        <span className="text-4xl font-bold text-[#1D1D1F] tabular-nums">
+                      <div className="bg-white rounded-xl md:rounded-2xl w-16 h-16 md:w-24 md:h-24 flex items-center justify-center mb-2 md:mb-3 shadow-md border-2 border-primary/20 hover:border-primary/40 transition-all">
+                        <span className="text-2xl md:text-4xl font-bold text-[#1D1D1F] tabular-nums">
                           {String(timeLeft.hours).padStart(2, "0")}
                         </span>
                       </div>
-                      <p className="text-xs text-[#64748B] font-medium uppercase tracking-wide">Horas</p>
+                      <p className="text-[10px] md:text-xs text-[#64748B] font-medium uppercase tracking-wide">Horas</p>
                     </div>
 
                     {/* Separator */}
-                    <div className="flex items-center pb-8">
-                      <span className="text-3xl font-light text-primary">:</span>
+                    <div className="flex items-center pb-6 md:pb-8">
+                      <span className="text-xl md:text-3xl font-light text-primary">:</span>
                     </div>
 
                     {/* Minutes */}
                     <div className="text-center">
-                      <div className="bg-white rounded-2xl w-24 h-24 flex items-center justify-center mb-3 shadow-md border-2 border-primary/20 hover:border-primary/40 transition-all">
-                        <span className="text-4xl font-bold text-[#1D1D1F] tabular-nums">
+                      <div className="bg-white rounded-xl md:rounded-2xl w-16 h-16 md:w-24 md:h-24 flex items-center justify-center mb-2 md:mb-3 shadow-md border-2 border-primary/20 hover:border-primary/40 transition-all">
+                        <span className="text-2xl md:text-4xl font-bold text-[#1D1D1F] tabular-nums">
                           {String(timeLeft.minutes).padStart(2, "0")}
                         </span>
                       </div>
-                      <p className="text-xs text-[#64748B] font-medium uppercase tracking-wide">Minutos</p>
+                      <p className="text-[10px] md:text-xs text-[#64748B] font-medium uppercase tracking-wide">Minutos</p>
                     </div>
 
                     {/* Separator */}
-                    <div className="flex items-center pb-8">
-                      <span className="text-3xl font-light text-primary">:</span>
+                    <div className="flex items-center pb-6 md:pb-8">
+                      <span className="text-xl md:text-3xl font-light text-primary">:</span>
                     </div>
 
                     {/* Seconds */}
                     <div className="text-center">
-                      <div className="bg-white rounded-2xl w-24 h-24 flex items-center justify-center mb-3 shadow-md border-2 border-secondary/30 hover:border-secondary/50 transition-all">
-                        <span className="text-4xl font-bold text-[#1D1D1F] tabular-nums">
+                      <div className="bg-white rounded-xl md:rounded-2xl w-16 h-16 md:w-24 md:h-24 flex items-center justify-center mb-2 md:mb-3 shadow-md border-2 border-secondary/30 hover:border-secondary/50 transition-all">
+                        <span className="text-2xl md:text-4xl font-bold text-[#1D1D1F] tabular-nums">
                           {String(timeLeft.seconds).padStart(2, "0")}
                         </span>
                       </div>
-                      <p className="text-xs text-[#64748B] font-medium uppercase tracking-wide">Segundos</p>
+                      <p className="text-[10px] md:text-xs text-[#64748B] font-medium uppercase tracking-wide">Segundos</p>
                     </div>
                   </div>
 
                   {/* Day counter indicator with progress bar */}
                   <div className="text-center">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm border border-primary/20">
-                      <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                      <p className="text-sm text-[#475569] font-medium">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-white rounded-full shadow-sm border border-primary/20">
+                      <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-primary rounded-full animate-pulse"></div>
+                      <p className="text-xs md:text-sm text-[#475569] font-medium">
                         Día <span className="font-bold text-primary">{currentDay}</span> de {totalDays}
                       </p>
                     </div>
