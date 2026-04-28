@@ -590,12 +590,12 @@ export default function ZenCommandCenter() {
                 {/* Start button */}
                 <Button
                   onClick={async () => {
-                    if (!profile?.id || !activeTemplate) return;
+                    if (!session?.user?.id || !activeTemplate) return;
 
                     try {
                       // Create new challenge in database
-                      const newChallenge = await challengeService.startChallenge(
-                        profile.id,
+                      const newChallenge = await challengeService.startUserChallenge(
+                        session.user.id,
                         activeTemplate.id
                       );
 
