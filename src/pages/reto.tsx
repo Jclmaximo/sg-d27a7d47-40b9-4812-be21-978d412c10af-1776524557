@@ -265,7 +265,7 @@ export default function ZenCommandCenter() {
   };
 
   const copyFunnelLink = async () => {
-    const link = profile?.username ? `https://mwr.hubia.vip/mwr?ref=${profile.username}` : "";
+    const link = profile?.username ? `https://mwr.hubia.vip/leads-registro?ref=${profile.username}` : "";
     navigator.clipboard.writeText(link);
     const newCount = copyCount + 1;
     setCopyCount(newCount);
