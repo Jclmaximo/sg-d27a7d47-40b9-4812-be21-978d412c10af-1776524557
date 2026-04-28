@@ -56,7 +56,7 @@ export default function ZenCommandCenter() {
   const [previousLeadsCount, setPreviousLeadsCount] = useState(0);
 
   // Define funnelLink early so it can be used in JSX
-  const funnelLink = profile?.username ? `https://mwr.hubia.vip/mwr?ref=${profile.username}` : "";
+  const funnelLink = profile?.username ? `https://mwr.hubia.vip/leads-registro?ref=${profile.username}` : "";
 
   useEffect(() => {
     loadData();
@@ -83,7 +83,7 @@ export default function ZenCommandCenter() {
           { id: "1", label: "Contactar 3 prospectos nuevos", completed: false, points: 10 },
           { id: "2", label: "Publicar contenido de valor", completed: false, points: 10 },
           { id: "3", label: "Hacer seguimiento a leads", completed: false, points: 10 },
-          { id: "4", label: "Compartir link en 2 plataformas", completed: false, points: 10 },
+          { id: "4", label: "Compartar link en 2 plataformas", completed: false, points: 10 },
           { id: "5", label: "Estudiar material de capacitación", completed: false, points: 10 },
         ]);
 
@@ -293,13 +293,13 @@ export default function ZenCommandCenter() {
   };
 
   const shareToWhatsApp = () => {
-    const funnelUrl = `https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`;
+    const funnelUrl = `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`;
     const message = encodeURIComponent(`¡Descubre cómo viajar más por menos! ${funnelUrl}`);
     window.open(`https://wa.me/?text=${message}`, "_blank");
   };
 
   const shareToInstagram = () => {
-    const funnelUrl = `https://mwr.hubia.vip/mwr?ref=${profile?.username || ""}`;
+    const funnelUrl = `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`;
     navigator.clipboard.writeText(funnelUrl);
     toast({
       title: "Link copiado",
@@ -712,7 +712,7 @@ export default function ZenCommandCenter() {
                   )}
                   {!resourcesUnlocked && (
                     <span className="absolute -top-12 left-1/2 -translate-x-1/2 bg-[#1D1D1F] text-white text-xs px-3 py-1.5 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none text-center">
-                      Bloqueado<br/>{shareCount}/5 veces copiado
+                      Bloqueado<br/>{copyCount}/5 veces copiado
                     </span>
                   )}
                 </button>
