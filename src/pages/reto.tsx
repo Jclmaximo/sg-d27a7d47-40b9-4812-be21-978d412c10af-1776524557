@@ -197,7 +197,7 @@ export default function ZenCommandCenter() {
 
       // Restore protocols
       if (profileData.challenge_protocols && Array.isArray(profileData.challenge_protocols)) {
-        setProtocols(profileData.challenge_protocols);
+        setProtocols(profileData.challenge_protocols as unknown as DailyProtocol[]);
       }
 
       // Load leads with error handling
