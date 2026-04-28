@@ -30,6 +30,7 @@ import { authService } from "@/services/authService";
 import { leadsService } from "@/services/leadsService";
 import { referralService } from "@/services/referralService";
 import { productivityService } from "@/services/productivityService";
+import { challengeService, type ChallengeTemplate, type UserChallengeProgress } from "@/services/challengeService";
 import { supabase } from "@/integrations/supabase/client";
 import type { NetworkStats } from "@/services/referralService";
 import type { ProductivityStats, TeamMemberStats, DailyActivity } from "@/services/productivityService";
@@ -134,6 +135,10 @@ export default function MainDashboard() {
   const [productivityStats, setProductivityStats] = useState<ProductivityStats | null>(null);
   const [teamStats, setTeamStats] = useState<TeamMemberStats[]>([]);
   const [savingActivity, setSavingActivity] = useState(false);
+
+  // Challenge sync (NEW)
+  const [activeTemplate, setActiveTemplate] = useState<ChallengeTemplate | null>(null);
+  const [userProgress, setUserProgress] = useState<UserChallengeProgress | null>(null);
 
   // Helper functions
   const getStatusText = (status: string) => {
@@ -626,28 +631,23 @@ Puedo resolver dudas sobre:
       const session = await authService.getCurrentSession();
       if (!session) return;
 
-      // Cargar actividad de hoy
-      const today = await productivityService.getTodayProductivity(session.user.id);
-      if (today) {
-        setTodayActivity({
-          contacted_prospects: today.contacted_prospects || false,
-          contacted_prospects_count: today.contacted_prospects_count || 0,
-          did_followup: today.did_followup || false,
-          presented_business: today.presented_business || false,
-          posted_content: today.posted_content || false,
-          attended_training: today.attended_training || false
-        });
-      }
+      // Load active challenge template
+      const template = await challengeService.getActiveTemplate();
+      setActiveTemplate(template);
 
-      // Cargar estadísticas personales
+      // Load user's active challenge progress
+      const progress = await challengeService.getUserActiveChallenge(session.user.id);
+      setUserProgress(progress);
+
+      // Cargar estadísticas personales (mantener para el panel de resumen)
       const stats = await productivityService.getProductivityStats(session.user.id);
       setProductivityStats(stats);
 
-      // Cargar estadísticas del equipo (solo admin) - usar el profile pasado como parámetro
+      // Cargar estadísticas del equipo (solo admin)
       const currentProfile = userProfile || profile;
       if (currentProfile?.role === "admin") {
         const team = await productivityService.getTeamProductivityStats(session.user.id);
-        console.log("Team stats loaded:", team); // Debug log
+        console.log("Team stats loaded:", team);
         setTeamStats(team);
       }
     } catch (error) {
@@ -661,19 +661,44 @@ Puedo resolver dudas sobre:
       const session = await authService.getCurrentSession();
       if (!session) return;
 
-      const result = await productivityService.saveDailyActivity(session.user.id, todayActivity);
+      // If user has active challenge, update progress
+      if (userProgress && activeTemplate) {
+        // Get current protocols from template
+        const updatedCompletedIds = activeTemplate.protocols
+          .map((p, index) => {
+            // Map old activity fields to protocol completion
+            const isCompleted = 
+              (index === 0 && todayActivity.contacted_prospects) ||
+              (index === 1 && todayActivity.posted_content) ||
+              (index === 2 && todayActivity.did_followup) ||
+              (index === 3 && todayActivity.presented_business) ||
+              (index === 4 && todayActivity.attended_training);
+            
+            return isCompleted ? p.id : null;
+          })
+          .filter(Boolean) as string[];
 
-      if (result.success) {
-        toast({
-          title: "✅ Actividad guardada",
-          description: "Tu progreso del día se actualizó correctamente"
+        const result = await challengeService.updateUserProgress(userProgress.id, {
+          protocols_completed: updatedCompletedIds
         });
-        await loadProductivityData();
+
+        if (result.success) {
+          toast({
+            title: "✅ Progreso guardado",
+            description: "Tu actividad se sincronizó con el reto",
+          });
+          await loadProductivityData();
+        } else {
+          toast({
+            title: "Error",
+            description: result.error || "No se pudo guardar",
+            variant: "destructive",
+          });
+        }
       } else {
         toast({
-          title: "Error",
-          description: result.error || "No se pudo guardar la actividad",
-          variant: "destructive"
+          title: "⚠️ Sin reto activo",
+          description: "Inicia el reto desde /reto para registrar tu progreso",
         });
       }
     } catch (error) {
@@ -1492,108 +1517,87 @@ Puedo resolver dudas sobre:
               <div className="space-y-6">
                 <Card className="bg-white border border-[#E2E8F0]">
                   <CardHeader>
-                    <CardTitle>Actividades de Hoy</CardTitle>
+                    <CardTitle>Protocolos del Reto Activo</CardTitle>
                     <CardDescription>
-                      Marca las actividades que completaste hoy
+                      {userProgress 
+                        ? "Marca los protocolos que completaste hoy"
+                        : "Inicia el reto desde /reto para comenzar a registrar tu progreso"}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <Label className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4" />
-                        Contacté prospectos
-                      </Label>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          type="number"
-                          min="0"
-                          value={todayActivity.contacted_prospects_count}
-                          onChange={(e) => setTodayActivity({
-                            ...todayActivity,
-                            contacted_prospects: parseInt(e.target.value) > 0,
-                            contacted_prospects_count: parseInt(e.target.value)
-                          })}
-                          className="w-20"
-                        />
+                    {!userProgress ? (
+                      <div className="text-center py-8">
+                        <Target className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                        <p className="text-gray-500 mb-4">
+                          No tienes un reto activo
+                        </p>
+                        <Button
+                          onClick={() => router.push("/reto")}
+                          className="bg-primary hover:bg-primary/90"
+                        >
+                          <Zap className="w-4 h-4 mr-2" />
+                          Ir al Command Center
+                        </Button>
                       </div>
-                    </div>
+                    ) : activeTemplate ? (
+                      <>
+                        <div className="space-y-3">
+                          {activeTemplate.protocols.map((protocol, index) => {
+                            const isCompleted = userProgress.protocols_completed.includes(protocol.id);
+                            return (
+                              <div
+                                key={protocol.id}
+                                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
+                              >
+                                <div className="flex items-center gap-3">
+                                  {isCompleted ? (
+                                    <CheckCircle2 className="w-5 h-5 text-primary" />
+                                  ) : (
+                                    <Circle className="w-5 h-5 text-gray-300" />
+                                  )}
+                                  <Label className={isCompleted ? "line-through text-gray-400" : "text-gray-900"}>
+                                    {protocol.label}
+                                  </Label>
+                                </div>
+                                <Badge variant="outline" className="text-xs">
+                                  {protocol.points} pts
+                                </Badge>
+                              </div>
+                            );
+                          })}
+                        </div>
 
-                    <div className="flex items-center justify-between">
-                      <Label className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4" />
-                        Hice seguimiento
-                      </Label>
-                      <input
-                        type="checkbox"
-                        checked={todayActivity.did_followup}
-                        onChange={(e) => setTodayActivity({
-                          ...todayActivity,
-                          did_followup: e.target.checked
-                        })}
-                        className="w-5 h-5"
-                      />
-                    </div>
+                        <div className="pt-4 border-t border-gray-200">
+                          <div className="flex items-center justify-between mb-3">
+                            <span className="text-sm text-gray-600">Progreso del reto</span>
+                            <span className="text-sm font-semibold text-primary">
+                              {userProgress.protocols_completed.length}/{activeTemplate.protocols.length} completados
+                            </span>
+                          </div>
+                          <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <div
+                              className="h-full bg-primary transition-all duration-300"
+                              style={{
+                                width: `${(userProgress.protocols_completed.length / activeTemplate.protocols.length) * 100}%`
+                              }}
+                            />
+                          </div>
+                        </div>
 
-                    <div className="flex items-center justify-between">
-                      <Label className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4" />
-                        Presenté el negocio
-                      </Label>
-                      <input
-                        type="checkbox"
-                        checked={todayActivity.presented_business}
-                        onChange={(e) => setTodayActivity({
-                          ...todayActivity,
-                          presented_business: e.target.checked
-                        })}
-                        className="w-5 h-5"
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <Label className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4" />
-                        Publiqué contenido
-                      </Label>
-                      <input
-                        type="checkbox"
-                        checked={todayActivity.posted_content}
-                        onChange={(e) => setTodayActivity({
-                          ...todayActivity,
-                          posted_content: e.target.checked
-                        })}
-                        className="w-5 h-5"
-                      />
-                    </div>
-
-                    <div className="flex items-center justify-between">
-                      <Label className="flex items-center gap-2">
-                        <CheckCircle className="w-4 h-4" />
-                        Asistí a entrenamiento
-                      </Label>
-                      <input
-                        type="checkbox"
-                        checked={todayActivity.attended_training}
-                        onChange={(e) => setTodayActivity({
-                          ...todayActivity,
-                          attended_training: e.target.checked
-                        })}
-                        className="w-5 h-5"
-                      />
-                    </div>
-
-                    <Button
-                      onClick={saveActivity}
-                      disabled={savingActivity}
-                      className="w-full"
-                    >
-                      {savingActivity ? (
-                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                      ) : (
-                        <CheckCircle className="w-4 h-4 mr-2" />
-                      )}
-                      Guardar Actividades
-                    </Button>
+                        <Button
+                          onClick={() => router.push("/reto")}
+                          variant="outline"
+                          className="w-full mt-4"
+                        >
+                          <Zap className="w-4 h-4 mr-2" />
+                          Ver en Command Center
+                        </Button>
+                      </>
+                    ) : (
+                      <p className="text-center text-gray-500 py-8">
+                        Cargando plantilla del reto...
+                      </p>
+                    )}
                   </CardContent>
                 </Card>
 
