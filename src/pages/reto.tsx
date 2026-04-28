@@ -795,121 +795,68 @@ export default function ZenCommandCenter() {
               </div>
             )}
 
-            {/* C. ESTADO DE FLUJO - Checklist */}
+            {/* C. PROTOCOLOS - Daily action checklist */}
             {challengeActive && (
-              <div className="transition-all duration-500 pb-32">
-                <div className="flex items-center justify-between mb-8">
-                  <div>
-                    <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-2">
-                      Protocolos de Hoy
-                    </p>
-                    <div className="flex items-center gap-3">
-                      <div className="w-32 h-1 bg-gray-100 rounded-full overflow-hidden">
-                        <div
-                          className="h-full bg-primary transition-all duration-500"
-                          style={{ width: `${completionPercentage}%` }}
-                        />
-                      </div>
-                      <span className="text-sm font-light text-[#1D1D1F]">
-                        {Math.round(completionPercentage)}%
-                      </span>
-                    </div>
-                  </div>
-                  <Button
-                    variant="ghost"
-                    onClick={() => setFocusMode(true)}
-                    className="text-[#1D1D1F] hover:bg-gray-50 font-light"
-                  >
-                    <Maximize2 className="w-4 h-4 mr-2" />
-                    Modo Enfoque
-                  </Button>
+              <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-secondary/10 rounded-3xl p-6 md:p-8 shadow-lg border border-primary/20">
+                <div className="flex items-center gap-2 mb-6">
+                  <CheckCircle2 className="w-5 h-5 text-primary" />
+                  <h2 className="text-lg font-semibold text-primary uppercase tracking-wider">
+                    Protocolos de Hoy
+                  </h2>
                 </div>
 
-                <div className="space-y-4 mb-8">
+                <div className="space-y-3">
                   {protocols.map((protocol) => (
-                    <button
+                    <div
                       key={protocol.id}
-                      id={`protocol-${protocol.id}`}
-                      onClick={() => toggleProtocol(parseInt(protocol.id, 10))}
-                      className="w-full flex items-center gap-4 p-6 rounded-2xl border border-gray-100 hover:border-gray-200 hover:bg-gray-50/50 transition-all text-left group"
+                      onClick={() => toggleProtocol(protocol.id)}
+                      className={`
+                        bg-white rounded-2xl p-5 cursor-pointer transition-all duration-200 
+                        border-2 hover:shadow-md
+                        ${
+                          protocol.completed
+                            ? "border-primary/40 shadow-sm"
+                            : "border-gray-200 hover:border-primary/30"
+                        }
+                      `}
                     >
-                      <div className="relative">
-                        {protocol.completed ? (
-                          <CheckCircle2 className="w-6 h-6 text-primary" strokeWidth={1} />
-                        ) : (
-                          <Circle className="w-6 h-6 text-gray-300 group-hover:text-gray-400" strokeWidth={1} />
-                        )}
+                      <div className="flex items-start gap-4">
+                        {/* Checkbox */}
+                        <div
+                          className={`
+                            flex-shrink-0 w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all
+                            ${
+                              protocol.completed
+                                ? "bg-primary border-primary"
+                                : "border-gray-300 hover:border-primary"
+                            }
+                          `}
+                        >
+                          {protocol.completed && (
+                            <Check className="w-4 h-4 text-white" />
+                          )}
+                        </div>
+
+                        {/* Content */}
+                        <div className="flex-1 min-w-0">
+                          <p
+                            className={`text-sm font-medium transition-all ${
+                              protocol.completed
+                                ? "text-primary line-through"
+                                : "text-[#1D1D1F]"
+                            }`}
+                          >
+                            {protocol.title}
+                          </p>
+                          {protocol.description && (
+                            <p className="text-xs text-gray-500 mt-1">
+                              {protocol.description}
+                            </p>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className={`text-sm font-light ${protocol.completed ? "line-through text-gray-400" : "text-[#1D1D1F]"}`}>
-                          {protocol.label}
-                        </p>
-                      </div>
-                      <div className="text-xs font-light text-gray-400">
-                        {protocol.points} pts
-                      </div>
-                    </button>
+                    </div>
                   ))}
-                </div>
-
-                {/* Botón de Guardar Progreso */}
-                <div className="flex justify-center">
-                  <Button
-                    onClick={async () => {
-                      await saveChallengeState({ protocols });
-                      toast({
-                        title: "✅ Progreso guardado",
-                        description: "Tus protocolos han sido actualizados",
-                        duration: 3000,
-                      });
-                    }}
-                    className="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-xl font-light"
-                  >
-                    <Check className="w-5 h-5 mr-2" />
-                    Guardar Progreso
-                  </Button>
-                </div>
-
-                {/* MOTOR DE CRECIMIENTO - Link de referido (Moved here) */}
-                <div className="mt-16">
-                  <p className="text-xs font-light text-gray-400 uppercase tracking-widest mb-6 text-center">
-                    Tu Embudo Personal
-                  </p>
-                  
-                  {/* Link container - responsive layout */}
-                  <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center mb-6">
-                    <input
-                      type="text"
-                      value={funnelLink}
-                      readOnly
-                      className="flex-1 px-4 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-600 font-light"
-                    />
-                    <Button
-                      onClick={copyFunnelLink}
-                      className="bg-[#1D1D1F] hover:bg-gray-800 text-white px-6 py-3 rounded-lg font-light whitespace-nowrap"
-                    >
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copiar Link
-                    </Button>
-                  </div>
-
-                  {/* Botones de compartir */}
-                  <div className="flex gap-3 justify-center">
-                    <Button
-                      onClick={shareToWhatsApp}
-                      className="bg-green-50 hover:bg-green-100 text-green-700 px-6 py-3 rounded-lg font-light border border-green-200"
-                    >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Compartir
-                    </Button>
-                    <Button
-                      onClick={shareToInstagram}
-                      className="bg-pink-50 hover:bg-pink-100 text-pink-700 px-6 py-3 rounded-lg font-light border border-pink-200"
-                    >
-                      <Instagram className="w-4 h-4 mr-2" />
-                      Instagram
-                    </Button>
-                  </div>
                 </div>
               </div>
             )}
