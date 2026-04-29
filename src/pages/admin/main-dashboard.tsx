@@ -950,205 +950,179 @@ Puedo resolver dudas sobre:
           </div>
         </div>
 
-        <main className="w-full px-6 py-8">
-          <div className="max-w-7xl mx-auto w-full">
-            {/* Tabs Navigation */}
-            <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
-              <Button
-                variant={activeTab === "resumen" ? "default" : "outline"}
-                onClick={() => setActiveTab("resumen")}
-                className="whitespace-nowrap"
-              >
-                <LayoutDashboard className="w-4 h-4 mr-2" />
-                Resumen
-              </Button>
-              <Button
-                variant={activeTab === "leads" ? "default" : "outline"}
-                onClick={() => setActiveTab("leads")}
-                className="whitespace-nowrap"
-              >
-                <Users className="w-4 h-4 mr-2" />
-                Leads
-              </Button>
-              <Button
-                variant={activeTab === "red" ? "default" : "outline"}
-                onClick={() => setActiveTab("red")}
-                className="whitespace-nowrap"
-              >
-                <Network className="w-4 h-4 mr-2" />
-                Mi Red
-              </Button>
-              <Button
-                variant={activeTab === "productividad" ? "default" : "outline"}
-                onClick={() => setActiveTab("productividad")}
-                className="whitespace-nowrap"
-              >
-                <Target className="w-4 h-4 mr-2" />
-                Productividad
-              </Button>
-              <Button
-                variant={activeTab === "links" ? "default" : "outline"}
-                onClick={() => setActiveTab("links")}
-                className="whitespace-nowrap"
-              >
-                <Link2 className="w-4 h-4 mr-2" />
-                Mis Links
-              </Button>
-              <Button
-                variant={activeTab === "perfil" ? "default" : "outline"}
-                onClick={() => setActiveTab("perfil")}
-                className="whitespace-nowrap"
-              >
-                <User className="w-4 h-4 mr-2" />
-                Perfil
-              </Button>
-            </div>
+        <main className="flex-1 overflow-auto p-8">
+          <div className="max-w-7xl mx-auto">
+            {/* TAB: RESUMEN */}
+            {activeTab === "resumen" && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Resumen</h2>
+                {/* Contenido del tab Resumen - Se restaurará próximamente */}
+              </div>
+            )}
+
+            {/* TAB: LEADS */}
+            {activeTab === "leads" && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Leads</h2>
+                {/* Contenido del tab Leads - Se restaurará próximamente */}
+              </div>
+            )}
+
+            {/* TAB: RED */}
+            {activeTab === "red" && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Mi Red</h2>
+                {/* Contenido del tab Red - Se restaurará próximamente */}
+              </div>
+            )}
+
+            {/* TAB: PRODUCTIVIDAD */}
+            {activeTab === "productividad" && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Productividad</h2>
+                {/* Contenido del tab Productividad - Se restaurará próximamente */}
+              </div>
+            )}
 
             {/* TAB: LINKS */}
             {activeTab === "links" && (
               <div className="space-y-6">
-                <div className="grid gap-6 md:grid-cols-2">
-                  {/* Link de Registro */}
-                  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <Link2 className="w-5 h-5 text-primary" />
-                        <h3 className="font-semibold text-gray-900">Link de Registro</h3>
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-bold">Mis Links</h2>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Card 1: Link de Registro */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Link de Registro</CardTitle>
+                      <CardDescription>
+                        Comparte este link para invitar personas a unirse
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="p-3 bg-muted rounded-lg">
+                        <p className="text-sm font-mono break-all">
+                          {`https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`}
+                        </p>
                       </div>
-                    </div>
-                    <div className="bg-gray-50 rounded-lg p-3 mb-3">
-                      <p className="text-sm text-gray-600 break-all font-mono">
-                        {typeof window !== "undefined" ? `${window.location.origin}/leads-registro?ref=${profile?.username || ''}` : ''}
-                      </p>
-                    </div>
-                    <Button
-                      onClick={() => {
-                        const link = typeof window !== "undefined" ? `${window.location.origin}/leads-registro?ref=${profile?.username || ''}` : '';
-                        copyToClipboard(link, "Link de registro copiado");
-                      }}
-                      variant="outline"
-                      className="w-full"
-                    >
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copiar Link
-                    </Button>
-                  </div>
+                      <Button
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`
+                          );
+                          toast({ title: "Link copiado" });
+                        }}
+                        className="w-full"
+                      >
+                        <Copy className="mr-2 h-4 w-4" />
+                        Copiar Link
+                      </Button>
+                    </CardContent>
+                  </Card>
 
-                  {/* Link MWR Personalizado */}
-                  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <ExternalLink className="w-5 h-5 text-primary" />
-                        <h3 className="font-semibold text-gray-900">Link MWR Personalizado</h3>
-                        <Badge variant="secondary" className="text-xs">Opcional</Badge>
-                      </div>
-                    </div>
+                  {/* Card 2: Link MWR Personalizado */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Link MWR Personalizado</CardTitle>
+                      <CardDescription>
+                        Personaliza tu link de registro (opcional)
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {isEditingMwrLink ? (
+                        <>
+                          <div className="space-y-2">
+                            <Label>URL Personalizada</Label>
+                            <Input
+                              placeholder="https://mi-dominio.com/registro"
+                              value={mwrCustomLink}
+                              onChange={(e) => {
+                                setMwrCustomLink(e.target.value);
+                                setMwrLinkError("");
+                              }}
+                            />
+                            {mwrLinkError && (
+                              <p className="text-sm text-red-500">{mwrLinkError}</p>
+                            )}
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={async () => {
+                                if (!mwrCustomLink.startsWith("http")) {
+                                  setMwrLinkError("El link debe empezar con http:// o https://");
+                                  return;
+                                }
+                                const { error } = await supabase
+                                  .from("profiles")
+                                  .update({ mwr_custom_link: mwrCustomLink })
+                                  .eq("id", profile?.id);
 
-                    {isEditingMwrLink ? (
-                      <div className="space-y-3">
-                        <div>
-                          <Input
-                            type="url"
-                            value={mwrCustomLink}
-                            onChange={(e) => {
-                              setMwrCustomLink(e.target.value);
-                              setMwrLinkError("");
-                            }}
-                            placeholder="https://tu-landing-personalizada.com"
-                            className={mwrLinkError ? "border-red-500" : ""}
-                          />
-                          {mwrLinkError && (
-                            <p className="text-xs text-red-500 mt-1">{mwrLinkError}</p>
-                          )}
-                          <p className="text-xs text-gray-500 mt-1">
-                            Ejemplo: https://mwr.hubia.vip/leads-registro
-                          </p>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button
-                            onClick={async () => {
-                              const trimmedLink = mwrCustomLink.trim();
-                              
-                              if (trimmedLink && !/^https?:\/\/.+\..+/.test(trimmedLink)) {
-                                setMwrLinkError("Por favor ingresa una URL válida (debe comenzar con https:// o http://)");
-                                return;
-                              }
-
-                              const { error } = await supabase
-                                .from("profiles")
-                                .update({ mwr_custom_link: trimmedLink || null })
-                                .eq("id", profile.id);
-
-                              if (error) {
-                                toast({
-                                  title: "Error",
-                                  description: "No se pudo guardar el link",
-                                  variant: "destructive",
-                                });
-                              } else {
-                                setProfile({ ...profile, mwr_custom_link: trimmedLink });
+                                if (error) {
+                                  toast({ title: "Error al guardar", variant: "destructive" });
+                                  return;
+                                }
                                 setIsEditingMwrLink(false);
-                                toast({
-                                  title: "¡Guardado!",
-                                  description: "Link MWR actualizado correctamente",
-                                });
-                              }
-                            }}
-                            className="flex-1"
-                          >
-                            <Save className="w-4 h-4 mr-2" />
-                            Guardar
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              setMwrCustomLink(profile?.mwr_custom_link || "");
-                              setIsEditingMwrLink(false);
-                              setMwrLinkError("");
-                            }}
-                            variant="outline"
-                          >
-                            Cancelar
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="bg-gray-50 rounded-lg p-3 mb-3">
-                          <p className="text-sm text-gray-600 break-all font-mono">
-                            {profile?.mwr_custom_link || `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ''}`}
-                          </p>
-                          {!profile?.mwr_custom_link && (
-                            <p className="text-xs text-gray-400 mt-2">Por defecto (no personalizado)</p>
-                          )}
-                        </div>
-                        <div className="flex gap-2">
-                          <Button
-                            onClick={() => {
-                              const link = profile?.mwr_custom_link || `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ''}`;
-                              copyToClipboard(link, "Link MWR copiado");
-                            }}
-                            variant="outline"
-                            className="flex-1"
-                          >
-                            <Copy className="w-4 h-4 mr-2" />
-                            Copiar Link
-                          </Button>
-                          <Button
-                            onClick={() => setIsEditingMwrLink(true)}
-                            variant="outline"
-                          >
-                            <Edit className="w-4 h-4 mr-2" />
-                            Editar
-                          </Button>
-                        </div>
-                      </>
-                    )}
-                  </div>
+                                toast({ title: "Link personalizado guardado" });
+                              }}
+                              className="flex-1"
+                            >
+                              Guardar
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={() => {
+                                setIsEditingMwrLink(false);
+                                setMwrCustomLink(profile?.mwr_custom_link || "");
+                                setMwrLinkError("");
+                              }}
+                            >
+                              Cancelar
+                            </Button>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="p-3 bg-muted rounded-lg">
+                            <p className="text-sm font-mono break-all">
+                              {mwrCustomLink || `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`}
+                            </p>
+                          </div>
+                          <div className="flex gap-2">
+                            <Button
+                              onClick={() => {
+                                navigator.clipboard.writeText(
+                                  mwrCustomLink || `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`
+                                );
+                                toast({ title: "Link copiado" });
+                              }}
+                              className="flex-1"
+                            >
+                              <Copy className="mr-2 h-4 w-4" />
+                              Copiar
+                            </Button>
+                            <Button
+                              variant="outline"
+                              onClick={() => setIsEditingMwrLink(true)}
+                            >
+                              Editar
+                            </Button>
+                          </div>
+                        </>
+                      )}
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
             )}
 
-            {/* Other tabs content would go here */}
+            {/* TAB: PERFIL */}
+            {activeTab === "perfil" && (
+              <div className="space-y-6">
+                <h2 className="text-2xl font-bold">Perfil</h2>
+                {/* Contenido del tab Perfil - Se restaurará próximamente */}
+              </div>
+            )}
           </div>
         </main>
       </div>
