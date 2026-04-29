@@ -88,9 +88,6 @@ export default function MainDashboard() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("resumen");
-  const [mwrCustomLink, setMwrCustomLink] = useState("");
-  const [isEditingMwrLink, setIsEditingMwrLink] = useState(false);
-  const [mwrLinkError, setMwrLinkError] = useState("");
   
   // User profile
   const [profile, setProfile] = useState<any>(null);
