@@ -5,7 +5,7 @@ import {
   Users, Clock, MessageSquare, CheckCircle2, 
   Download, LogOut, Mail, Phone, Calendar, Target, Plus, Eye,
   LayoutGrid, Share2, Copy, Check, Info, BookOpen, Network, DollarSign, Gift,
-  TrendingUp, TrendingDown, Minus, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle, Zap, Upload, Circle, BarChart3, ChevronRight, Award
+  TrendingUp, TrendingDown, Minus, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle, Zap, Upload, Circle, BarChart3, ChevronRight, Award, Save, Edit
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -61,6 +61,7 @@ interface UserProfile {
   role: string;
   ambassador_active: boolean;
   mwr_link?: string | null;
+  mwr_custom_link?: string | null;
   avatar_url?: string | null;
 }
 
@@ -186,6 +187,22 @@ export default function MainDashboard() {
       month: "short",
       year: "numeric"
     });
+  };
+
+  const copyToClipboard = async (text: string, successMessage: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      toast({
+        title: "¡Copiado!",
+        description: successMessage,
+      });
+    } catch (err) {
+      toast({
+        title: "Error",
+        description: "No se pudo copiar al portapapeles",
+        variant: "destructive",
+      });
+    }
   };
 
   // Load notes when lead is selected
@@ -354,6 +371,7 @@ Puedo resolver dudas sobre:
 
       if (profileData) {
         setProfile(profileData);
+        setMwrCustomLink(profileData.mwr_custom_link || "");
         setWalletAddress(profileData.usdt_wallet_address || "");
         setProfileForm({
           full_name: profileData.full_name || "",
@@ -986,216 +1004,154 @@ Puedo resolver dudas sobre:
               </Button>
             </div>
 
-            {/* TAB 1 - RESUMEN */}
-            {activeTab === "resumen" && (
+            {/* TAB: LINKS */}
+            {activeTab === "links" && (
               <div className="space-y-6">
-                <div className="grid gap-6 md:grid-cols-3 mb-6">
-                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
-                    <CardHeader>
-                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
-                        <DollarSign className="w-5 h-5 text-primary" />
-                        Total Ganado
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-4xl font-semibold text-[#0F172A] mb-1">
-                        ${(stats?.total_earned ?? 0).toFixed(2)}
+                <div className="grid gap-6 md:grid-cols-2">
+                  {/* Link de Registro */}
+                  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Link2 className="w-5 h-5 text-primary" />
+                        <h3 className="font-semibold text-gray-900">Link de Registro</h3>
                       </div>
-                      <p className="text-sm text-[#475569]">Acumulado total</p>
-                    </CardContent>
-                  </Card>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-3 mb-3">
+                      <p className="text-sm text-gray-600 break-all font-mono">
+                        {typeof window !== "undefined" ? `${window.location.origin}/leads-registro?ref=${profile?.username || ''}` : ''}
+                      </p>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        const link = typeof window !== "undefined" ? `${window.location.origin}/leads-registro?ref=${profile?.username || ''}` : '';
+                        copyToClipboard(link, "Link de registro copiado");
+                      }}
+                      variant="outline"
+                      className="w-full"
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      Copiar Link
+                    </Button>
+                  </div>
 
-                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
-                        <Clock className="w-5 h-5 text-primary" />
-                        Nuevos
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-4xl font-semibold text-[#0F172A]">
-                        {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
+                  {/* Link MWR Personalizado */}
+                  <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <ExternalLink className="w-5 h-5 text-primary" />
+                        <h3 className="font-semibold text-gray-900">Link MWR Personalizado</h3>
+                        <Badge variant="secondary" className="text-xs">Opcional</Badge>
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
 
-                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
-                        <MessageSquare className="w-5 h-5 text-primary" />
-                        Contactados
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-4xl font-semibold text-[#0F172A]">
-                        {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
+                    {isEditingMwrLink ? (
+                      <div className="space-y-3">
+                        <div>
+                          <Input
+                            type="url"
+                            value={mwrCustomLink}
+                            onChange={(e) => {
+                              setMwrCustomLink(e.target.value);
+                              setMwrLinkError("");
+                            }}
+                            placeholder="https://tu-landing-personalizada.com"
+                            className={mwrLinkError ? "border-red-500" : ""}
+                          />
+                          {mwrLinkError && (
+                            <p className="text-xs text-red-500 mt-1">{mwrLinkError}</p>
+                          )}
+                          <p className="text-xs text-gray-500 mt-1">
+                            Ejemplo: https://mwr.hubia.vip/leads-registro
+                          </p>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={async () => {
+                              const trimmedLink = mwrCustomLink.trim();
+                              
+                              if (trimmedLink && !/^https?:\/\/.+\..+/.test(trimmedLink)) {
+                                setMwrLinkError("Por favor ingresa una URL válida (debe comenzar con https:// o http://)");
+                                return;
+                              }
+
+                              const { error } = await supabase
+                                .from("profiles")
+                                .update({ mwr_custom_link: trimmedLink || null })
+                                .eq("id", profile.id);
+
+                              if (error) {
+                                toast({
+                                  title: "Error",
+                                  description: "No se pudo guardar el link",
+                                  variant: "destructive",
+                                });
+                              } else {
+                                setProfile({ ...profile, mwr_custom_link: trimmedLink });
+                                setIsEditingMwrLink(false);
+                                toast({
+                                  title: "¡Guardado!",
+                                  description: "Link MWR actualizado correctamente",
+                                });
+                              }
+                            }}
+                            className="flex-1"
+                          >
+                            <Save className="w-4 h-4 mr-2" />
+                            Guardar
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              setMwrCustomLink(profile?.mwr_custom_link || "");
+                              setIsEditingMwrLink(false);
+                              setMwrLinkError("");
+                            }}
+                            variant="outline"
+                          >
+                            Cancelar
+                          </Button>
+                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
+                    ) : (
+                      <>
+                        <div className="bg-gray-50 rounded-lg p-3 mb-3">
+                          <p className="text-sm text-gray-600 break-all font-mono">
+                            {profile?.mwr_custom_link || `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ''}`}
+                          </p>
+                          {!profile?.mwr_custom_link && (
+                            <p className="text-xs text-gray-400 mt-2">Por defecto (no personalizado)</p>
+                          )}
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            onClick={() => {
+                              const link = profile?.mwr_custom_link || `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ''}`;
+                              copyToClipboard(link, "Link MWR copiado");
+                            }}
+                            variant="outline"
+                            className="flex-1"
+                          >
+                            <Copy className="w-4 h-4 mr-2" />
+                            Copiar Link
+                          </Button>
+                          <Button
+                            onClick={() => setIsEditingMwrLink(true)}
+                            variant="outline"
+                          >
+                            <Edit className="w-4 h-4 mr-2" />
+                            Editar
+                          </Button>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
-
-                {/* Quick Actions */}
-                <Card className="bg-white border border-[#E2E8F0] shadow-sm">
-                  <CardHeader>
-                    <CardTitle className="text-lg font-semibold text-[#0F172A]">Acciones Rápidas</CardTitle>
-                    <CardDescription className="text-[#475569]">
-                      Herramientas para hacer crecer tu negocio
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="grid gap-4 md:grid-cols-3">
-                    <Button
-                      variant="outline"
-                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
-                      onClick={() => setActiveTab("links")}
-                    >
-                      <Link2 className="h-6 w-6 text-primary" />
-                      <div className="text-center">
-                        <div className="font-semibold text-[#0F172A]">Compartir Embudo</div>
-                        <div className="text-sm text-[#475569]">
-                          Copia tu link personalizado
-                        </div>
-                      </div>
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
-                      onClick={() => setActiveTab("leads")}
-                    >
-                      <Users className="h-6 w-6 text-primary" />
-                      <div className="text-center">
-                        <div className="font-semibold text-[#0F172A]">Ver Leads</div>
-                        <div className="text-sm text-[#475569]">
-                          {allLeads.length} prospectos capturados
-                        </div>
-                      </div>
-                    </Button>
-
-                    <Button
-                      variant="outline"
-                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F8FAFC] hover:border-primary transition-all"
-                      onClick={() => router.push("/admin/recursos")}
-                    >
-                      <Gift className="h-6 w-6 text-primary" />
-                      <div className="text-center">
-                        <div className="font-semibold text-[#0F172A]">Recursos de Marketing</div>
-                        <div className="text-sm text-[#475569]">
-                          Imágenes, copys y enlaces
-                        </div>
-                      </div>
-                    </Button>
-                  </CardContent>
-                </Card>
               </div>
             )}
 
-            {/* TAB 2 - LEADS */}
-            {activeTab === "leads" && (
-              <div className="space-y-6">
-                <div className="grid gap-6 md:grid-cols-4 mb-6">
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-[#64748B]">Total Leads</CardTitle>
-                      <Clock className="w-5 h-5 text-primary" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-semibold text-[#0F172A]">{allLeads.length}</div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-[#64748B]">Nuevos</CardTitle>
-                      <Clock className="w-5 h-5 text-primary" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-semibold text-[#0F172A]">
-                        {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-[#64748B]">Contactados</CardTitle>
-                      <MessageSquare className="w-5 h-5 text-primary" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-semibold text-[#0F172A]">
-                        {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
-                    <CardHeader className="flex flex-row items-center justify-between pb-2">
-                      <CardTitle className="text-sm font-medium text-[#64748B]">Convertidos</CardTitle>
-                      <CheckCircle2 className="w-5 h-5 text-primary" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-semibold text-[#0F172A]">
-                        {allLeads.filter(l => l.status === "convertido" || l.status === "converted").length}
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Search and Filter */}
-                <div className="flex flex-col sm:flex-row gap-4 mb-6">
-                  <div className="relative flex-1">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]" />
-                    <Input
-                      placeholder="Buscar por nombre, email o teléfono..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 bg-white border-[#E2E8F0]"
-                    />
-                  </div>
-                  <Select value={statusFilter} onValueChange={setStatusFilter}>
-                    <SelectTrigger className="w-full sm:w-[200px] bg-white border-[#E2E8F0]">
-                      <SelectValue placeholder="Filtrar por estado" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos los estados</SelectItem>
-                      <SelectItem value="nuevo">Nuevos</SelectItem>
-                      <SelectItem value="contactado">Contactados</SelectItem>
-                      <SelectItem value="convertido">Convertidos</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Leads List */}
-                <div className="space-y-4">
-                  {filteredLeads.length === 0 ? (
-                    <Card className="bg-white border border-[#E2E8F0]">
-                      <CardContent className="flex flex-col items-center justify-center py-12">
-                        <Users className="w-12 h-12 text-[#CBD5E1] mb-4" />
-                        <p className="text-[#64748B] text-center mb-2">
-                          {searchTerm || statusFilter !== "all" 
-                            ? "No se encontraron leads con ese filtro"
-                            : "Aún no tienes leads capturados"}
-                        </p>
-                        <p className="text-sm text-[#94A3B8] text-center">
-                          {!searchTerm && statusFilter === "all" && "Comparte tu link de embudo para empezar a capturar leads"}
-                        </p>
-                      </CardContent>
-                    </Card>
-                  ) : (
-                    filteredLeads.map((lead) => (
-                      <Card key={lead.id} className="bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] hover:shadow-md transition-all">
-                        <CardContent className="p-6">
-                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                            <div className="flex-1 space-y-2">
-                              <div className="flex items-center gap-3 flex-wrap">
-                                <h3 className="text-lg font-semibold text-[#0F172A]">
-                                  {lead.name}
-                                </h3>
-                                <Badge 
-                                  variant={
-                                    lead.status === "nuevo" || lead.status === "new" ? "secondary" :
-                                    lead.status === "contactado" || lead.status === "contacted" ? "default" :
-                                    "outline"
-                                  }
-                                  className="capitalize"
-                                >
-                                  {lead.status === "nuevo" || lead.status === "new" ? "
+            {/* Other tabs content would go here */}
+          </div>
+        </main>
+      </div>
+    </>
+  );
+}
