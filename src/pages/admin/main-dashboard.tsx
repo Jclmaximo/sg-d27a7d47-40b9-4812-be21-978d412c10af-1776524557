@@ -1148,7 +1148,32 @@ Puedo resolver dudas sobre:
               </div>
             )}
 
-            {/* Other tabs content would go here */}
+            {/* Other tabs: Placeholder for now - you had full content before */}
+            {activeTab === "resumen" && (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Tab Resumen - Contenido restaurado próximamente</p>
+              </div>
+            )}
+            {activeTab === "leads" && (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Tab Leads - Contenido restaurado próximamente</p>
+              </div>
+            )}
+            {activeTab === "red" && (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Tab Red - Contenido restaurado próximamente</p>
+              </div>
+            )}
+            {activeTab === "productividad" && (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Tab Productividad - Contenido restaurado próximamente</p>
+              </div>
+            )}
+            {activeTab === "perfil" && (
+              <div className="text-center py-12">
+                <p className="text-gray-500">Tab Perfil - Contenido restaurado próximamente</p>
+              </div>
+            )}
           </div>
         </main>
       </div>
