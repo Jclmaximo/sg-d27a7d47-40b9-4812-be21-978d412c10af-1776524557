@@ -123,6 +123,9 @@ export default function MainDashboard() {
   const [copiedReferral, setCopiedReferral] = useState(false);
   const [copiedLeads, setCopiedLeads] = useState(false);
   const [showCreateTemplate, setShowCreateTemplate] = useState(false);
+  const [mwrCustomLink, setMwrCustomLink] = useState("");
+  const [isEditingMwrLink, setIsEditingMwrLink] = useState(false);
+  const [mwrLinkError, setMwrLinkError] = useState("");
   
   // Wallet
   const [walletAddress, setWalletAddress] = useState("");
