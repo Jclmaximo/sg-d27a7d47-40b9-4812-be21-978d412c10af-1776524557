@@ -5,14 +5,13 @@ import {
   Users, Clock, MessageSquare, CheckCircle2, 
   Download, LogOut, Mail, Phone, Calendar, Target, Plus, Eye,
   LayoutGrid, Share2, Copy, Check, Info, BookOpen, Network, DollarSign, Gift,
-  TrendingUp, TrendingDown, Minus, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle, Zap, Upload, Circle, BarChart3, ChevronRight, Award, Save, Edit
+  TrendingUp, TrendingDown, Minus, Shield, Link2, ExternalLink, Loader2, CheckCircle, User, Search, Hand, LayoutDashboard, PlayCircle, Zap, Upload, Circle, BarChart3
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Select,
   SelectContent,
@@ -61,7 +60,6 @@ interface UserProfile {
   role: string;
   ambassador_active: boolean;
   mwr_link?: string | null;
-  mwr_custom_link?: string | null;
   avatar_url?: string | null;
 }
 
@@ -90,7 +88,7 @@ export default function MainDashboard() {
   const [activeTab, setActiveTab] = useState("resumen");
   
   // User profile
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   
   // Leads
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -120,9 +118,6 @@ export default function MainDashboard() {
   const [copiedReferral, setCopiedReferral] = useState(false);
   const [copiedLeads, setCopiedLeads] = useState(false);
   const [showCreateTemplate, setShowCreateTemplate] = useState(false);
-  const [mwrCustomLink, setMwrCustomLink] = useState("");
-  const [isEditingMwrLink, setIsEditingMwrLink] = useState(false);
-  const [mwrLinkError, setMwrLinkError] = useState("");
   
   // Wallet
   const [walletAddress, setWalletAddress] = useState("");
@@ -187,22 +182,6 @@ export default function MainDashboard() {
       month: "short",
       year: "numeric"
     });
-  };
-
-  const copyToClipboard = async (text: string, successMessage: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      toast({
-        title: "¡Copiado!",
-        description: successMessage,
-      });
-    } catch (err) {
-      toast({
-        title: "Error",
-        description: "No se pudo copiar al portapapeles",
-        variant: "destructive",
-      });
-    }
   };
 
   // Load notes when lead is selected
@@ -371,7 +350,6 @@ Puedo resolver dudas sobre:
 
       if (profileData) {
         setProfile(profileData);
-        setMwrCustomLink(profileData.mwr_custom_link || "");
         setWalletAddress(profileData.usdt_wallet_address || "");
         setProfileForm({
           full_name: profileData.full_name || "",
@@ -950,231 +928,1616 @@ Puedo resolver dudas sobre:
           </div>
         </div>
 
-        {/* Tab Navigation */}
-        <div className="max-w-7xl mx-auto px-6 mb-6">
-          <div className="bg-white rounded-lg border border-[#E2E8F0] p-2 flex gap-2 overflow-x-auto">
-            <Button
-              variant={activeTab === "resumen" ? "default" : "ghost"}
-              onClick={() => setActiveTab("resumen")}
-              className="flex items-center gap-2"
-            >
-              <LayoutDashboard className="w-4 h-4" />
-              Resumen
-            </Button>
-            <Button
-              variant={activeTab === "leads" ? "default" : "ghost"}
-              onClick={() => setActiveTab("leads")}
-              className="flex items-center gap-2"
-            >
-              <Users className="w-4 h-4" />
-              Leads
-            </Button>
-            <Button
-              variant={activeTab === "red" ? "default" : "ghost"}
-              onClick={() => setActiveTab("red")}
-              className="flex items-center gap-2"
-            >
-              <Network className="w-4 h-4" />
-              Mi Red
-            </Button>
-            <Button
-              variant={activeTab === "productividad" ? "default" : "ghost"}
-              onClick={() => setActiveTab("productividad")}
-              className="flex items-center gap-2"
-            >
-              <BarChart3 className="w-4 h-4" />
-              Productividad
-            </Button>
-            <Button
-              variant={activeTab === "links" ? "default" : "ghost"}
-              onClick={() => setActiveTab("links")}
-              className="flex items-center gap-2"
-            >
-              <Link2 className="w-4 h-4" />
-              Mis Links
-            </Button>
-            <Button
-              variant={activeTab === "perfil" ? "default" : "ghost"}
-              onClick={() => setActiveTab("perfil")}
-              className="flex items-center gap-2"
-            >
-              <User className="w-4 h-4" />
-              Perfil
-            </Button>
-          </div>
-        </div>
+        <main className="w-full px-6 py-8">
+          <div className="max-w-7xl mx-auto w-full">
+            {/* Tabs Navigation */}
+            <div className="flex gap-2 mb-8 overflow-x-auto pb-2">
+              <Button
+                variant={activeTab === "resumen" ? "default" : "outline"}
+                onClick={() => setActiveTab("resumen")}
+                className="whitespace-nowrap"
+              >
+                <LayoutDashboard className="w-4 h-4 mr-2" />
+                Resumen
+              </Button>
+              <Button
+                variant={activeTab === "leads" ? "default" : "outline"}
+                onClick={() => setActiveTab("leads")}
+                className="whitespace-nowrap"
+              >
+                <Users className="w-4 h-4 mr-2" />
+                Leads
+              </Button>
+              <Button
+                variant={activeTab === "red" ? "default" : "outline"}
+                onClick={() => setActiveTab("red")}
+                className="whitespace-nowrap"
+              >
+                <Network className="w-4 h-4 mr-2" />
+                Mi Red
+              </Button>
+              <Button
+                variant={activeTab === "productividad" ? "default" : "outline"}
+                onClick={() => setActiveTab("productividad")}
+                className="whitespace-nowrap"
+              >
+                <Target className="w-4 h-4 mr-2" />
+                Productividad
+              </Button>
+              <Button
+                variant={activeTab === "links" ? "default" : "outline"}
+                onClick={() => setActiveTab("links")}
+                className="whitespace-nowrap"
+              >
+                <Link2 className="w-4 h-4 mr-2" />
+                Mis Links
+              </Button>
+              <Button
+                variant={activeTab === "perfil" ? "default" : "outline"}
+                onClick={() => setActiveTab("perfil")}
+                className="whitespace-nowrap"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Perfil
+              </Button>
+            </div>
 
-        <main className="flex-1 overflow-auto p-8">
-          <div className="max-w-7xl mx-auto">
-            {/* TAB: RESUMEN */}
+            {/* TAB 1 - RESUMEN */}
             {activeTab === "resumen" && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold">Resumen</h2>
-                <p className="text-muted-foreground">Contenido del resumen próximamente...</p>
-              </div>
-            )}
-
-            {/* TAB: LEADS */}
-            {activeTab === "leads" && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold">Leads</h2>
-                <p className="text-muted-foreground">Contenido de leads próximamente...</p>
-              </div>
-            )}
-
-            {/* TAB: RED */}
-            {activeTab === "red" && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold">Mi Red</h2>
-                <p className="text-muted-foreground">Contenido de red próximamente...</p>
-              </div>
-            )}
-
-            {/* TAB: PRODUCTIVIDAD */}
-            {activeTab === "productividad" && (
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold">Productividad</h2>
-                <p className="text-muted-foreground">Contenido de productividad próximamente...</p>
-              </div>
-            )}
-
-            {/* TAB: LINKS */}
-            {activeTab === "links" && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold">Mis Links</h2>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {/* Card 1: Link de Registro */}
-                  <Card>
+                <div className="grid gap-6 md:grid-cols-3 mb-6">
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
                     <CardHeader>
-                      <CardTitle>Link de Registro</CardTitle>
-                      <CardDescription>
-                        Comparte este link para invitar personas a unirse
-                      </CardDescription>
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                        <DollarSign className="w-5 h-5 text-primary" />
+                        Total Ganado
+                      </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      <div className="p-3 bg-muted rounded-lg">
-                        <p className="text-sm font-mono break-all">
-                          {`https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`}
-                        </p>
+                    <CardContent>
+                      <div className="text-4xl font-semibold text-[#0F172A] mb-1">
+                        ${(stats?.total_earned ?? 0).toFixed(2)}
                       </div>
-                      <Button
-                        onClick={() => {
-                          navigator.clipboard.writeText(
-                            `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`
-                          );
-                          toast({ title: "Link copiado" });
-                        }}
-                        className="w-full"
-                      >
-                        <Copy className="mr-2 h-4 w-4" />
-                        Copiar Link
-                      </Button>
+                      <p className="text-sm text-[#475569]">Acumulado total</p>
                     </CardContent>
                   </Card>
 
-                  {/* Card 2: Link MWR Personalizado */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Link MWR Personalizado</CardTitle>
-                      <CardDescription>
-                        Personaliza tu link de registro (opcional)
-                      </CardDescription>
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                        <Clock className="w-5 h-5 text-primary" />
+                        Nuevos
+                      </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
-                      {isEditingMwrLink ? (
-                        <>
-                          <div className="space-y-2">
-                            <Label>URL Personalizada</Label>
-                            <Input
-                              placeholder="https://mi-dominio.com/registro"
-                              value={mwrCustomLink}
-                              onChange={(e) => {
-                                setMwrCustomLink(e.target.value);
-                                setMwrLinkError("");
-                              }}
-                            />
-                            {mwrLinkError && (
-                              <p className="text-sm text-red-500">{mwrLinkError}</p>
-                            )}
-                          </div>
-                          <div className="flex gap-2">
-                            <Button
-                              onClick={async () => {
-                                if (!mwrCustomLink.startsWith("http")) {
-                                  setMwrLinkError("El link debe empezar con http:// o https://");
-                                  return;
-                                }
-                                const { error } = await supabase
-                                  .from("profiles")
-                                  .update({ mwr_custom_link: mwrCustomLink })
-                                  .eq("id", profile?.id);
+                    <CardContent>
+                      <div className="text-4xl font-semibold text-[#0F172A]">
+                        {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
+                      </div>
+                    </CardContent>
+                  </Card>
 
-                                if (error) {
-                                  toast({ title: "Error al guardar", variant: "destructive" });
-                                  return;
-                                }
-                                setIsEditingMwrLink(false);
-                                toast({ title: "Link personalizado guardado" });
-                              }}
-                              className="flex-1"
-                            >
-                              Guardar
-                            </Button>
-                            <Button
-                              variant="outline"
-                              onClick={() => {
-                                setIsEditingMwrLink(false);
-                                setMwrCustomLink(profile?.mwr_custom_link || "");
-                                setMwrLinkError("");
-                              }}
-                            >
-                              Cancelar
-                            </Button>
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm hover:shadow-md transition-all">
+                    <CardHeader className="pb-3">
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                        <MessageSquare className="w-5 h-5 text-primary" />
+                        Contactados
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold text-[#0F172A]">
+                        {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Quick Actions */}
+                <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="text-lg font-semibold text-[#0F172A]">Acciones Rápidas</CardTitle>
+                    <CardDescription className="text-[#475569]">
+                      Herramientas para hacer crecer tu negocio
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="grid gap-4 md:grid-cols-3">
+                    <Button
+                      variant="outline"
+                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
+                      onClick={() => setActiveTab("links")}
+                    >
+                      <Link2 className="h-6 w-6 text-primary" />
+                      <div className="text-center">
+                        <div className="font-semibold text-[#0F172A]">Compartir Embudo</div>
+                        <div className="text-sm text-[#475569]">
+                          Copia tu link personalizado
+                        </div>
+                      </div>
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F1F5F9] hover:border-primary transition-all"
+                      onClick={() => setActiveTab("leads")}
+                    >
+                      <Users className="h-6 w-6 text-primary" />
+                      <div className="text-center">
+                        <div className="font-semibold text-[#0F172A]">Ver Leads</div>
+                        <div className="text-sm text-[#475569]">
+                          {allLeads.length} prospectos capturados
+                        </div>
+                      </div>
+                    </Button>
+
+                    <Button
+                      variant="outline"
+                      className="h-auto py-6 flex-col gap-3 border-[#E2E8F0] hover:bg-[#F8FAFC] hover:border-primary transition-all"
+                      onClick={() => router.push("/admin/recursos")}
+                    >
+                      <Gift className="h-6 w-6 text-primary" />
+                      <div className="text-center">
+                        <div className="font-semibold text-[#0F172A]">Recursos de Marketing</div>
+                        <div className="text-sm text-[#475569]">
+                          Imágenes, copys y enlaces
+                        </div>
+                      </div>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* TAB 2 - LEADS */}
+            {activeTab === "leads" && (
+              <div className="space-y-6">
+                <div className="grid gap-6 md:grid-cols-4 mb-6">
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Total Leads</CardTitle>
+                      <Clock className="w-5 h-5 text-primary" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-semibold text-[#0F172A]">{allLeads.length}</div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Nuevos</CardTitle>
+                      <Clock className="w-5 h-5 text-primary" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-semibold text-[#0F172A]">
+                        {allLeads.filter(l => l.status === "nuevo" || l.status === "new").length}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Contactados</CardTitle>
+                      <MessageSquare className="w-5 h-5 text-primary" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-semibold text-[#0F172A]">
+                        {allLeads.filter(l => l.status === "contactado" || l.status === "contacted").length}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white border border-[#E5E7EB] shadow-sm hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between pb-2">
+                      <CardTitle className="text-sm font-medium text-[#64748B]">Convertidos</CardTitle>
+                      <CheckCircle2 className="w-5 h-5 text-primary" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-semibold text-[#0F172A]">
+                        {allLeads.filter(l => l.status === "convertido" || l.status === "converted").length}
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Search and Filter */}
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#94A3B8]" />
+                    <Input
+                      placeholder="Buscar por nombre, email o teléfono..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 bg-white border-[#E2E8F0]"
+                    />
+                  </div>
+                  <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <SelectTrigger className="w-full sm:w-[200px] bg-white border-[#E2E8F0]">
+                      <SelectValue placeholder="Filtrar por estado" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Todos los estados</SelectItem>
+                      <SelectItem value="nuevo">Nuevos</SelectItem>
+                      <SelectItem value="contactado">Contactados</SelectItem>
+                      <SelectItem value="convertido">Convertidos</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* Leads List */}
+                <div className="space-y-4">
+                  {filteredLeads.length === 0 ? (
+                    <Card className="bg-white border border-[#E2E8F0]">
+                      <CardContent className="flex flex-col items-center justify-center py-12">
+                        <Users className="w-12 h-12 text-[#CBD5E1] mb-4" />
+                        <p className="text-[#64748B] text-center mb-2">
+                          {searchTerm || statusFilter !== "all" 
+                            ? "No se encontraron leads con ese filtro"
+                            : "Aún no tienes leads capturados"}
+                        </p>
+                        <p className="text-sm text-[#94A3B8] text-center">
+                          {!searchTerm && statusFilter === "all" && "Comparte tu link de embudo para empezar a capturar leads"}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ) : (
+                    filteredLeads.map((lead) => (
+                      <Card key={lead.id} className="bg-white border border-[#E2E8F0] hover:border-[#CBD5E1] hover:shadow-md transition-all">
+                        <CardContent className="p-6">
+                          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div className="flex-1 space-y-2">
+                              <div className="flex items-center gap-3 flex-wrap">
+                                <h3 className="text-lg font-semibold text-[#0F172A]">
+                                  {lead.name}
+                                </h3>
+                                <Badge 
+                                  variant={
+                                    lead.status === "nuevo" || lead.status === "new" ? "secondary" :
+                                    lead.status === "contactado" || lead.status === "contacted" ? "default" :
+                                    "outline"
+                                  }
+                                  className="capitalize"
+                                >
+                                  {lead.status === "nuevo" || lead.status === "new" ? "Nuevo" :
+                                   lead.status === "contactado" || lead.status === "contacted" ? "Contactado" :
+                                   lead.status === "convertido" || lead.status === "converted" ? "Convertido" :
+                                   lead.status}
+                                </Badge>
+                              </div>
+                              <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-[#64748B]">
+                                <div className="flex items-center gap-2">
+                                  <Mail className="w-4 h-4" />
+                                  {lead.email}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Phone className="w-4 h-4" />
+                                  {lead.phone}
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <Calendar className="w-4 h-4" />
+                                  {new Date(lead.created_at).toLocaleDateString("es-ES")}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-2 flex-wrap sm:flex-nowrap">
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  const message = `Hola ${lead.name}, vi que te interesa Viaja Ligero. ¿Tienes alguna pregunta?`;
+                                  window.open(`https://wa.me/${lead.phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
+                                }}
+                                className="border-[#E2E8F0] hover:bg-[#F1F5F9]"
+                              >
+                                <Phone className="w-4 h-4 mr-2" />
+                                Contactar
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => setSelectedLead(lead)}
+                                className="border-[#E2E8F0] hover:bg-[#F1F5F9]"
+                              >
+                                <Eye className="w-4 h-4 mr-2" />
+                                Ver Detalles
+                              </Button>
+                            </div>
                           </div>
-                        </>
-                      ) : (
-                        <>
-                          <div className="p-3 bg-muted rounded-lg">
-                            <p className="text-sm font-mono break-all">
-                              {mwrCustomLink || `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`}
+                        </CardContent>
+                      </Card>
+                    ))
+                  )}
+                </div>
+
+                {/* Lead Details Modal */}
+                <Dialog open={!!selectedLead} onOpenChange={(open) => !open && setSelectedLead(null)}>
+                  <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                      <DialogTitle className="text-2xl">Detalles del Lead</DialogTitle>
+                      <DialogDescription>
+                        Gestiona la información y seguimiento de este prospecto
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    {selectedLead && (
+                      <div className="space-y-6">
+                        {/* Lead Info */}
+                        <div className="grid gap-4 md:grid-cols-2">
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">Nombre</Label>
+                            <p className="text-lg font-semibold text-[#0F172A] mt-1">{selectedLead.name}</p>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">Estado</Label>
+                            <Select
+                              value={selectedLead.status}
+                              onValueChange={async (newStatus) => {
+                                try {
+                                  await leadsService.updateLeadStatus(selectedLead.id, newStatus);
+                                  setSelectedLead({ ...selectedLead, status: newStatus });
+                                  const updatedLeads = allLeads.map(l => 
+                                    l.id === selectedLead.id ? { ...l, status: newStatus } : l
+                                  );
+                                  setAllLeads(updatedLeads);
+                                  toast({
+                                    title: "Estado actualizado",
+                                    description: `Lead marcado como ${newStatus}`,
+                                  });
+                                } catch (error) {
+                                  toast({
+                                    title: "Error",
+                                    description: "No se pudo actualizar el estado",
+                                    variant: "destructive",
+                                  });
+                                }
+                              }}
+                            >
+                              <SelectTrigger className="mt-1">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="nuevo">Nuevo</SelectItem>
+                                <SelectItem value="contactado">Contactado</SelectItem>
+                                <SelectItem value="convertido">Convertido</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">Email</Label>
+                            <p className="text-[#0F172A] mt-1">{selectedLead.email}</p>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">WhatsApp</Label>
+                            <div className="flex items-center gap-2 mt-1">
+                              <p className="text-[#0F172A]">{selectedLead.phone}</p>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => {
+                                  const message = `Hola ${selectedLead.name}, vi que te interesa Viaja Ligero. ¿Tienes alguna pregunta?`;
+                                  window.open(`https://wa.me/${selectedLead.phone.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`, "_blank");
+                                }}
+                              >
+                                <Phone className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">País</Label>
+                            <p className="text-[#0F172A] mt-1">{selectedLead.country}</p>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium text-[#64748B]">Fecha de Captura</Label>
+                            <p className="text-[#0F172A] mt-1">
+                              {new Date(selectedLead.created_at).toLocaleDateString("es-ES", {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              })}
                             </p>
                           </div>
-                          <div className="flex gap-2">
-                            <Button
-                              onClick={() => {
-                                navigator.clipboard.writeText(
-                                  mwrCustomLink || `https://mwr.hubia.vip/leads-registro?ref=${profile?.username || ""}`
-                                );
-                                toast({ title: "Link copiado" });
+                        </div>
+
+                        {/* Notes Section */}
+                        <div>
+                          <Label className="text-sm font-medium text-[#0F172A] mb-3 block">
+                            💬 Notas y Seguimiento
+                          </Label>
+                          
+                          {/* Add Note Form */}
+                          <div className="flex gap-2 mb-4">
+                            <Input
+                              placeholder="Escribe una nota sobre este lead..."
+                              value={newNote}
+                              onChange={(e) => setNewNote(e.target.value)}
+                              onKeyPress={(e) => {
+                                if (e.key === "Enter" && !e.shiftKey) {
+                                  e.preventDefault();
+                                  handleAddNote();
+                                }
                               }}
                               className="flex-1"
-                            >
-                              <Copy className="mr-2 h-4 w-4" />
-                              Copiar
-                            </Button>
+                            />
                             <Button
-                              variant="outline"
-                              onClick={() => setIsEditingMwrLink(true)}
+                              onClick={handleAddNote}
+                              disabled={!newNote.trim() || addingNote}
+                              size="sm"
                             >
-                              Editar
+                              {addingNote ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <>
+                                  <Plus className="w-4 h-4 mr-2" />
+                                  Agregar
+                                </>
+                              )}
                             </Button>
                           </div>
-                        </>
+
+                          {/* Notes List */}
+                          <div className="space-y-3 max-h-64 overflow-y-auto">
+                            {loadingNotes ? (
+                              <div className="flex items-center justify-center py-8">
+                                <Loader2 className="w-6 h-6 animate-spin text-primary" />
+                              </div>
+                            ) : leadNotes.length === 0 ? (
+                              <p className="text-sm text-[#64748B] text-center py-6">
+                                No hay notas aún. Agrega la primera nota de seguimiento.
+                              </p>
+                            ) : (
+                              leadNotes.map((note) => (
+                                <div
+                                  key={note.id}
+                                  className="bg-[#F8FAFC] rounded-lg p-4 border border-[#E2E8F0]"
+                                >
+                                  <div className="flex items-start justify-between gap-3 mb-2">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                                        <span className="text-sm font-medium text-primary">
+                                          {note.profiles?.full_name?.charAt(0) || note.profiles?.username?.charAt(0) || "U"}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-medium text-[#0F172A]">
+                                          {note.profiles?.full_name || note.profiles?.username || "Usuario"}
+                                        </p>
+                                        <p className="text-xs text-[#64748B]">
+                                          {new Date(note.created_at).toLocaleDateString("es-ES", {
+                                            day: "numeric",
+                                            month: "short",
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                          })}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <p className="text-sm text-[#475569]">{note.note}</p>
+                                </div>
+                              ))
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Message Templates */}
+                        <div>
+                          <Label className="text-sm font-medium text-[#0F172A] mb-3 block">
+                            📝 Biblioteca de Mensajes
+                          </Label>
+                          <div className="space-y-4">
+                            {customTemplates.length === 0 ? (
+                              <p className="text-sm text-[#64748B] py-4 text-center">
+                                No hay plantillas guardadas
+                              </p>
+                            ) : (
+                              <>
+                                {/* Group templates by category */}
+                                {[
+                                  { key: 'primer_contacto', label: '👋 Primer Contacto', emoji: '👋' },
+                                  { key: 'seguimiento_1', label: '📧 Seguimiento 1', emoji: '📧' },
+                                  { key: 'seguimiento_2', label: '🎁 Seguimiento 2', emoji: '🎁' },
+                                  { key: 'recordatorio', label: '⏰ Recordatorio', emoji: '⏰' },
+                                ].map((categoryGroup) => {
+                                  const templatesInCategory = customTemplates.filter(
+                                    (t) => t.category === categoryGroup.key
+                                  );
+
+                                  if (templatesInCategory.length === 0) return null;
+
+                                  return (
+                                    <div key={categoryGroup.key} className="space-y-2">
+                                      {/* Category Header */}
+                                      <div className="flex items-center gap-2 pt-2">
+                                        <div className="h-px flex-1 bg-[#E2E8F0]" />
+                                        <p className="text-xs font-medium text-[#64748B] uppercase tracking-wider">
+                                          {categoryGroup.label}
+                                        </p>
+                                        <div className="h-px flex-1 bg-[#E2E8F0]" />
+                                      </div>
+
+                                      {/* Templates in this category */}
+                                      {templatesInCategory.map((template) => (
+                                        <Card
+                                          key={template.id}
+                                          className="p-4 hover:bg-[#F8FAFC] cursor-pointer transition-colors border-[#E2E8F0]"
+                                          onClick={() => {
+                                            // Replace all possible placeholder formats with lead name
+                                            const personalizedMessage = template.template
+                                              .replace(/\{name\}/g, selectedLead.name)
+                                              .replace(/\{\{name\}\}/g, selectedLead.name)
+                                              .replace(/\{nombre\}/g, selectedLead.name)
+                                              .replace(/\{\{nombre\}\}/g, selectedLead.name)
+                                              .replace(/\{email\}/g, selectedLead.email)
+                                              .replace(/\{\{email\}\}/g, selectedLead.email);
+                                            
+                                            // Clean WhatsApp number (remove + and spaces)
+                                            const cleanPhone = selectedLead.phone?.replace(/[\s\+]/g, "") || "";
+                                            
+                                            if (!cleanPhone) {
+                                              toast({
+                                                title: "⚠️ Sin número de WhatsApp",
+                                                description: "Este lead no tiene número registrado",
+                                                variant: "destructive",
+                                              });
+                                              return;
+                                            }
+                                            
+                                            // Open WhatsApp with personalized message
+                                            const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(personalizedMessage)}`;
+                                            window.open(whatsappUrl, "_blank");
+                                            
+                                            toast({
+                                              title: "✅ WhatsApp abierto",
+                                              description: "Mensaje personalizado listo para enviar",
+                                            });
+                                          }}
+                                        >
+                                          <div className="flex items-start justify-between gap-3 mb-3">
+                                            <div className="flex items-center gap-3">
+                                              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-lg">
+                                                {template.emoji}
+                                              </div>
+                                              <p className="text-sm font-medium text-[#0F172A]">
+                                                {template.name}
+                                              </p>
+                                            </div>
+                                          </div>
+                                          <p className="text-sm text-[#475569] leading-relaxed">
+                                            {template.template
+                                              .replace(/\{name\}/g, selectedLead.name)
+                                              .replace(/\{\{name\}\}/g, selectedLead.name)
+                                              .replace(/\{nombre\}/g, selectedLead.name)
+                                              .replace(/\{\{nombre\}\}/g, selectedLead.name)}
+                                          </p>
+                                        </Card>
+                                      ))}
+                                    </div>
+                                  );
+                                })}
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </DialogContent>
+                </Dialog>
+              </div>
+            )}
+
+            {/* TAB 3 - MI RED */}
+            {activeTab === "red" && (
+              <div className="space-y-6">
+                {/* Network Stats */}
+                <div className="grid gap-6 md:grid-cols-3 mb-6">
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                        <DollarSign className="w-5 h-5 text-primary" />
+                        Total Ganado
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold text-[#0F172A]">
+                        ${(stats?.total_earned ?? 0).toFixed(2)}
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                        Disponible
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold text-[#0F172A]">
+                        ${(stats?.available_balance ?? 0).toFixed(2)}
+                      </div>
+                      {(stats?.available_balance ?? 0) >= 39.50 && (
+                        <Button
+                          size="sm"
+                          onClick={requestWithdrawal}
+                          className="mt-3"
+                        >
+                          Solicitar Retiro
+                        </Button>
                       )}
                     </CardContent>
                   </Card>
+
+                  <Card className="bg-white border border-[#E2E8F0] shadow-sm">
+                    <CardHeader>
+                      <CardTitle className="text-sm font-medium text-[#64748B] flex items-center gap-2">
+                        <Network className="w-5 h-5 text-primary" />
+                        Referidos Directos
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-4xl font-semibold text-[#0F172A]">
+                        {networkMembers.length}
+                      </div>
+                    </CardContent>
+                  </Card>
                 </div>
+
+                {/* Network Members */}
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Mi Red de Referidos</CardTitle>
+                    <CardDescription>
+                      Miembros que se han unido a través de tu enlace
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {networkMembers.length === 0 ? (
+                      <div className="text-center py-8">
+                        <Network className="w-12 h-12 text-[#CBD5E1] mx-auto mb-4" />
+                        <p className="text-[#64748B] mb-2">
+                          Aún no tienes referidos en tu red
+                        </p>
+                        <p className="text-sm text-[#94A3B8]">
+                          Comparte tu link personalizado para empezar a construir tu red
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {networkMembers.map((member: any) => (
+                          <div
+                            key={member.id}
+                            className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]"
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                <User className="w-5 h-5 text-primary" />
+                              </div>
+                              <div>
+                                <p className="font-medium text-[#0F172A]">
+                                  {member.full_name || member.username || member.email}
+                                </p>
+                                <p className="text-sm text-[#64748B]">
+                                  {new Date(member.created_at).toLocaleDateString("es-ES")}
+                                </p>
+                              </div>
+                            </div>
+                            <Badge variant="outline" className="capitalize">
+                              {member.role || "member"}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* Commissions History */}
+                {commissions.length > 0 && (
+                  <Card className="bg-white border border-[#E2E8F0]">
+                    <CardHeader>
+                      <CardTitle>Historial de Comisiones</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {commissions.map((commission) => (
+                          <div
+                            key={commission.id}
+                            className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]"
+                          >
+                            <div>
+                              <p className="font-medium text-[#0F172A]">
+                                {commission.commission_type === "direct" ? "Comisión Directa" : "Comisión Indirecta"}
+                              </p>
+                              <p className="text-sm text-[#64748B]">
+                                {new Date(commission.created_at).toLocaleDateString("es-ES")}
+                              </p>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-lg font-semibold text-green-600">
+                                +${commission.amount_usd.toFixed(2)}
+                              </p>
+                              <Badge variant="outline" className="mt-1">
+                                {commission.status}
+                              </Badge>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </div>
             )}
 
-            {/* TAB: PERFIL */}
+            {/* TAB 4 - PRODUCTIVIDAD */}
+            {activeTab === "productividad" && (
+              <div className="space-y-8">
+                {/* 1. SCORE DEL DÍA - Principal */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Score Principal */}
+                  <Card className="p-8 bg-gradient-to-br from-white to-gray-50">
+                    <div className="flex items-center justify-between mb-6">
+                      <h2 className="text-lg font-semibold text-gray-900">Score de Hoy</h2>
+                      {productivityStats && productivityStats.current_streak > 0 && (
+                        <div className="flex items-center gap-2 px-3 py-1.5 bg-orange-50 border border-orange-200 rounded-lg">
+                          <span className="text-lg">🔥</span>
+                          <span className="text-sm font-medium text-orange-700">
+                            Racha: {productivityStats.current_streak} {productivityStats.current_streak === 1 ? 'día' : 'días'}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center gap-8">
+                      {/* Circular Progress */}
+                      <div className="relative w-32 h-32 flex-shrink-0">
+                        <svg className="w-32 h-32 transform -rotate-90">
+                          <circle
+                            cx="64"
+                            cy="64"
+                            r="56"
+                            stroke="#E5E7EB"
+                            strokeWidth="8"
+                            fill="none"
+                          />
+                          <circle
+                            cx="64"
+                            cy="64"
+                            r="56"
+                            stroke={
+                              (productivityStats?.daily_score || 0) >= 80 ? "#10B981" :
+                              (productivityStats?.daily_score || 0) >= 50 ? "#F59E0B" :
+                              "#EF4444"
+                            }
+                            strokeWidth="8"
+                            fill="none"
+                            strokeDasharray={`${2 * Math.PI * 56}`}
+                            strokeDashoffset={`${2 * Math.PI * 56 * (1 - (productivityStats?.daily_score || 0) / 100)}`}
+                            strokeLinecap="round"
+                            className="transition-all duration-500"
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span 
+                            className="text-4xl font-bold"
+                            style={{
+                              color: 
+                                (productivityStats?.daily_score || 0) >= 80 ? "#10B981" :
+                                (productivityStats?.daily_score || 0) >= 50 ? "#F59E0B" :
+                                "#EF4444"
+                            }}
+                          >
+                            {Math.round(productivityStats?.daily_score || 0)}%
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Status & Message */}
+                      <div className="flex-1">
+                        <h3 
+                          className="text-2xl font-semibold mb-2"
+                          style={{
+                            color: 
+                              (productivityStats?.daily_score || 0) >= 80 ? "#10B981" :
+                              (productivityStats?.daily_score || 0) >= 50 ? "#F59E0B" :
+                              "#EF4444"
+                          }}
+                        >
+                          {(productivityStats?.daily_score || 0) >= 80 ? "Productividad Alta" :
+                           (productivityStats?.daily_score || 0) >= 50 ? "Productividad Media" :
+                           "Productividad Baja"}
+                        </h3>
+                        <p className="text-sm text-gray-600 mb-4">
+                          {(productivityStats?.daily_score || 0) >= 80 
+                            ? "¡Excelente! Mantén este ritmo" 
+                            : (productivityStats?.daily_score || 0) >= 50
+                            ? "Buen progreso, sigue así"
+                            : `Te faltan ${Math.ceil((80 - (productivityStats?.daily_score || 0)) / 10)} acciones para nivel alto`
+                          }
+                        </p>
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 border border-blue-200 rounded-lg">
+                          <TrendingUp className="w-4 h-4 text-blue-600" />
+                          <span className="text-sm text-blue-700">
+                            {productivityStats?.total_actions_today || 0} acciones completadas hoy
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Quick Stats */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <Card className="p-6">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                          <Users className="w-5 h-5 text-blue-600" />
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-gray-900">
+                            {productivityStats?.contacts_today || 0}
+                          </p>
+                          <p className="text-xs text-gray-500">Contactos hoy</p>
+                        </div>
+                      </div>
+                    </Card>
+
+                    <Card className="p-6">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                          <CheckCircle2 className="w-5 h-5 text-green-600" />
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-gray-900">
+                            {productivityStats?.follow_ups_today || 0}
+                          </p>
+                          <p className="text-xs text-gray-500">Seguimientos</p>
+                        </div>
+                      </div>
+                    </Card>
+
+                    <Card className="p-6">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                          <Calendar className="w-5 h-5 text-purple-600" />
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-gray-900">
+                            {productivityStats?.presentations_today || 0}
+                          </p>
+                          <p className="text-xs text-gray-500">Presentaciones</p>
+                        </div>
+                      </div>
+                    </Card>
+
+                    <Card className="p-6">
+                      <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                          <Share2 className="w-5 h-5 text-orange-600" />
+                        </div>
+                        <div>
+                          <p className="text-2xl font-bold text-gray-900">
+                            {productivityStats?.posts_today || 0}
+                          </p>
+                          <p className="text-xs text-gray-500">Publicaciones</p>
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                </div>
+
+                {/* 2. ACTIVIDAD DIARIA - Protocolos del Reto Activo */}
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-lg font-semibold text-gray-900">Actividad Diaria</h3>
+                    {challengeProtocols.length > 0 ? (
+                      <span className="text-sm text-gray-500">
+                        {challengeProtocols.filter(p => p.completed).length} / {challengeProtocols.length} completados
+                      </span>
+                    ) : (
+                      <Button
+                        onClick={() => router.push("/reto")}
+                        size="sm"
+                        variant="outline"
+                        className="text-sm"
+                      >
+                        Iniciar Reto
+                      </Button>
+                    )}
+                  </div>
+
+                  {challengeProtocols.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                      {challengeProtocols.map((protocol, index) => {
+                        const colors = [
+                          { bg: "bg-blue-50", border: "border-blue-100", bar: "bg-blue-500", text: "text-blue-700" },
+                          { bg: "bg-green-50", border: "border-green-100", bar: "bg-green-500", text: "text-green-700" },
+                          { bg: "bg-purple-50", border: "border-purple-100", bar: "bg-purple-500", text: "text-purple-700" },
+                          { bg: "bg-orange-50", border: "border-orange-100", bar: "bg-orange-500", text: "text-orange-700" },
+                          { bg: "bg-red-50", border: "border-red-100", bar: "bg-red-500", text: "text-red-700" }
+                        ];
+                        const color = colors[index % 5];
+
+                        return (
+                          <div key={protocol.id} className={`p-4 ${color.bg} border ${color.border} rounded-lg`}>
+                            <div className="flex items-start justify-between mb-3">
+                              <span className="text-sm font-medium text-gray-700 line-clamp-2">
+                                {protocol.label}
+                              </span>
+                              {protocol.completed && (
+                                <CheckCircle2 className={`w-5 h-5 ${color.text} flex-shrink-0 ml-2`} />
+                              )}
+                            </div>
+                            <div className="w-full h-2 bg-white rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full ${color.bar} transition-all duration-300`}
+                                style={{ width: protocol.completed ? "100%" : "0%" }}
+                              />
+                            </div>
+                            <div className="mt-2 text-xs text-gray-600">
+                              {protocol.points} puntos
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12">
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Zap className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <p className="text-gray-600 mb-2">No hay reto activo</p>
+                      <p className="text-sm text-gray-500 mb-4">Inicia el reto de 24 horas para ver tus protocolos aquí</p>
+                      <Button
+                        onClick={() => router.push("/reto")}
+                        className="bg-primary hover:bg-primary/90"
+                      >
+                        Ir al Reto
+                      </Button>
+                    </div>
+                  )}
+                </Card>
+
+                {/* 3. RESÚMENES - Semanal, Mensual y Conversión */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Resumen Semanal */}
+                  <Card className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Resumen Semanal</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-600">Días activos</span>
+                          <span className="text-sm font-medium text-gray-900">
+                            {productivityStats?.active_days_week || 0}/7
+                          </span>
+                        </div>
+                        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-blue-500 transition-all duration-300"
+                            style={{ width: `${((productivityStats?.active_days_week || 0) / 7) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span className="text-sm text-gray-600">Estado</span>
+                        <span className={`text-sm font-medium ${
+                          (productivityStats?.active_days_week || 0) >= 5 ? "text-green-600" :
+                          (productivityStats?.active_days_week || 0) >= 3 ? "text-yellow-600" :
+                          "text-red-600"
+                        }`}>
+                          {(productivityStats?.active_days_week || 0) >= 5 ? "Alto" :
+                           (productivityStats?.active_days_week || 0) >= 3 ? "Medio" :
+                           "Bajo"}
+                        </span>
+                      </div>
+
+                      <div>
+                        <p className="text-sm text-gray-600 mb-1">Promedio diario</p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          {Math.round((productivityStats?.total_actions_week || 0) / 7)} acciones
+                        </p>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {(productivityStats?.total_actions_week || 0) / 7 < 5 
+                            ? "Por debajo del objetivo (5)" 
+                            : "Objetivo alcanzado"}
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Resumen Mensual */}
+                  <Card className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Resumen Mensual</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-600">Días activos</span>
+                          <span className="text-sm font-medium text-gray-900">
+                            {productivityStats?.active_days_month || 0}/31
+                          </span>
+                        </div>
+                        <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-purple-500 transition-all duration-300"
+                            style={{ width: `${((productivityStats?.active_days_month || 0) / 31) * 100}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span className="text-sm text-gray-600">Consistencia</span>
+                        <span className="text-sm font-medium text-gray-900">
+                          {Math.round(((productivityStats?.active_days_month || 0) / 31) * 100)}%
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <span className="text-sm text-gray-600">Estado</span>
+                        <span className={`text-sm font-medium ${
+                          (productivityStats?.active_days_month || 0) >= 20 ? "text-green-600" :
+                          (productivityStats?.active_days_month || 0) >= 10 ? "text-yellow-600" :
+                          "text-red-600"
+                        }`}>
+                          {(productivityStats?.active_days_month || 0) >= 20 ? "Alta" :
+                           (productivityStats?.active_days_month || 0) >= 10 ? "Media" :
+                           "Baja"}
+                        </span>
+                      </div>
+                    </div>
+                  </Card>
+
+                  {/* Conversión */}
+                  <Card className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">Conversión</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Presentaciones</span>
+                        <span className="text-2xl font-bold text-gray-900">
+                          {productivityStats?.presentations_total || 0}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm text-gray-600">Decisiones</span>
+                        <span className="text-2xl font-bold text-gray-900">
+                          {productivityStats?.decisions_total || 0}
+                        </span>
+                      </div>
+
+                      <div className="border-t pt-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-sm text-gray-600">Tasa de conversión</span>
+                          <span className={`text-2xl font-bold ${
+                            ((productivityStats?.decisions_total || 0) / (productivityStats?.presentations_total || 1)) * 100 >= 25 
+                              ? "text-green-600" 
+                              : "text-yellow-600"
+                          }`}>
+                            {Math.round(((productivityStats?.decisions_total || 0) / (productivityStats?.presentations_total || 1)) * 100)}%
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          Meta recomendada: 25%+
+                        </p>
+                      </div>
+                    </div>
+                  </Card>
+                </div>
+
+                {/* Team Stats (Admin only) */}
+                {profile?.role === "admin" && teamStats.length > 0 && (
+                  <Card className="bg-white border border-[#E2E8F0]">
+                    <CardHeader>
+                      <CardTitle>Productividad del Equipo</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        {teamStats.map((member) => (
+                          <div
+                            key={member.user_id}
+                            className="flex items-center justify-between p-4 bg-[#F8FAFC] rounded-lg border border-[#E2E8F0]"
+                          >
+                            <div className="flex items-center gap-3">
+                              {member.avatar_url ? (
+                                <img src={member.avatar_url} alt={member.full_name} className="w-8 h-8 rounded-full object-cover" />
+                              ) : (
+                                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+                                  {member.full_name?.charAt(0) || "U"}
+                                </div>
+                              )}
+                              <div>
+                                <p className="font-medium text-[#0F172A]">
+                                  {member.full_name}
+                                </p>
+                                <p className="text-sm text-[#64748B]">
+                                  {member.days_active} días activos esta semana
+                                </p>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <p className="text-sm font-medium text-[#0F172A]">
+                                {member.total_points} puntos
+                              </p>
+                              <div className="flex items-center justify-end gap-2 mt-1">
+                                <Badge variant={member.status === "active" ? "default" : member.status === "medium" ? "secondary" : "outline"}>
+                                  {member.percentage}%
+                                </Badge>
+                                <span className="text-xs text-[#64748B] ml-2">{member.last_activity}</span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* 4. GRÁFICA DE TENDENCIA - Últimos 30 Días */}
+                <Card className="p-6">
+                  <div className="flex items-center justify-between mb-6">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">Tendencia de Productividad</h3>
+                      <p className="text-sm text-gray-500 mt-1">Últimos 30 días</p>
+                    </div>
+                    {productivityStats?.monthly_data && productivityStats.monthly_data.length > 1 && (
+                      <div className="flex items-center gap-2">
+                        {(() => {
+                          const firstHalf = productivityStats.monthly_data.slice(0, 15);
+                          const secondHalf = productivityStats.monthly_data.slice(15);
+                          const avgFirst = firstHalf.reduce((sum, d) => sum + d.score, 0) / firstHalf.length;
+                          const avgSecond = secondHalf.reduce((sum, d) => sum + d.score, 0) / secondHalf.length;
+                          const trend = avgSecond > avgFirst ? 'up' : avgSecond < avgFirst ? 'down' : 'stable';
+                          
+                          return (
+                            <>
+                              {trend === 'up' && (
+                                <>
+                                  <TrendingUp className="w-5 h-5 text-green-600" />
+                                  <span className="text-sm font-medium text-green-600">Subiendo</span>
+                                </>
+                              )}
+                              {trend === 'down' && (
+                                <>
+                                  <TrendingDown className="w-5 h-5 text-red-600" />
+                                  <span className="text-sm font-medium text-red-600">Bajando</span>
+                                </>
+                              )}
+                              {trend === 'stable' && (
+                                <>
+                                  <Minus className="w-5 h-5 text-gray-600" />
+                                  <span className="text-sm font-medium text-gray-600">Estable</span>
+                                </>
+                              )}
+                            </>
+                          );
+                        })()}
+                      </div>
+                    )}
+                  </div>
+
+                  {productivityStats?.monthly_data && productivityStats.monthly_data.length > 0 ? (
+                    <div className="w-full h-64 relative">
+                      <svg className="w-full h-full" viewBox="0 0 800 200" preserveAspectRatio="none">
+                        {/* Grid lines */}
+                        {[0, 25, 50, 75, 100].map((y) => (
+                          <line
+                            key={y}
+                            x1="0"
+                            y1={200 - (y * 2)}
+                            x2="800"
+                            y2={200 - (y * 2)}
+                            stroke="#E5E7EB"
+                            strokeWidth="1"
+                          />
+                        ))}
+
+                        {/* Line chart */}
+                        {(() => {
+                          const points = productivityStats.monthly_data.map((d, i) => ({
+                            x: (i / (productivityStats.monthly_data.length - 1)) * 800,
+                            y: 200 - (d.score * 2)
+                          }));
+
+                          const pathD = points
+                            .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`)
+                            .join(' ');
+
+                          return (
+                            <>
+                              {/* Area fill */}
+                              <path
+                                d={`${pathD} L 800 200 L 0 200 Z`}
+                                fill="url(#gradient)"
+                                opacity="0.2"
+                              />
+                              
+                              {/* Line */}
+                              <path
+                                d={pathD}
+                                fill="none"
+                                stroke="#3B82F6"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+
+                              {/* Gradient definition */}
+                              <defs>
+                                <linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                  <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.4" />
+                                  <stop offset="100%" stopColor="#3B82F6" stopOpacity="0" />
+                                </linearGradient>
+                              </defs>
+
+                              {/* Points */}
+                              {points.map((p, i) => (
+                                <g key={i}>
+                                  <circle
+                                    cx={p.x}
+                                    cy={p.y}
+                                    r="4"
+                                    fill="#3B82F6"
+                                    stroke="white"
+                                    strokeWidth="2"
+                                  />
+                                  {/* Show value on hover or every 5th point */}
+                                  {(i % 5 === 0 || i === points.length - 1) && (
+                                    <text
+                                      x={p.x}
+                                      y={p.y - 10}
+                                      textAnchor="middle"
+                                      fontSize="10"
+                                      fill="#6B7280"
+                                    >
+                                      {productivityStats.monthly_data[i].score}%
+                                    </text>
+                                  )}
+                                </g>
+                              ))}
+                            </>
+                          );
+                        })()}
+                      </svg>
+
+                      {/* Y-axis labels */}
+                      <div className="absolute left-0 top-0 h-full flex flex-col justify-between text-xs text-gray-500 -ml-8">
+                        <span>100%</span>
+                        <span>75%</span>
+                        <span>50%</span>
+                        <span>25%</span>
+                        <span>0%</span>
+                      </div>
+
+                      {/* X-axis labels */}
+                      <div className="flex justify-between mt-2 text-xs text-gray-500">
+                        {productivityStats.monthly_data
+                          .filter((_, i) => i % 5 === 0 || i === productivityStats.monthly_data.length - 1)
+                          .map((d, i) => (
+                            <span key={i}>{d.day}</span>
+                          ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="h-64 flex items-center justify-center text-gray-400">
+                      <div className="text-center">
+                        <BarChart3 className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                        <p>No hay datos suficientes para mostrar la tendencia</p>
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              </div>
+            )}
+
+            {/* TAB 5 - MIS LINKS */}
+            {activeTab === "links" && (
+              <div className="space-y-6">
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Link de Embudo de Registro</CardTitle>
+                    <CardDescription>
+                      Link directo para registro de leads con tu código de referido
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex gap-2">
+                      <Input
+                        value={`${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`}
+                        readOnly
+                        className="flex-1 bg-[#F8FAFC] border-[#E2E8F0]"
+                      />
+                      <Button
+                        onClick={async () => {
+                          const leadsUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`;
+                          await navigator.clipboard.writeText(leadsUrl);
+                          setCopiedLeads(true);
+                          setTimeout(() => setCopiedLeads(false), 2000);
+                          toast({
+                            title: "¡Link copiado!",
+                            description: "Link de registro copiado al portapapeles",
+                          });
+                        }}
+                        variant="outline"
+                      >
+                        {copiedLeads ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Button
+                        onClick={() => {
+                          const leadsUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`;
+                          window.open(leadsUrl, "_blank");
+                        }}
+                        className="flex-1"
+                        variant="outline"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Abrir en nueva pestaña
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          const leadsUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/leads-registro${profile?.username ? `?ref=${profile.username}` : ""}`;
+                          const message = `📋 Regístrate aquí para recibir acceso exclusivo:\n\n${leadsUrl}`;
+                          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+                        }}
+                        className="flex-1"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Compartir por WhatsApp
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Link de Funnel de Referidos</CardTitle>
+                    <CardDescription>
+                      Comparte este link para capturar leads y ganar comisiones
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex gap-2">
+                      <Input
+                        value={funnelUrl}
+                        readOnly
+                        className="flex-1 bg-[#F8FAFC] border-[#E2E8F0]"
+                      />
+                      <Button
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(funnelUrl);
+                          setCopiedFunnel(true);
+                          setTimeout(() => setCopiedFunnel(false), 2000);
+                          toast({
+                            title: "¡Link copiado!",
+                            description: "Pégalo donde quieras compartirlo",
+                          });
+                        }}
+                        variant="outline"
+                      >
+                        {copiedFunnel ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <Button
+                        onClick={() => window.open(funnelUrl, "_blank")}
+                        className="flex-1"
+                        variant="outline"
+                      >
+                        <ExternalLink className="w-4 h-4 mr-2" />
+                        Abrir en nueva pestaña
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          const message = `¡Descubre cómo viajar más por menos! 🌍✈️\n\n${funnelUrl}`;
+                          window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank");
+                        }}
+                        className="flex-1"
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        Compartir por WhatsApp
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {profile?.mwr_link && (
+                  <Card className="bg-white border border-[#E2E8F0]">
+                    <CardHeader>
+                      <CardTitle>Link MWR Personalizado</CardTitle>
+                      <CardDescription>
+                        Tu link de referidos para el programa MWR
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="flex gap-2">
+                        <Input
+                          value={profile.mwr_link}
+                          readOnly
+                          className="flex-1 bg-[#F8FAFC] border-[#E2E8F0]"
+                        />
+                        <Button
+                          onClick={async () => {
+                            await navigator.clipboard.writeText(profile.mwr_link || "");
+                            setCopiedReferral(true);
+                            setTimeout(() => setCopiedReferral(false), 2000);
+                            toast({
+                              title: "¡Link copiado!",
+                              description: "Link MWR copiado al portapapeles",
+                            });
+                          }}
+                          variant="outline"
+                        >
+                          {copiedReferral ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
+            )}
+
+            {/* TAB 6 - PERFIL */}
             {activeTab === "perfil" && (
               <div className="space-y-6">
-                <h2 className="text-2xl font-bold">Perfil</h2>
-                <p className="text-muted-foreground">Contenido de perfil próximamente...</p>
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Información Personal</CardTitle>
+                    <CardDescription>
+                      Actualiza tu información de perfil
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    {/* Avatar */}
+                    <div className="flex items-center gap-6">
+                      {profileForm.avatar_url ? (
+                        <img
+                          src={profileForm.avatar_url}
+                          alt="Avatar"
+                          className="w-24 h-24 rounded-full object-cover border-4 border-white shadow-lg"
+                        />
+                      ) : (
+                        <div className="w-24 h-24 bg-[#F1F5F9] text-primary rounded-full flex items-center justify-center text-3xl font-semibold border-4 border-white shadow-lg">
+                          {profileForm.full_name?.[0]?.toUpperCase() || "U"}
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <Label htmlFor="avatar-upload" className="cursor-pointer">
+                          <div className="flex items-center gap-2 text-primary hover:text-primary/80">
+                            <Upload className="w-4 h-4" />
+                            <span className="font-medium">
+                              {uploadingAvatar ? "Subiendo..." : "Cambiar foto"}
+                            </span>
+                          </div>
+                        </Label>
+                        <input
+                          id="avatar-upload"
+                          type="file"
+                          accept="image/*"
+                          onChange={uploadAvatar}
+                          className="hidden"
+                          disabled={uploadingAvatar}
+                        />
+                        <p className="text-sm text-[#64748B] mt-1">
+                          JPG, PNG o GIF. Máximo 2MB.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Form Fields */}
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Nombre Completo</Label>
+                        <Input
+                          value={profileForm.full_name}
+                          onChange={(e) => setProfileForm({
+                            ...profileForm,
+                            full_name: e.target.value
+                          })}
+                          placeholder="Juan Pérez"
+                          className="mt-2"
+                        />
+                      </div>
+
+                      <div>
+                        <Label>Username (para links personalizados)</Label>
+                        <Input
+                          value={profileForm.username}
+                          onChange={(e) => setProfileForm({
+                            ...profileForm,
+                            username: e.target.value.toLowerCase().replace(/[^a-z0-9]/g, "")
+                          })}
+                          placeholder="juanperez"
+                          className="mt-2"
+                        />
+                        <p className="text-sm text-[#64748B] mt-1">
+                          Solo letras minúsculas y números, sin espacios
+                        </p>
+                      </div>
+
+                      <div>
+                        <Label>Link MWR Personalizado (opcional)</Label>
+                        <Input
+                          value={profileForm.mwr_link}
+                          onChange={(e) => setProfileForm({
+                            ...profileForm,
+                            mwr_link: e.target.value
+                          })}
+                          placeholder="https://tu-link-mwr.com"
+                          className="mt-2"
+                        />
+                      </div>
+
+                      <Button
+                        onClick={updateProfile}
+                        className="w-full"
+                      >
+                        <CheckCircle className="w-4 h-4 mr-2" />
+                        Guardar Cambios
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Wallet Configuration */}
+                <Card className="bg-white border border-[#E2E8F0]">
+                  <CardHeader>
+                    <CardTitle>Billetera USDT (BSC)</CardTitle>
+                    <CardDescription>
+                      Configura tu dirección de billetera para recibir retiros
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <Label>Dirección de Billetera USDT (BEP-20)</Label>
+                      <Input
+                        value={walletAddress}
+                        onChange={(e) => setWalletAddress(e.target.value)}
+                        placeholder="0x..."
+                        className="mt-2 font-mono"
+                      />
+                      <p className="text-sm text-[#64748B] mt-1">
+                        Solo BEP-20 (Binance Smart Chain). Verifica bien la dirección.
+                      </p>
+                    </div>
+
+                    <Button
+                      onClick={async () => {
+                        try {
+                          setSavingWallet(true);
+                          const session = await authService.getCurrentSession();
+                          if (!session) return;
+
+                          const { error } = await supabase
+                            .from("profiles")
+                            .update({ usdt_wallet_address: walletAddress })
+                            .eq("id", session.user.id);
+
+                          if (error) throw error;
+
+                          await loadData();
+                          toast({
+                            title: "✅ Billetera guardada",
+                            description: "Tu dirección USDT se actualizó correctamente",
+                          });
+                        } catch (error) {
+                          console.error("Error saving wallet:", error);
+                          toast({
+                            title: "Error",
+                            description: "No se pudo guardar la billetera",
+                            variant: "destructive",
+                          });
+                        } finally {
+                          setSavingWallet(false);
+                        }
+                      }}
+                      disabled={!walletAddress || savingWallet}
+                      className="w-full"
+                    >
+                      {savingWallet ? (
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      ) : (
+                        <Shield className="w-4 h-4 mr-2" />
+                      )}
+                      Guardar Billetera
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
             )}
           </div>
