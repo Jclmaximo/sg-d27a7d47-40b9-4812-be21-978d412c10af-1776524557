@@ -88,6 +88,9 @@ export default function MainDashboard() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("resumen");
+  const [mwrCustomLink, setMwrCustomLink] = useState("");
+  const [isEditingMwrLink, setIsEditingMwrLink] = useState(false);
+  const [mwrLinkError, setMwrLinkError] = useState("");
   
   // User profile
   const [profile, setProfile] = useState<any>(null);
@@ -126,7 +129,7 @@ export default function MainDashboard() {
   
   // Wallet
   const [walletAddress, setWalletAddress] = useState("");
-  const [isEditingWallet, setIsEditingWallet] = useState(false);
+  const [savingWallet, setSavingWallet] = useState(false);
 
   // Productivity
   const [todayActivity, setTodayActivity] = useState<DailyActivity>({
@@ -1148,32 +1151,7 @@ Puedo resolver dudas sobre:
               </div>
             )}
 
-            {/* Other tabs: Placeholder for now - you had full content before */}
-            {activeTab === "resumen" && (
-              <div className="text-center py-12">
-                <p className="text-gray-500">Tab Resumen - Contenido restaurado próximamente</p>
-              </div>
-            )}
-            {activeTab === "leads" && (
-              <div className="text-center py-12">
-                <p className="text-gray-500">Tab Leads - Contenido restaurado próximamente</p>
-              </div>
-            )}
-            {activeTab === "red" && (
-              <div className="text-center py-12">
-                <p className="text-gray-500">Tab Red - Contenido restaurado próximamente</p>
-              </div>
-            )}
-            {activeTab === "productividad" && (
-              <div className="text-center py-12">
-                <p className="text-gray-500">Tab Productividad - Contenido restaurado próximamente</p>
-              </div>
-            )}
-            {activeTab === "perfil" && (
-              <div className="text-center py-12">
-                <p className="text-gray-500">Tab Perfil - Contenido restaurado próximamente</p>
-              </div>
-            )}
+            {/* Other tabs content would go here */}
           </div>
         </main>
       </div>
