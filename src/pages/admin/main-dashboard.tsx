@@ -129,7 +129,7 @@ export default function MainDashboard() {
   
   // Wallet
   const [walletAddress, setWalletAddress] = useState("");
-  const [savingWallet, setSavingWallet] = useState(false);
+  const [isEditingWallet, setIsEditingWallet] = useState(false);
 
   // Productivity
   const [todayActivity, setTodayActivity] = useState<DailyActivity>({
