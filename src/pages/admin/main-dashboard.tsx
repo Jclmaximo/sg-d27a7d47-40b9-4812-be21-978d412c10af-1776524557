@@ -950,13 +950,67 @@ Puedo resolver dudas sobre:
           </div>
         </div>
 
+        {/* Tab Navigation */}
+        <div className="max-w-7xl mx-auto px-6 mb-6">
+          <div className="bg-white rounded-lg border border-[#E2E8F0] p-2 flex gap-2 overflow-x-auto">
+            <Button
+              variant={activeTab === "resumen" ? "default" : "ghost"}
+              onClick={() => setActiveTab("resumen")}
+              className="flex items-center gap-2"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              Resumen
+            </Button>
+            <Button
+              variant={activeTab === "leads" ? "default" : "ghost"}
+              onClick={() => setActiveTab("leads")}
+              className="flex items-center gap-2"
+            >
+              <Users className="w-4 h-4" />
+              Leads
+            </Button>
+            <Button
+              variant={activeTab === "red" ? "default" : "ghost"}
+              onClick={() => setActiveTab("red")}
+              className="flex items-center gap-2"
+            >
+              <Network className="w-4 h-4" />
+              Mi Red
+            </Button>
+            <Button
+              variant={activeTab === "productividad" ? "default" : "ghost"}
+              onClick={() => setActiveTab("productividad")}
+              className="flex items-center gap-2"
+            >
+              <BarChart3 className="w-4 h-4" />
+              Productividad
+            </Button>
+            <Button
+              variant={activeTab === "links" ? "default" : "ghost"}
+              onClick={() => setActiveTab("links")}
+              className="flex items-center gap-2"
+            >
+              <Link2 className="w-4 h-4" />
+              Mis Links
+            </Button>
+            <Button
+              variant={activeTab === "perfil" ? "default" : "ghost"}
+              onClick={() => setActiveTab("perfil")}
+              className="flex items-center gap-2"
+            >
+              <User className="w-4 h-4" />
+              Perfil
+            </Button>
+          </div>
+        </div>
+
         <main className="flex-1 overflow-auto p-8">
           <div className="max-w-7xl mx-auto">
             {/* TAB: RESUMEN */}
             {activeTab === "resumen" && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">Resumen</h2>
-                {/* Contenido del tab Resumen - Se restaurará próximamente */}
+                <p className="text-muted-foreground">Contenido del resumen próximamente...</p>
               </div>
             )}
 
@@ -964,7 +1018,7 @@ Puedo resolver dudas sobre:
             {activeTab === "leads" && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">Leads</h2>
-                {/* Contenido del tab Leads - Se restaurará próximamente */}
+                <p className="text-muted-foreground">Contenido de leads próximamente...</p>
               </div>
             )}
 
@@ -972,7 +1026,7 @@ Puedo resolver dudas sobre:
             {activeTab === "red" && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">Mi Red</h2>
-                {/* Contenido del tab Red - Se restaurará próximamente */}
+                <p className="text-muted-foreground">Contenido de red próximamente...</p>
               </div>
             )}
 
@@ -980,7 +1034,7 @@ Puedo resolver dudas sobre:
             {activeTab === "productividad" && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">Productividad</h2>
-                {/* Contenido del tab Productividad - Se restaurará próximamente */}
+                <p className="text-muted-foreground">Contenido de productividad próximamente...</p>
               </div>
             )}
 
@@ -1120,7 +1174,7 @@ Puedo resolver dudas sobre:
             {activeTab === "perfil" && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-bold">Perfil</h2>
-                {/* Contenido del tab Perfil - Se restaurará próximamente */}
+                <p className="text-muted-foreground">Contenido de perfil próximamente...</p>
               </div>
             )}
           </div>
